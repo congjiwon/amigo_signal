@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
-
-import { useBoolean, useClickAway } from '../../hooks';
+import { useBoolean, useClickAway } from '../../../hooks';
 
 interface DropdownProps {
   options: string[];
