@@ -1,7 +1,7 @@
 import Swal from 'sweetalert2';
 
-// 기본 alert창
-export const Alert = () => {
+// 기본 alert창 (로그인) -> title만 바꿔서 재사용 가능
+export const AlertLogin = () => {
   Swal.fire({
     position: 'top-end',
     icon: 'success',
