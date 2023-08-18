@@ -1,7 +1,11 @@
-import React from 'react';
+import PartnerList from '../components/partner/PartnerList';
 
 const Partner = () => {
-  return <div>Partner</div>;
+  return (
+    <>
+      <PartnerList />
+    </>
+  );
 };
 
 export default Partner;
