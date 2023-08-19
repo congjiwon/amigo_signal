@@ -1,27 +1,37 @@
 import Swal from 'sweetalert2';
 
-// 기본 alert창 (로그인) -> title만 바꿔서 재사용 가능
-export const AlertLogin = () => {
+type AlertProps = {
+  title: string;
+  position?: 'top' | 'top-start' | 'top-end' | 'center' | 'center-start' | 'center-end' | 'bottom' | 'bottom-start' | 'bottom-end';
+};
+
+type AlertErrorProps = {
+  title?: string;
+  text?: string;
+};
+
+// 기본 alert창 -> position과 title 바꿔서 재사용 가능
+export const Alert = ({ title, position = 'center' }: AlertProps) => {
   Swal.fire({
-    position: 'top-end',
+    position,
     icon: 'success',
-    title: '로그인 되었습니다.',
+    title,
     showConfirmButton: false,
     timer: 1000,
   });
 };
 
-// alert창 (error)
-export const AlertError = () => {
+// alert창 (error) -> title과 text 바꿔서 재사용 가능
+export const AlertError = ({ title = '에러가 발생했습니다.', text = '다시 시도해 주세요!' }: AlertErrorProps) => {
   Swal.fire({
     icon: 'error',
-    title: '에러가 발생했습니다.',
-    text: '다시 시도해 주세요!',
+    title,
+    text,
   });
 };
 
-// 삭제 시 confirm 창
-export const ConfirmDelete = () => {
+// 삭제 시 confirm 창 -> deleteMessage 입력 필수
+export const ConfirmDelete = (deleteMessage: string) => {
   Swal.fire({
     title: '정말 삭제하시겠습니까?',
     text: '이 작업은 되돌릴 수 없습니다.',
@@ -33,7 +43,7 @@ export const ConfirmDelete = () => {
     cancelButtonText: '취소',
   }).then((result) => {
     if (result.isConfirmed) {
-      Swal.fire('삭제됨', '해당 내용은 삭제되었습니다.', 'success');
+      Swal.fire('삭제됨', deleteMessage, 'success');
     }
   });
 };
@@ -41,17 +51,14 @@ export const ConfirmDelete = () => {
 // 수정사항 저장 시 confirm 창
 export const ConfirmSave = () => {
   Swal.fire({
-    title: '변경사항을 저장하시겠습니까?',
-    showDenyButton: true,
+    icon: 'question',
+    title: '수정사항을 반영하시겠습니까?',
     showCancelButton: true,
-    confirmButtonText: '저장',
-    denyButtonText: `저장하지 않음`,
+    confirmButtonText: '확인',
     cancelButtonText: '취소',
   }).then((result) => {
     if (result.isConfirmed) {
-      Swal.fire('변경사항이 저장되었습니다!', '', 'success');
-    } else if (result.isDenied) {
-      Swal.fire('변경사항이 반영되지 않았습니다.', '', 'info');
+      Swal.fire('수정되었습니다!', '', 'success');
     }
   });
 };
@@ -61,24 +68,30 @@ export const ConfirmSave = () => {
 // import { Alert, AlertError, ConfirmDelete, ConfirmSave } from '../components/common/modal/alert';
 
 // const Intro = () => {
-//   const handleClick = () => {
-//     Alert();
+//   // title 입력 필수, position은 입력하지 않으면 default 값 = center
+//   const handleAlert = () => {
+//     Alert({ title: '로그인 성공', position: 'top-end' });
 //   };
-//   const handleClick2 = () => {
-//     AlertError();
+//   // 빈 배열 넣으면 기본 error 메시지로 alert
+//   // 다음과 같이 error 메시지 커스텀 가능 -> AlertError({ title: '에러다.', text: '이제 나가줘' });
+//   const handleAlertError = () => {
+//     AlertError({});
 //   };
-//   const handleClick3 = () => {
-//     ConfirmDelete();
+//   // 삭제 메시지 입력 필수
+//   const handleConfirmDelete = () => {
+//     ConfirmDelete('해당 댓글이 삭제되었습니다.');
 //   };
-//   const handleClick4 = () => {
+
+//   const handleConfirmSave = () => {
 //     ConfirmSave();
 //   };
+
 //   return (
 //     <div>
-//       <button onClick={handleClick}>클릭!</button>
-//       <button onClick={handleClick2}>클릭!</button>
-//       <button onClick={handleClick3}>클릭!</button>
-//       <button onClick={handleClick4}>클릭!</button>
+//       <button onClick={handleAlert}>Alert 버튼</button>
+//       <button onClick={handleAlertError}>AlertError 버튼</button>
+//       <button onClick={handleConfirmDelete}>ConfirmDelete 버튼</button>
+//       <button onClick={handleConfirmSave}>ConfirmSave 버튼</button>
 //     </div>
 //   );
 // };
