@@ -1,63 +1,90 @@
-import React, { useRef, useState } from 'react';
-import { useBoolean, useClickAway } from '../../../hooks';
+import React from 'react';
+import { Select, Space } from 'antd';
 
-interface DropdownProps {
-  options: string[];
-  selected?: number;
-  size?: string;
-  border?: boolean;
-  onChange: (value: string) => void;
-  text?: string;
+interface PartnerProps {
+  setPartner: React.Dispatch<React.SetStateAction<number>>;
+}
+interface StarProps {
+  setStar: React.Dispatch<React.SetStateAction<number>>;
+}
+interface SortProps {
+  setSort: React.Dispatch<React.SetStateAction<number>>;
 }
 
-type DropdownType = Record<string, string>;
-
-export const Dropdown: React.FC<DropdownProps> = ({ options, selected, onChange, size = 'md', border = false, text = '선택하세요' }) => {
-  const [isOpen, setIsOpen] = useBoolean(false);
-  const [selectedOption, setSelectedOption] = useState<string | null>(selected !== undefined ? options[selected - 1] : null);
-
-  const dropdownBorder = 'border-[1px] border-gray4 rounded-xl overflow-hidden';
-
-  const dropdownSize: DropdownType = {
-    sm: 'min-w-[50px]',
-    md: 'min-w-[100px]',
-    lg: 'min-w-[150px]',
+export function PartnerDropDown({ setPartner }: PartnerProps) {
+  const handleChange = (value: string) => {
+    setPartner(Number(value));
   };
-
-  const flex = 'flex justify-center items-center';
-  const flexCol = 'flex-col justify-center items-center';
-
-  const containerRef = useRef(null);
-
-  const selectOption = (option: string) => {
-    if (option.length === 0) return;
-    setSelectedOption(option);
-    setIsOpen.off();
-    onChange(option);
-  };
-  useClickAway({ ref: containerRef, callback: setIsOpen.off });
-
   return (
-    <div className={`relative ${dropdownSize[size]} drop-shadow-[2px_2px_0px_rgba(0,0,0,1)] z-10`} ref={containerRef}>
-      <button className={`bg-white ${flex} ${dropdownSize[size]} ${border ? dropdownBorder : ''} p-[4px]`} onClick={setIsOpen.toggle}>
-        {selectedOption === null ? text : selectedOption} <span className="text-[12px] ml-1"> ▼</span>
-      </button>
-      {isOpen && (
-        <ul className={`absolute ${flexCol} ${dropdownSize[size]} bg-slate-50 z-10 mt-[5px] border-[1px] ${border ? dropdownBorder : ''}`}>
-          {options.map((option, index) => (
-            <li
-              key={index}
-              className={`dropdown-option ${flex} bg-slate-50 cursor-pointer w-full ${border ? 'border-b-[1px] border-black' : ''}p-[2px]
-              hover:bg-gray2`}
-              onClick={() => {
-                selectOption(option);
-              }}
-            >
-              {option}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+    <Space wrap>
+      <Select
+        defaultValue="모집인원"
+        style={{ width: 140 }}
+        onChange={handleChange}
+        options={[
+          { value: '1', label: '1명' },
+          { value: '2', label: '2명' },
+          { value: '3', label: '3명' },
+          { value: '4', label: '4명' },
+          { value: '5', label: '5명' },
+          { value: '6', label: '6명' },
+          { value: '7', label: '7명' },
+          { value: '8', label: '8명' },
+          { value: '9', label: '9명' },
+          { value: '10', label: '10명' },
+        ]}
+      />
+    </Space>
   );
-};
+}
+
+export function StarDropDown({ setStar }: StarProps) {
+  const handleChange = (value: string) => {
+    setStar(Number(value));
+  };
+  return (
+    <Space wrap>
+      <Select
+        defaultValue="⭐⭐⭐⭐⭐"
+        style={{ width: 140 }}
+        onChange={handleChange}
+        options={[
+          { value: '5', label: '⭐⭐⭐⭐⭐' },
+          { value: '4', label: '⭐⭐⭐⭐' },
+          { value: '3', label: '⭐⭐⭐' },
+          { value: '2', label: '⭐⭐' },
+          { value: '1', label: '⭐' },
+        ]}
+      />
+    </Space>
+  );
+}
+
+export function SortDropDown({ setSort }: SortProps) {
+  const handleChange = (value: string) => {
+    setSort(Number(value));
+  };
+  return (
+    <Space wrap>
+      <Select
+        defaultValue="인기순"
+        style={{ width: 140 }}
+        onChange={handleChange}
+        options={[
+          { value: '1', label: '인기순' },
+          { value: '2', label: '최신순' },
+        ]}
+      />
+    </Space>
+  );
+}
+
+// 사용법
+
+// const [star, setStar] = useState<number>(5);
+// const [partner, setPartner] = useState<number>(1);
+// const [sort, setSort] = useState<number>(1);
+
+// <StarDropDown setStar={setStar} />
+// <PartnerDropDown setPartner={setPartner} />
+// <SortDropDown setSort={setSort} />
