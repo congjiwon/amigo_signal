@@ -26,8 +26,7 @@ const Modal: React.FC<ModalProps> = ({ children, isModalOpen, setIsModalOpen, cl
                 <button onClick={HandleToClose}></button>
               </Styled.InnerBox>
             )}
-
-            {children}
+            ₩{children}
           </Styled.Inner>
         </Styled.Outer>,
         document.getElementById(PORTAL_MODAL) as HTMLElement,
