@@ -236,6 +236,30 @@ const options: Option[] = [
         value: '쿠바',
         label: '쿠바',
       },
+      {
+        value: '브라질',
+        label: '브라질',
+      },
+      {
+        value: '에콰도르',
+        label: '에콰도르',
+      },
+      {
+        value: '콜롬비아',
+        label: '콜롬비아',
+      },
+      {
+        value: '파라과이',
+        label: '파라과이',
+      },
+      {
+        value: '우루과이',
+        label: '우루과이',
+      },
+      {
+        value: '베네수엘라',
+        label: '베네수엘라',
+      },
     ],
   },
   {
