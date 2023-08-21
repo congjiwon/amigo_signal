@@ -289,12 +289,12 @@ const options: Option[] = [
 ];
 
 function LocationDropDown({ setLocation }: Props) {
-  // const onChange = (value: string[]) => {
-  //   setLocation(value);
-  // };
+  const onChange = (value: string[]) => {
+    const valueSplit = value[0].split(',');
+    setLocation(valueSplit);
+  };
 
-  return <Cascader style={{ width: 140 }} options={options} placeholder="국가 선택" />;
-  // return <Cascader style={{ width: 140 }} options={options} onChange={onChange} placeholder="국가 선택" />;
+  return <Cascader style={{ width: 140 }} options={options} onChange={(e) => onChange([String(e)])} placeholder="국가 선택" />;
 }
 
 export default LocationDropDown;

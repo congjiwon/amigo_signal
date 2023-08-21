@@ -148,7 +148,7 @@ export function LocationDropDown({ setLocation }: LocationProps) {
 // const [star, setStar] = useState<number>(5);
 // const [partner, setPartner] = useState<number>(1);
 // const [sort, setSort] = useState<number>(1);
-// const [location, setLocation] = useState<string[]>(['아시아', '대한민국']);
+// const [location, setLocation] = useState<string[]>([]);
 
 // <StarDropDown setStar={setStar} />
 // <PartnerDropDown setPartner={setPartner} />
