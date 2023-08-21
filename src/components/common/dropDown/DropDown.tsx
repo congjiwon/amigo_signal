@@ -1,63 +1,156 @@
-import React, { useRef, useState } from 'react';
-import { useBoolean, useClickAway } from '../../../hooks';
+import React, { useState } from 'react';
+import { Select, Space } from 'antd';
 
-interface DropdownProps {
-  options: string[];
-  selected?: number;
-  size?: string;
-  border?: boolean;
-  onChange: (value: string) => void;
-  text?: string;
+interface PartnerProps {
+  setPartner: React.Dispatch<React.SetStateAction<number>>;
+}
+interface StarProps {
+  setStar: React.Dispatch<React.SetStateAction<number>>;
+}
+interface SortProps {
+  setSort: React.Dispatch<React.SetStateAction<number>>;
+}
+interface LocationProps {
+  setLocation: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-type DropdownType = Record<string, string>;
+export function PartnerDropDown({ setPartner }: PartnerProps) {
+  const handleChange = (value: string) => {
+    setPartner(Number(value));
+  };
+  return (
+    <Space wrap>
+      <Select
+        defaultValue="모집인원"
+        style={{ width: 140 }}
+        onChange={handleChange}
+        options={[
+          { value: '1', label: '1명' },
+          { value: '2', label: '2명' },
+          { value: '3', label: '3명' },
+          { value: '4', label: '4명' },
+          { value: '5', label: '5명' },
+          { value: '6', label: '6명' },
+          { value: '7', label: '7명' },
+          { value: '8', label: '8명' },
+          { value: '9', label: '9명' },
+          { value: '10', label: '10명' },
+        ]}
+      />
+    </Space>
+  );
+}
 
-export const Dropdown: React.FC<DropdownProps> = ({ options, selected, onChange, size = 'md', border = false, text = '선택하세요' }) => {
-  const [isOpen, setIsOpen] = useBoolean(false);
-  const [selectedOption, setSelectedOption] = useState<string | null>(selected !== undefined ? options[selected - 1] : null);
+export function StarDropDown({ setStar }: StarProps) {
+  const handleChange = (value: string) => {
+    setStar(Number(value));
+  };
+  return (
+    <Space wrap>
+      <Select
+        defaultValue="⭐⭐⭐⭐⭐"
+        style={{ width: 140 }}
+        onChange={handleChange}
+        options={[
+          { value: '5', label: '⭐⭐⭐⭐⭐' },
+          { value: '4', label: '⭐⭐⭐⭐' },
+          { value: '3', label: '⭐⭐⭐' },
+          { value: '2', label: '⭐⭐' },
+          { value: '1', label: '⭐' },
+        ]}
+      />
+    </Space>
+  );
+}
 
-  const dropdownBorder = 'border-[1px] border-gray4 rounded-xl overflow-hidden';
+export function SortDropDown({ setSort }: SortProps) {
+  const handleChange = (value: string) => {
+    setSort(Number(value));
+  };
+  return (
+    <Space wrap>
+      <Select
+        defaultValue="인기순"
+        style={{ width: 140 }}
+        onChange={handleChange}
+        options={[
+          { value: '1', label: '인기순' },
+          { value: '2', label: '최신순' },
+        ]}
+      />
+    </Space>
+  );
+}
 
-  const dropdownSize: DropdownType = {
-    sm: 'min-w-[50px]',
-    md: 'min-w-[100px]',
-    lg: 'min-w-[150px]',
+export function LocationDropDown({ setLocation }: LocationProps) {
+  const provinceData = ['아시아', '유럽', '아메리카', '오세아니아', '아프리카'];
+
+  const cityData = {
+    아시아: ['대한한국', '일본', '홍콩', '마카오', '대만', '중국', '몽골', '싱가포르', '베트남', '태국', '인도네시아', '말레이시아', '필리핀', '라오스', '캄보디아', '미얀마', '아랍에미리트', '오만', '인도', '네팔', '이스라엘', '카타르'],
+    유럽: [
+      '프랑스',
+      '이탈리아',
+      '터키',
+      '스페인',
+      '영국',
+      '오스트리아',
+      '네덜란드',
+      '독일',
+      '스위스',
+      '포르투칼',
+      '폴란드',
+      '아이슬란드',
+      '필란드',
+      '스웨덴',
+      '노르웨이',
+      '덴마크',
+      '그리스',
+      '러시아',
+      '아일랜드',
+      '헝가리',
+      '벨기에',
+      '체코',
+      '슬로베니아',
+    ],
+    아메리카: ['미국', '캐나다', '멕시코', '페루', '볼리비아', '칠레', '아르헨티나', '쿠바'],
+    오세아니아: ['호주', '뉴질랜드'],
+    아프리카: ['이집트', '남아프리카공화국', '탄자니아', '에티오피아', '케냐', '나미비아', '모로코'],
   };
 
-  const flex = 'flex justify-center items-center';
-  const flexCol = 'flex-col justify-center items-center';
+  type CityName = keyof typeof cityData;
 
-  const containerRef = useRef(null);
+  const [cities, setCities] = useState(cityData[provinceData[0] as CityName]);
+  const [secondCity, setSecondCity] = useState(cityData[provinceData[0] as CityName][0]);
+  const [copy, setCopy] = useState<string>(provinceData[0]);
 
-  const selectOption = (option: string) => {
-    if (option.length === 0) return;
-    setSelectedOption(option);
-    setIsOpen.off();
-    onChange(option);
+  const handleProvinceChange = (value: CityName) => {
+    setCities(cityData[value]);
+    setSecondCity(cityData[value][0]);
+    setLocation([value, cityData[value][0]]);
+    setCopy(value);
   };
-  useClickAway({ ref: containerRef, callback: setIsOpen.off });
+
+  const onSecondCityChange = (value: CityName) => {
+    setSecondCity(value);
+    setLocation([copy, value]);
+  };
 
   return (
-    <div className={`relative ${dropdownSize[size]} drop-shadow-[2px_2px_0px_rgba(0,0,0,1)] z-10`} ref={containerRef}>
-      <button className={`bg-white ${flex} ${dropdownSize[size]} ${border ? dropdownBorder : ''} p-[4px]`} onClick={setIsOpen.toggle}>
-        {selectedOption === null ? text : selectedOption} <span className="text-[12px] ml-1"> ▼</span>
-      </button>
-      {isOpen && (
-        <ul className={`absolute ${flexCol} ${dropdownSize[size]} bg-slate-50 z-10 mt-[5px] border-[1px] ${border ? dropdownBorder : ''}`}>
-          {options.map((option, index) => (
-            <li
-              key={index}
-              className={`dropdown-option ${flex} bg-slate-50 cursor-pointer w-full ${border ? 'border-b-[1px] border-black' : ''}p-[2px]
-              hover:bg-gray2`}
-              onClick={() => {
-                selectOption(option);
-              }}
-            >
-              {option}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+    <Space wrap>
+      <Select defaultValue={provinceData[0] as CityName} style={{ width: 120 }} onChange={handleProvinceChange} options={provinceData.map((province) => ({ label: province, value: province }))} />
+      <Select style={{ width: 120 }} value={secondCity as CityName} onChange={onSecondCityChange} options={cities.map((city) => ({ label: city, value: city }))} />
+    </Space>
   );
-};
+}
+
+// 사용법
+
+// const [star, setStar] = useState<number>(5);
+// const [partner, setPartner] = useState<number>(1);
+// const [sort, setSort] = useState<number>(1);
+// const [location, setLocation] = useState<string[]>([]);
+
+// <StarDropDown setStar={setStar} />
+// <PartnerDropDown setPartner={setPartner} />
+// <SortDropDown setSort={setSort} />
+// <LocationDropDown setLocation={setLocation} />
