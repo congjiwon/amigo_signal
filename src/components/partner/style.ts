@@ -26,6 +26,7 @@ export const Grid = styled.div`
 
 export const PostCard = styled.div`
   padding: 20px;
+  padding-bottom: 15px;
   border-radius: 20px;
   box-shadow: 5px 5px 10px 3px rgba(0, 0, 0, 0.2);
 `;
@@ -96,7 +97,20 @@ export const InterestImage = styled.img`
 
 export const Footer = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 10px;
   font-size: 0.8rem;
+`;
+
+export const UserProfile = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+`;
+
+export const ProfileImage = styled.img`
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
 `;
