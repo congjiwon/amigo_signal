@@ -1,37 +1,32 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { getCountry } from '../../api/supabase/location';
+import { getPartnerPosts } from '../../api/supabase/partner';
+import { Tables } from '../../api/supabase/supabase';
+import PartnerItem from './PartnerItem';
+import * as St from './style';
 
 const PartnerList = () => {
-  const [imageSrc, setImageSrc] = useState<string>('');
-  // 동행찾기 게시글작성할 때 선택한 country
-  const filteredCountry = '가나';
-
-  // 국기 api key
-  const API_KEY = process.env.REACT_APP_API_KEY;
-
-  // 국기 이미지 가져오기
-  const getFlagAndDisplayImage = async (): Promise<void> => {
-    const url = `https://apis.data.go.kr/1262000/CountryFlagService2/getCountryFlagList2?serviceKey=${API_KEY}&pageNo=1&numOfRows=227&cond[country_nm::EQ]=${filteredCountry}`;
-
-    const response = await axios.get(url);
-    const imageUrl = response.data.data[0].download_url;
-
-    setImageSrc(imageUrl);
-  };
+  const [postStorage, setPostStorage] = useState<Tables<'partnerPosts'>[]>([]);
 
   useEffect(() => {
-    getFlagAndDisplayImage();
+    const fetchPosts = async () => {
+      const { data, error } = await getPartnerPosts();
+      if (error || !data) {
+        console.error('동행자 게시글 목록을 가져오는 과정에서 에러 발생', error);
+        setPostStorage([]);
+      } else {
+        setPostStorage(data);
+      }
+    };
+    fetchPosts();
   }, []);
-
-  // supabase에서 country 가져오기
-  getCountry();
 
   return (
     <>
-      <div>PartnerList</div>
-      {/* 국기 이미지 */}
-      {imageSrc && <img src={imageSrc} alt="Image" />}
+      <St.Grid>
+        {postStorage.map((post) => {
+          return <PartnerItem key={post.id} post={post} />;
+        })}
+      </St.Grid>
     </>
   );
 };

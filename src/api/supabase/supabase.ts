@@ -37,14 +37,17 @@ export interface Database {
       interest: {
         Row: {
           id: number;
+          imageUrl: string | null;
           name: string;
         };
         Insert: {
           id?: number;
+          imageUrl?: string | null;
           name: string;
         };
         Update: {
           id?: number;
+          imageUrl?: string | null;
           name?: string;
         };
         Relationships: [];
@@ -137,98 +140,80 @@ export interface Database {
           content: string;
           date: string;
           id: string;
-          postId: string | null;
+          postId: string;
           writerId: string;
         };
+        // 설빈: 로그인 연동 후 writerId? -> writerId로 수정하기
         Insert: {
-          content?: string;
-          date?: string;
-          id?: string;
-          postId?: string | null;
-          writerId: string;
-        };
-        Update: {
           content?: string;
           date?: string;
           id?: string;
           postId?: string | null;
           writerId?: string;
         };
-        Relationships: [
-          {
-            foreignKeyName: 'partnerComments_postId_fkey';
-            columns: ['postId'];
-            referencedRelation: 'partnerPosts';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'partnerComments_writerId_fkey';
-            columns: ['writerId'];
-            referencedRelation: 'users';
-            referencedColumns: ['id'];
-          },
-        ];
+        Update: {
+          content?: string;
+          date?: string;
+          id?: string;
+          postId?: string;
+          writerId?: string;
+        };
+        Relationships: [];
       };
       partnerPosts: {
         Row: {
-          applicant: string;
+          applicant: string | null;
           content: string;
+          country: string;
           createdAt: string;
           endDate: string;
-          flagUrl: string;
           id: string;
-          interest: number[];
+          interestUrl: string[];
           isOpen: boolean;
-          location: number;
           numOfPeople: number;
           openChat: string;
+          region: string;
           startDate: string;
           title: string;
-          writerId: string;
+          writerId: string | null;
         };
         Insert: {
-          applicant: string;
+          applicant?: string | null;
           content?: string;
+          country: string;
           createdAt: string;
           endDate: string;
-          flagUrl?: string;
           id?: string;
-          interest: number[];
+          interestUrl: string[];
           isOpen?: boolean;
-          location: number;
           numOfPeople: number;
           openChat?: string;
+          region: string;
           startDate: string;
           title?: string;
-          writerId: string;
+          writerId?: string | null;
         };
         Update: {
-          applicant?: string;
+          applicant?: string | null;
           content?: string;
+          country?: string;
           createdAt?: string;
           endDate?: string;
-          flagUrl?: string;
           id?: string;
-          interest?: number[];
+          interestUrl?: string[];
           isOpen?: boolean;
-          location?: number;
           numOfPeople?: number;
           openChat?: string;
+          region?: string;
           startDate?: string;
           title?: string;
-          writerId?: string;
+          writerId?: string | null;
         };
         Relationships: [
           {
             foreignKeyName: 'partnerPosts_applicant_fkey';
             columns: ['applicant'];
             referencedRelation: 'users';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'partnerPosts_location_fkey';
-            columns: ['location'];
-            referencedRelation: 'location';
             referencedColumns: ['id'];
           },
           {
@@ -338,7 +323,7 @@ export interface Database {
           profileImageUrl: string | null;
         };
         Insert: {
-          birthday?: string;
+          birthday: string;
           email?: string;
           gender?: string;
           id?: string;
@@ -372,3 +357,6 @@ export interface Database {
 }
 
 export type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row'];
+export type TPartnerComment = Database['public']['Tables']['partnerComments']['Row'];
+export type TPartnerInsert = Database['public']['Tables']['partnerComments']['Insert'];
+export type TPartnerUpdate = Database['public']['Tables']['partnerComments']['Update'];
