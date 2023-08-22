@@ -37,14 +37,17 @@ export interface Database {
       interest: {
         Row: {
           id: number;
+          imageUrl: string | null;
           name: string;
         };
         Insert: {
           id?: number;
+          imageUrl?: string | null;
           name: string;
         };
         Update: {
           id?: number;
+          imageUrl?: string | null;
           name?: string;
         };
         Relationships: [];
@@ -137,8 +140,6 @@ export interface Database {
           content: string;
           date: string;
           id: string;
-          postId: string | null;
-          writerId: string;
         };
         // 설빈: 로그인 연동 후 writerId? -> writerId로 수정하기
         Insert: {
@@ -152,84 +153,63 @@ export interface Database {
           content?: string;
           date?: string;
           id?: string;
-          postId?: string | null;
-          writerId?: string;
         };
-        Relationships: [
-          {
-            foreignKeyName: 'partnerComments_postId_fkey';
-            columns: ['postId'];
-            referencedRelation: 'partnerPosts';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'partnerComments_writerId_fkey';
-            columns: ['writerId'];
-            referencedRelation: 'users';
-            referencedColumns: ['id'];
-          },
-        ];
+        Relationships: [];
       };
       partnerPosts: {
         Row: {
-          applicant: string;
+          applicant: string | null;
           content: string;
+          country: string;
           createdAt: string;
           endDate: string;
-          flagUrl: string;
           id: string;
-          interest: number[];
+          interestUrl: string[];
           isOpen: boolean;
-          location: number;
           numOfPeople: number;
           openChat: string;
+          region: string;
           startDate: string;
           title: string;
-          writerId: string;
+          writerId: string | null;
         };
         Insert: {
-          applicant: string;
+          applicant?: string | null;
           content?: string;
+          country: string;
           createdAt: string;
           endDate: string;
-          flagUrl?: string;
           id?: string;
-          interest: number[];
+          interestUrl: string[];
           isOpen?: boolean;
-          location: number;
           numOfPeople: number;
           openChat?: string;
+          region: string;
           startDate: string;
           title?: string;
-          writerId: string;
+          writerId?: string | null;
         };
         Update: {
-          applicant?: string;
+          applicant?: string | null;
           content?: string;
+          country?: string;
           createdAt?: string;
           endDate?: string;
-          flagUrl?: string;
           id?: string;
-          interest?: number[];
+          interestUrl?: string[];
           isOpen?: boolean;
-          location?: number;
           numOfPeople?: number;
           openChat?: string;
+          region?: string;
           startDate?: string;
           title?: string;
-          writerId?: string;
+          writerId?: string | null;
         };
         Relationships: [
           {
             foreignKeyName: 'partnerPosts_applicant_fkey';
             columns: ['applicant'];
             referencedRelation: 'users';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'partnerPosts_location_fkey';
-            columns: ['location'];
-            referencedRelation: 'location';
             referencedColumns: ['id'];
           },
           {
@@ -339,7 +319,7 @@ export interface Database {
           profileImageUrl: string | null;
         };
         Insert: {
-          birthday?: string;
+          birthday: string;
           email?: string;
           gender?: string;
           id?: string;
