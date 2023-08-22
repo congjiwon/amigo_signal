@@ -140,25 +140,28 @@ export interface Database {
           content: string;
           date: string;
           id: string;
-          postId: string;
           writerId: string;
         };
-        // 설빈: 로그인 연동 후 writerId? -> writerId로 수정하기
         Insert: {
-          content?: string;
+          content: string;
           date?: string;
           id?: string;
-          postId?: string | null;
-          writerId?: string;
+          writerId: string;
         };
         Update: {
           content?: string;
           date?: string;
           id?: string;
-          postId?: string;
           writerId?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'partnerComments_writerId_fkey';
+            columns: ['writerId'];
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       partnerPosts: {
         Row: {

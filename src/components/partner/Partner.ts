@@ -14,7 +14,21 @@ export const postPartnerComment = async (newPartnerComment: TPartnerInsert) => {
 
 export const getPartnerComments = async () => {
   let { data: partnerComments, error } = await supabase.from('partnerComments').select('*');
+  console.log('파트너코멘트', partnerComments);
   return partnerComments;
+};
+
+export const getAuthId = async () => {
+  const authId = await supabase.auth.getUser();
+  console.log('authId', authId);
+  return authId.data;
+};
+getAuthId();
+
+export const getUserId = async () => {
+  let { data: userId, error } = await supabase.from('users').select('id');
+  // console.log('userId', userId);
+  return userId;
 };
 
 export const deletePartnerComments = async () => {
