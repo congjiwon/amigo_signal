@@ -13,7 +13,7 @@ const PartnerDetailInfo = ({ partnerPostData }: { partnerPostData: Tables<'partn
             </svg>
           </St.userProfileImgBox>
           <div>
-            <p>유저아이디</p>
+            <St.blackParagraph>유저아이디</St.blackParagraph>
             <St.grayParagraph>2023.08.31 조회 100</St.grayParagraph>
           </div>
         </St.userProfileBox>
@@ -22,28 +22,35 @@ const PartnerDetailInfo = ({ partnerPostData }: { partnerPostData: Tables<'partn
       <St.detailInfoList>
         <St.detailInfoBox>
           <St.grayParagraph>나라</St.grayParagraph>
-          <span>
+          <St.blackParagraph>
             {partnerPostData.region}
             &gt;
             {partnerPostData.country}
-          </span>
+          </St.blackParagraph>
         </St.detailInfoBox>
         <St.detailInfoBox>
           <St.grayParagraph>모집인원</St.grayParagraph>
-          <span>{partnerPostData.numOfPeople}명</span>
+          <St.blackParagraph>{partnerPostData.numOfPeople}명</St.blackParagraph>
         </St.detailInfoBox>
         <St.detailInfoBox>
           <St.grayParagraph>여행기간</St.grayParagraph>
-          <span>
+          <St.blackParagraph>
             {partnerPostData.startDate}
             &sim;
             {partnerPostData.endDate}
-          </span>
+          </St.blackParagraph>
         </St.detailInfoBox>
-        <St.detailInfoBox>같이 카페가요!</St.detailInfoBox>
-        <St.detailInfoBox>같이 카페가요!</St.detailInfoBox>
+        <St.detailInfoBox>
+          <St.blackParagraph>같이 카페가요!</St.blackParagraph>
+        </St.detailInfoBox>
+        <St.detailInfoBox>
+          <St.blackParagraph>같이 카페가요!</St.blackParagraph>
+        </St.detailInfoBox>
+        <St.detailInfoBox>
+          <St.blackParagraph>같이 카페가요!</St.blackParagraph>
+        </St.detailInfoBox>
       </St.detailInfoList>
-      <p>{partnerPostData.content}</p>
+      <St.contentParagraph>{partnerPostData.content}</St.contentParagraph>
     </section>
   );
 };

@@ -9,7 +9,27 @@ export const H2 = styled.h2`
 `;
 
 export const grayParagraph = styled.p`
-  color: #999999;
+  color: #999;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 21px */
+`;
+
+export const blackParagraph = styled.p`
+  color: #000;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%; /* 21px */
+`;
+
+export const contentParagraph = styled.p`
+  color: #000;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 21px */
 `;
 
 export const userFeedbackBox = styled.div`
