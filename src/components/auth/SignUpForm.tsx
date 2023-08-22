@@ -3,10 +3,8 @@ import Button from '../common/button/Button';
 import { BtnStyleType } from '../../types/styleTypes';
 import { useNavigate } from 'react-router';
 import { Input } from '../common/input/Input';
-import SpotCalendar from '../common/calendar/SpotCalendar';
 import { styled } from 'styled-components';
-import { useEffect, useState } from 'react';
-import { getFlag } from '../../api/flag/flag';
+import { useEffect, useRef, useState } from 'react';
 
 type newUserType = {
   email: string;
@@ -22,28 +20,46 @@ export default function SignUpForm() {
   const [newUser, setNewUser] = useState<newUserType>({ email: '', nickName: '', password: '', passwordConfirm: '', gender: '여성', birthday: '' });
 
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    let { name, value } = e.target;
+
     setNewUser((prev) => {
       return { ...prev, [name]: value };
     });
   };
 
-  useEffect(() => {
-    console.log(newUser);
-  }, [newUser]);
-
-  const signUpFn = async () => {
-    const { data, error } = await supabase.auth.signUp({
-      email: 'tadadadacoding@gmail.com',
-      password: '1234asdf!',
+  // useEffect(() => {
+  //   console.log(newUser);
+  // }, [newUser]);
+  // http://localhost:3000/signup?email=tadadadacoding%40gmail.com&nickName=jy&password=1234asdf%21&passwordConfirm=1234asdf%21&gender=%EC%97%AC%EC%84%B1&birthday=2000-01-01
+  const signUpFn = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const { data: authData, error: authErr } = await supabase.auth.signUp({
+      email: newUser.email,
+      password: newUser.password,
       options: {
         data: {
-          nickName: 'John',
-          gender: 'female',
-          birthday: '1999-05-05',
+          nickName: newUser.nickName,
+          gender: newUser.gender,
+          birthday: newUser.birthday,
         },
       },
     });
+    const uid = authData.user?.id;
+    if (authErr) {
+      if (authErr?.message === 'Unable to validate email address: invalid format') return alert('이메일 형태가 올바르지 않습니다.');
+      else if (authErr?.message === 'User already registered') return alert('이미 일치하는 회원이 존재합니다.');
+    }
+
+    const { error: dbUserErr } = await supabase.from('users').insert({
+      id: uid,
+      email: newUser.email,
+      nickName: newUser.nickName,
+      gender: newUser.gender,
+      birthday: newUser.birthday,
+    });
+
+    if (dbUserErr) return alert('db에러발생');
+    return alert('회원가입이 정상적으로 처리 되었습니다!');
   };
   return (
     <FormWrapper>
@@ -78,6 +94,7 @@ export default function SignUpForm() {
         </FormRow>
         <FormRow>
           <div>
+            <span>성별</span>
             <label htmlFor="female">
               여성
               <input id="female" type="radio" name="gender" value="여성" checked={newUser.gender === '여성'} onChange={onChangeInput} />
@@ -91,7 +108,8 @@ export default function SignUpForm() {
           </div>
         </FormRow>
         <FormRow>
-          <SpotCalendar />
+          <label htmlFor="">생년월일</label>
+          <Input id="birthday" name="birthday" value={newUser.birthday} type="text" inputStyleType="auth" placeholder="1995-01-01" border={false} onChange={onChangeInput} />
         </FormRow>
         <div>
           <Button styleType={BtnStyleType.BTN_PRIMARY} onClick={() => navigate('/')}>
