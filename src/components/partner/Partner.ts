@@ -7,42 +7,53 @@ import { supabase } from '../../api/supabase/supabaseClient';
 //   inputValue: TPartnerUpdate
 // }
 
+// 댓글 작성
 export const postPartnerComment = async (newPartnerComment: TPartnerInsert) => {
   const { error } = await supabase.from('partnerComments').insert(newPartnerComment);
   console.log('error', error);
 };
 
+// 댓글 가져오기
 export const getPartnerComments = async () => {
   let { data: partnerComments, error } = await supabase.from('partnerComments').select('*');
   return partnerComments;
 };
 
+// 현재 로그인 한 유저
 export const getAuthId = async () => {
   const authId = await supabase.auth.getUser();
   return authId.data.user?.id;
 };
 const authId = getAuthId();
 
+// user 테이블 ID
 export const getUserId = async () => {
-  let { data: userId, error } = await supabase.from('users').select('id');
-  return userId;
+  let { data: userData } = await supabase.from('users').select('*');
+  return userData;
 };
+getUserId();
+
+// export const getUserId = async () => {
+//   let { data: userId, error } = await supabase.from('users').select('id');
+//   return userId;
+// };
 
 export const getCommentPostId = async () => {
   let { data: commentPostId, error } = await supabase.from('partnerComments').select('postId');
+  return commentPostId;
 };
 
 export const getPartnerPostId = async () => {
   let { data: partnerPostId, error } = await supabase.from('partnerPosts').select('id');
+  return partnerPostId;
 };
 
-// supabase 삭제
-export const getCommentId = async () => {
-  let { data: commentId, error } = await supabase.from('partnerComments').select('id');
-  console.log('zz', commentId);
+export const getWriterId = async () => {
+  let { data: writerId, error } = await supabase.from('partnerComments').select('writerId');
+  return writerId;
 };
-getCommentId();
 
+// 댓글 삭제
 export const deletePartnerComments = async (commentId: string) => {
   const { error } = await supabase.from('partnerComments').delete().eq('id', commentId);
   console.log('error', error);

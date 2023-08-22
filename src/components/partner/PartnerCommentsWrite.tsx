@@ -33,8 +33,9 @@ function PartnerCommentsWrite({ prevComment }: { prevComment: string }) {
     },
   });
 
+  // 항상 뜸
   if (isLoading) {
-    console.log('로딩중');
+    // console.log('로딩중');
   }
 
   // const [inputContent, setInputContent] = useState(prevComment);
@@ -62,16 +63,16 @@ function PartnerCommentsWrite({ prevComment }: { prevComment: string }) {
   //   },
   // });
 
-  const handleSubmitBtnClick = (event: any) => {
-    event.preventDefault();
+  const handleSubmitBtnClick = () => {
+    // event.preventDefault();
     const comment = {
       content: content,
       date: Timestamptz,
       writerId: authId,
       postId: params.postid,
     };
-    postPartnerComment(comment);
-    // mutation.mutate(comment);
+    // postPartnerComment(comment);
+    mutation.mutate(comment);
   };
 
   // setInputValue({ ...inputValue, content: prevComment, date: Timestamptz });
