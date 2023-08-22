@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import * as St from './style';
-import { Tables } from '../../api/supabase/supabase';
 import { Link } from 'react-router-dom';
+import { Tables } from '../../api/supabase/supabase';
+import * as St from './style';
 
 type PartnerItemProps = {
   post: Tables<'partnerPosts'>;
@@ -65,7 +65,7 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
   // 필요 없는 정보: id, content, applicant, openChat, region
 
   return (
-    <Link to={`partner/detail/${post.id}`}>
+    <Link to={`detail/${post.id}`}>
       <St.PostCard>
         <St.Head>
           <St.Location>
