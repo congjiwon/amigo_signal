@@ -157,20 +157,7 @@ export interface Database {
           postId?: string;
           writerId?: string;
         };
-        Relationships: [
-          {
-            foreignKeyName: 'partnerComments_postId_fkey';
-            columns: ['postId'];
-            referencedRelation: 'partnerPosts';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'partnerComments_writerId_fkey';
-            columns: ['writerId'];
-            referencedRelation: 'users';
-            referencedColumns: ['id'];
-          },
-        ];
+        Relationships: [];
       };
       partnerPosts: {
         Row: {
@@ -335,7 +322,7 @@ export interface Database {
           profileImageUrl: string | null;
         };
         Insert: {
-          birthday?: string;
+          birthday: string;
           email?: string;
           gender?: string;
           id?: string;
