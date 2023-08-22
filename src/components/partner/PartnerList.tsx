@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import * as St from './style';
-import PartnerItem from './PartnerItem';
 import { getPartnerPosts } from '../../api/supabase/partner';
 import { Tables } from '../../api/supabase/supabase';
+import PartnerItem from './PartnerItem';
+import * as St from './style';
 
 const PartnerList = () => {
   const [postStorage, setPostStorage] = useState<Tables<'partnerPosts'>[]>([]);
