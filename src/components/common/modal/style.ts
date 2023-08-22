@@ -20,7 +20,7 @@ export const Inner = styled.div<InnerProps>`
   display: flex;
   flex-direction: column;
   position: relative;
-  margin: 170px 16px 0 16px;
+  margin: auto;
   background-color: #ffffff;
   border-radius: 15px;
   box-shadow: 5px 5px 12px rgba(23, 23, 23, 0.3);
@@ -29,8 +29,9 @@ export const Inner = styled.div<InnerProps>`
     switch (size) {
       case 'medium':
         return `
-        width: 500px;
+        width: 50%;
         height: 60%;
+        border-radius: 30px;
         `;
       case 'small':
         return `
@@ -55,17 +56,12 @@ export const Inner = styled.div<InnerProps>`
   }}
 `;
 
-export const InnerBox = styled.div`
+export const CloseButton = styled.button`
   display: flex;
-  justify-content: space-between;
-  position: absolute;
-  z-index: 1;
-  top: 20px;
-  left: -15px;
-  width: 100%;
-
-  & > button {
-    background: none;
-    border: none;
-  }
+  justify-content: flex-end;
+  padding: 30px;
+  padding-bottom: 0px;
+  background: none;
+  border: none;
+  cursor: pointer;
 `;

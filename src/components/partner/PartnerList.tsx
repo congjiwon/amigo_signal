@@ -3,7 +3,7 @@ import { getPartnerPosts } from '../../api/supabase/partner';
 import { Tables } from '../../api/supabase/supabase';
 import PartnerItem from './PartnerItem';
 import * as St from './style';
-import TravelWith from '../../assets/TravelWith.jpg';
+import TravelWith from '../../assets/imgs/partner/TravelWith.jpg';
 
 const PartnerList = () => {
   const [postStorage, setPostStorage] = useState<Tables<'partnerPosts'>[]>([]);

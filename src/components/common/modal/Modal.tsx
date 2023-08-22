@@ -1,35 +1,31 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
-import * as Styled from './Modal.style';
+import * as St from './style';
+import { useModalStore } from '../../zustand/store';
+import CloseButton from '../../../assets/imgs/partner/CloseButton.svg';
 
 export const PORTAL_MODAL = 'portal-root';
 
 export interface ModalProps {
+  id: string;
   children: React.ReactNode;
-  isModalOpen: boolean;
-  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  closeButton: boolean;
   size: 'medium' | 'small' | undefined;
 }
 
-const Modal: React.FC<ModalProps> = ({ children, isModalOpen, setIsModalOpen, closeButton, size }) => {
-  const HandleToClose = () => {
-    setIsModalOpen(false);
-  };
+const Modal: React.FC<ModalProps> = ({ id, children, size }) => {
+  const { openedModals, closeModal } = useModalStore();
+  const isThisModalOpen = openedModals[id];
 
-  return isModalOpen
+  return isThisModalOpen
     ? createPortal(
-        <Styled.Outer>
-          <Styled.Inner size={size}>
-            {closeButton && (
-              <Styled.InnerBox>
-                <button onClick={HandleToClose}></button>
-              </Styled.InnerBox>
-            )}
-
+        <St.Outer>
+          <St.Inner size={size}>
+            <St.CloseButton onClick={() => closeModal(id)}>
+              <img src={CloseButton} alt="close" />
+            </St.CloseButton>
             {children}
-          </Styled.Inner>
-        </Styled.Outer>,
+          </St.Inner>
+        </St.Outer>,
         document.getElementById(PORTAL_MODAL) as HTMLElement,
       )
     : null;
