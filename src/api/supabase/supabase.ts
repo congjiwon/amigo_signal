@@ -140,16 +140,22 @@ export interface Database {
           content: string;
           date: string;
           id: string;
+          postId: string;
+          writerId: string;
         };
         Insert: {
           content?: string;
           date?: string;
           id?: string;
+          postId: string;
+          writerId: string;
         };
         Update: {
           content?: string;
           date?: string;
           id?: string;
+          postId?: string;
+          writerId?: string;
         };
         Relationships: [];
       };
