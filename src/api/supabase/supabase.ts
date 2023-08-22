@@ -140,12 +140,13 @@ export interface Database {
           postId: string | null;
           writerId: string;
         };
+        // 설빈: 로그인 연동 후 writerId? -> writerId로 수정하기
         Insert: {
           content?: string;
           date?: string;
           id?: string;
           postId?: string | null;
-          writerId: string;
+          writerId?: string;
         };
         Update: {
           content?: string;
@@ -372,3 +373,6 @@ export interface Database {
 }
 
 export type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row'];
+export type TPartnerComment = Database['public']['Tables']['partnerComments']['Row'];
+export type TPartnerInsert = Database['public']['Tables']['partnerComments']['Insert'];
+export type TPartnerUpdate = Database['public']['Tables']['partnerComments']['Update'];
