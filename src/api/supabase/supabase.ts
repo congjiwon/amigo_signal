@@ -3,6 +3,43 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export interface Database {
   public: {
     Tables: {
+      applicants: {
+        Row: {
+          applicantId: string;
+          content: string;
+          id: string;
+          isInvolved: string;
+          postId: string;
+        };
+        Insert: {
+          applicantId: string;
+          content: string;
+          id?: string;
+          isInvolved: string;
+          postId: string;
+        };
+        Update: {
+          applicantId?: string;
+          content?: string;
+          id?: string;
+          isInvolved?: string;
+          postId?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'applicants_applicantId_fkey';
+            columns: ['applicantId'];
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'applicants_postId_fkey';
+            columns: ['postId'];
+            referencedRelation: 'partnerPosts';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       bookmarks: {
         Row: {
           id: string;
@@ -101,60 +138,35 @@ export interface Database {
         };
         Relationships: [];
       };
-      participate: {
-        Row: {
-          id: string;
-          isInvolved: boolean;
-          postId: string;
-          userId: string;
-        };
-        Insert: {
-          id?: string;
-          isInvolved: boolean;
-          postId: string;
-          userId: string;
-        };
-        Update: {
-          id?: string;
-          isInvolved?: boolean;
-          postId?: string;
-          userId?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'participate_postId_fkey';
-            columns: ['postId'];
-            referencedRelation: 'partnerPosts';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'participate_userId_fkey';
-            columns: ['userId'];
-            referencedRelation: 'users';
-            referencedColumns: ['id'];
-          },
-        ];
-      };
       partnerComments: {
         Row: {
           content: string;
           date: string;
           id: string;
+          postId: string | null;
           writerId: string;
         };
         Insert: {
           content: string;
           date?: string;
           id?: string;
-          writerId: string;
+          postId?: string;
+          writerId?: string;
         };
         Update: {
           content?: string;
           date?: string;
           id?: string;
+          postId?: string | null;
           writerId?: string;
         };
         Relationships: [
+          {
+            foreignKeyName: 'partnerComments_postId_fkey';
+            columns: ['postId'];
+            referencedRelation: 'partnerPosts';
+            referencedColumns: ['id'];
+          },
           {
             foreignKeyName: 'partnerComments_writerId_fkey';
             columns: ['writerId'];
@@ -165,7 +177,6 @@ export interface Database {
       };
       partnerPosts: {
         Row: {
-          applicant: string | null;
           content: string;
           country: string;
           createdAt: string;
@@ -181,7 +192,6 @@ export interface Database {
           writerId: string | null;
         };
         Insert: {
-          applicant?: string | null;
           content?: string;
           country: string;
           createdAt: string;
@@ -197,7 +207,6 @@ export interface Database {
           writerId?: string | null;
         };
         Update: {
-          applicant?: string | null;
           content?: string;
           country?: string;
           createdAt?: string;
@@ -213,12 +222,6 @@ export interface Database {
           writerId?: string | null;
         };
         Relationships: [
-          {
-            foreignKeyName: 'partnerPosts_applicant_fkey';
-            columns: ['applicant'];
-            referencedRelation: 'users';
-            referencedColumns: ['id'];
-          },
           {
             foreignKeyName: 'partnerPosts_writerId_fkey';
             columns: ['writerId'];

@@ -14,25 +14,37 @@ export const postPartnerComment = async (newPartnerComment: TPartnerInsert) => {
 
 export const getPartnerComments = async () => {
   let { data: partnerComments, error } = await supabase.from('partnerComments').select('*');
-  console.log('파트너코멘트', partnerComments);
   return partnerComments;
 };
 
 export const getAuthId = async () => {
   const authId = await supabase.auth.getUser();
-  console.log('authId', authId);
-  return authId.data;
+  return authId.data.user?.id;
 };
-getAuthId();
+const authId = getAuthId();
 
 export const getUserId = async () => {
   let { data: userId, error } = await supabase.from('users').select('id');
-  // console.log('userId', userId);
   return userId;
 };
 
-export const deletePartnerComments = async () => {
-  const { error } = await supabase.from('partnerComments').delete().eq('id', '65711584-1d6f-48e9-bc12-5516ff3c7f5f');
+export const getCommentPostId = async () => {
+  let { data: commentPostId, error } = await supabase.from('partnerComments').select('postId');
+};
+
+export const getPartnerPostId = async () => {
+  let { data: partnerPostId, error } = await supabase.from('partnerPosts').select('id');
+};
+
+// supabase 삭제
+export const getCommentId = async () => {
+  let { data: commentId, error } = await supabase.from('partnerComments').select('id');
+  console.log('zz', commentId);
+};
+getCommentId();
+
+export const deletePartnerComments = async (commentId: string) => {
+  const { error } = await supabase.from('partnerComments').delete().eq('id', commentId);
   console.log('error', error);
 };
 
