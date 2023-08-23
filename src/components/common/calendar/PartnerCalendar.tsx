@@ -12,7 +12,7 @@ function PartnerCalendar() {
 
   useEffect(() => {
     console.log(selectedDates); // ['2023-08-14', '2023-08-16']
-  });
+  }, [selectedDates]);
 
   return (
     <Space direction="vertical" size={12}>
