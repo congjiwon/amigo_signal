@@ -65,7 +65,7 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
   // 필요 없는 정보: id, content, applicant, openChat, region
 
   return (
-    <Link to={`partner/detail/${post.id}`}>
+    <Link to={`detail/${post.id}`}>
       <St.PostCard>
         <St.Head>
           <St.Location>

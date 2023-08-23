@@ -32,7 +32,7 @@ function PartnerCommentsWrite() {
   const handleSubmitBtnClick = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setInputValue({ ...inputValue, content, date: Timestamptz });
-    mutation.mutate(inputValue);
+    // mutation.mutate(inputValue);
   };
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
