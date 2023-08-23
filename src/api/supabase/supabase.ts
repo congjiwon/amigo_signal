@@ -143,7 +143,7 @@ export interface Database {
           content: string;
           date: string;
           id: string;
-          postId: string | null;
+          postId: string;
           writerId: string;
         };
         Insert: {
@@ -157,6 +157,9 @@ export interface Database {
           content?: string;
           date?: string;
           id?: string;
+
+          postId?: string;
+
           writerId?: string;
         };
         Relationships: [
@@ -368,6 +371,8 @@ export interface Database {
 }
 
 export type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row'];
+export type Inserts<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Insert'];
+
 export type TPartnerComment = Database['public']['Tables']['partnerComments']['Row'];
 export type TPartnerInsert = Database['public']['Tables']['partnerComments']['Insert'];
 export type TPartnerUpdate = Database['public']['Tables']['partnerComments']['Update'];
