@@ -143,21 +143,29 @@ export interface Database {
           content: string;
           date: string;
           id: string;
+          postId: string | null;
           writerId: string;
         };
         Insert: {
           content: string;
           date?: string;
           id?: string;
-          writerId: string;
+          postId?: string;
+          writerId?: string;
         };
         Update: {
           content?: string;
           date?: string;
           id?: string;
-          writerId?: string;
+          writerId: string;
         };
         Relationships: [
+          {
+            foreignKeyName: 'partnerComments_postId_fkey';
+            columns: ['postId'];
+            referencedRelation: 'partnerPosts';
+            referencedColumns: ['id'];
+          },
           {
             foreignKeyName: 'partnerComments_writerId_fkey';
             columns: ['writerId'];
