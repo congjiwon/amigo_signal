@@ -45,9 +45,13 @@ const baseStyles = css<BaseStylesProps>`
         `;
       case 'apply':
         return css`
-          width: 40vw;
-          height: 20vw;
-          padding: 10px;
+          width: 80%;
+          height: 40%;
+          margin: 0px auto;
+          margin-top: 30px;
+          padding: 20px;
+          border-radius: 20px;
+          resize: none;
           &::-webkit-scrollbar {
             display: none;
           }
