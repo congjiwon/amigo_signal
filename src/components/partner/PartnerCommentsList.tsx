@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import { styled } from 'styled-components';
-import { deletePartnerComments, getAuthId, getPartnerComments, getPartnerPostId, getUserId, getWriterId, updatePartnerComments } from './Partner';
+import { deletePartnerComments, getAuthId, getCommentId, getPartnerComments, getPartnerPostId, getUserId, getWriterId, updatePartnerComments } from './Partner';
 import PartnerCommentsWrite from './PartnerCommentsWrite';
 
 const PartnerCommentsList = () => {
@@ -44,10 +44,16 @@ const PartnerCommentsList = () => {
     return id.writerId === authId;
   });
 
+  console.log('헐', filteredId);
+
   // 로그인 한 유저 정보 가져오기
   const { data: userId } = useQuery(['user'], getUserId);
+  const { data: commentId } = useQuery(['comment'], getCommentId);
   const user = userId?.filter((user) => {
     return user.id === authId;
+    // return commentId?.find((comment) => {
+    //   comment.id == user.id;
+    // })?.id;
   });
   console.log('user', user);
 
@@ -77,7 +83,7 @@ const PartnerCommentsList = () => {
         return (
           <div key={comment.id}>
             {isLoginUser && <Img src={user && user[0] && user[0].profileImageUrl!} />}
-            <p>{user && user[0] && user[0].nickName}</p>
+            {/* <p>{user && user[0] && user[0].nickName}</p> */}
             <div>
               <p>{comment.content}</p>
               <p>{comment.date}</p>

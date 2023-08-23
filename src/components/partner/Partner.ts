@@ -31,12 +31,11 @@ export const getUserId = async () => {
   let { data: userData } = await supabase.from('users').select('*');
   return userData;
 };
-getUserId();
 
-// export const getUserId = async () => {
-//   let { data: userId, error } = await supabase.from('users').select('id');
-//   return userId;
-// };
+export const getCommentId = async () => {
+  let { data: commentId } = await supabase.from('partnerComments').select('id');
+  return commentId;
+};
 
 export const getCommentPostId = async () => {
   let { data: commentPostId, error } = await supabase.from('partnerComments').select('postId');
