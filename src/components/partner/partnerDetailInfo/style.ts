@@ -71,10 +71,25 @@ export const DetailInfoBox = styled.div`
   border: 1px solid #eaeaea;
 `;
 
-export const ApplicantTitle = styled.h1`
+export const ModalTitle = styled.h1`
   padding-left: 50px;
   font-size: 1.4rem;
   font-weight: bold;
+`;
+
+export const TextCount = styled.span`
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+  margin-right: 45px;
+  font-size: 12px;
+  color: gray;
+`;
+
+export const SubmitApply = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 45px;
 `;
 
 export const ApplicantList = styled.ul`

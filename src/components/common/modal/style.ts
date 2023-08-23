@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 
 interface InnerProps {
-  size?: 'medium' | 'small';
+  size?: 'large' | 'medium' | 'small';
 }
 
 export const Outer = styled.div`
@@ -27,10 +27,16 @@ export const Inner = styled.div<InnerProps>`
 
   ${({ size }) => {
     switch (size) {
+      case 'large':
+        return `
+        width: 60%;
+        height: 70%;
+        border-radius: 30px;
+        `;
       case 'medium':
         return `
-        width: 50%;
-        height: 60%;
+        width: 45%;
+        height: 55%;
         border-radius: 30px;
         `;
       case 'small':

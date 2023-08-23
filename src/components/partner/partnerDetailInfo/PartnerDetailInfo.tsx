@@ -2,6 +2,7 @@ import { Tables } from '../../../api/supabase/supabase';
 import Modal from '../../common/modal/Modal';
 import { useModalStore } from '../../zustand/store';
 import ApplicantList from './ApplicantList';
+import ApplyWithInfo from './ApplyWithInfo';
 import * as St from './style';
 
 const PartnerDetailInfo = ({ partnerPostData }: { partnerPostData: Tables<'partnerPosts'> }) => {
@@ -56,9 +57,15 @@ const PartnerDetailInfo = ({ partnerPostData }: { partnerPostData: Tables<'partn
         </St.DetailInfoBox>
       </St.DetailInfoList>
       <St.ContentParagraph>{partnerPostData.content}</St.ContentParagraph>
+      <button onClick={() => openModal('applyWithInfo')}>참여하기</button>
+      {openedModals.applyWithInfo && (
+        <Modal id="applyWithInfo" size="medium">
+          <ApplyWithInfo />
+        </Modal>
+      )}
       <button onClick={() => openModal('applicantList')}>신청자 목록</button>
       {openedModals.applicantList && (
-        <Modal id="applicantList" size="medium">
+        <Modal id="applicantList" size="large">
           <ApplicantList />
         </Modal>
       )}

@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getPartnerPost } from '../api/supabase/partnerPosts';
 import PartnerDetailInfo from '../components/partner/partnerDetailInfo/PartnerDetailInfo';
 
-function ParterDetail() {
+function PartnerDetail() {
   const { postid } = useParams<string>();
 
   const { data: partnerPost, isLoading, isError } = useQuery(['partnerPost', postid], () => getPartnerPost({ postId: postid as string }));
@@ -25,4 +25,4 @@ function ParterDetail() {
   );
 }
 
-export default ParterDetail;
+export default PartnerDetail;

@@ -9,7 +9,7 @@ export const PORTAL_MODAL = 'portal-root';
 export interface ModalProps {
   id: string;
   children: React.ReactNode;
-  size: 'medium' | 'small' | undefined;
+  size: 'large' | 'medium' | 'small' | undefined;
 }
 
 const Modal: React.FC<ModalProps> = ({ id, children, size }) => {
