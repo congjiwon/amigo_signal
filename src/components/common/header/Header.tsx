@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import * as St from './style';
 import { supabase } from '../../../api/supabase/supabaseClient';
-import useSessionStore from '../../zstand/store';
+import useSessionStore from '../../../zustand/store';
 import { useEffect } from 'react';
 import { Alert } from '../modal/alert';
 
