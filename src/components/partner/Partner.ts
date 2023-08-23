@@ -63,3 +63,16 @@ export const updatePartnerComments = async (updateComment: TPartnerUpdate) => {
   // .eq('id', '65711584-1d6f-48e9-bc12-5516ff3c7f5f');
   console.log('error', error);
 };
+
+export const insertPost = async (dataToInsert: any) => {
+  try {
+    const { data, error } = await supabase.from('partnerPosts').insert(dataToInsert);
+    if (error) {
+      console.error('Insert error:', error);
+    } else {
+      console.log('Inserted data:', data);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};

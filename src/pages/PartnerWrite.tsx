@@ -1,10 +1,10 @@
 import React from 'react';
-import PartnerCalendar from '../components/common/calendar/PartnerCalendar';
+import PartnerWriteTemplate from '../components/partner/partnerWriteTemplate/PartnerWriteTemplate';
 function PartnerWrite() {
   return (
     <div>
-      PartnerWrite
-      <PartnerCalendar />
+      PartnerWrite page
+      <PartnerWriteTemplate />
     </div>
   );
 }

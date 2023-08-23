@@ -157,8 +157,7 @@ export interface Database {
           content?: string;
           date?: string;
           id?: string;
-          postId?: string | null;
-          writerId?: string;
+          writerId: string;
         };
         Relationships: [
           {
@@ -190,6 +189,12 @@ export interface Database {
           startDate: string;
           title: string;
           writerId: string | null;
+          users: {
+            birthday: string;
+            gender: string;
+            nickName: string;
+            profileImageUrl: string | null;
+          };
         };
         Insert: {
           content?: string;
