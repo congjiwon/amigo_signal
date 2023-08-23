@@ -3,28 +3,17 @@ import Modal from '../../common/modal/Modal';
 import { useModalStore } from '../../zustand/store';
 import ApplicantList from './ApplicantList';
 import ApplyWithInfo from './ApplyWithInfo';
+import UserFeedback from '../userFeedback/UserFeedback';
 import * as St from './style';
 
 const PartnerDetailInfo = ({ partnerPostData }: { partnerPostData: Tables<'partnerPosts'> }) => {
+  const { createdAt, writerId, openChat } = partnerPostData;
   const { openedModals, openModal } = useModalStore();
 
   return (
     <section>
       <St.H2>{partnerPostData.title}</St.H2>
-      <St.UserFeedbackBox>
-        <St.UserProfileBox>
-          <St.UserProfileImgBox>
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
-              <circle cx="20" cy="20" r="20" fill="#D9D9D9" />
-            </svg>
-          </St.UserProfileImgBox>
-          <div>
-            <St.BlackParagraph>유저아이디</St.BlackParagraph>
-            <St.GrayParagraph>2023.08.31 조회 100</St.GrayParagraph>
-          </div>
-        </St.UserProfileBox>
-        <div>버튼</div>
-      </St.UserFeedbackBox>
+      <UserFeedback createdAt={createdAt} writerId={writerId as string} openChat={openChat} />
       <St.DetailInfoList>
         <St.DetailInfoBox>
           <St.GrayParagraph>나라</St.GrayParagraph>
@@ -46,15 +35,11 @@ const PartnerDetailInfo = ({ partnerPostData }: { partnerPostData: Tables<'partn
             {partnerPostData.endDate}
           </St.BlackParagraph>
         </St.DetailInfoBox>
-        <St.DetailInfoBox>
-          <St.BlackParagraph>같이 카페가요!</St.BlackParagraph>
-        </St.DetailInfoBox>
-        <St.DetailInfoBox>
-          <St.BlackParagraph>같이 카페가요!</St.BlackParagraph>
-        </St.DetailInfoBox>
-        <St.DetailInfoBox>
-          <St.BlackParagraph>같이 카페가요!</St.BlackParagraph>
-        </St.DetailInfoBox>
+        {partnerPostData.interestUrl.map((url, index) => (
+          <St.DetailInfoBox key={index}>
+            <St.InterestImage src={url} alt={`interest-${index}`} />
+          </St.DetailInfoBox>
+        ))}
       </St.DetailInfoList>
       <St.ContentParagraph>{partnerPostData.content}</St.ContentParagraph>
       <button onClick={() => openModal('applyWithInfo')}>참여하기</button>

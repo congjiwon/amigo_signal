@@ -32,27 +32,6 @@ export const ContentParagraph = styled.p`
   line-height: 150%; /* 21px */
 `;
 
-export const UserFeedbackBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  border-bottom: 1px #eaeaea solid;
-`;
-
-export const UserProfileBox = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-`;
-
-export const UserProfileImgBox = styled.div`
-  width: 40px;
-  height: 40px;
-  flex-shrink: 0;
-`;
-
 export const DetailInfoList = styled.div`
   display: flex;
   flex-flow: row wrap;
@@ -69,6 +48,13 @@ export const DetailInfoBox = styled.div`
   gap: 10px;
   border-radius: 10px;
   border: 1px solid #eaeaea;
+`;
+
+export const InterestImage = styled.img`
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
 `;
 
 export const ModalTitle = styled.h1`

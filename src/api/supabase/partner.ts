@@ -5,6 +5,10 @@ export const getPartnerPosts = async () => {
   return { data: partnerPosts, error };
 };
 
+export const getPartnerPost = async ({ postId }: { postId: string }) => {
+  let { data: partnerPosts } = await supabase.from('partnerPosts').select('*').eq('id', postId).single();
+  return { data: partnerPosts };
+};
 export const getAuthId = async () => {
   const authId = await supabase.auth.getUser();
   // console.log('여기서', authId.data.user?.id);
