@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import * as St from './style';
-import { Tables } from '../../api/supabase/supabase';
 import { Link } from 'react-router-dom';
+import { Tables } from '../../api/supabase/supabase';
+import * as St from './style';
 
 type PartnerItemProps = {
   post: Tables<'partnerPosts'>;
