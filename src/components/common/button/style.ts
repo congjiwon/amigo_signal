@@ -14,6 +14,8 @@ const btnCommonStyles = css`
 `;
 
 export const Button = styled.button<{ $styleType: BtnStyleType }>`
+  cursor: pointer;
+
   ${(props) => {
     switch (props.$styleType) {
       case BtnStyleType.BTN_PRIMARY:
