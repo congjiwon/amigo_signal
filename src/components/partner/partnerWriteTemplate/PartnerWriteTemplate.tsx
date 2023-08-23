@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import PartnerCalendar from '../../common/calendar/PartnerCalendar';
-import NumOfPartner from './NumOfPartner';
 import { supabase } from '../../../api/supabase/supabaseClient';
 import Button from '../../common/button/Button';
 import { DatePicker, Space, Col, InputNumber, Row, Slider } from 'antd';
@@ -8,7 +6,6 @@ import { BtnStyleType } from '../../../types/styleTypes';
 import { styled } from 'styled-components';
 import LocationDropDown from '../../common/dropDown/LocationDropDown';
 import { insertPost } from '../Partner';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getAuthId } from '../../../api/supabase/partner';
 interface interestT {
   id: number;
@@ -37,7 +34,6 @@ function PartnerWriteTemplate() {
     let { data: interest, error } = await supabase.from('interest').select('*');
     if (interest) {
       setInterestTagList(interest);
-      console.log(interest);
     }
   };
 
@@ -103,10 +99,6 @@ function PartnerWriteTemplate() {
       setWriterId(authId);
     }
   };
-
-  // useEffect(() => {
-  //   getWriterId();
-  // }, []);
 
   // 글 작성 버튼 클릭 핸들러
   const handleWriteClick = async () => {

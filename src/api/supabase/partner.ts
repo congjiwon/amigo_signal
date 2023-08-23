@@ -13,7 +13,7 @@ export const getAuthId = async () => {
 
 export const getUserId = async () => {
   let { data: userId, error } = await supabase.from('users').select('id');
-  console.log('userId', userId);
+  // console.log('userId', userId);
   return userId;
 };
 getUserId();
