@@ -8,7 +8,7 @@ export const H2 = styled.h2`
   line-height: 150%;
 `;
 
-export const grayParagraph = styled.p`
+export const GrayParagraph = styled.p`
   color: #999;
   font-size: 14px;
   font-style: normal;
@@ -16,7 +16,7 @@ export const grayParagraph = styled.p`
   line-height: 150%; /* 21px */
 `;
 
-export const blackParagraph = styled.p`
+export const BlackParagraph = styled.p`
   color: #000;
   font-size: 14px;
   font-style: normal;
@@ -24,7 +24,7 @@ export const blackParagraph = styled.p`
   line-height: 150%; /* 21px */
 `;
 
-export const contentParagraph = styled.p`
+export const ContentParagraph = styled.p`
   color: #000;
   font-size: 14px;
   font-style: normal;
@@ -32,28 +32,7 @@ export const contentParagraph = styled.p`
   line-height: 150%; /* 21px */
 `;
 
-export const userFeedbackBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  border-bottom: 1px #eaeaea solid;
-`;
-
-export const userProfileBox = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-`;
-
-export const userProfileImgBox = styled.div`
-  width: 40px;
-  height: 40px;
-  flex-shrink: 0;
-`;
-
-export const detailInfoList = styled.div`
+export const DetailInfoList = styled.div`
   display: flex;
   flex-flow: row wrap;
   gap: 10px;
@@ -61,7 +40,7 @@ export const detailInfoList = styled.div`
   margin-bottom: 20px;
 `;
 
-export const detailInfoBox = styled.div`
+export const DetailInfoBox = styled.div`
   display: inline-flex;
   padding: 20px;
   justify-content: center;
@@ -69,4 +48,11 @@ export const detailInfoBox = styled.div`
   gap: 10px;
   border-radius: 10px;
   border: 1px solid #eaeaea;
+`;
+
+export const InterestImage = styled.img`
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
 `;

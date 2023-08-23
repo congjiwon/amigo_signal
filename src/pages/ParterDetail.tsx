@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { getPartnerPost } from '../api/supabase/partnerPosts';
+import { getPartnerPost } from '../api/supabase/partner';
 import PartnerDetailInfo from '../components/partner/partnerDetailInfo/PartnerDetailInfo';
 
 function ParterDetail() {
