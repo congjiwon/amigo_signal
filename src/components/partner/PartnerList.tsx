@@ -4,9 +4,12 @@ import { Tables } from '../../api/supabase/supabase';
 import PartnerItem from './PartnerItem';
 import * as St from './style';
 import TravelWith from '../../assets/imgs/partner/TravelWith.jpg';
+import { useNavigate } from 'react-router';
 
 const PartnerList = () => {
   const [postStorage, setPostStorage] = useState<Tables<'partnerPosts'>[]>([]);
+  const navigate = useNavigate();
+  console.log('postStorage', postStorage);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -15,6 +18,9 @@ const PartnerList = () => {
         console.error('동행자 게시글 목록을 가져오는 과정에서 에러 발생', error);
         setPostStorage([]);
       } else {
+        data.sort((a, b) => {
+          return new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf();
+        });
         setPostStorage(data);
       }
     };
@@ -32,6 +38,9 @@ const PartnerList = () => {
           여행이 더 즐거워질 거에요.
         </St.ImageSubText>
       </St.ImageWrapper>
+      <div>
+        <button onClick={() => navigate('/partner/write')}>글쓰기</button>
+      </div>
       <St.Grid>
         {postStorage.map((post) => {
           return <PartnerItem key={post.id} post={post} />;
