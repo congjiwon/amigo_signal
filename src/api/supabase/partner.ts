@@ -11,6 +11,11 @@ export const getPartnerPost = async ({ postId }: { postId: string }) => {
   return { data: partnerPosts };
 };
 
+export const deletePartnerPost = async ({ postId }: { postId: string }) => {
+  const { error } = await supabase.from('partnerPosts').delete().eq('id', postId);
+  console.log('deletePost', error);
+};
+
 // 댓글 작성
 export const postPartnerComment = async (newPartnerComment: TPartnerInsert) => {
   const { error } = await supabase.from('partnerComments').insert(newPartnerComment);
