@@ -5,8 +5,7 @@ import { DatePicker, Space, Col, InputNumber, Row, Slider } from 'antd';
 import { BtnStyleType } from '../../../types/styleTypes';
 import { styled } from 'styled-components';
 import LocationDropDown from '../../common/dropDown/LocationDropDown';
-import { insertPost } from '../Partner';
-import { getAuthId } from '../../../api/supabase/partner';
+import { getAuthId, insertPost } from '../../../api/supabase/partner';
 interface interestT {
   id: number;
   name: string;

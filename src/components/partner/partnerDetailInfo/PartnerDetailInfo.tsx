@@ -1,6 +1,6 @@
 import { Tables } from '../../../api/supabase/supabase';
 import Modal from '../../common/modal/Modal';
-import { useModalStore } from '../../zustand/store';
+import { useModalStore } from '../../../zustand/store';
 import ApplicantList from './ApplicantList';
 import ApplyWithInfo from './ApplyWithInfo';
 import UserFeedback from '../userFeedback/UserFeedback';

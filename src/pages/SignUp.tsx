@@ -1,5 +1,5 @@
 import SignUpForm from '../components/auth/SignUpForm';
-import useSessionStore from '../components/zustand/store';
+import useSessionStore from '../zustand/store';
 
 function SignUp() {
   const session = useSessionStore((state) => state.session);
