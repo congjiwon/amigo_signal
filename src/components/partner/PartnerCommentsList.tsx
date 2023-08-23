@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import { styled } from 'styled-components';
-import { deletePartnerComments, getAuthId, getCommentId, getPartnerComments, getPartnerPostId, getUserId, getWriterId, updatePartnerComments } from './Partner';
+import { deletePartnerComments, getAuthId, getCommentId, getPartnerComments, getPartnerPostId, getUser, getWriterId, updatePartnerComments } from '../../api/supabase/partner';
 import PartnerCommentsWrite from './PartnerCommentsWrite';
 
 const PartnerCommentsList = () => {
@@ -47,7 +47,7 @@ const PartnerCommentsList = () => {
   console.log('헐', filteredId);
 
   // 로그인 한 유저 정보 가져오기
-  const { data: userId } = useQuery(['user'], getUserId);
+  const { data: userId } = useQuery(['user'], getUser);
   const { data: commentId } = useQuery(['comment'], getCommentId);
   const user = userId?.filter((user) => {
     return user.id === authId;
