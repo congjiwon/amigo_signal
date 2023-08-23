@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Tables } from '../../api/supabase/supabase';
 import * as St from './style';
+import defaultProfileImage from '../../assets/imgs/users/default_profile_img.png';
 
 type PartnerItemProps = {
   post: Tables<'partnerPosts'>;
@@ -95,12 +96,12 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
         </St.Body>
         <St.Footer>
           <St.UserProfile>
-            {post.users.profileImageUrl && <St.ProfileImage src={post.users.profileImageUrl} alt="profile" />}
+            {post.users.profileImageUrl ? <St.ProfileImage src={post.users.profileImageUrl} alt="profile" /> : <St.ProfileImage src={defaultProfileImage} alt="profile" />}
             <p>{post.users.nickName}</p>
           </St.UserProfile>
           <div>
             <p>
-              {getAgeCategory(post.users.birthday)} | {post.users.gender === 'woman' ? '여성' : '남성'}
+              {getAgeCategory(post.users.birthday)} | {post.users.gender}
             </p>
           </div>
         </St.Footer>

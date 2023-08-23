@@ -136,7 +136,7 @@ export const Footer = styled.div`
 export const UserProfile = styled.div`
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 7px;
 `;
 
 export const ProfileImage = styled.img`

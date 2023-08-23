@@ -56,38 +56,3 @@ export const InterestImage = styled.img`
   height: 50px;
   flex-shrink: 0;
 `;
-
-export const ModalTitle = styled.h1`
-  padding-left: 50px;
-  font-size: 1.4rem;
-  font-weight: bold;
-`;
-
-export const TextCount = styled.span`
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
-  margin-right: 45px;
-  font-size: 12px;
-  color: gray;
-`;
-
-export const SubmitApply = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  margin-right: 45px;
-`;
-
-export const ApplicantList = styled.ul`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 85%;
-  margin: 0px auto;
-  margin-top: 30px;
-`;
-
-export const ApplicantCard = styled.li`
-  width: 100%;
-  border: 1px solid gray;
-`;

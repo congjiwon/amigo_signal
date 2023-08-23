@@ -30,36 +30,67 @@ export const AlertError = ({ title = '에러가 발생했습니다.', text = '�
   });
 };
 
+// 취소 시 confirm 창 -> cancelMessage 입력 필수
+export const ConfirmCancel = (cancelMessage: string): Promise<boolean> => {
+  return new Promise((resolve) => {
+    Swal.fire({
+      title: '정말 취소하시겠습니까?',
+      text: '이 작업은 되돌릴 수 없습니다.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: '네, 취소하겠습니다.',
+      cancelButtonText: '닫기',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire('취소됨', cancelMessage, 'success');
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    });
+  });
+};
+
 // 삭제 시 confirm 창 -> deleteMessage 입력 필수
-export const ConfirmDelete = (deleteMessage: string) => {
-  Swal.fire({
-    title: '정말 삭제하시겠습니까?',
-    text: '이 작업은 되돌릴 수 없습니다.',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: '네, 삭제하겠습니다.',
-    cancelButtonText: '취소',
-  }).then((result) => {
-    if (result.isConfirmed) {
-      Swal.fire('삭제됨', deleteMessage, 'success');
-    }
+export const ConfirmDelete = (deleteMessage: string): Promise<boolean> => {
+  return new Promise((resolve) => {
+    Swal.fire({
+      title: '정말 삭제하시겠습니까?',
+      text: '이 작업은 되돌릴 수 없습니다.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: '네, 삭제하겠습니다.',
+      cancelButtonText: '취소',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire('삭제됨', deleteMessage, 'success');
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    });
   });
 };
 
 // 수정사항 저장 시 confirm 창
-export const ConfirmSave = () => {
-  Swal.fire({
-    icon: 'question',
-    title: '수정사항을 반영하시겠습니까?',
-    showCancelButton: true,
-    confirmButtonText: '확인',
-    cancelButtonText: '취소',
-  }).then((result) => {
-    if (result.isConfirmed) {
-      Swal.fire('수정되었습니다!', '', 'success');
-    }
+export const ConfirmSave = (): Promise<boolean> => {
+  return new Promise((resolve) => {
+    Swal.fire({
+      icon: 'question',
+      title: '수정사항을 반영하시겠습니까?',
+      showCancelButton: true,
+      confirmButtonText: '확인',
+      cancelButtonText: '취소',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire('수정되었습니다!', '', 'success');
+        resolve(true);
+      } else resolve(false);
+    });
   });
 };
 
@@ -72,18 +103,38 @@ export const ConfirmSave = () => {
 //   const handleAlert = () => {
 //     Alert({ title: '로그인 성공', position: 'top-end' });
 //   };
+
 //   // 빈 배열 넣으면 기본 error 메시지로 alert
 //   // 다음과 같이 error 메시지 커스텀 가능 -> AlertError({ title: '에러다.', text: '이제 나가줘' });
 //   const handleAlertError = () => {
 //     AlertError({});
 //   };
+
 //   // 삭제 메시지 입력 필수
-//   const handleConfirmDelete = () => {
-//     ConfirmDelete('해당 댓글이 삭제되었습니다.');
+//   const handleConfirmDelete = async () => {
+//     const isConfirmed = await ConfirmDelete('해당 댓글이 삭제되었습니다.');
+//     if (!isConfirmed) {
+//       return;
+//     }
+//     try {
+//       // confirm 확인 눌렀을 떄의 로직 (아래는 alert로 넣어봄)
+//       alert('삭제 성공');
+//     } catch (error) {
+//       // error 시 로직
+//     }
 //   };
 
-//   const handleConfirmSave = () => {
-//     ConfirmSave();
+//   const handleConfirmSave = async () => {
+//     const isConfirmed = await ConfirmSave();
+//     if (!isConfirmed) {
+//       return;
+//     }
+//     try {
+//       // confirm 확인 눌렀을 떄의 로직 (아래는 alert로 넣어봄)
+//       alert('수정 성공');
+//     } catch (error) {
+//       // error 시 로직
+//     }
 //   };
 
 //   return (

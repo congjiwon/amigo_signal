@@ -1,4 +1,4 @@
-import { TPartnerInsert, TPartnerUpdate } from './supabase';
+import { Inserts, TPartnerInsert, TPartnerUpdate } from './supabase';
 import { supabase } from './supabaseClient';
 
 export const getPartnerPosts = async () => {
@@ -70,5 +70,41 @@ export const insertPost = async (dataToInsert: any) => {
     }
   } catch (error) {
     console.error('Error:', error);
+  }
+};
+
+// 참여하기 (자기소개 모달에서 보내는 정보)
+export const insertApplicant = async (applicantData: Inserts<'applicants'>) => {
+  try {
+    const { data, error } = await supabase.from('applicants').insert(applicantData);
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error('참여하기 정보 보내는 과정에서 오류 발생', error);
+    throw error;
+  }
+};
+
+// 참여 신청했는지 여부 check
+export const checkApply = async (postId: string, logInUserId: string) => {
+  if (!postId || !logInUserId) return;
+  const { data, error } = await supabase.from('applicants').select('*').eq('postId', postId).eq('applicantId', logInUserId);
+  if (error) {
+    console.error('참가 여부를 확인하는 과정에서 error 발생', error);
+    return;
+  }
+  console.log('checkApply 함수에서 찍은 data', data);
+  return data;
+};
+
+// 참여 취소
+export const deleteApplicant = async (postId: string, logInUserId: string) => {
+  try {
+    const { data, error } = await supabase.from('applicants').delete().eq('postId', postId).eq('applicantId', logInUserId);
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error('참여 취소 과정에서 error 발생', error);
+    throw error;
   }
 };
