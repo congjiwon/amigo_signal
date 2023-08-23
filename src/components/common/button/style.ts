@@ -15,6 +15,8 @@ const btnCommonStyles = css`
 `;
 
 export const Button = styled.button<{ $styleType: BtnStyleType; disabled: boolean | undefined }>`
+  cursor: pointer;
+
   ${(props) => {
     if (props.disabled) {
       return css`
