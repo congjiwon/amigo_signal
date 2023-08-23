@@ -11,27 +11,6 @@ export const getPartnerPost = async ({ postId }: { postId: string }) => {
   return { data: partnerPosts };
 };
 
-export const getUserId = async () => {
-  let { data: userId, error } = await supabase.from('users').select('id');
-  // console.log('userId', userId);
-  return userId;
-};
-
-// 설빈: 로그인 연동 후 수정
-// type TPartnerForCommentUpdate = {
-//   id: string,
-//   inputValue: TPartnerUpdate
-// }
-
-// 현재 로그인 한 유저
-export const getAuthId = async () => {
-  const authId = await supabase.auth.getUser();
-  // console.log('여기서', authId.data.user?.id);
-  return authId.data.user?.id;
-};
-
-const authId = getAuthId();
-
 // 댓글 작성
 export const postPartnerComment = async (newPartnerComment: TPartnerInsert) => {
   const { error } = await supabase.from('partnerComments').insert(newPartnerComment);
@@ -42,12 +21,6 @@ export const postPartnerComment = async (newPartnerComment: TPartnerInsert) => {
 export const getPartnerComments = async () => {
   let { data: partnerComments, error } = await supabase.from('partnerComments').select('*');
   return partnerComments;
-};
-
-// user 테이블 ID
-export const getUser = async () => {
-  let { data: userData } = await supabase.from('users').select('*');
-  return userData;
 };
 
 export const getCommentId = async () => {

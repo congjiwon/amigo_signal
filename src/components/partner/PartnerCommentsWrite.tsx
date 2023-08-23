@@ -4,7 +4,8 @@ import { useParams } from 'react-router';
 import { styled } from 'styled-components';
 import { BtnStyleType } from '../../types/styleTypes';
 import Button from '../common/button/Button';
-import { getAuthId, postPartnerComment } from '../../api/supabase/partner';
+import { postPartnerComment } from '../../api/supabase/partner';
+import { getAuthId } from '../../api/supabase/users';
 
 type PartnerCommentWriteProps = {
   initialComment?: {
