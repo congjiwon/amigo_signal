@@ -1,7 +1,10 @@
 import { useState } from 'react';
-import { supabase } from '../../api/supabase/supabaseClient';
+import { supabase } from '../../../api/supabase/supabaseClient';
+import { useNavigate } from 'react-router';
+import { Alert } from '../../common/modal/alert';
 
 const SignInForm = () => {
+  const navigate = useNavigate();
   const [loginEmail, setLoginEmail] = useState<string>('');
   const [loginPassword, setLoginPassword] = useState<string>('');
   const signInHandler = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -10,7 +13,10 @@ const SignInForm = () => {
       email: loginEmail,
       password: loginPassword,
     });
-    if (error) alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+    if (error) Alert({ title: '아이디 또는 비밀번호가 일치하지 않습니다.' });
+    else {
+      navigate('/partner');
+    }
   };
 
   return (

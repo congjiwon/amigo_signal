@@ -1,14 +1,10 @@
-import SignUpForm from '../components/auth/SignUpForm';
-import useSessionStore from '../components/zstand/store';
+import SignUpForm from '../components/auth/signUpForm/SignUpForm';
 
 function SignUp() {
-  const session = useSessionStore((state) => state.session);
-  console.log(session);
   return (
-    <div>
-      SignUp Page
+    <>
       <SignUpForm />
-    </div>
+    </>
   );
 }
 

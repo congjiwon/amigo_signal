@@ -3,6 +3,7 @@ import * as St from './style';
 import { supabase } from '../../../api/supabase/supabaseClient';
 import useSessionStore from '../../zstand/store';
 import { useEffect } from 'react';
+import { Alert } from '../modal/alert';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -21,7 +22,8 @@ export default function Header() {
 
   const handleSignout = async () => {
     await supabase.auth.signOut();
-    navigate('/');
+    Alert({ title: '로그아웃 되었습니다.' });
+    navigate('/login');
   };
 
   return (
