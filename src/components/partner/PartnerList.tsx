@@ -5,6 +5,7 @@ import PartnerItem from './PartnerItem';
 import * as St from './style';
 import TravelWith from '../../assets/imgs/partner/TravelWith.jpg';
 import { useNavigate } from 'react-router';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 const PartnerList = () => {
   const [postStorage, setPostStorage] = useState<Tables<'partnerPosts'>[]>([]);
@@ -26,6 +27,28 @@ const PartnerList = () => {
     };
     fetchPosts();
   }, []);
+
+  //무한스크롤
+  const {
+    data: data,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ['posts'],
+    queryFn: fetchPostData,
+    getNextPageParam: (lastPage) => {
+      console.log('getNextPageParam 호출');
+      console.log('lastPage', lastPage);
+      if (lastPage.page < lastPage.total_pages) {
+        console.log('다음 페이지로 pageParam 저장');
+        return lastPage.page + 1;
+      }
+    },
+    select: (data) => {
+      return data.pages.map((pageData) => pageData.results).flat();
+    },
+  });
 
   return (
     <>
