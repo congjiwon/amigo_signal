@@ -5,7 +5,7 @@ interface ButtonProps {
   type?: 'button' | 'submit' | 'reset';
   children: React.ReactNode;
   styleType: BtnStyleType;
-  disabled?: boolean;
+  disabled?: boolean | undefined;
   onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 

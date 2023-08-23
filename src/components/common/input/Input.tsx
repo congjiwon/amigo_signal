@@ -3,7 +3,7 @@ import * as St from './style';
 export interface InputProps {
   id?: string;
   name?: string;
-  type: 'text' | 'textarea' | 'email' | 'password';
+  type: 'text' | 'textarea' | 'email' | 'password' | 'number';
   inputStyleType: 'comment' | 'auth' | 'search' | 'write' | 'apply';
   placeholder?: string;
   value?: string;

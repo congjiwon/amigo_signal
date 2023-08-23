@@ -11,40 +11,49 @@ const btnCommonStyles = css`
   color: #fff;
   letter-spacing: 1px;
   line-height: 20px;
+  cursor: pointer;
 `;
 
-export const Button = styled.button<{ $styleType: BtnStyleType }>`
+export const Button = styled.button<{ $styleType: BtnStyleType; disabled: boolean | undefined }>`
   cursor: pointer;
 
   ${(props) => {
-    switch (props.$styleType) {
-      case BtnStyleType.BTN_PRIMARY:
-        return css`
-          ${btnCommonStyles}
-          background: #FF7000;
-        `;
-      case BtnStyleType.BTN_SUBMIT:
-        return css`
-          ${btnCommonStyles}
-          background: #198754;
-        `;
-      case BtnStyleType.BTN_DANGER:
-        return css`
-          ${btnCommonStyles}
-          background: #dc3545;
-        `;
-      case BtnStyleType.BTN_DARK:
-        return css`
-          ${btnCommonStyles}
-          background: #212529;
-        `;
-      case BtnStyleType.BTN_DISABLED:
-        return css`
-          ${btnCommonStyles}
-          background: #81858A;
-        `;
-      default:
-        return ``;
+    if (props.disabled) {
+      return css`
+        ${btnCommonStyles}
+        background-color: #777;
+        cursor: not-allowed;
+      `;
+    } else {
+      switch (props.$styleType) {
+        case BtnStyleType.BTN_PRIMARY:
+          return css`
+            ${btnCommonStyles}
+            background: #FF7000;
+          `;
+        case BtnStyleType.BTN_SUBMIT:
+          return css`
+            ${btnCommonStyles}
+            background: #198754;
+          `;
+        case BtnStyleType.BTN_DANGER:
+          return css`
+            ${btnCommonStyles}
+            background: #dc3545;
+          `;
+        case BtnStyleType.BTN_DARK:
+          return css`
+            ${btnCommonStyles}
+            background: #212529;
+          `;
+        case BtnStyleType.BTN_DISABLED:
+          return css`
+            ${btnCommonStyles}
+            background: #81858A;
+          `;
+        default:
+          return ``;
+      }
     }
   }}
 `;
