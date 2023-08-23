@@ -2,10 +2,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import { styled } from 'styled-components';
-import { BtnStyleType } from '../../types/styleTypes';
-import Button from '../common/button/Button';
-import { postPartnerComment } from '../../api/supabase/partner';
-import { getAuthId } from '../../api/supabase/users';
+import { postPartnerComment } from '../../../api/supabase/partner';
+import { getAuthId } from '../../../api/supabase/users';
+import { BtnStyleType } from '../../../types/styleTypes';
+import Button from '../../common/button/Button';
 
 type PartnerCommentWriteProps = {
   initialComment?: {
@@ -19,7 +19,7 @@ type PartnerCommentWriteProps = {
 
 // function PartnerCommentsWrite({ initialComment }: PartnerCommentWriteProps) {
 //   const [content, setContent] = useState(initialComment ? initialComment.content : '');
-function PartnerCommentsWrite({ prevComment }: { prevComment: string }) {
+function PartnerCommentsWrite() {
   const params = useParams();
   const [content, setContent] = useState('');
   const queryKey = ['partnerComments2'];
@@ -64,8 +64,8 @@ function PartnerCommentsWrite({ prevComment }: { prevComment: string }) {
   //   },
   // });
 
-  const handleSubmitBtnClick = () => {
-    // event.preventDefault();
+  const handleSubmitBtnClick = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     const comment = {
       content: content,
       date: Timestamptz,
