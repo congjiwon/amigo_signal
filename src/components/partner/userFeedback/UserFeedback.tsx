@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { getUser } from '../../../api/supabase/users';
-import useSessionStore from '../../zstand/store';
+import useSessionStore from '../../zustand/store';
 import useCopyClipBoard from '../../../hooks/useCopyClipBoard';
 import * as St from './style';
 
