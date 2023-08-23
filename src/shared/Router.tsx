@@ -3,7 +3,7 @@ import Layout from '../components/common/layout/Layout';
 import Intro from '../pages/Intro';
 import LogIn from '../pages/LogIn';
 import MyPage from '../pages/MyPage';
-import PartnerDetail from '../pages/ParterDetail';
+import PartnerDetail from '../pages/PartnerDetail';
 import Partner from '../pages/Partner';
 import PartnerComment from '../pages/PartnerComment';
 import PartnerWrite from '../pages/PartnerWrite';
@@ -24,8 +24,8 @@ const Router: React.FC = () => {
           <Route path="/partner" element={<Partner />} />
           <Route path="/partner/detail/:postid" element={<PartnerDetail />} />
           <Route path="/partner/write" element={<PartnerWrite />} />
-          <Route path="/spotshare" element={<SpotShare />} />
           <Route path="/partner/comment" element={<PartnerComment />} />
+          <Route path="/spotshare" element={<SpotShare />} />
           <Route path="/spotshare/detail/:postid" element={<SpotShareDetail />} />
           <Route path="/spotshare/write" element={<SpotShareWrite />} />
         </Route>

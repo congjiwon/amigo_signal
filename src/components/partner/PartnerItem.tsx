@@ -40,29 +40,34 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
     getFlagAndDisplayImage();
   }, []);
 
-  // 작성시간(createAt) -> 시간 경과 렌더링하도록 변경
-  const timeAgo = (createDate: string) => {
-    const date = new Date(createDate);
-    const now = new Date();
-    const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
+  const getAgeCategory = (birthday: string) => {
+    const birthDate = new Date(birthday);
+    const currentDate = new Date();
 
-    const timeUnits = [
-      { value: days, unit: '일' },
-      { value: hours, unit: '시간' },
-      { value: minutes, unit: '분' },
-      { value: seconds, unit: '초' },
-    ];
+    const age = currentDate.getFullYear() - birthDate.getFullYear() - (currentDate.getMonth() < birthDate.getMonth() || (currentDate.getMonth() === birthDate.getMonth() && currentDate.getDate() < birthDate.getDate()) ? 1 : 0);
 
-    const result = timeUnits.find((unit) => unit.value > 0) || timeUnits[timeUnits.length - 1];
-    return `${result.value}${result.unit} 전`;
+    if (age >= 10 && age < 20) {
+      return '10대';
+    }
+    if (age >= 20 && age < 30) {
+      return '20대';
+    }
+    if (age >= 30 && age < 40) {
+      return '30대';
+    }
+    if (age >= 40 && age < 50) {
+      return '40대';
+    }
+    if (age >= 50 && age < 60) {
+      return '50대';
+    }
+    if (age >= 60 && age < 70) {
+      return '60대';
+    }
+    if (age >= 70 && age < 80) {
+      return '70대';
+    }
   };
-
-  // 필요한 정보: title, startDate, endDate, numOfPeople, isOpen, createdAt, country
-  // 가공 필요 -> writerId, interestUrl
-  // 필요 없는 정보: id, content, applicant, openChat, region
 
   return (
     <Link to={`detail/${post.id}`}>
@@ -89,7 +94,15 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
           <p>모집인원: {post.numOfPeople}명</p>
         </St.Body>
         <St.Footer>
-          <p>{timeAgo(post.createdAt)}</p>
+          <St.UserProfile>
+            {post.users.profileImageUrl && <St.ProfileImage src={post.users.profileImageUrl} alt="profile" />}
+            <p>{post.users.nickName}</p>
+          </St.UserProfile>
+          <div>
+            <p>
+              {getAgeCategory(post.users.birthday)} | {post.users.gender === 'woman' ? '여성' : '남성'}
+            </p>
+          </div>
         </St.Footer>
       </St.PostCard>
     </Link>

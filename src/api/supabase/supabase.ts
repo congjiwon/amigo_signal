@@ -181,6 +181,12 @@ export interface Database {
           startDate: string;
           title: string;
           writerId: string | null;
+          users: {
+            birthday: string;
+            gender: string;
+            nickName: string;
+            profileImageUrl: string | null;
+          };
         };
         Insert: {
           content?: string;
