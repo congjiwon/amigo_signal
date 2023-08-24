@@ -4,6 +4,7 @@ import { getUser } from '../../../api/supabase/users';
 import { deletePartnerPost } from '../../../api/supabase/partner';
 import useSessionStore from '../../../zustand/store';
 import useCopyClipBoard from '../../../hooks/useCopyClipBoard';
+import { ConfirmDelete } from '../../common/modal/alert';
 import * as St from './style';
 
 interface Props {
@@ -45,9 +46,16 @@ const UserFeedback = ({ id, createdAt, writerId, openChat }: Props) => {
 
   const isPostUser = () => logInUserId === userId;
 
-  const handleDelBtn = (id: string) => {
-    if (window.confirm('삭제하시겠습니까?')) {
+  const handleDelBtn = async (id: string) => {
+    const isConfirmed = await ConfirmDelete('해당 동행 글이 삭제되었습니다.');
+    if (!isConfirmed) {
+      return;
+    }
+    try {
       mutation.mutate({ postId: id });
+      navigate('/partner');
+    } catch (error) {
+      // error 시 로직
     }
   };
 
