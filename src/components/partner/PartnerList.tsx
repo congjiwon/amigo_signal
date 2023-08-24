@@ -1,15 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { getPartnerPosts } from '../../api/supabase/partner';
 import { Tables } from '../../api/supabase/supabase';
 import PartnerItem from './PartnerItem';
 import * as St from './style';
 import TravelWith from '../../assets/imgs/partner/TravelWith.jpg';
 import { useNavigate } from 'react-router';
-import { useInfiniteQuery } from '@tanstack/react-query';
 
 const PartnerList = () => {
   const [postStorage, setPostStorage] = useState<Tables<'partnerPosts'>[]>([]);
   const navigate = useNavigate();
+  const divRef = useRef(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const limit = 10;
+  const offset = (currentPage - 1) * limit;
   console.log('postStorage', postStorage);
 
   useEffect(() => {
@@ -28,27 +31,30 @@ const PartnerList = () => {
     fetchPosts();
   }, []);
 
-  //무한스크롤
-  const {
-    data: data,
-    hasNextPage,
-    fetchNextPage,
-    isFetchingNextPage,
-  } = useInfiniteQuery({
-    queryKey: ['posts'],
-    queryFn: fetchPostData,
-    getNextPageParam: (lastPage) => {
-      console.log('getNextPageParam 호출');
-      console.log('lastPage', lastPage);
-      if (lastPage.page < lastPage.total_pages) {
-        console.log('다음 페이지로 pageParam 저장');
-        return lastPage.page + 1;
+  const defaultOption = {
+    root: null,
+    threshold: 0.5,
+    rootMargin: '0px',
+  };
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting) {
+        setTimeout(() => {
+          setCurrentPage((prevPage) => prevPage + 1);
+        }, 500);
       }
     },
-    select: (data) => {
-      return data.pages.map((pageData) => pageData.results).flat();
+    {
+      ...defaultOption,
     },
-  });
+  );
+
+  useEffect(() => {
+    if (divRef.current) {
+      observer.observe(divRef.current);
+    }
+  }, []);
 
   return (
     <>
@@ -65,9 +71,12 @@ const PartnerList = () => {
         <button onClick={() => navigate('/partner/write')}>글쓰기</button>
       </div>
       <St.Grid>
-        {postStorage.map((post) => {
-          return <PartnerItem key={post.id} post={post} />;
-        })}
+        {postStorage
+          .map((post) => {
+            return <PartnerItem key={post.id} post={post} />;
+          })
+          .slice(0, offset + 10)}
+        <div ref={divRef}></div>
       </St.Grid>
     </>
   );
