@@ -24,3 +24,8 @@ export const getAuthId = async () => {
 };
 
 const authId = getAuthId();
+
+export const getCurrentUser = async (userId: string) => {
+  let { data: user } = await supabase.from('users').select('*').eq('id', userId).single();
+  return user;
+};
