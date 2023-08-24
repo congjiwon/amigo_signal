@@ -1,7 +1,11 @@
-import React from 'react';
+import Profile from '../components/myPage/profile/Profile';
 
 function MyPage() {
-  return <div>MyPage</div>;
+  return (
+    <>
+      <Profile />
+    </>
+  );
 }
 
 export default MyPage;
