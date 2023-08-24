@@ -1,16 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
 import { useParams } from 'react-router';
 import { styled } from 'styled-components';
-import { deletePartnerComments, getCommentId, getPartnerComments, getPartnerPostId, getWriterId, updatePartnerComments } from '../../api/supabase/partner';
+import { deletePartnerComments, getPartnerComments, getPartnerPostId, getWriterId, updatePartnerComments } from '../../../api/supabase/partner';
+import { getAuthId, getUsers } from '../../../api/supabase/users';
+import PartnerCommentList from './PartnerCommentList';
 import PartnerCommentsWrite from './PartnerCommentsWrite';
-import { getAuthId, getUsers } from '../../api/supabase/users';
 
 const PartnerCommentsList = () => {
   const params = useParams();
   const queryClient = useQueryClient();
-  const [prevComment, setPrevComment] = useState('');
   const queryKey = ['partnerComments'];
+  // 여기서 데이터가져오는데 여기 쿼리키랑 다른곳 쿼리키(comment)랑 달라서..안된거였다.
   const { isLoading: getIsLoading, isError: getIsError, data: allComments } = useQuery(queryKey, getPartnerComments);
 
   const { isLoading: fixIsLoading, isError: fixIsError } = useMutation(updatePartnerComments, {
@@ -41,63 +41,31 @@ const PartnerCommentsList = () => {
   const { isLoading, data: authId } = useQuery(['partnerAuthId'], getAuthId);
 
   // 현재 로그인한 유저의 댓글목록(writerId)
-  const filteredId = writerId?.filter((id) => {
+  const filteredIds = writerId?.filter((id) => {
     return id.writerId === authId;
   });
 
-  console.log('헐', filteredId);
-
   // 로그인 한 유저 정보 가져오기
   const { data: userId } = useQuery(['user'], getUsers);
-  const { data: commentId } = useQuery(['comment'], getCommentId);
   const user = userId?.filter((user) => {
     return user.id === authId;
     // return commentId?.find((comment) => {
     //   comment.id == user.id;
     // })?.id;
   });
-  console.log('user', user);
 
   // 다른걸 리턴할 필요가 없으니까 그냥 이거자체를 리턴.
   if (getIsLoading || getIsError || mutation.isLoading || mutation.isError || fixIsLoading || fixIsError) {
-    return <div>그렇게 됐다.</div>;
+    return <div>로딩 || 에러</div>;
   }
-
-  const handleDelBtn = (id: string) => {
-    if (window.confirm('삭제하시겠습니까?')) {
-      mutation.mutate(id);
-    }
-  };
-
-  // input은 계속 있어야하니까,
-  // 변수로 상태값만 바꾸고 컴포넌트자체를 바꿀 필요는 없다.
-  // const handleFixBtn = (comment: string) => {
-  //   setPrevComment(comment);
-  // };
 
   return (
     <div>
       <p>댓글 {filteredComments?.length}개</p>
-      <PartnerCommentsWrite prevComment={prevComment} />
+      <PartnerCommentsWrite />
       {filteredComments?.map((comment) => {
-        const isLoginUser = filteredId?.some((id) => id.writerId === comment.writerId);
-        return (
-          <div key={comment.id}>
-            {isLoginUser && <Img src={user && user[0] && user[0].profileImageUrl!} />}
-            {/* <p>{user && user[0] && user[0].nickName}</p> */}
-            <div>
-              <p>{comment.content}</p>
-              <p>{comment.date}</p>
-            </div>
-            {isLoginUser && (
-              <div>
-                <button>수정</button>
-                <button onClick={() => handleDelBtn(comment.id)}>삭제</button>
-              </div>
-            )}
-            <button>답글달기</button>
-          </div>
-        );
+        const isLoginUser = filteredIds?.some((id) => id.writerId === comment.writerId);
+        return <PartnerCommentList key={comment.id} comment={comment} isLoginUser={isLoginUser!} />;
       })}
     </div>
   );
@@ -105,6 +73,15 @@ const PartnerCommentsList = () => {
 
 export default PartnerCommentsList;
 
+{
+  /*  컴포넌트로 빼고 id값으로 데이터 받아올 수 있게 수정해야한다. 
+      오 컴포넌트로 빼니까 해당 댓글만 value값에 맞게 바뀜 신기하넹~
+  */
+}
+// <PartnerCommentsList filteredComments={filteredComments} filteredIds={filteredIds} handleDelBtn={handleDelBtn} />
+{
+  /* <PartnerCommentsList {...filteredComments} {...filteredIds} {...handleDelBtn} /> */
+}
 const Img = styled.img`
   width: 40px;
   height: 40px;

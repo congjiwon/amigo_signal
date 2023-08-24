@@ -1,4 +1,4 @@
-import PartnerCommentsList from '../components/partner/PartnerCommentsList';
+import PartnerCommentsList from '../components/partner/partnerComment/PartnerComments';
 
 function PartnerComment() {
   return <PartnerCommentsList />;

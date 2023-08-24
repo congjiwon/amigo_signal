@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { getPartnerPost } from '../api/supabase/partner';
-import PartnerCommentsList from '../components/partner/PartnerCommentsList';
+import PartnerCommentsList from '../components/partner/partnerComment/PartnerComments';
 import PartnerDetailInfo from '../components/partner/partnerDetailInfo/PartnerDetailInfo';
 import Communication from '../components/partner/communicate/Communication';
 import useSessionStore from '../zustand/store';
