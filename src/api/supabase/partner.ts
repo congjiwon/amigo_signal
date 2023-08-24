@@ -17,9 +17,9 @@ export const postPartnerComment = async (newPartnerComment: TPartnerInsert) => {
   console.log('error', error);
 };
 
-// 동행 댓글 가져오기
+// 동행 댓글 가져오기(정렬)
 export const getPartnerComments = async () => {
-  let { data: partnerComments, error } = await supabase.from('partnerComments').select('*');
+  let { data: partnerComments, error } = await supabase.from('partnerComments').select('*').order('date');
   return partnerComments;
 };
 
@@ -42,6 +42,7 @@ export const getWriterId = async () => {
   let { data: writerId, error } = await supabase.from('partnerComments').select('writerId');
   return writerId;
 };
+getWriterId();
 
 // 동행 댓글 삭제
 export const deletePartnerComments = async (commentId: string) => {
@@ -49,9 +50,9 @@ export const deletePartnerComments = async (commentId: string) => {
   console.log('error', error);
 };
 
-// 동행 댓글 수정
 export const updatePartnerComments = async (updateComment: TPartnerUpdate) => {
-  const { data: testData, error } = await supabase.from('partnerComments').update(updateComment);
+  // 수정할 댓글 ID = updateComment.id
+  const { data: updatedData, error } = await supabase.from('partnerComments').update(updateComment).eq('id', updateComment.id);
   console.log('error', error);
 };
 

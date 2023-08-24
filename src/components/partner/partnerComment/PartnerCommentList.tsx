@@ -1,66 +1,102 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useParams } from 'react-router';
-import { getCommentId, updatePartnerComments } from '../../../api/supabase/partner';
-import { getAuthId } from '../../../api/supabase/users';
-import { PartnerCommentListProps } from './PartnerComments';
+import { deletePartnerComments, getCommentId, getWriterId, updatePartnerComments } from '../../../api/supabase/partner';
+import { getAuthId, getUserIds, getUsers } from '../../../api/supabase/users';
 
-function PartnerCommentList({ comment, filteredIds, isLoginUser, handleDelBtn }: PartnerCommentListProps) {
-  // function PartnerCommentList(comment: PartnerCommentListProps['comment'], filteredIds: PartnerCommentListProps['filteredIds'], isLoginUser: PartnerCommentListProps['isLoginUser'], handleDelBtn: PartnerCommentListProps['handleDelBtn']): JSX.Element {
+type CommentProps = {
+  content: string;
+  date: string;
+  id: string;
+  postId: string | null;
+  writerId: string;
+};
+
+export interface PartnerCommentListProps {
+  comment: CommentProps | undefined;
+  isLoginUser: boolean;
+}
+
+function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
   // 구조분해할당하기 함수컴포넌트 props는 무조건 객체
   const params = useParams();
   const [isUpdate, setIsUpdate] = useState(false);
   const [updateComment, setUpdateComment] = useState('');
+  const [commentIdToUpdate, setCommentIdToUpdate] = useState('');
   const queryClient = useQueryClient();
   const { isLoading, data: authId } = useQuery(['authId'], getAuthId);
   const mutation = useMutation(updatePartnerComments, {
     onSuccess: async () => {
-      await queryClient.invalidateQueries(['updatePartnerComment']);
-      console.log('수정되는거니');
+      await queryClient.invalidateQueries(['partnerComments']);
     },
   });
 
-  const { data: commentId } = useQuery(['commentId'], getCommentId);
-  console.log('이건데', commentId);
-
-  const now = new Date();
-  const Timestamptz = now.toISOString();
-
-  const handleUpdateBtn = () => {
-    setIsUpdate(true);
-  };
-
-  // 핸들러는 함수고 이벤트는 매개변수니까 handler 빼야된다.
   // 매개변수로 event객체를 받는다.
-  const handleSubmitBtn = (event: React.FormEvent<HTMLFormElement>) => {
-    console.log('submit 1번');
+  // 핸들러는 함수고 이벤트는 매개변수니까 handler 빼야된다.
+  const handleSubmitBtn = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const newComment = {
       content: updateComment,
-      date: Timestamptz,
+      // date: currentTime(), 수정시간넣으면 정렬 이상해짐.
       writerId: authId,
       postId: params.postid,
+      id: comment?.id,
     };
 
-    mutation.mutate(newComment);
+    await mutation.mutateAsync(newComment);
 
-    console.log('submit 2번');
     setIsUpdate(false);
   };
+
+  const handleUpdateBtn = (commentId: string) => {
+    setIsUpdate(true);
+    setCommentIdToUpdate(commentId);
+  };
+
+  const delMutation = useMutation(deletePartnerComments, {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(['partnerComments']);
+    },
+  });
+
+  const handleDelBtn = async (id: string) => {
+    if (window.confirm('삭제하시겠습니까?')) {
+      await delMutation.mutateAsync(id);
+    }
+  };
+
+  const { data: writerIds } = useQuery(['comment'], getWriterId);
+  const { data: userIds } = useQuery(['user'], getUserIds);
+  const filteredUserIds = userIds?.map((id) => id.id);
+
+  // const handleOnkeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  //   if(event.keyCode == 13) aaascript()
+  // } onKeyDown={handleOnkeyDown}
+
+  // 로그인 한 유저 정보 가져오기
+  const { data: userId } = useQuery(['user'], getUsers);
+  const { data: commentId } = useQuery(['comment'], getCommentId);
+  const user = userId?.filter((user) => {
+    return user.id === authId;
+    // return commentId?.find((comment) => {
+    //   comment.id == user.id;
+    // })?.id;
+  });
 
   {
     return (
       <div>
-        {/* {isLoginUser && <Img src={user && user[0] && user[0].profileImageUrl!} />} */}
-        {/* <p>{user && user[0] && user[0].nickName}</p> */}
+        {/* {<img src={user && user[0] && user[0].profileImageUrl!} />}
+        <p>{userId && userId[0] && userId[0].nickName}</p> */}
         <div>
-          {isUpdate && updateComment !== null ? <p>{updateComment}</p> : <p>{comment?.content}</p>}
-          <p>{comment?.date}</p>
+          {/* {isUpdate && updateComment !== null ? <p>{updateComment}</p> : <p>{comment?.content}</p>} */}
+          <p>{comment?.content}</p>
+          <p>{comment?.date.substring(0, 10) + ' ' + comment?.date.substring(11, 16)}</p>
         </div>
         {isLoginUser && (
           <div>
-            <button onClick={handleUpdateBtn}>수정</button>
+            <button onClick={() => handleUpdateBtn(comment!.id)}>수정</button>
             {isUpdate ? (
               <form onSubmit={handleSubmitBtn}>
                 <input type="text" placeholder="댓글을 남겨보세요" value={updateComment} onChange={(event) => setUpdateComment(event.target.value)} />

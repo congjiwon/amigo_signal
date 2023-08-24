@@ -1,34 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router';
 import { styled } from 'styled-components';
-import { deletePartnerComments, getCommentId, getPartnerComments, getPartnerPostId, getWriterId, updatePartnerComments } from '../../../api/supabase/partner';
+import { deletePartnerComments, getPartnerComments, getPartnerPostId, getWriterId, updatePartnerComments } from '../../../api/supabase/partner';
 import { getAuthId, getUsers } from '../../../api/supabase/users';
 import PartnerCommentList from './PartnerCommentList';
 import PartnerCommentsWrite from './PartnerCommentsWrite';
-
-type CommentProps = {
-  content: string;
-  date: string;
-  id: string;
-  postId: string | null;
-  writerId: string;
-};
-
-type IdProps = {
-  writerId: string;
-};
-
-export interface PartnerCommentListProps {
-  comment: CommentProps | undefined;
-  filteredIds: IdProps[] | undefined;
-  isLoginUser: boolean;
-  handleDelBtn: (id: string) => void;
-}
 
 const PartnerCommentsList = () => {
   const params = useParams();
   const queryClient = useQueryClient();
   const queryKey = ['partnerComments'];
+  // 여기서 데이터가져오는데 여기 쿼리키랑 다른곳 쿼리키(comment)랑 달라서..안된거였다.
   const { isLoading: getIsLoading, isError: getIsError, data: allComments } = useQuery(queryKey, getPartnerComments);
 
   const { isLoading: fixIsLoading, isError: fixIsError } = useMutation(updatePartnerComments, {
@@ -65,7 +47,6 @@ const PartnerCommentsList = () => {
 
   // 로그인 한 유저 정보 가져오기
   const { data: userId } = useQuery(['user'], getUsers);
-  const { data: commentId } = useQuery(['comment'], getCommentId);
   const user = userId?.filter((user) => {
     return user.id === authId;
     // return commentId?.find((comment) => {
@@ -75,23 +56,16 @@ const PartnerCommentsList = () => {
 
   // 다른걸 리턴할 필요가 없으니까 그냥 이거자체를 리턴.
   if (getIsLoading || getIsError || mutation.isLoading || mutation.isError || fixIsLoading || fixIsError) {
-    return <div>그렇게 됐다.</div>;
+    return <div>로딩 || 에러</div>;
   }
-
-  const handleDelBtn = (id: string) => {
-    if (window.confirm('삭제하시겠습니까?')) {
-      mutation.mutate(id);
-    }
-  };
 
   return (
     <div>
       <p>댓글 {filteredComments?.length}개</p>
       <PartnerCommentsWrite />
-      {filteredComments?.map((comment: CommentProps) => {
+      {filteredComments?.map((comment) => {
         const isLoginUser = filteredIds?.some((id) => id.writerId === comment.writerId);
-        // filteredIds는 자식에서 쓰지도 않는데 왜 안넘겨주면 에러나는지?..
-        return <PartnerCommentList key={comment.id} comment={comment} filteredIds={filteredIds} isLoginUser={isLoginUser!} handleDelBtn={handleDelBtn} />;
+        return <PartnerCommentList key={comment.id} comment={comment} isLoginUser={isLoginUser!} />;
       })}
     </div>
   );

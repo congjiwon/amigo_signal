@@ -157,9 +157,7 @@ export interface Database {
           content?: string;
           date?: string;
           id?: string;
-
           postId?: string;
-
           writerId?: string;
         };
         Relationships: [

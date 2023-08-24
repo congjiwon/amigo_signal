@@ -11,6 +11,11 @@ export const getUsers = async () => {
   return userData;
 };
 
+export const getUserIds = async () => {
+  let { data: userIdData } = await supabase.from('users').select('id');
+  return userIdData;
+};
+
 // 현재 로그인 한 유저
 export const getAuthId = async () => {
   const authId = await supabase.auth.getUser();
