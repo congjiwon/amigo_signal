@@ -93,7 +93,6 @@ export const checkApply = async (postId: string, logInUserId: string) => {
     console.error('참가 여부를 확인하는 과정에서 error 발생', error);
     return;
   }
-  console.log('checkApply 함수에서 찍은 data', data);
   return data;
 };
 
@@ -107,4 +106,10 @@ export const deleteApplicant = async (postId: string, logInUserId: string) => {
     console.error('참여 취소 과정에서 error 발생', error);
     throw error;
   }
+};
+
+// 신청자 목록 가져오기
+export const getApplicantList = async (postId: string) => {
+  const { data: ApplicantList, error } = await supabase.from('applicants').select('*, users!applicants_applicantId_fkey(*)').eq('postId', postId);
+  return { data: ApplicantList, error };
 };

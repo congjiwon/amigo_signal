@@ -27,7 +27,7 @@ function PartnerDetail() {
   return (
     <>
       <PartnerDetailInfo partnerPostData={partnerPostData} />
-      {logInUserId ? <Communication postId={postid} writerId={partnerPostData.writerId} /> : <></>}
+      {logInUserId ? <Communication postId={postid} writerId={partnerPostData.writerId} logInUserId={logInUserId} /> : <></>}
       <PartnerCommentsList />
     </>
   );
