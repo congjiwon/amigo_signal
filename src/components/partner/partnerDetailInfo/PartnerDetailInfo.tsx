@@ -3,11 +3,12 @@ import UserFeedback from '../userFeedback/UserFeedback';
 import * as St from './style';
 
 const PartnerDetailInfo = ({ partnerPostData }: { partnerPostData: Tables<'partnerPosts'> }) => {
-  const { createdAt, writerId, openChat } = partnerPostData;
+  const { id, createdAt, writerId, openChat } = partnerPostData;
+
   return (
     <section>
       <St.H2>{partnerPostData.title}</St.H2>
-      <UserFeedback createdAt={createdAt} writerId={writerId as string} openChat={openChat} />
+      <UserFeedback id={id} createdAt={createdAt} writerId={writerId as string} openChat={openChat} />
       <St.DetailInfoList>
         <St.DetailInfoBox>
           <St.GrayParagraph>나라</St.GrayParagraph>
