@@ -46,7 +46,7 @@ const ApplyWithInfo = ({ postId, applicantId, setIsApply }: ApplyWithInfoProps) 
       <St.ModalTitle>동행 참여 신청하기</St.ModalTitle>
       <Input type="textarea" inputStyleType="apply" border={true} placeholder="간단한 자기소개를 작성해주세요." value={text} onChange={handleText} />
 
-      <St.TextCount>{text.length}/300 characters</St.TextCount>
+      <St.TextCount>{text.length}/300 자</St.TextCount>
       <St.SubmitApply>
         <Button type="submit" styleType={BtnStyleType.BTN_DARK} onClick={handleSubmit}>
           신청

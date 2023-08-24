@@ -24,7 +24,7 @@ export const TextCount = styled.span`
   display: flex;
   justify-content: flex-end;
   margin-top: 10px;
-  margin-right: 45px;
+  margin-right: 50px;
   font-size: 12px;
   color: gray;
 `;
@@ -39,12 +39,59 @@ export const ApplicantList = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 85%;
+  width: 90%;
   margin: 0px auto;
   margin-top: 30px;
 `;
 
-export const ApplicantCard = styled.li`
-  width: 100%;
-  border: 1px solid gray;
+export const ApplicantCard = styled.div`
+  margin-top: 15px;
+  padding: 20px;
+  border: 1px solid lightgray;
+  border-radius: 10px;
+`;
+
+export const ApplicantProfile = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const ApplicantInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 7px;
+`;
+
+export const ApplicantProfileImage = styled.img`
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+`;
+
+export const ApplicantNickName = styled.p`
+  margin-left: 5px;
+  font-weight: bold;
+  font-size: 1rem;
+`;
+
+export const ApplicantAgeGender = styled.p`
+  margin-left: 10px;
+  color: gray;
+`;
+
+export const ButtonDiv = styled.div`
+  display: flex;
+  gap: 5px;
+`;
+
+export const CheckButton = styled.button`
+  padding: 7px 10px;
+  background: none;
+  border: 1px solid black;
+  border-radius: 20px;
+`;
+
+export const ApplicantContent = styled.p`
+  margin-top: 20px;
+  margin-left: 40px;
 `;
