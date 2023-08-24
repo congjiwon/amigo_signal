@@ -74,9 +74,9 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
   // } onKeyDown={handleOnkeyDown}
 
   // 로그인 한 유저 정보 가져오기
-  const { data: userId } = useQuery(['user'], getUsers);
+  const { data: users } = useQuery(['user'], getUsers);
   const { data: commentId } = useQuery(['comment'], getCommentId);
-  const user = userId?.filter((user) => {
+  const user = users?.filter((user) => {
     return user.id === authId;
     // return commentId?.find((comment) => {
     //   comment.id == user.id;

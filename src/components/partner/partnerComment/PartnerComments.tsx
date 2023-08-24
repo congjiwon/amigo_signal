@@ -11,7 +11,8 @@ const PartnerCommentsList = () => {
   const queryClient = useQueryClient();
   const queryKey = ['partnerComments'];
   // 여기서 데이터가져오는데 여기 쿼리키랑 다른곳 쿼리키(comment)랑 달라서..안된거였다.
-  const { isLoading: getIsLoading, isError: getIsError, data: allComments } = useQuery(queryKey, getPartnerComments);
+  // useQuery당 하나의 쿼리인스턴스를 갖고있다. 여러개면 제일 최신key가 실행된다? 쿼리키랑 쿼리펑션 한쌍의 키
+  const { isLoading: getIsLoading, isError: getIsError, data: allComments } = useQuery(['partnerComments'], getPartnerComments);
 
   const { isLoading: fixIsLoading, isError: fixIsError } = useMutation(updatePartnerComments, {
     onSuccess: () => {
@@ -35,6 +36,7 @@ const PartnerCommentsList = () => {
   const filteredComments = allComments?.filter((comment) => {
     return comment.postId === filteredPostId;
   });
+  // console.log('해당게시글의 댓글', filteredComments);
 
   const { data: writerId } = useQuery(['partnerCommentId'], getWriterId);
   // 현재 로그인 한 유저의 ID
@@ -44,6 +46,7 @@ const PartnerCommentsList = () => {
   const filteredIds = writerId?.filter((id) => {
     return id.writerId === authId;
   });
+  // console.log('로그인한유저가작성한모든댓글', filteredIds);
 
   // 로그인 한 유저 정보 가져오기
   const { data: userId } = useQuery(['user'], getUsers);
@@ -63,10 +66,17 @@ const PartnerCommentsList = () => {
     <div>
       <p>댓글 {filteredComments?.length}개</p>
       <PartnerCommentsWrite />
-      {filteredComments?.map((comment) => {
-        const isLoginUser = filteredIds?.some((id) => id.writerId === comment.writerId);
-        return <PartnerCommentList key={comment.id} comment={comment} isLoginUser={isLoginUser!} />;
-      })}
+      {/* filteredComments : 해당 게시글의 모든 댓글 */}
+      {/* 지금은 fc만 있어도 실행되게 되어있다. fi 없어도.. */}
+      {filteredComments &&
+        filteredIds &&
+        filteredComments.map((comment) => {
+          // filteredIds : 로그인한 유저가 작성한 모든 댓글
+          // id.writerId : 로그인한 유저가 작성한 댓글 돌면서 writerId 조회
+          // comment.writerId : 해당 게시글의 모든 댓글 돌면서 writerId 조회
+          const isLoginUser = filteredIds.some((id) => id.writerId === comment.writerId);
+          return <PartnerCommentList key={comment.id} comment={comment} isLoginUser={isLoginUser!} />;
+        })}
     </div>
   );
 };

@@ -25,7 +25,8 @@ export const postPartnerComment = async (newPartnerComment: TPartnerInsert) => {
 
 // 동행 댓글 가져오기(정렬)
 export const getPartnerComments = async () => {
-  let { data: partnerComments, error } = await supabase.from('partnerComments').select('*').order('date');
+  let { data: partnerComments, error } = await supabase.from('partnerComments').select('*').order('date', { ascending: false });
+  console.log('getPartnerComments');
   return partnerComments;
 };
 
@@ -46,6 +47,7 @@ export const getPartnerPostId = async () => {
 
 export const getWriterId = async () => {
   let { data: writerId, error } = await supabase.from('partnerComments').select('writerId');
+  console.log('getWriterId');
   return writerId;
 };
 getWriterId();
