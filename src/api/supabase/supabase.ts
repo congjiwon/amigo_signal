@@ -10,6 +10,12 @@ export interface Database {
           id: string;
           isInvolved: string;
           postId: string;
+          users?: {
+            birthday: string;
+            gender: string;
+            nickName: string;
+            profileImageUrl: string | null;
+          };
         };
         Insert: {
           applicantId: string;

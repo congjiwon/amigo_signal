@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import * as St from './style';
-import useSessionStore, { useModalStore } from '../../../zustand/store';
+import { useModalStore } from '../../../zustand/store';
 import Modal from '../../common/modal/Modal';
 import ApplicantList from './ApplicantList';
 import ApplyWithInfo from './ApplyWithInfo';
@@ -10,15 +10,13 @@ import { Alert, ConfirmCancel } from '../../common/modal/alert';
 type CommunicationProps = {
   postId: string | undefined;
   writerId: string | null | undefined;
+  logInUserId: string;
 };
 
-const Communication = ({ postId, writerId }: CommunicationProps) => {
+const Communication = ({ postId, writerId, logInUserId }: CommunicationProps) => {
   const { openedModals, openModal } = useModalStore();
 
   const [isApply, setIsApply] = useState<boolean | null>(null);
-
-  const { session } = useSessionStore();
-  const logInUserId = session?.user.id;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,7 +70,7 @@ const Communication = ({ postId, writerId }: CommunicationProps) => {
       )}
       {openedModals.applicantList && (
         <Modal id="applicantList" size="large">
-          <ApplicantList />
+          <ApplicantList postId={postId} />
         </Modal>
       )}
     </div>
