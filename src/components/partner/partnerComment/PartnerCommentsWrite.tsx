@@ -22,7 +22,7 @@ function PartnerCommentsWrite() {
   const mutation = useMutation(postPartnerComment, {
     onSuccess: async () => {
       await queryClient.invalidateQueries(['partnerComments']);
-      setContent(''); // 얘도 안먹음.. 왜지?
+      setContent('');
     },
   });
 

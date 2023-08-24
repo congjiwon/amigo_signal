@@ -18,7 +18,6 @@ export interface PartnerCommentListProps {
 }
 
 function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
-  // 구조분해할당하기 함수컴포넌트 props는 무조건 객체
   const params = useParams();
   const [isUpdate, setIsUpdate] = useState(false);
   const [updateComment, setUpdateComment] = useState('');
@@ -44,7 +43,7 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
       id: comment?.id,
     };
 
-    await mutation.mutateAsync(newComment);
+    await mutation.mutate(newComment);
 
     setIsUpdate(false);
   };
@@ -90,7 +89,6 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
         {/* {<img src={user && user[0] && user[0].profileImageUrl!} />}
         <p>{userId && userId[0] && userId[0].nickName}</p> */}
         <div>
-          {/* {isUpdate && updateComment !== null ? <p>{updateComment}</p> : <p>{comment?.content}</p>} */}
           <p>{comment?.content}</p>
           <p>{comment?.date.substring(0, 10) + ' ' + comment?.date.substring(11, 16)}</p>
         </div>
@@ -100,7 +98,9 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
             {isUpdate ? (
               <form onSubmit={handleSubmitBtn}>
                 <input type="text" placeholder="댓글을 남겨보세요" value={updateComment} onChange={(event) => setUpdateComment(event.target.value)} />
-                <button onClick={() => setIsUpdate(false)}>취소</button>
+                <button type="submit" onClick={() => setIsUpdate(false)}>
+                  취소
+                </button>
                 <button type="submit">수정등록</button>
               </form>
             ) : (
