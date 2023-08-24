@@ -25,18 +25,22 @@ const ApplicantList = ({ postId }: ApplicantListProps) => {
         setApplicantList([]);
       } else {
         setApplicantList(data);
-        console.log('신청자 목록', data);
       }
     };
     fetchApplicant();
   }, [postId]);
 
+  const removeConfirmedApplicant = (applicantId: string) => {
+    const updatedApplicantList = applicantList.filter((applicant) => applicant.applicantId !== applicantId);
+    setApplicantList(updatedApplicantList);
+  };
+
   return (
     <>
-      <St.ModalTitle>동행 신청 대기 리스트</St.ModalTitle>
+      <St.ModalTitle>동행 신청 대기 목록</St.ModalTitle>
       <St.ApplicantList>
         {applicantList.map((data) => {
-          return <ApplicantCard key={data.id} data={data} onClick={handleCardClick} isSelected={selectedCardId === data.id} />;
+          return <ApplicantCard key={data.id} data={data} onClick={handleCardClick} isSelected={selectedCardId === data.id} removeConfirmedApplicant={removeConfirmedApplicant} />;
         })}
       </St.ApplicantList>
     </>

@@ -98,8 +98,14 @@ export const AcceptButton = styled.button<CheckButtonProps>`
   border: 1px solid black;
   border-radius: 20px;
   cursor: pointer;
-  background-color: ${(props) => (props.isAccepted ? 'black' : 'white')};
-  color: ${(props) => (props.isAccepted ? 'white' : 'black')};
+  background-color: ${(props) => {
+    if (props.isAccepted === null) return 'white';
+    return props.isAccepted ? 'black' : 'white';
+  }};
+  color: ${(props) => {
+    if (props.isAccepted === null) return 'black';
+    return props.isAccepted ? 'white' : 'black';
+  }};
 `;
 
 export const RejectButton = styled.button<CheckButtonProps>`
@@ -108,8 +114,14 @@ export const RejectButton = styled.button<CheckButtonProps>`
   border: 1px solid black;
   border-radius: 20px;
   cursor: pointer;
-  background-color: ${(props) => (props.isAccepted ? 'white' : 'black')};
-  color: ${(props) => (props.isAccepted ? 'black' : 'white')};
+  background-color: ${(props) => {
+    if (props.isAccepted === null) return 'white';
+    return props.isAccepted ? 'white' : 'black';
+  }};
+  color: ${(props) => {
+    if (props.isAccepted === null) return 'black';
+    return props.isAccepted ? 'black' : 'white';
+  }};
 `;
 
 export const ApplicantContent = styled.p`

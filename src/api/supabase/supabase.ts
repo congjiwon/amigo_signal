@@ -8,8 +8,9 @@ export interface Database {
           applicantId: string;
           content: string;
           id: string;
+          isConfirmed: boolean;
           postId: string;
-          status: string;
+          isAccepted?: boolean;
           users?: {
             birthday: string;
             gender: string;
@@ -21,15 +22,17 @@ export interface Database {
           applicantId: string;
           content: string;
           id?: string;
+          isConfirmed: boolean;
           postId: string;
-          status: string;
+          isAccepted?: boolean;
         };
         Update: {
           applicantId?: string;
           content?: string;
           id?: string;
+          isConfirmed?: boolean;
           postId?: string;
-          status?: string;
+          isAccepted?: boolean;
         };
         Relationships: [
           {
