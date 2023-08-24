@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getUser } from '../../../api/supabase/users';
+import { addBookmark, getUser, removeBookMark } from '../../../api/supabase/users';
 import { deletePartnerPost } from '../../../api/supabase/partner';
 import useSessionStore from '../../../zustand/store';
 import useCopyClipBoard from '../../../hooks/useCopyClipBoard';
@@ -67,14 +67,17 @@ const UserFeedback = ({ id, createdAt, writerId, openChat }: Props) => {
   // 북마크 로직
   // 로그인한 사람이 북마크를 클릭하면 => 북마크 테이블에 로그인 한 유저 id, 게시글 id 넣어주고, 마커표시 true로 주기(북마크 체크표시 => useEffect)
   // 북마크 해제하면 => 북마크 테이블에서 행 삭제
-  // 로그인 안 한 사람 => 북마크 아예 안보이게 or 클릭시 회원가입으로 이동하게
-  // const [bookMark, setBookMark] = useState(false);
-  const addBookMarkHandle = () => {
+  // 로그인 안 한 사람 => 북마크 아예 안보이게 or 클릭시 회원가입으로 이동하게 / 전자가 더 나을것 같음
+
+  const addBookMarkHandle = async () => {
     setBookMark(!bookMark);
+    const bookMarkInsert = [{ userId: logInUserId, postId: id }];
+    await addBookmark(bookMarkInsert);
   };
 
-  const removeBookMarkHandle = () => {
+  const removeBookMarkHandle = async () => {
     setBookMark(!bookMark);
+    await removeBookMark(logInUserId!, id);
   };
 
   return (
@@ -97,7 +100,7 @@ const UserFeedback = ({ id, createdAt, writerId, openChat }: Props) => {
         </div>
       ) : (
         <>
-          <div>{bookMark ? <RiBookmarkFill onClick={() => addBookMarkHandle()} /> : <RiBookmarkLine onClick={() => removeBookMarkHandle()} />}</div>
+          <div>{bookMark ? <RiBookmarkFill onClick={() => removeBookMarkHandle()} /> : <RiBookmarkLine onClick={() => addBookMarkHandle()} />}</div>
           <div>{openChat.length > 1 && <FiMessageSquare onClick={() => handleCopyClipBoard(openChat)} />}</div>
         </>
       )}

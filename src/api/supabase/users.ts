@@ -29,3 +29,34 @@ export const getCurrentUser = async (userId: string) => {
   let { data: user } = await supabase.from('users').select('*').eq('id', userId).single();
   return user;
 };
+
+//북마크 추가
+export const addBookmark = async (bookMarkInsert: any) => {
+  try {
+    const { data, error } = await supabase.from('bookmarks').insert(bookMarkInsert).select();
+    if (error) {
+      console.log('북마크 추가하기 실패', error);
+    } else {
+      console.log('북마크 추가 성공');
+    }
+  } catch (error) {
+    console.log('error', error);
+  }
+};
+
+//북마크 삭제
+export const removeBookMark = async (logInUserId: string, postId: string) => {
+  try {
+    const { error } = await supabase.from('bookmarks').delete().eq('postId', postId).eq('userId', logInUserId);
+    if (error) throw error;
+  } catch (error) {
+    console.log('북마크 삭제 기능 에러', error);
+  }
+};
+
+//북마크 상태 확인
+export const bookmarkCheck = async () => {
+  try {
+    let { data: bookmarks, error } = await supabase.from('bookmarks').select('*').eq('column', 'Equal to');
+  } catch (error) {}
+};
