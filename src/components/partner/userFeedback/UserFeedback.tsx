@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { addBookmark, getUser, removeBookMark } from '../../../api/supabase/users';
+import { addBookmark, bookmarkCheck, getUser, removeBookMark } from '../../../api/supabase/users';
 import { deletePartnerPost } from '../../../api/supabase/partner';
 import useSessionStore from '../../../zustand/store';
 import useCopyClipBoard from '../../../hooks/useCopyClipBoard';
@@ -8,7 +8,8 @@ import { ConfirmDelete } from '../../common/modal/alert';
 import { FiMessageSquare } from 'react-icons/fi';
 import { RiBookmarkLine, RiBookmarkFill } from 'react-icons/ri';
 import * as St from './style';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { supabase } from '../../../api/supabase/supabaseClient';
 
 interface Props {
   id: string;
@@ -19,10 +20,40 @@ interface Props {
 
 const UserFeedback = ({ id, createdAt, writerId, openChat }: Props) => {
   const [bookMark, setBookMark] = useState(false);
-
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+  //북마크
+  const bookmarkCheck = async (logInUserId: string, postId: string) => {
+    try {
+      let { data: checkBookmark, error } = await supabase.from('bookmarks').select('*').eq('postId', postId).eq('userId', logInUserId);
+      console.log('checkBookmark', checkBookmark);
+      if (error) {
+        console.log('북마크 데이터 불러오는데 실패함 ..', error);
+      } else {
+        setBookMark(checkBookmark!.length > 0);
+      }
+    } catch (error) {
+      console.log('처참히 실패', error);
+    }
+  };
+
+  useEffect(() => {
+    bookmarkCheck(logInUserId!, id);
+  }, []);
+
+  const addBookMarkHandle = async () => {
+    setBookMark(!bookMark);
+    const bookMarkInsert = [{ userId: logInUserId, postId: id }];
+    await addBookmark(bookMarkInsert);
+  };
+
+  const removeBookMarkHandle = async () => {
+    setBookMark(!bookMark);
+    await removeBookMark(logInUserId!, id);
+  };
+
+  //오픈채팅
   const [, onCopy] = useCopyClipBoard();
   const handleCopyClipBoard = (text: string) => {
     onCopy(text);
@@ -30,7 +61,6 @@ const UserFeedback = ({ id, createdAt, writerId, openChat }: Props) => {
 
   const session = useSessionStore((state) => state.session);
   const logInUserId = session?.user.id;
-  console.log('로그인한 사람인가요,,', logInUserId, '이건 writerId', writerId, '이건 글id', id);
   const { data: postUser, isLoading, isError } = useQuery(['user', writerId], () => getUser({ userId: writerId as string }));
 
   const mutation = useMutation(deletePartnerPost, {
@@ -42,13 +72,11 @@ const UserFeedback = ({ id, createdAt, writerId, openChat }: Props) => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-
   if (isError) {
     return <div>Error loading data</div>;
   }
 
   const { id: userId, nickName, profileImageUrl } = postUser.data!;
-
   const isPostUser = () => logInUserId === userId;
 
   const handleDelBtn = async (id: string) => {
@@ -59,25 +87,7 @@ const UserFeedback = ({ id, createdAt, writerId, openChat }: Props) => {
     try {
       mutation.mutate({ postId: id });
       navigate('/partner');
-    } catch (error) {
-      // error 시 로직
-    }
-  };
-
-  // 북마크 로직
-  // 로그인한 사람이 북마크를 클릭하면 => 북마크 테이블에 로그인 한 유저 id, 게시글 id 넣어주고, 마커표시 true로 주기(북마크 체크표시 => useEffect)
-  // 북마크 해제하면 => 북마크 테이블에서 행 삭제
-  // 로그인 안 한 사람 => 북마크 아예 안보이게 or 클릭시 회원가입으로 이동하게 / 전자가 더 나을것 같음
-
-  const addBookMarkHandle = async () => {
-    setBookMark(!bookMark);
-    const bookMarkInsert = [{ userId: logInUserId, postId: id }];
-    await addBookmark(bookMarkInsert);
-  };
-
-  const removeBookMarkHandle = async () => {
-    setBookMark(!bookMark);
-    await removeBookMark(logInUserId!, id);
+    } catch (error) {}
   };
 
   return (
@@ -99,10 +109,15 @@ const UserFeedback = ({ id, createdAt, writerId, openChat }: Props) => {
           <button onClick={() => handleDelBtn(id)}>삭제</button>
         </div>
       ) : (
-        <>
+        <></>
+      )}
+      {logInUserId ? (
+        <div>
           <div>{bookMark ? <RiBookmarkFill onClick={() => removeBookMarkHandle()} /> : <RiBookmarkLine onClick={() => addBookMarkHandle()} />}</div>
           <div>{openChat.length > 1 && <FiMessageSquare onClick={() => handleCopyClipBoard(openChat)} />}</div>
-        </>
+        </div>
+      ) : (
+        <></>
       )}
     </St.UserFeedbackBox>
   );

@@ -55,8 +55,14 @@ export const removeBookMark = async (logInUserId: string, postId: string) => {
 };
 
 //북마크 상태 확인
-export const bookmarkCheck = async () => {
+export const bookmarkCheck = async (logInUserId: string, postId: string) => {
   try {
-    let { data: bookmarks, error } = await supabase.from('bookmarks').select('*').eq('column', 'Equal to');
-  } catch (error) {}
+    let { data: checkBookmark, error } = await supabase.from('bookmarks').select('*').eq('postId', postId).eq('userId', logInUserId);
+    if (error) {
+      console.log('북마크 데이터 불러오는데 실패함 ..', error);
+    }
+    return checkBookmark;
+  } catch (error) {
+    console.log('처참히 실패', error);
+  }
 };
