@@ -8,7 +8,7 @@ import useSessionStore from '../zustand/store';
 
 function PartnerDetail() {
   const { postid } = useParams<string>();
-
+  console.log('게시글 아이디인가요', postid);
   const { session } = useSessionStore();
   const logInUserId = session?.user.id;
 
@@ -23,7 +23,7 @@ function PartnerDetail() {
   }
 
   const partnerPostData = partnerPost.data!;
-
+  console.log('해당 글 정보가 다 들어오나요', partnerPostData);
   return (
     <>
       <PartnerDetailInfo partnerPostData={partnerPostData} />

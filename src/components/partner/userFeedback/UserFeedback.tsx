@@ -5,7 +5,10 @@ import { deletePartnerPost } from '../../../api/supabase/partner';
 import useSessionStore from '../../../zustand/store';
 import useCopyClipBoard from '../../../hooks/useCopyClipBoard';
 import { ConfirmDelete } from '../../common/modal/alert';
+import { FiMessageSquare } from 'react-icons/fi';
+import { RiBookmarkLine, RiBookmarkFill } from 'react-icons/ri';
 import * as St from './style';
+import { useState } from 'react';
 
 interface Props {
   id: string;
@@ -15,6 +18,8 @@ interface Props {
 }
 
 const UserFeedback = ({ id, createdAt, writerId, openChat }: Props) => {
+  const [bookMark, setBookMark] = useState(false);
+
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -25,7 +30,7 @@ const UserFeedback = ({ id, createdAt, writerId, openChat }: Props) => {
 
   const session = useSessionStore((state) => state.session);
   const logInUserId = session?.user.id;
-
+  console.log('로그인한 사람인가요,,', logInUserId, '이건 writerId', writerId, '이건 글id', id);
   const { data: postUser, isLoading, isError } = useQuery(['user', writerId], () => getUser({ userId: writerId as string }));
 
   const mutation = useMutation(deletePartnerPost, {
@@ -59,6 +64,19 @@ const UserFeedback = ({ id, createdAt, writerId, openChat }: Props) => {
     }
   };
 
+  // 북마크 로직
+  // 로그인한 사람이 북마크를 클릭하면 => 북마크 테이블에 로그인 한 유저 id, 게시글 id 넣어주고, 마커표시 true로 주기(북마크 체크표시 => useEffect)
+  // 북마크 해제하면 => 북마크 테이블에서 행 삭제
+  // 로그인 안 한 사람 => 북마크 아예 안보이게 or 클릭시 회원가입으로 이동하게
+  // const [bookMark, setBookMark] = useState(false);
+  const addBookMarkHandle = () => {
+    setBookMark(!bookMark);
+  };
+
+  const removeBookMarkHandle = () => {
+    setBookMark(!bookMark);
+  };
+
   return (
     <St.UserFeedbackBox>
       <St.UserProfileBox>
@@ -78,7 +96,10 @@ const UserFeedback = ({ id, createdAt, writerId, openChat }: Props) => {
           <button onClick={() => handleDelBtn(id)}>삭제</button>
         </div>
       ) : (
-        <div>{openChat.length > 1 && <button onClick={() => handleCopyClipBoard(openChat)}>오픈카톡</button>}</div>
+        <>
+          <div>{bookMark ? <RiBookmarkFill onClick={() => addBookMarkHandle()} /> : <RiBookmarkLine onClick={() => removeBookMarkHandle()} />}</div>
+          <div>{openChat.length > 1 && <FiMessageSquare onClick={() => handleCopyClipBoard(openChat)} />}</div>
+        </>
       )}
     </St.UserFeedbackBox>
   );
