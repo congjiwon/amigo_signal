@@ -7,12 +7,6 @@ import { getAuthId } from '../../../api/supabase/users';
 import { BtnStyleType } from '../../../types/styleTypes';
 import Button from '../../common/button/Button';
 
-type PartnerCommentWriteProps = {
-  initialComment?: {
-    content: string;
-  };
-};
-
 function PartnerCommentsWrite() {
   const params = useParams();
   const [content, setContent] = useState('');
@@ -31,9 +25,6 @@ function PartnerCommentsWrite() {
     // console.log('로딩중');
   }
 
-  const now = new Date();
-  const Timestamptz = now.toISOString();
-
   // 지원님 시간 가져옴.
   const currentTime = function () {
     const today = new Date();
@@ -49,14 +40,15 @@ function PartnerCommentsWrite() {
 
   const handleSubmitBtnClick = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const comment = {
+
+    const newComment = {
       content: content,
       date: currentTime(),
       writerId: authId,
       postId: params.postid,
     };
 
-    mutation.mutateAsync(comment);
+    mutation.mutateAsync(newComment);
   };
 
   return (

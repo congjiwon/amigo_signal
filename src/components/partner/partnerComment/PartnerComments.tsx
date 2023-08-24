@@ -1,8 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router';
-import { styled } from 'styled-components';
-import { deletePartnerComments, getPartnerComments, getPartnerPostId, getWriterId, updatePartnerComments } from '../../../api/supabase/partner';
-import { getAuthId, getUsers } from '../../../api/supabase/users';
+import { getPartnerComments, getPartnerPostId, getWriterIds, updatePartnerComments } from '../../../api/supabase/partner';
 import PartnerCommentList from './PartnerCommentList';
 import PartnerCommentsWrite from './PartnerCommentsWrite';
 
@@ -20,12 +18,6 @@ const PartnerCommentsList = () => {
     },
   });
 
-  const mutation = useMutation(deletePartnerComments, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(queryKey);
-    },
-  });
-
   const { data: partnerPostIdData } = useQuery(['partnerPostId'], getPartnerPostId);
   const findFilteredComments = partnerPostIdData?.filter((comment) => {
     return comment.id === params.postid; // postid,,,ㅠㅠ
@@ -38,27 +30,20 @@ const PartnerCommentsList = () => {
   });
   // console.log('해당게시글의 댓글', filteredComments);
 
-  const { data: writerId } = useQuery(['partnerCommentId'], getWriterId);
+  const { data: writerId } = useQuery(['partnerCommentId'], getWriterIds);
   // 현재 로그인 한 유저의 ID
-  const { isLoading, data: authId } = useQuery(['partnerAuthId'], getAuthId);
+  // 얘때문에 안된거임.
+  // const { isLoading, data: authId } = useQuery(['partnerAuthId'], getAuthId);
 
   // 현재 로그인한 유저의 댓글목록(writerId)
   const filteredIds = writerId?.filter((id) => {
-    return id.writerId === authId;
+    // return id.writerId === authId;
+    return id.writerId === localStorage.getItem('authId');
   });
   // console.log('로그인한유저가작성한모든댓글', filteredIds);
 
-  // 로그인 한 유저 정보 가져오기
-  const { data: userId } = useQuery(['user'], getUsers);
-  const user = userId?.filter((user) => {
-    return user.id === authId;
-    // return commentId?.find((comment) => {
-    //   comment.id == user.id;
-    // })?.id;
-  });
-
   // 다른걸 리턴할 필요가 없으니까 그냥 이거자체를 리턴.
-  if (getIsLoading || getIsError || mutation.isLoading || mutation.isError || fixIsLoading || fixIsError) {
+  if (getIsLoading || getIsError || fixIsLoading || fixIsError) {
     return <div>로딩 || 에러</div>;
   }
 
@@ -74,7 +59,7 @@ const PartnerCommentsList = () => {
           // filteredIds : 로그인한 유저가 작성한 모든 댓글
           // id.writerId : 로그인한 유저가 작성한 댓글 돌면서 writerId 조회
           // comment.writerId : 해당 게시글의 모든 댓글 돌면서 writerId 조회
-          const isLoginUser = filteredIds.some((id) => id.writerId === comment.writerId);
+          const isLoginUser = localStorage.getItem('authId') === comment.writerId; // ���그인한 �
           return <PartnerCommentList key={comment.id} comment={comment} isLoginUser={isLoginUser!} />;
         })}
     </div>
@@ -92,9 +77,3 @@ export default PartnerCommentsList;
 {
   /* <PartnerCommentsList {...filteredComments} {...filteredIds} {...handleDelBtn} /> */
 }
-const Img = styled.img`
-  width: 40px;
-  height: 40px;
-
-  border-radius: 50px;
-`;

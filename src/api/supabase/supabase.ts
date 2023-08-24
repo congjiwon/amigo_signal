@@ -242,6 +242,43 @@ export interface Database {
           },
         ];
       };
+      reComments: {
+        Row: {
+          commentId: string;
+          date: string;
+          id: string;
+          reContent: string;
+          writerId: string;
+        };
+        Insert: {
+          commentId?: string;
+          date: string;
+          id?: string;
+          reContent: string;
+          writerId?: string;
+        };
+        Update: {
+          commentId?: string;
+          date?: string;
+          id?: string;
+          reContent?: string;
+          writerId?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'reComments_commentId_fkey';
+            columns: ['commentId'];
+            referencedRelation: 'partnerComments';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'reComments_writerId_fkey';
+            columns: ['writerId'];
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       spotComments: {
         Row: {
           content: string;
@@ -380,3 +417,7 @@ export type Inserts<T extends keyof Database['public']['Tables']> = Database['pu
 export type TPartnerComment = Database['public']['Tables']['partnerComments']['Row'];
 export type TPartnerInsert = Database['public']['Tables']['partnerComments']['Insert'];
 export type TPartnerUpdate = Database['public']['Tables']['partnerComments']['Update'];
+
+export type TPartnerReComments = Database['public']['Tables']['reComments']['Row'];
+export type TPartnerReCommentsInsert = Database['public']['Tables']['reComments']['Insert'];
+export type TPartnerReCommentsUpdate = Database['public']['Tables']['reComments']['Update'];
