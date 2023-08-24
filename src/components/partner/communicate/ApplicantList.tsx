@@ -10,6 +10,11 @@ type ApplicantListProps = {
 
 const ApplicantList = ({ postId }: ApplicantListProps) => {
   const [applicantList, setApplicantList] = useState<Tables<'applicants'>[]>([]);
+  const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
+
+  const handleCardClick = (id: string) => {
+    setSelectedCardId(id);
+  };
 
   useEffect(() => {
     const fetchApplicant = async () => {
@@ -28,10 +33,10 @@ const ApplicantList = ({ postId }: ApplicantListProps) => {
 
   return (
     <>
-      <St.ModalTitle>동행 신청자 리스트</St.ModalTitle>
+      <St.ModalTitle>동행 신청 대기 리스트</St.ModalTitle>
       <St.ApplicantList>
         {applicantList.map((data) => {
-          return <ApplicantCard key={data.id} data={data} />;
+          return <ApplicantCard key={data.id} data={data} onClick={handleCardClick} isSelected={selectedCardId === data.id} />;
         })}
       </St.ApplicantList>
     </>

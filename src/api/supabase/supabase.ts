@@ -8,8 +8,8 @@ export interface Database {
           applicantId: string;
           content: string;
           id: string;
-          isInvolved: string;
           postId: string;
+          status: string;
           users?: {
             birthday: string;
             gender: string;
@@ -21,15 +21,15 @@ export interface Database {
           applicantId: string;
           content: string;
           id?: string;
-          isInvolved: string;
           postId: string;
+          status: string;
         };
         Update: {
           applicantId?: string;
           content?: string;
           id?: string;
-          isInvolved?: string;
           postId?: string;
+          status?: string;
         };
         Relationships: [
           {

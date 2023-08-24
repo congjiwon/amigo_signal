@@ -29,7 +29,7 @@ const ApplyWithInfo = ({ postId, applicantId, setIsApply }: ApplyWithInfoProps) 
     const applicantData = {
       postId,
       applicantId,
-      isInvolved: 'pending',
+      status: 'pending',
       content: text,
     };
     try {
