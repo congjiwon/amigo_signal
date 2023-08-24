@@ -17,6 +17,7 @@ const Communication = ({ postId, writerId, logInUserId }: CommunicationProps) =>
   const { openedModals, openModal } = useModalStore();
 
   const [isApply, setIsApply] = useState<boolean | null>(null);
+  const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,7 +25,12 @@ const Communication = ({ postId, writerId, logInUserId }: CommunicationProps) =>
         const applyHistory = await checkApply(postId, logInUserId);
         if (applyHistory && applyHistory.length > 0) {
           setIsApply(true);
-        } else setIsApply(false);
+          const confirmedStatus = applyHistory[0].isConfirmed;
+          setIsConfirmed(confirmedStatus);
+        } else {
+          setIsApply(false);
+          setIsConfirmed(false);
+        }
       }
     };
     fetchData();
@@ -57,7 +63,7 @@ const Communication = ({ postId, writerId, logInUserId }: CommunicationProps) =>
     <div>
       {writerId !== logInUserId ? (
         <St.ApplyDiv>
-          <button onClick={isApply ? handleApplyCancel : handleApply}>{isApply ? '참여 취소' : '참여하기'}</button>
+          {isConfirmed ? <></> : <button onClick={isApply ? handleApplyCancel : handleApply}>{isApply ? '참여 취소' : '참여하기'}</button>}
           <St.ApplyStatus>상태 확인 태그</St.ApplyStatus>
         </St.ApplyDiv>
       ) : (
