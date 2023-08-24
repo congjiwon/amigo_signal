@@ -7,6 +7,7 @@ import { styled } from 'styled-components';
 import LocationDropDown from '../../common/dropDown/LocationDropDown';
 import { insertPost } from '../../../api/supabase/partner';
 import { getAuthId } from '../../../api/supabase/users';
+import { useNavigate } from 'react-router';
 interface interestT {
   id: number;
   name: string;
@@ -29,6 +30,7 @@ function PartnerWriteTemplate() {
   const [loading, setLoading] = useState(false);
   const [writerId, setWriterId] = useState('');
   const { RangePicker } = DatePicker;
+  const navigate = useNavigate();
 
   const getInterestsList = async () => {
     let { data: interest, error } = await supabase.from('interest').select('*');
@@ -123,6 +125,7 @@ function PartnerWriteTemplate() {
     setLoading(true);
     await insertPost(dataToInsert);
     setLoading(false);
+    navigate('/partner');
   };
 
   return (

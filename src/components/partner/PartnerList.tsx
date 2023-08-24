@@ -1,12 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { getPartnerPosts } from '../../api/supabase/partner';
 import { Tables } from '../../api/supabase/supabase';
 import PartnerItem from './PartnerItem';
 import * as St from './style';
 import TravelWith from '../../assets/imgs/partner/TravelWith.jpg';
+import { useNavigate } from 'react-router';
 
 const PartnerList = () => {
   const [postStorage, setPostStorage] = useState<Tables<'partnerPosts'>[]>([]);
+  const navigate = useNavigate();
+  const divRef = useRef(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const limit = 10;
+  const offset = (currentPage - 1) * limit;
+  console.log('postStorage', postStorage);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -15,10 +22,38 @@ const PartnerList = () => {
         console.error('동행자 게시글 목록을 가져오는 과정에서 에러 발생', error);
         setPostStorage([]);
       } else {
+        data.sort((a, b) => {
+          return new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf();
+        });
         setPostStorage(data);
       }
     };
     fetchPosts();
+  }, []);
+
+  const defaultOption = {
+    root: null,
+    threshold: 0.5,
+    rootMargin: '0px',
+  };
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting) {
+        setTimeout(() => {
+          setCurrentPage((prevPage) => prevPage + 1);
+        }, 500);
+      }
+    },
+    {
+      ...defaultOption,
+    },
+  );
+
+  useEffect(() => {
+    if (divRef.current) {
+      observer.observe(divRef.current);
+    }
   }, []);
 
   return (
@@ -32,10 +67,16 @@ const PartnerList = () => {
           여행이 더 즐거워질 거에요.
         </St.ImageSubText>
       </St.ImageWrapper>
+      <div>
+        <button onClick={() => navigate('/partner/write')}>글쓰기</button>
+      </div>
       <St.Grid>
-        {postStorage.map((post) => {
-          return <PartnerItem key={post.id} post={post} />;
-        })}
+        {postStorage
+          .map((post) => {
+            return <PartnerItem key={post.id} post={post} />;
+          })
+          .slice(0, offset + 10)}
+        <div ref={divRef}></div>
       </St.Grid>
     </>
   );
