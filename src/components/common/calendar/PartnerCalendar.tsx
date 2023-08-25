@@ -8,7 +8,8 @@ interface CalendarProps {
 const { RangePicker } = DatePicker;
 
 function PartnerCalendar({ setPartnerDates }: CalendarProps) {
-  const getDateHandle = (dateString: any) => {
+  const getDateHandle = (dates: any, dateString: any) => {
+    // console.log('dateString:', dateString, 'dates:', dates);
     setPartnerDates(dateString);
   };
 

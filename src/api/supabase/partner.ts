@@ -143,3 +143,27 @@ export const getConfirmedApplicantList = async (postId: string) => {
   const { data: applicantList, error } = await supabase.from('applicants').select('*, users!applicants_applicantId_fkey(*)').eq('postId', postId).eq('isAccepted', true);
   return { data: applicantList, error };
 };
+
+//동행 메인 리스트 국가 + 기간별 필터... ㅇㅔ휴
+// export const getFilteredPartnerPost = async (country: string, startDate: string, endDate: string) => {
+export const getFilteredPartnerPost = async (country: string) => {
+  // export const getFilteredPartnerPost = async (country: string) => {
+
+  try {
+    // let { data: partnerPosts, error } = await supabase.from('partnerPosts').select('*').eq('country', country).gte('startDate', startDate).lte('endDate', endDate);
+    // let { data: partnerPosts, error } = await supabase.from('partnerPosts').select('*').gte('startDate', startDate).lte('endDate', endDate);
+    // let { data: partnerPosts, error } = await supabase.from('partnerPosts').select('*').eq('country', country).gte('startDate', startDate);
+    // let { data: partnerPosts, error } = await supabase.from('partnerPosts').select('*').gte('startDate', startDate);
+
+    let { data: partnerPosts, error } = await supabase.from('partnerPosts').select('*').eq('country', country);
+
+    if (error) {
+      console.log('동행 메인 리스트 검색 필터링된 포스트 가져오는데 에러', 'error');
+    } else {
+      console.log('동행 메인 필터링 성공', partnerPosts);
+      return partnerPosts;
+    }
+  } catch (error) {
+    console.log('동행 메인 필터링 에러', error);
+  }
+};

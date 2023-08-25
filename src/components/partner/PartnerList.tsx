@@ -1,13 +1,21 @@
 import { useEffect, useState, useRef } from 'react';
-import { getPartnerPosts } from '../../api/supabase/partner';
+import { getFilteredPartnerPost, getPartnerPosts } from '../../api/supabase/partner';
 import { Tables } from '../../api/supabase/supabase';
 import PartnerItem from './PartnerItem';
 import * as St from './style';
 import TravelWith from '../../assets/imgs/partner/TravelWith.jpg';
 import { useNavigate } from 'react-router';
+import LocationDropDown from '../common/dropDown/LocationDropDown';
+import PartnerCalendar from '../common/calendar/PartnerCalendar';
 
 const PartnerList = () => {
   const [postStorage, setPostStorage] = useState<Tables<'partnerPosts'>[]>([]);
+
+  const [location, setLocation] = useState<string[]>([]);
+  const [test, setTest] = useState<string[]>([]);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+
   const navigate = useNavigate();
   const divRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,6 +36,11 @@ const PartnerList = () => {
       }
     };
     fetchPosts();
+
+    //무한스크롤 옵저버 인식
+    if (divRef.current) {
+      observer.observe(divRef.current);
+    }
   }, []);
 
   const defaultOption = {
@@ -49,11 +62,16 @@ const PartnerList = () => {
     },
   );
 
+  //나라 필터
   useEffect(() => {
-    if (divRef.current) {
-      observer.observe(divRef.current);
-    }
-  }, []);
+    const getfilteredPost = async () => {
+      const filteredPost = await getFilteredPartnerPost(location[1]);
+      console.log('메인에서 필터링 잘 받아오나요', filteredPost);
+      // setPostStorage(filteredPost);
+    };
+    // console.log(getFilteredPartnerPost(country, test[0], test[1]))
+    getfilteredPost();
+  }, [location]);
 
   return (
     <>
@@ -66,6 +84,10 @@ const PartnerList = () => {
           여행이 더 즐거워질 거에요.
         </St.ImageSubText>
       </St.ImageWrapper>
+      <div>
+        <LocationDropDown setLocation={setLocation} />
+        <PartnerCalendar setPartnerDates={setTest} />
+      </div>
       <div>
         <button onClick={() => navigate('/partner/write')}>글쓰기</button>
       </div>

@@ -14,7 +14,6 @@ interface Option {
 
 function LocationDropDown({ setLocation }: Props) {
   const [options, setOptions] = useState<Option[]>([]); // options 상태로 변경
-
   useEffect(() => {
     const fetchData = async () => {
       const data = await getAllLocation();

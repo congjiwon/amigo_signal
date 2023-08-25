@@ -41,7 +41,6 @@ function PartnerWriteTemplate() {
       setWriterId(session.user.id);
     }
     if (!session) {
-      alert('로그인이 필요합니다.');
       navigate('/login');
     }
   }, [navigate, session]);
@@ -160,7 +159,7 @@ function PartnerWriteTemplate() {
           }}
           rows={10}
           cols={100}
-          placeholder="1. 현제 동행이 있나요? &#13;&#10;2. 어떤 동행을 찾고 있나요? &#13;&#10;3. 원하는 여행 코스가 있다면 적어주세요  "
+          placeholder="1. 현재 동행이 있나요? &#13;&#10;2. 어떤 동행을 찾고 있나요? &#13;&#10;3. 원하는 여행 코스가 있다면 적어주세요 "
         ></textarea>
         <br />
         <span>태그선택</span>
@@ -176,7 +175,7 @@ function PartnerWriteTemplate() {
                   backgroundColor: interestUrl.includes(item.imageUrl as string) ? 'lightblue' : 'white',
                 }}
               >
-                <p>{item.name}</p>
+                <p>{item.content}</p>
               </button>
             );
           })}

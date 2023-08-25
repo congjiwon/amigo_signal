@@ -27,7 +27,7 @@ const UserFeedback = ({ id, createdAt, writerId, openChat }: Props) => {
   const bookmarkCheck = async (logInUserId: string, postId: string) => {
     try {
       let { data: checkBookmark, error } = await supabase.from('bookmarks').select('*').eq('postId', postId).eq('userId', logInUserId);
-      console.log('checkBookmark', checkBookmark);
+      // console.log('checkBookmark', checkBookmark);
       if (error) {
         console.log('북마크 데이터 불러오는데 실패함 ..', error);
       } else {
