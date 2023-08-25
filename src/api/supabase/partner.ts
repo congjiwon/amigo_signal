@@ -62,6 +62,7 @@ export const updatePartnerComments = async (updateComment: TPartnerUpdate) => {
   console.log('error', error);
 };
 
+//동행 글 추가
 export const insertPost = async (dataToInsert: any) => {
   try {
     const { data, error } = await supabase.from('partnerPosts').insert(dataToInsert);
@@ -112,6 +113,28 @@ export const deleteApplicant = async (postId: string, logInUserId: string) => {
 
 // 신청자 목록 가져오기
 export const getApplicantList = async (postId: string) => {
-  const { data: ApplicantList, error } = await supabase.from('applicants').select('*, users!applicants_applicantId_fkey(*)').eq('postId', postId);
-  return { data: ApplicantList, error };
+  const { data: applicantList, error } = await supabase.from('applicants').select('*, users!applicants_applicantId_fkey(*)').eq('postId', postId).eq('isConfirmed', false);
+  return { data: applicantList, error };
+};
+
+// 신청자 목록 -> 수락 / 거절
+export const updateStatus = async (applicantId: string, isAccepted: boolean) => {
+  const { data: updatedData, error } = await supabase.from('applicants').update({ isAccepted, isConfirmed: true }).eq('applicantId', applicantId);
+  return { data: updatedData, error };
+};
+
+// 신청자 state(수락 / 거절) 정보 가져오기
+export const getApplicantStatus = async (applicantId: string) => {
+  const { data, error } = await supabase.from('applicants').select('isAccepted').eq('applicantId', applicantId).single();
+  if (error) {
+    console.error('신청자 참여 정보를 불러오는 과정에서 error', error);
+    throw error;
+  }
+  return data;
+};
+
+// 참여 수락된 신청자 정보 가져오기
+export const getConfirmedApplicantList = async (postId: string) => {
+  const { data: applicantList, error } = await supabase.from('applicants').select('*, users!applicants_applicantId_fkey(*)').eq('postId', postId).eq('isAccepted', true);
+  return { data: applicantList, error };
 };
