@@ -5,12 +5,13 @@ export const getUser = async ({ userId }: { userId: string }) => {
   return { data: user };
 };
 
-// user 테이블 ID
+// user 정보 배열
 export const getUsers = async () => {
-  let { data: userData } = await supabase.from('users').select('*');
+  let { data: userData } = await supabase.from('users').select('id, nickName, profileImageUrl');
   return userData;
 };
 
+// user ID
 export const getUserIds = async () => {
   let { data: userIdData } = await supabase.from('users').select('id');
   return userIdData;

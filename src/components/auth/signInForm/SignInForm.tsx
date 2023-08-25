@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { supabase } from '../../../api/supabase/supabaseClient';
 import { useNavigate } from 'react-router';
+import { supabase } from '../../../api/supabase/supabaseClient';
 import { Alert } from '../../common/modal/alert';
 
 const SignInForm = () => {
@@ -13,6 +13,10 @@ const SignInForm = () => {
       email: loginEmail,
       password: loginPassword,
     });
+    if (data) {
+      localStorage.setItem('authId', data.user?.id as string);
+    } // 설빈 : 로그아웃할 때 지워주기
+
     if (error) Alert({ title: '아이디 또는 비밀번호가 일치하지 않습니다.' });
     else {
       navigate('/partner');

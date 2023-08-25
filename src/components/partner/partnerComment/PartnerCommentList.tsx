@@ -1,8 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useParams } from 'react-router';
-import { deletePartnerComments, getCommentId, getWriterId, updatePartnerComments } from '../../../api/supabase/partner';
-import { getAuthId, getUserIds, getUsers } from '../../../api/supabase/users';
+import { styled } from 'styled-components';
+import { deletePartnerComment, deletePartnerReComment, getReCommentData, getReCommentWriterIds, getWriterIds, postPartnerRecomment, updatePartnerComments, updatePartnerReComment } from '../../../api/supabase/partner';
+import { getAuthId, getUsers } from '../../../api/supabase/users';
 
 type CommentProps = {
   content: string;
@@ -12,107 +13,365 @@ type CommentProps = {
   writerId: string;
 };
 
-export interface PartnerCommentListProps {
+export type PartnerCommentListProps = {
   comment: CommentProps | undefined;
   isLoginUser: boolean;
-}
+};
 
 function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
+  // params : 게시글 ID
   const params = useParams();
+  const queryClient = useQueryClient();
   const [isUpdate, setIsUpdate] = useState(false);
   const [updateComment, setUpdateComment] = useState('');
-  const [commentIdToUpdate, setCommentIdToUpdate] = useState('');
-  const queryClient = useQueryClient();
-  const { isLoading, data: authId } = useQuery(['authId'], getAuthId);
+  const [isReComment, setIsReComment] = useState(false);
+  const [reContent, setReContent] = useState('');
+  const [isUpdateReComment, setIsUpdateReComment] = useState(false);
+  const [updateReComment, setUpdateReComment] = useState('');
+  const [reCommentId, setReCommentId] = useState('');
+
+  const { isLoading, data: authId } = useQuery(['auth'], getAuthId);
+
+  const { data: allReCommentsData } = useQuery(['partnerReComments'], getReCommentData);
+  // 답댓글 작성한 모든 유저 정보
+  const reCommentUsers = allReCommentsData?.map((user) => {
+    return user.users;
+  });
+
+  console.log(allReCommentsData);
+  // 댓글 수정
   const mutation = useMutation(updatePartnerComments, {
     onSuccess: async () => {
       await queryClient.invalidateQueries(['partnerComments']);
     },
   });
 
-  // 매개변수로 event객체를 받는다.
-  // 핸들러는 함수고 이벤트는 매개변수니까 handler 빼야된다.
+  // 답댓글 수정
+  const reUpdateMutation = useMutation(updatePartnerReComment, {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(['partnerReComments']);
+    },
+  });
+
+  // 답댓글 작성
+  const reCommentMutation = useMutation(postPartnerRecomment, {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(['partnerReComments']);
+      setReContent('');
+      setIsReComment(false);
+    },
+  });
+
+  // 지원님 시간 가져옴.
+  const currentTime = function () {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = ('0' + (today.getMonth() + 1)).slice(-2);
+    const day = ('0' + today.getDate()).slice(-2);
+    const hours = ('0' + today.getHours()).slice(-2);
+    const minutes = ('0' + today.getMinutes()).slice(-2);
+    const seconds = ('0' + today.getSeconds()).slice(-2);
+    const now = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+    return now;
+  };
+
+  // 댓글 수정 submit
   const handleSubmitBtn = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const newComment = {
       content: updateComment,
       // date: currentTime(), 수정시간넣으면 정렬 이상해짐.
-      writerId: authId,
-      postId: params.postid,
+      writerId: comment?.writerId,
+      postId: comment?.postId!,
       id: comment?.id,
     };
 
-    await mutation.mutate(newComment);
+    await mutation.mutateAsync(newComment);
 
+    setUpdateComment('');
     setIsUpdate(false);
   };
 
-  const handleUpdateBtn = (commentId: string) => {
-    setIsUpdate(true);
-    setCommentIdToUpdate(commentId);
+  // 답댓글 수정 submit
+  const handleReSubmitBtn = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const newReComment = {
+      reContent: updateReComment,
+      writerId: authId,
+      commentId: comment?.id,
+      id: reCommentId,
+    };
+
+    reUpdateMutation.mutate(newReComment);
+
+    setUpdateReComment('');
+    setIsUpdateReComment(false);
   };
 
-  const delMutation = useMutation(deletePartnerComments, {
+  // 답댓글 submit
+  const handleReCommentSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const reComment = {
+      reContent: reContent,
+      date: currentTime(),
+      writerId: authId,
+      commentId: comment!.id,
+    };
+
+    reCommentMutation.mutateAsync(reComment);
+  };
+
+  // 댓글 수정 버튼
+  const handleUpdateBtn = () => {
+    setIsUpdate(true);
+  };
+
+  // 댓글 삭제
+  const delMutation = useMutation(deletePartnerComment, {
     onSuccess: async () => {
       await queryClient.invalidateQueries(['partnerComments']);
     },
   });
 
+  // 답댓글 삭제
+  const delReMutation = useMutation(deletePartnerReComment, {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(['partnerReComment']);
+    },
+  });
+
+  // 답댓글 삭제 버튼 클릭
+  const handleReDelBtn = async (id: string) => {
+    if (window.confirm('삭제하시겠습니까?')) {
+      await delReMutation.mutateAsync(id);
+    }
+  };
+
+  /// 댓글 삭제 버튼
   const handleDelBtn = async (id: string) => {
     if (window.confirm('삭제하시겠습니까?')) {
       await delMutation.mutateAsync(id);
     }
   };
 
-  const { data: writerIds } = useQuery(['comment'], getWriterId);
-  const { data: userIds } = useQuery(['user'], getUserIds);
-  const filteredUserIds = userIds?.map((id) => id.id);
+  // 유저 ID, 닉네임, 프로필사진 배열
+  const { data: users } = useQuery(['userData'], getUsers);
 
-  // const handleOnkeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-  //   if(event.keyCode == 13) aaascript()
-  // } onKeyDown={handleOnkeyDown}
-
-  // 로그인 한 유저 정보 가져오기
-  const { data: userId } = useQuery(['user'], getUsers);
-  const { data: commentId } = useQuery(['comment'], getCommentId);
-  const user = userId?.filter((user) => {
-    return user.id === authId;
-    // return commentId?.find((comment) => {
-    //   comment.id == user.id;
-    // })?.id;
+  // 댓글 작성자 ID 배열
+  const { data: writerId } = useQuery(['writerId'], getWriterIds);
+  // 답댓글 작성자 ID 배열
+  const { data: reCommentIds } = useQuery(['reCommentId'], getReCommentWriterIds);
+  // 댓글 작성자의 유저 ID, 닉네임, 프로필사진 배열
+  const user = users?.filter((user) => {
+    return writerId?.filter((id) => {
+      return user.id === id.writerId;
+    });
   });
+
+  // 답글쓰기 버튼
+  const handleRecommentBtn = () => {
+    setIsReComment(true);
+  };
+
+  // 답글 수정 버튼
+  const handleReUpdateBtn = (id: string) => {
+    setReCommentId(id);
+    setIsUpdateReComment(true);
+  };
 
   {
     return (
-      <div>
-        {/* {<img src={user && user[0] && user[0].profileImageUrl!} />}
-        <p>{userId && userId[0] && userId[0].nickName}</p> */}
-        <div>
-          <p>{comment?.content}</p>
-          <p>{comment?.date.substring(0, 10) + ' ' + comment?.date.substring(11, 16)}</p>
-        </div>
-        {isLoginUser && (
+      <PartnerCommentsContainerBox>
+        <PartnerCommentsBox>
+          {/* user : 댓글 작성자의 유저 ID, 닉네임, 프로필사진 배열 */}
+          {user?.map((user) => {
+            if (user.id === comment?.writerId) {
+              const isPostWriter = comment.writerId === user.id;
+              return (
+                <div key={user.id}>
+                  <CommentTopBox>
+                    <div>
+                      <Img src={user && user.profileImageUrl!} />
+                    </div>
+                    <WriterContainerBox>
+                      {/* {isPostWriter && ( */}
+                      <WriterBox>
+                        <NickNameParagraph>{user.nickName}</NickNameParagraph>
+                        <WriterParagraph>작성자</WriterParagraph>
+                      </WriterBox>
+                      {/* )} */}
+                      <CommentBox>
+                        <CommentParagraph>{comment?.content}</CommentParagraph>
+                      </CommentBox>
+                    </WriterContainerBox>
+                  </CommentTopBox>
+                </div>
+              );
+            }
+          })}
+          {isLoginUser && (
+            <CommentBottomBox>
+              <DateBox>
+                <p>{comment?.date.substring(0, 10) + ' ' + comment?.date.substring(11, 16)}</p>
+              </DateBox>
+              <div>
+                <button onClick={handleUpdateBtn}>수정</button>
+              </div>
+              <div>
+                <button onClick={() => handleDelBtn(comment!.id)}>삭제</button>
+                <button onClick={handleRecommentBtn}>답글쓰기</button>
+                {isUpdate ? (
+                  <form onSubmit={handleSubmitBtn}>
+                    <Input type="text" placeholder="댓글을 남겨보세요" value={updateComment} onChange={(event) => setUpdateComment(event.target.value)} required />
+                    <button type="submit" onClick={() => setIsUpdate(false)}>
+                      취소
+                    </button>
+                    <button type="submit">수정등록</button>
+                  </form>
+                ) : (
+                  ''
+                )}
+              </div>
+            </CommentBottomBox>
+          )}
           <div>
-            <button onClick={() => handleUpdateBtn(comment!.id)}>수정</button>
-            {isUpdate ? (
-              <form onSubmit={handleSubmitBtn}>
-                <input type="text" placeholder="댓글을 남겨보세요" value={updateComment} onChange={(event) => setUpdateComment(event.target.value)} />
-                <button type="submit" onClick={() => setIsUpdate(false)}>
-                  취소
-                </button>
-                <button type="submit">수정등록</button>
+            {!isLoginUser && <button onClick={handleRecommentBtn}>답글쓰기</button>}
+            {isReComment ? (
+              <form onSubmit={handleReCommentSubmit}>
+                <input type="text" placeholder="댓글을 입력하세요" value={reContent} onChange={(event) => setReContent(event?.target.value)} />
+                <button onClick={() => setIsReComment(false)}>취소</button>
+                <button type="submit">등록</button>
               </form>
             ) : (
               ''
             )}
-            <button onClick={() => handleDelBtn(comment!.id)}>삭제</button>
           </div>
-        )}
-        <button>답글달기</button>
-      </div>
+        </PartnerCommentsBox>
+        <PartnerReCommentsBox>
+          {/* allReCommentsData : 모든 답댓글 정보(유저포함) */}
+          {allReCommentsData?.map((reComment) => {
+            if (reComment.commentId === comment?.id) {
+              const isLoginCommentUser = authId === reComment.writerId;
+              return (
+                <UpdateReCommentBox key={reComment.id}>
+                  <Img src={reComment.users && reComment.users.profileImageUrl!} />
+                  <p>{reComment.users && reComment.users.nickName}</p>
+                  <p>{reComment.reContent}</p>
+                  <p>{comment?.date.substring(0, 10) + ' ' + comment?.date.substring(11, 16)}</p>
+                  {isLoginCommentUser && (
+                    <>
+                      <button onClick={() => handleReUpdateBtn(reComment.id)}>수정</button>
+                      {/* 모든애들 인풋창 보이게되어있다. */}
+                      {/* 테이블에 isopen 상태를 넣는게 좋다. 각각 코멘트에 속성 상태 넣는것도 쉬운 방법 */}
+                      {isUpdateReComment ? (
+                        <form onSubmit={handleReSubmitBtn}>
+                          <input type="text" placeholder="댓글을 남겨보세요" value={updateReComment} onChange={(event) => setUpdateReComment(event.target.value)} />
+                          <button type="submit" onClick={() => setIsUpdateReComment(false)}>
+                            취소
+                          </button>
+                          <button type="submit">수정등록</button>
+                        </form>
+                      ) : (
+                        ''
+                      )}
+                      <button onClick={() => handleReDelBtn(reComment.id)}>삭제</button>
+                    </>
+                  )}
+                </UpdateReCommentBox>
+              );
+            }
+          })}
+        </PartnerReCommentsBox>
+      </PartnerCommentsContainerBox>
     );
   }
 }
 
 export default PartnerCommentList;
+
+const PartnerCommentsContainerBox = styled.div``;
+
+const PartnerCommentsBox = styled.div`
+  margin-bottom: 24px;
+
+  border: 1px solid;
+`;
+
+const CommentTopBox = styled.div`
+  display: flex;
+`;
+
+const WriterBox = styled.div`
+  display: flex;
+`;
+
+const NickNameParagraph = styled.p`
+  margin-right: 12px;
+  margin-bottom: 6px;
+`;
+
+const Img = styled.img`
+  width: 40px;
+  height: 40px;
+
+  margin-right: 12px;
+
+  border-radius: 50px;
+`;
+
+const WriterContainerBox = styled.div`
+  flex-direction: column;
+`;
+
+const CommentBox = styled.div`
+  margin-bottom: 6px;
+  /* margin-right: 12px; */
+`;
+
+const CommentParagraph = styled.p``;
+
+const CommentBottomBox = styled.div`
+  display: flex;
+
+  margin-left: 52px;
+`;
+
+const DateBox = styled.div`
+  margin-right: 12px;
+`;
+
+const Input = styled.input`
+  width: 1188px;
+  height: 100px;
+`;
+
+const WriterParagraph = styled.p`
+  text-align: center;
+  align-items: center;
+
+  width: 51px;
+  height: 23px;
+
+  color: white;
+  background-color: gray;
+
+  border-radius: 30px;
+
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+`;
+
+const UpdateReCommentBox = styled.div`
+  margin-bottom: 24px;
+  margin-left: 52px;
+  border: 1px solid;
+`;
+
+const PartnerReCommentsBox = styled.div`
+  border: 1px solid;
+`;

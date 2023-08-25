@@ -1,11 +1,11 @@
-import { supabase } from '../../../api/supabase/supabaseClient';
-import Button from '../../common/button/Button';
-import { BtnStyleType } from '../../../types/styleTypes';
-import { useNavigate } from 'react-router';
-import { Input } from '../../common/input/Input';
 import { useEffect, useState } from 'react';
-import BirthdaySelect from '../../common/birthdaySelect/BirthdaySelect';
+import { useNavigate } from 'react-router';
+import { supabase } from '../../../api/supabase/supabaseClient';
+import { BtnStyleType } from '../../../types/styleTypes';
 import useBirthdayStore from '../../../zustand/birthdayData';
+import BirthdaySelect from '../../common/birthdaySelect/BirthdaySelect';
+import Button from '../../common/button/Button';
+import { Input } from '../../common/input/Input';
 import { Alert } from '../../common/modal/alert';
 import * as St from './style';
 import { duplicationCheckFromUserTable } from '../../../api/supabase/users';
@@ -158,6 +158,11 @@ export default function SignUpForm() {
       email: newUser.email,
       password: newUser.password,
     });
+
+    if (authData) {
+      localStorage.setItem('authId', authData.user?.id as string);
+    }
+
     const uid = authData.user?.id;
 
     const { error: dbUserErr } = await supabase.from('users').insert({
