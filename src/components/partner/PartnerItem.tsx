@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Tables } from '../../api/supabase/supabase';
 import * as St from './style';
 import defaultProfileImage from '../../assets/imgs/users/default_profile_img.png';
+import classifyingAge from '../common/classifyingAge/classifyingAge';
 
 type PartnerItemProps = {
   post: Tables<'partnerPosts'>;
@@ -41,35 +42,6 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
     getFlagAndDisplayImage();
   }, []);
 
-  const getAgeCategory = (birthday: string) => {
-    const birthDate = new Date(birthday);
-    const currentDate = new Date();
-
-    const age = currentDate.getFullYear() - birthDate.getFullYear() - (currentDate.getMonth() < birthDate.getMonth() || (currentDate.getMonth() === birthDate.getMonth() && currentDate.getDate() < birthDate.getDate()) ? 1 : 0);
-
-    if (age >= 10 && age < 20) {
-      return '10대';
-    }
-    if (age >= 20 && age < 30) {
-      return '20대';
-    }
-    if (age >= 30 && age < 40) {
-      return '30대';
-    }
-    if (age >= 40 && age < 50) {
-      return '40대';
-    }
-    if (age >= 50 && age < 60) {
-      return '50대';
-    }
-    if (age >= 60 && age < 70) {
-      return '60대';
-    }
-    if (age >= 70 && age < 80) {
-      return '70대';
-    }
-  };
-
   return (
     <Link to={`detail/${post.id}`}>
       <St.PostCard>
@@ -88,9 +60,9 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
         </St.Main>
         <St.Body>
           <picture>
-            {post.interestUrl.map((url, index) => (
+            {/* {post.interestUrl.map((url, index) => (
               <St.InterestImage key={index} src={url} alt={`interest-${index}`} />
-            ))}
+            ))} */}
           </picture>
           <p>모집인원: {post.numOfPeople}명</p>
         </St.Body>
@@ -101,7 +73,7 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
           </St.UserProfile>
           <div>
             <p>
-              {getAgeCategory(post.users.birthday)} | {post.users.gender}
+              {classifyingAge(post.users.birthday)} | {post.users.gender}
             </p>
           </div>
         </St.Footer>
