@@ -74,7 +74,7 @@ const UserFeedback = ({ id, createdAt, writerId, openChat }: Props) => {
       </St.UserProfileBox>
       {isPostUser() ? (
         <div>
-          <button onClick={() => navigate('/partner/write')}>수정</button>
+          <button onClick={() => navigate(`/partner/write/${id}`)}>수정</button>
           <button onClick={() => handleDelBtn(id)}>삭제</button>
         </div>
       ) : (
