@@ -1,5 +1,8 @@
 import React from 'react';
-import { DatePicker, Space } from 'antd';
+import dayjs from 'dayjs';
+import { DatePicker, Space, ConfigProvider } from 'antd';
+import type { RangePickerProps } from 'antd/es/date-picker';
+import koKR from 'antd/es/locale/ko_KR';
 
 interface CalendarProps {
   setPartnerDates: React.Dispatch<React.SetStateAction<string[]>>;
@@ -12,31 +15,17 @@ function PartnerCalendar({ setPartnerDates }: CalendarProps) {
     // console.log('dateString:', dateString, 'dates:', dates);
     setPartnerDates(dateString);
   };
+  const disabledDate: RangePickerProps['disabledDate'] = (current) => {
+    return current && current < dayjs().startOf('day');
+  };
 
   return (
-    <Space direction="vertical" size={12}>
-      <RangePicker onChange={getDateHandle} />
-    </Space>
+    <ConfigProvider locale={koKR}>
+      <Space direction="vertical" size={12}>
+        <RangePicker disabledDate={disabledDate} onChange={getDateHandle} />
+      </Space>
+    </ConfigProvider>
   );
 }
 
 export default PartnerCalendar;
-// function PartnerCalendar() {
-//   const [selectedDates, setSelectedDates] = useState([]);
-
-//   const getDateHandle = (dates: any, dateString: any) => {
-//     setSelectedDates(dateString);
-//   };
-
-//   useEffect(() => {
-//     console.log(selectedDates); // ['2023-08-14', '2023-08-16']
-//   }, [selectedDates]);
-
-//   return (
-//     <Space direction="vertical" size={12}>
-//       <RangePicker onChange={getDateHandle} />
-//     </Space>
-//   );
-// }
-
-// export default PartnerCalendar;
