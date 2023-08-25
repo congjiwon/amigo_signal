@@ -13,7 +13,6 @@ const PartnerList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 10;
   const offset = (currentPage - 1) * limit;
-  console.log('postStorage', postStorage);
 
   useEffect(() => {
     const fetchPosts = async () => {

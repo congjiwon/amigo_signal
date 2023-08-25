@@ -29,8 +29,8 @@ const ApplyWithInfo = ({ postId, applicantId, setIsApply }: ApplyWithInfoProps) 
     const applicantData = {
       postId,
       applicantId,
-      isInvolved: 'pending',
       content: text,
+      isConfirmed: false,
     };
     try {
       await insertApplicant(applicantData);

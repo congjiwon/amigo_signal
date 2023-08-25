@@ -10,6 +10,15 @@ type AlertErrorProps = {
   text?: string;
 };
 
+type ConfirmCustomProps = {
+  title: string;
+  text: string;
+  confirmButtonText: string;
+  cancelButtonText: string;
+  confirmMessage: string;
+  message: string;
+};
+
 // 기본 alert창 -> position과 title 바꿔서 재사용 가능
 export const Alert = ({ title, position = 'center' }: AlertProps) => {
   Swal.fire({
@@ -27,6 +36,29 @@ export const AlertError = ({ title = '에러가 발생했습니다.', text = '�
     icon: 'error',
     title,
     text,
+  });
+};
+
+// Confirm창 (모든 메시지 커스텀 가능)
+export const ConfirmCustom = ({ title, text, confirmButtonText, cancelButtonText, confirmMessage, message }: ConfirmCustomProps): Promise<boolean> => {
+  return new Promise((resolve) => {
+    Swal.fire({
+      title,
+      text,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText,
+      cancelButtonText,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire(confirmMessage, message, 'success');
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    });
   });
 };
 
