@@ -82,16 +82,19 @@ export interface Database {
       };
       interest: {
         Row: {
+          content: string | null;
           id: number;
           imageUrl: string | null;
           name: string;
         };
         Insert: {
+          content?: string | null;
           id?: number;
           imageUrl?: string | null;
           name: string;
         };
         Update: {
+          content?: string | null;
           id?: number;
           imageUrl?: string | null;
           name?: string;

@@ -41,7 +41,6 @@ function PartnerWriteTemplate() {
       setWriterId(session.user.id);
     }
     if (!session) {
-      alert('로그인이 필요합니다.');
       navigate('/login');
     }
   }, [navigate, session]);
@@ -176,7 +175,7 @@ function PartnerWriteTemplate() {
                   backgroundColor: interestUrl.includes(item.imageUrl as string) ? 'lightblue' : 'white',
                 }}
               >
-                <p>{item.name}</p>
+                <p>{item.content}</p>
               </button>
             );
           })}
