@@ -17,6 +17,8 @@ const Communication = ({ postId, writerId, logInUserId }: CommunicationProps) =>
   const { openedModals, openModal } = useModalStore();
 
   const [isApply, setIsApply] = useState<boolean | null>(null);
+  const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
+  const [isAccepted, setIsAccepted] = useState<boolean | null>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,7 +26,15 @@ const Communication = ({ postId, writerId, logInUserId }: CommunicationProps) =>
         const applyHistory = await checkApply(postId, logInUserId);
         if (applyHistory && applyHistory.length > 0) {
           setIsApply(true);
-        } else setIsApply(false);
+          const confirmedStatus = applyHistory[0].isConfirmed;
+          setIsConfirmed(confirmedStatus);
+          const AcceptedStatus = applyHistory[0].isAccepted;
+          setIsAccepted(AcceptedStatus);
+        } else {
+          setIsApply(false);
+          setIsConfirmed(false);
+          setIsAccepted(null);
+        }
       }
     };
     fetchData();
@@ -57,8 +67,8 @@ const Communication = ({ postId, writerId, logInUserId }: CommunicationProps) =>
     <div>
       {writerId !== logInUserId ? (
         <St.ApplyDiv>
-          <button onClick={isApply ? handleApplyCancel : handleApply}>{isApply ? '참여 취소' : '참여하기'}</button>
-          <St.ApplyStatus>상태 확인 태그</St.ApplyStatus>
+          {isConfirmed ? <></> : <button onClick={isApply ? handleApplyCancel : handleApply}>{isApply ? '참여 취소' : '참여하기'}</button>}
+          {isApply && <St.ApplyStatus>{isAccepted === null ? '참여 신청 중' : isAccepted ? '참여 수락됨' : '참여 거절됨'}</St.ApplyStatus>}
         </St.ApplyDiv>
       ) : (
         <button onClick={() => openModal('applicantList')}>신청자 목록</button>

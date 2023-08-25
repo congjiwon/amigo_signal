@@ -1,5 +1,13 @@
 import { styled } from 'styled-components';
 
+type ApplicantCardProps = {
+  isClicked: boolean;
+};
+
+type CheckButtonProps = {
+  isAccepted: boolean | null;
+};
+
 export const ApplyDiv = styled.div`
   display: flex;
   align-items: center;
@@ -44,10 +52,10 @@ export const ApplicantList = styled.ul`
   margin-top: 30px;
 `;
 
-export const ApplicantCard = styled.div`
+export const ApplicantCard = styled.div<ApplicantCardProps>`
   margin-top: 15px;
   padding: 20px;
-  border: 1px solid lightgray;
+  border: ${(props) => (props.isClicked ? '1.5px solid black' : '1px solid lightgray')};
   border-radius: 10px;
 `;
 
@@ -84,14 +92,66 @@ export const ButtonDiv = styled.div`
   gap: 5px;
 `;
 
-export const CheckButton = styled.button`
+export const AcceptButton = styled.button<CheckButtonProps>`
   padding: 7px 10px;
   background: none;
   border: 1px solid black;
   border-radius: 20px;
+  cursor: pointer;
+  background-color: ${(props) => {
+    if (props.isAccepted === null) return 'white';
+    return props.isAccepted ? 'black' : 'white';
+  }};
+  color: ${(props) => {
+    if (props.isAccepted === null) return 'black';
+    return props.isAccepted ? 'white' : 'black';
+  }};
+`;
+
+export const RejectButton = styled.button<CheckButtonProps>`
+  padding: 7px 10px;
+  background: none;
+  border: 1px solid black;
+  border-radius: 20px;
+  cursor: pointer;
+  background-color: ${(props) => {
+    if (props.isAccepted === null) return 'white';
+    return props.isAccepted ? 'white' : 'black';
+  }};
+  color: ${(props) => {
+    if (props.isAccepted === null) return 'black';
+    return props.isAccepted ? 'black' : 'white';
+  }};
 `;
 
 export const ApplicantContent = styled.p`
   margin-top: 20px;
   margin-left: 40px;
+`;
+
+export const ConfirmedApplicantList = styled.div`
+  padding: 30px;
+  border: 1px solid lightgray;
+  border-radius: 10px;
+  h1 {
+    font-weight: 600;
+  }
+`;
+
+export const ConfirmedApplicantItem = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+`;
+
+export const ConfirmedApplicantInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+export const ConfirmedApplicantAgeNGender = styled.p`
+  color: gray;
+  font-size: 14px;
 `;
