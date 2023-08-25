@@ -1,5 +1,9 @@
 import { styled } from 'styled-components';
 
+type ValidationStatusProps = {
+  $validationStatus: boolean;
+};
+
 export const ModifyProfileWrapper = styled.div`
   padding: 32px;
   box-sizing: border-box;
@@ -20,12 +24,26 @@ export const ModifyProfileBox = styled.div`
 `;
 
 export const ProfileImgBox = styled.div`
+  position: relative;
   width: 150px;
+  height: 150px;
   flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 50%;
 
   & img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
     width: 100%;
+    transform: translate(-50%, -50%);
   }
+`;
+
+export const MofifyNickNameMsg = styled.p<ValidationStatusProps>`
+  margin-top: 8px;
+  color: ${(props) => (props.$validationStatus ? 'green' : 'red')};
+  font-size: 14px;
 `;
 
 export const BtnBox = styled.div`
