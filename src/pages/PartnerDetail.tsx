@@ -8,7 +8,6 @@ import useSessionStore from '../zustand/store';
 
 function PartnerDetail() {
   const { postid } = useParams<string>();
-
   const { session } = useSessionStore();
   const logInUserId = session?.user.id;
 
@@ -23,7 +22,6 @@ function PartnerDetail() {
   }
 
   const partnerPostData = partnerPost.data!;
-
   return (
     <>
       <PartnerDetailInfo partnerPostData={partnerPostData} />
