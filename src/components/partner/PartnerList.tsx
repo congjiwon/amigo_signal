@@ -8,13 +8,17 @@ import { useNavigate } from 'react-router';
 import LocationDropDown from '../common/dropDown/LocationDropDown';
 import PartnerCalendar from '../common/calendar/PartnerCalendar';
 
+interface passType {
+  country?: string;
+  startDate?: string;
+  endDate?: string;
+}
+
 const PartnerList = () => {
   const [postStorage, setPostStorage] = useState<Tables<'partnerPosts'>[]>([]);
-
+  console.log('전체', postStorage);
   const [location, setLocation] = useState<string[]>([]);
-  const [test, setTest] = useState<string[]>([]);
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [date, setDate] = useState<string[]>([]);
 
   const navigate = useNavigate();
   const divRef = useRef(null);
@@ -63,15 +67,19 @@ const PartnerList = () => {
   );
 
   //나라 필터
+
   useEffect(() => {
     const getfilteredPost = async () => {
-      const filteredPost = await getFilteredPartnerPost(location[1]);
+      console.log(location[1], date[0], date[1]);
+      const filteredPost = await getFilteredPartnerPost({ country: location[1], startDate: date[0], endDate: date[1] });
       console.log('메인에서 필터링 잘 받아오나요', filteredPost);
-      // setPostStorage(filteredPost);
+      if (filteredPost) {
+        console.log('sdfsdfs', filteredPost);
+        setPostStorage(filteredPost);
+      }
     };
-    // console.log(getFilteredPartnerPost(country, test[0], test[1]))
     getfilteredPost();
-  }, [location]);
+  }, [location, date]);
 
   return (
     <>
@@ -86,7 +94,7 @@ const PartnerList = () => {
       </St.ImageWrapper>
       <div>
         <LocationDropDown setLocation={setLocation} />
-        <PartnerCalendar setPartnerDates={setTest} />
+        <PartnerCalendar setPartnerDates={setDate} />
       </div>
       <div>
         <button onClick={() => navigate('/partner/write')}>글쓰기</button>

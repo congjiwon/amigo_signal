@@ -124,15 +124,11 @@ export const getUsers = async (userId: string) => {
 
 //동행 글 추가
 export const insertPost = async (dataToInsert: any) => {
-  try {
-    const { data, error } = await supabase.from('partnerPosts').insert(dataToInsert);
-    if (error) {
-      console.error('Insert error:', error);
-    } else {
-      console.log('Inserted data:', data);
-    }
-  } catch (error) {
-    console.error('Error:', error);
+  const { data, error } = await supabase.from('partnerPosts').insert(dataToInsert);
+  if (error) {
+    console.error('Insert error:', error);
+  } else {
+    console.log('Inserted data:', data);
   }
 };
 
@@ -206,30 +202,6 @@ export const getConfirmedApplicantList = async (postId: string) => {
   return { data: applicantList, error };
 };
 
-//동행 메인 리스트 국가 + 기간별 필터... ㅇㅔ휴
-// export const getFilteredPartnerPost = async (country: string, startDate: string, endDate: string) => {
-export const getFilteredPartnerPost = async (country: string) => {
-  // export const getFilteredPartnerPost = async (country: string) => {
-
-  try {
-    // let { data: partnerPosts, error } = await supabase.from('partnerPosts').select('*').eq('country', country).gte('startDate', startDate).lte('endDate', endDate);
-    // let { data: partnerPosts, error } = await supabase.from('partnerPosts').select('*').gte('startDate', startDate).lte('endDate', endDate);
-    // let { data: partnerPosts, error } = await supabase.from('partnerPosts').select('*').eq('country', country).gte('startDate', startDate);
-    // let { data: partnerPosts, error } = await supabase.from('partnerPosts').select('*').gte('startDate', startDate);
-
-    let { data: partnerPosts, error } = await supabase.from('partnerPosts').select('*').eq('country', country);
-
-    if (error) {
-      console.log('동행 메인 리스트 검색 필터링된 포스트 가져오는데 에러', 'error');
-    } else {
-      console.log('동행 메인 필터링 성공', partnerPosts);
-      return partnerPosts;
-    }
-  } catch (error) {
-    console.log('동행 메인 필터링 에러', error);
-  }
-};
-
 // 내가 작성한 동행찾기 포스트 가져오기 (filterIsOpen 조건)
 type MyPartnerPostProps = {
   userId: string | undefined;
@@ -260,4 +232,35 @@ export const getAppliedPosts = async (userId: string) => {
   const { data: appliedPosts, error } = await supabase.from('applicants').select('*, postId (id, country, title)').eq('applicantId', userId).eq('isAccepted', true);
 
   return appliedPosts;
+};
+
+//동행 메인 리스트 국가 + 기간별 필터... ㅇㅔ휴
+
+type filteredPostProps = {
+  country: string | undefined;
+  startDate: string | undefined;
+  endDate: string | undefined;
+};
+
+export const getFilteredPartnerPost = async ({ country, startDate, endDate }: filteredPostProps) => {
+  // let { data: partnerPosts, error } = await supabase.from('partnerPosts').select('*').eq('country', country).gte('startDate', startDate).lte('endDate', endDate);
+  let partnerPosts = supabase.from('partnerPosts').select('*, users!partnerPosts_writerId_fkey(*)');
+
+  if (country == undefined) {
+    partnerPosts = partnerPosts.gte('startDate', startDate).lte('endDate', endDate);
+    const { data: test } = await partnerPosts;
+    return test;
+  }
+
+  if (startDate == undefined || endDate == undefined) {
+    partnerPosts = partnerPosts.eq('country', country);
+    const { data: test } = await partnerPosts;
+    return test;
+  }
+
+  if (typeof country == 'string' && typeof endDate == 'string' && typeof startDate == 'string') {
+    partnerPosts = partnerPosts.eq('country', country).gte('startDate', startDate).lte('endDate', endDate);
+    const { data: test } = await partnerPosts;
+    return test;
+  }
 };

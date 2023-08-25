@@ -38,10 +38,11 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
     setImageSrc(imageUrl);
   };
 
-  useEffect(() => {
-    getFlagAndDisplayImage();
-  }, []);
+  // useEffect(() => {
+  //   getFlagAndDisplayImage();
+  // }, []);
 
+  console.log();
   return (
     <Link to={`detail/${post.id}`}>
       <St.PostCard>
@@ -69,11 +70,11 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
         <St.Footer>
           <St.UserProfile>
             {post.users.profileImageUrl ? <St.ProfileImage src={post.users.profileImageUrl} alt="profile" /> : <St.ProfileImage src={defaultProfileImage} alt="profile" />}
-            <p>{post.users.nickName}</p>
+            <p>{post.users?.nickName!}</p>
           </St.UserProfile>
           <div>
             <p>
-              {classifyingAge(post.users.birthday)} | {post.users.gender}
+              {classifyingAge(post.users?.birthday)} | {post.users?.gender}
             </p>
           </div>
         </St.Footer>
