@@ -8,6 +8,7 @@ import Button from '../../common/button/Button';
 import { Input } from '../../common/input/Input';
 import { Alert } from '../../common/modal/alert';
 import * as St from './style';
+import { duplicationCheckFromUserTable } from '../../../api/supabase/users';
 
 type newUserType = {
   email: string;
@@ -217,14 +218,6 @@ export default function SignUpForm() {
 
     emailStatus && nickNameStatus && passwordStatus && passwordConfirmStatus && genderStatus && birthdayStatus ? setBtnSubmitStatus(false) : setBtnSubmitStatus(true);
   }, [validationStatus]);
-
-  const duplicationCheckFromUserTable = async (name: string, value: string) => {
-    let { data: users, error } = await supabase.from('users').select(name).eq(name, value);
-    if (users?.length !== undefined && users.length > 0) {
-      return true;
-    }
-    return;
-  };
 
   const validateValue = (name: string, value: string) => {
     switch (name) {

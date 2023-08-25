@@ -31,6 +31,34 @@ export const getCurrentUser = async (userId: string) => {
   return user;
 };
 
+export const duplicationCheckFromUserTable = async (columnName: string, value: string) => {
+  let { data: users, error } = await supabase.from('users').select(columnName).eq(columnName, value);
+  if (users?.length !== undefined && users.length > 0) {
+    return true;
+  }
+  return;
+};
+
+type userNickNameProps = {
+  nickName: string | undefined;
+  userId: string | undefined;
+};
+
+export const updateUserNickname = async ({ nickName, userId }: userNickNameProps) => {
+  const { data, error } = await supabase.from('users').update({ nickName }).eq('id', userId).select();
+  return data;
+};
+
+type userProfileImgUrlProps = {
+  profileImageUrl: string | undefined;
+  userId: string | undefined;
+};
+
+export const updateUserProfileImgUrl = async ({ profileImageUrl, userId }: userProfileImgUrlProps) => {
+  const { data, error } = await supabase.from('users').update({ profileImageUrl }).eq('id', userId).select();
+  return data;
+};
+
 //북마크 추가
 export const addBookmark = async (bookMarkInsert: any) => {
   try {
