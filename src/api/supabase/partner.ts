@@ -1,4 +1,4 @@
-import { Inserts, TPartnerInsert, TPartnerReCommentsInsert, TPartnerUpdate } from './supabase';
+import { Inserts, TPartnerInsert, TPartnerReCommentsInsert, TPartnerReCommentsUpdate, TPartnerUpdate } from './supabase';
 import { supabase } from './supabaseClient';
 
 export const getPartnerPosts = async () => {
@@ -59,15 +59,21 @@ export const postPartnerRecomment = async (newPartnerRecomment: TPartnerReCommen
   const { error } = await supabase.from('reComments').insert(newPartnerRecomment);
 };
 
-// 동행 답댓글 commentId로 쓸 partnerComments.id 찾기
-export const getFPartnerCommentId = async () => {
-  let { data: reComments, error } = await supabase.from('reComments').select(`
-  *,
-  partnerComments (
-    *
-  )
-`);
+// 동행 답댓글 수정
+export const updatePartnerReComment = async (updateReComment: TPartnerReCommentsUpdate) => {
+  const { error } = await supabase.from('reComments').update(updateReComment).eq('id', updateReComment.id);
 };
+
+// 동행 답댓글 commentId로 쓸 partnerComments.id 찾기
+export const getFUser = async () => {
+  let { data: reComments, error } = await supabase.from('reComments').select(`
+  writerId,
+  users (
+    id, profileImageUrl, nickName
+  )`);
+  // console.log('ㅎㅎ', reComments);
+};
+// getFUser();
 
 // 코멘트 ID 배열
 export const getCommentIds = async () => {
@@ -88,8 +94,28 @@ export const getPartnerPostId = async () => {
 // 코멘트 작성자 ID 배열
 export const getWriterIds = async () => {
   let { data: writerId, error } = await supabase.from('partnerComments').select('writerId');
-  // console.log('getWriterId');
   return writerId;
+};
+
+// 답댓글 작성자 ID 배열
+export const getReCommentWriterIds = async () => {
+  let { data: reCommentWriterId, error } = await supabase.from('reComments').select('writerId');
+  return reCommentWriterId;
+};
+
+// 테스트
+export const getUsers = async (userId: string) => {
+  const { data, error } = await supabase
+    .from('users') // 사용자 테이블 이름
+    .select('id, nickName, profileImageUrl') // 가져올 필드 목록
+    .eq('id', userId) // 필터 조건: id가 userId와 일치하는 경우
+    .single(); // 단일 결과를 가져오기
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
 };
 
 export const insertPost = async (dataToInsert: any) => {

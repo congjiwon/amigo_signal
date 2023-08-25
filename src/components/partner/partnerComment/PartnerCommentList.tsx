@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { useParams } from 'react-router';
-import { deletePartnerComment, deletePartnerReComment, getPartnerReComments, getWriterIds, postPartnerRecomment, updatePartnerComments } from '../../../api/supabase/partner';
-import { getAuthId, getUserIds, getUsers } from '../../../api/supabase/users';
+import { styled } from 'styled-components';
+import { deletePartnerComment, deletePartnerReComment, getFUser, getPartnerReComments, getReCommentWriterIds, getWriterIds, postPartnerRecomment, updatePartnerComments, updatePartnerReComment } from '../../../api/supabase/partner';
+import { getUsers } from '../../../api/supabase/users';
 
 type CommentProps = {
   content: string;
@@ -18,15 +18,19 @@ export interface PartnerCommentListProps {
 }
 
 function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
-  const params = useParams();
+  // const params = useParams();
   const queryClient = useQueryClient();
   const [isUpdate, setIsUpdate] = useState(false);
   const [updateComment, setUpdateComment] = useState('');
   const [isReComment, setIsReComment] = useState(false);
   const [reContent, setReContent] = useState('');
-  const [commentIdToUpdate, setCommentIdToUpdate] = useState('');
+  const [isUpdateReComment, setIsUpdateReComment] = useState(false);
+  const [updateReComment, setUpdateReComment] = useState('');
+  const [reCommentId, setReCommentId] = useState('');
 
-  const { isLoading, data: authId } = useQuery(['authId'], getAuthId);
+  // 답댓글 조회
+  const { data: allReComments } = useQuery(['partnerReComments'], getPartnerReComments);
+
   // 댓글 수정
   const mutation = useMutation(updatePartnerComments, {
     onSuccess: async () => {
@@ -34,7 +38,12 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
     },
   });
 
-  const { data: allReComments } = useQuery(['partnerReComments'], getPartnerReComments);
+  // 답댓글 수정
+  const reUpdateMutation = useMutation(updatePartnerReComment, {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(['partnerReComments']);
+    },
+  });
 
   // 답댓글 작성
   const reCommentMutation = useMutation(postPartnerRecomment, {
@@ -60,6 +69,7 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
 
   // 매개변수로 event객체를 받는다.
   // 핸들러는 함수고 이벤트는 매개변수니까 handler 빼야된다.
+
   // 댓글 수정 submit
   const handleSubmitBtn = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -74,7 +84,25 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
 
     await mutation.mutateAsync(newComment);
 
+    setUpdateComment('');
     setIsUpdate(false);
+  };
+
+  // 답댓글 수정 submit
+  const handleReSubmitBtn = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const newReComment = {
+      reContent: updateReComment,
+      writerId: comment?.writerId,
+      commentId: comment?.id,
+      id: reCommentId,
+    };
+
+    reUpdateMutation.mutate(newReComment);
+
+    setUpdateReComment('');
+    setIsUpdateReComment(false);
   };
 
   // 답댓글 submit
@@ -91,9 +119,9 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
     reCommentMutation.mutateAsync(reComment);
   };
 
-  const handleUpdateBtn = (commentId: string) => {
+  // 댓글 수정 버튼
+  const handleUpdateBtn = () => {
     setIsUpdate(true);
-    setCommentIdToUpdate(commentId);
   };
 
   // 댓글 삭제
@@ -117,20 +145,23 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
     }
   };
 
+  /// 댓글 삭제 버튼
   const handleDelBtn = async (id: string) => {
     if (window.confirm('삭제하시겠습니까?')) {
       await delMutation.mutateAsync(id);
     }
   };
 
-  const { data: writerIds } = useQuery(['comment'], getWriterIds);
-  const { data: userIds } = useQuery(['user'], getUserIds);
-  const filteredUserIds = userIds?.map((id) => id.id);
-
   // 유저 ID, 닉네임, 프로필사진 배열
   const { data: users } = useQuery(['userData'], getUsers);
+  // 답댓글용 유저 정보
+  const { data: reCommentUsers } = useQuery(['userData'], getFUser);
+  console.log('gg', reCommentUsers);
+
   // 댓글 작성자 ID 배열
   const { data: writerId } = useQuery(['writerId'], getWriterIds);
+  // 답댓글 작성자 ID 배열
+  const { data: reCommentIds } = useQuery(['reCommentId'], getReCommentWriterIds);
   // 댓글 작성자의 유저 ID, 닉네임, 프로필사진 배열
   const user = users?.filter((user) => {
     return writerId?.filter((id) => {
@@ -138,8 +169,25 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
     });
   });
 
+  const filteredReComments = allReComments?.filter((reComment) => {
+    return;
+  });
+
+  // const reCommentUsers = reCommentIds?.filter((id) => {
+  //   return users?.filter((user) => {
+  //     return user.id === id.writerId;
+  //   });
+  // });
+
+  // 답글쓰기 버튼
   const handleRecommentBtn = () => {
     setIsReComment(true);
+  };
+
+  // 답글 수정 버튼
+  const handleReUpdateBtn = (id: string) => {
+    setReCommentId(id);
+    setIsUpdateReComment(true);
   };
 
   {
@@ -150,7 +198,7 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
             if (n.id === comment?.writerId) {
               return (
                 <div key={n.id}>
-                  <img style={{ width: '40px', height: '40px', borderRadius: '50px' }} src={n && n.profileImageUrl!} />
+                  <Img src={n && n.profileImageUrl!} />
                   <p>{n.nickName}</p>
                 </div>
               );
@@ -161,10 +209,10 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
         </div>
         {isLoginUser && (
           <div>
-            <button onClick={() => handleUpdateBtn(comment!.id)}>수정</button>
+            <button onClick={handleUpdateBtn}>수정</button>
             {isUpdate ? (
               <form onSubmit={handleSubmitBtn}>
-                <input type="text" placeholder="댓글을 남겨보세요" value={updateComment} onChange={(event) => setUpdateComment(event.target.value)} />
+                <input type="text" placeholder="댓글을 남겨보세요" value={updateComment} onChange={(event) => setUpdateComment(event.target.value)} required />
                 <button type="submit" onClick={() => setIsUpdate(false)}>
                   취소
                 </button>
@@ -189,14 +237,36 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
           )}
         </div>
         <div>
-          {/* {comment?.id === 수파베이스에서 fk로 불러온 배열의 partnerComments배열 속 id랑 같으면} */}
+          <div></div>
           {allReComments?.map((reComment) => {
             if (reComment.commentId === comment?.id) {
               return (
-                <div key={reComment.id}>
+                <UpdateReCommentBox key={reComment.id}>
+                  {/* {reCommentUsers?.map((user) => {
+                    if (user.id === reComment.writerId) {
+                      return (
+                        <div key={user.id}>
+                          <Img src={user && user.profileImageUrl!} />
+                          <p>{user.nickName}</p>
+                        </div>
+                      );
+                    }
+                  })} */}
                   <p>{reComment.reContent}</p>
+                  <button onClick={() => handleReUpdateBtn(reComment.id)}>수정</button>
+                  {isUpdateReComment ? (
+                    <form onSubmit={handleReSubmitBtn}>
+                      <input type="text" placeholder="댓글을 남겨보세요" value={updateReComment} onChange={(event) => setUpdateReComment(event.target.value)} />
+                      <button type="submit" onClick={() => setIsUpdateReComment(false)}>
+                        취소
+                      </button>
+                      <button type="submit">수정등록</button>
+                    </form>
+                  ) : (
+                    ''
+                  )}
                   <button onClick={() => handleReDelBtn(reComment.id)}>삭제</button>
-                </div>
+                </UpdateReCommentBox>
               );
             }
           })}
@@ -207,3 +277,15 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
 }
 
 export default PartnerCommentList;
+
+const Img = styled.img`
+  width: 40px;
+  height: 40px;
+  border-radius: 50px;
+`;
+
+const UpdateReCommentBox = styled.div`
+  margin-top: 24px;
+  margin-left: 52px;
+  border: 1px solid;
+`;
