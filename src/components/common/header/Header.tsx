@@ -4,13 +4,17 @@ import { supabase } from '../../../api/supabase/supabaseClient';
 import useSessionStore from '../../../zustand/store';
 import { useEffect } from 'react';
 import { Alert } from '../modal/alert';
+import { useQuery } from '@tanstack/react-query';
+import { getCurrentUser } from '../../../api/supabase/users';
 
 export default function Header() {
   const navigate = useNavigate();
   const session = useSessionStore((state) => state.session);
   const setSession = useSessionStore((state) => state.setSession);
-  // const storageUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
-  const addedSession = session?.user.user_metadata;
+  const userId = session?.user.id;
+
+  const { isLoading, data: currentUser } = useQuery(['currentUser', userId], () => getCurrentUser(userId as string));
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -44,7 +48,7 @@ export default function Header() {
       <St.Utils>
         {session ? (
           <>
-            <span>{addedSession?.nickName}&nbsp;님</span>
+            <span>{currentUser?.nickName}&nbsp;님</span>
             <Link to="/mypage">마이페이지</Link>
             <button onClick={handleSignout}>로그아웃</button>
           </>
