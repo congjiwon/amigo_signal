@@ -9,13 +9,14 @@ import { BtnStyleType } from '../../../types/styleTypes';
 import { Alert } from '../../common/modal/alert';
 import defaultImg from '../../../assets/imgs/users/default_profile_img.png';
 import * as St from './style';
+import useCurrentUserStore from '../../../zustand/currentUser';
 
 export default function ModifyProfile() {
   const queryClient = useQueryClient();
   const storagaUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
   const session = useSessionStore((state) => state.session);
   const userId = session?.user.id;
-  const { isLoading, data: currentUser } = useQuery(['currentUser', userId], () => getCurrentUser(userId as string));
+  const currentUser = useCurrentUserStore((state) => state.currentUser);
 
   const [nickName, setNickName] = useState<string | undefined>(currentUser?.nickName);
   const [nickNameValidationMsg, setNickNameValidationMsg] = useState<string | null>('');
