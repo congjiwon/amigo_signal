@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { Alert } from '../modal/alert';
 import { useQuery } from '@tanstack/react-query';
 import { getCurrentUser } from '../../../api/supabase/users';
+import useCurrentUserStore from '../../../zustand/currentUser';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -13,16 +14,22 @@ export default function Header() {
   const setSession = useSessionStore((state) => state.setSession);
   const userId = session?.user.id;
 
-  const { isLoading, data: currentUser } = useQuery(['currentUser', userId], () => getCurrentUser(userId as string));
+  const currentUser = useCurrentUserStore((state) => state.currentUser);
+  const setCurrentUser = useCurrentUserStore((state) => state.setCurrentUser);
+
+  const { data: currentUserDB } = useQuery(['currentUser', userId], () => getCurrentUser(userId as string), {
+    enabled: !!userId,
+  });
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
   }, [setSession]);
+
+  useEffect(() => {
+    currentUserDB && setCurrentUser(currentUserDB);
+  }, [currentUserDB]);
 
   const handleSignout = async () => {
     await supabase.auth.signOut();

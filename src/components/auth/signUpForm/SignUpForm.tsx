@@ -157,13 +157,6 @@ export default function SignUpForm() {
     const { data: authData, error: authErr } = await supabase.auth.signUp({
       email: newUser.email,
       password: newUser.password,
-      options: {
-        data: {
-          nickName: newUser.nickName,
-          gender: newUser.gender,
-          birthday,
-        },
-      },
     });
     const uid = authData.user?.id;
 

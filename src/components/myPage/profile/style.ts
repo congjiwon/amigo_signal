@@ -2,10 +2,6 @@ import { styled } from 'styled-components';
 
 export const ProfileWrapper = styled.div`
   width: 100%;
-  max-width: 800px;
-  margin: 60px auto;
-  padding: 32px;
-  background-color: #eee;
 `;
 
 export const ProfileBox = styled.div`
@@ -16,8 +12,8 @@ export const ProfileBox = styled.div`
 
 export const ProfileImgBox = styled.div`
   position: relative;
-  width: 150px;
-  height: 150px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   overflow: hidden;
 

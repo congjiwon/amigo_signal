@@ -143,3 +143,35 @@ export const getConfirmedApplicantList = async (postId: string) => {
   const { data: applicantList, error } = await supabase.from('applicants').select('*, users!applicants_applicantId_fkey(*)').eq('postId', postId).eq('isAccepted', true);
   return { data: applicantList, error };
 };
+
+// 내가 작성한 동행찾기 포스트 가져오기 (filterIsOpen 조건)
+type MyPartnerPostProps = {
+  userId: string | undefined;
+  filterIsOpen?: boolean | null;
+};
+
+export const getMyPartnerPosts = async ({ userId, filterIsOpen }: MyPartnerPostProps) => {
+  let partnerPosts = supabase.from('partnerPosts').select('*').eq('writerId', userId);
+
+  if (filterIsOpen === null) {
+    const { data: filteredPartnerPosts } = await partnerPosts;
+    return filteredPartnerPosts;
+  }
+
+  if (filterIsOpen === true) {
+    partnerPosts = partnerPosts.eq('isOpen', true);
+  }
+  if (filterIsOpen === false) {
+    partnerPosts = partnerPosts.eq('isOpen', false);
+  }
+
+  const { data: filteredPartnerPosts } = await partnerPosts;
+  return filteredPartnerPosts;
+};
+
+// 내가 지원한 포스트들
+export const getAppliedPosts = async (userId: string) => {
+  const { data: appliedPosts, error } = await supabase.from('applicants').select('*, postId (id, country, title)').eq('applicantId', userId).eq('isAccepted', true);
+
+  return appliedPosts;
+};
