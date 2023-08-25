@@ -15,9 +15,17 @@ export const ProfileBox = styled.div`
 `;
 
 export const ProfileImgBox = styled.div`
+  position: relative;
   width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
 
   & img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
     width: 100%;
+    transform: translate(-50%, -50%);
   }
 `;
