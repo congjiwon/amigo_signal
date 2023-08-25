@@ -168,3 +168,10 @@ export const getMyPartnerPosts = async ({ userId, filterIsOpen }: MyPartnerPostP
   const { data: filteredPartnerPosts } = await partnerPosts;
   return filteredPartnerPosts;
 };
+
+// 내가 지원한 포스트들
+export const getAppliedPosts = async (userId: string) => {
+  const { data: appliedPosts, error } = await supabase.from('applicants').select('*, postId (id, country, title)').eq('applicantId', userId).eq('isAccepted', true);
+
+  return appliedPosts;
+};
