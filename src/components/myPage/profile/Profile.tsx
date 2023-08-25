@@ -16,14 +16,6 @@ export default function Profile() {
   const ageRange = classifyingAge(currentUser?.birthday as string);
   return (
     <St.ProfileWrapper>
-      <Button styleType={BtnStyleType.BTN_DARK} onClick={() => openModal('modifyProfile')}>
-        프로필 수정
-      </Button>
-      {openedModals.modifyProfile && (
-        <Modal id="modifyProfile" size="medium">
-          <ModifyProfile />
-        </Modal>
-      )}
       <St.ProfileBox>
         <St.ProfileImgBox>
           <img src={currentUser?.profileImageUrl ? `${storagaUrl}/${currentUser?.profileImageUrl}` : defaultImg} />
@@ -34,6 +26,12 @@ export default function Profile() {
           <p>{ageRange}</p>
         </div>
       </St.ProfileBox>
+      <button onClick={() => openModal('modifyProfile')}>프로필 수정</button>
+      {openedModals.modifyProfile && (
+        <Modal id="modifyProfile" size="medium">
+          <ModifyProfile />
+        </Modal>
+      )}
     </St.ProfileWrapper>
   );
 }

@@ -18,9 +18,17 @@ export default function MyPartnerPost() {
 
   return (
     <St.MyPartnerPostsWrapper>
-      <button onClick={() => handleClickFilter(null)}>전체</button>
-      <button onClick={() => handleClickFilter(true)}>모집중</button>
-      <button onClick={() => handleClickFilter(false)}>모집마감</button>
+      <St.FilterBtns>
+        <St.FilterBtn className={filterStatus === null ? 'active' : ''} onClick={() => handleClickFilter(null)}>
+          전체
+        </St.FilterBtn>
+        <St.FilterBtn className={filterStatus === true ? 'active' : ''} onClick={() => handleClickFilter(true)}>
+          모집중
+        </St.FilterBtn>
+        <St.FilterBtn className={filterStatus === false ? 'active' : ''} onClick={() => handleClickFilter(false)}>
+          모집마감
+        </St.FilterBtn>
+      </St.FilterBtns>
       <St.MyPartnerPostCardList>
         {myPartnerPosts?.map((partnerPost) => (
           <St.MyPartnerPostCard key={partnerPost.id}>
