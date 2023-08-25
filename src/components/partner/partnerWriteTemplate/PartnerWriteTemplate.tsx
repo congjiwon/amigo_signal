@@ -1,85 +1,71 @@
-import React, { useEffect, useState } from 'react';
-import { supabase } from '../../../api/supabase/supabaseClient';
-import Button from '../../common/button/Button';
-import { DatePicker, Space, Col, InputNumber, Row, Slider } from 'antd';
-import { BtnStyleType } from '../../../types/styleTypes';
-import { styled } from 'styled-components';
-import LocationDropDown from '../../common/dropDown/LocationDropDown';
-import { insertPost } from '../../../api/supabase/partner';
-import { getAuthId } from '../../../api/supabase/users';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-interface interestT {
-  id: number;
-  name: string;
-  imageUrl: string | null;
-}
+import { getInterests } from '../../../api/supabase/interest';
+import { BtnStyleType } from '../../../types/styleTypes';
+import LocationDropDown from '../../common/dropDown/LocationDropDown';
+import { PartnerDropDown } from '../../common/dropDown/DropDown';
+import PartnerCalendar from '../../common/calendar/PartnerCalendar';
+import Button from '../../common/button/Button';
+import { insertPost } from '../../../api/supabase/partner';
+import { Tables } from '../../../api/supabase/supabase';
+import useSessionStore from '../../../zustand/store';
 
 function PartnerWriteTemplate() {
   const [location, setLocation] = useState<string[]>([]);
-  const [region, setRegion] = useState('');
-  const [country, setCountry] = useState('');
-  const [interestTagList, setInterestTagList] = useState<interestT[]>([]);
+  const [partnerDates, setPartnerDates] = useState<string[]>([]);
+  const [partner, setPartner] = useState<number>(1);
+  const [title, setTitle] = useState<string>('');
+  const [content, setContent] = useState<string>('');
+  const [chatUrl, setChatUrl] = useState<string>('');
+  const [interestTagList, setInterestTagList] = useState<Tables<'interest'>[]>([]);
   const [interestUrl, setInterestUrl] = useState<string[]>([]);
-  const [filteredInterestUrl, setFilteredInterestUrl] = useState<string[]>([]);
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [chatUrl, setChatUrl] = useState('');
-  const [title, setTitle] = useState('');
-  const [contents, setContents] = useState('');
-  const [numOfPeople, setNumOfPeople] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [writerId, setWriterId] = useState('');
-  const { RangePicker } = DatePicker;
+  const [loading, setLoading] = useState<boolean>(false);
+  const [writerId, setWriterId] = useState<string>('');
   const navigate = useNavigate();
+  const session = useSessionStore((state) => state.session);
 
   const getInterestsList = async () => {
-    let { data: interest, error } = await supabase.from('interest').select('*');
-    if (interest) {
-      setInterestTagList(interest);
+    const Interests = await getInterests();
+    const InterestsData = Interests.data!;
+    if (InterestsData) {
+      setInterestTagList(InterestsData);
     }
   };
 
   useEffect(() => {
     getInterestsList();
-    getWriterId();
   }, []);
 
-  const handleInterestClick = (name: string) => {
-    setInterestUrl((prevInterestUrl) => [...prevInterestUrl, name]);
-  };
-
-  const filteredSet = new Set(interestUrl);
   useEffect(() => {
-    setFilteredInterestUrl(Array.from(filteredSet));
-  }, [interestUrl]);
+    if (!!session) {
+      setWriterId(session.user.id);
+    }
+    if (!session) {
+      alert('로그인이 필요합니다.');
+      navigate('/login');
+    }
+  }, [navigate, session]);
 
-  //날짜
-  const getDateHandle = (dates: any, dateString: any) => {
-    setStartDate(dateString[0]);
-    setEndDate(dateString[1]);
-  };
-
-  //지역
-  useEffect(() => {
-    setRegion(location[0]);
-    setCountry(location[1]);
-  }, [location]);
-
-  //인원수 입력
-  const numOfPeopleHandler = (newValue: number | null) => {
-    if (typeof newValue == 'number') {
-      setNumOfPeople(newValue);
+  const handleInterestClick = (imageUrl: string) => {
+    if (interestUrl.includes(imageUrl)) {
+      // 이미 추가된 태그를 클릭한 경우 제거
+      setInterestUrl((prevInterestUrl) => prevInterestUrl.filter((url) => url !== imageUrl));
+    } else if (interestUrl.length >= 3) {
+      // 3개 이상의 태그를 추가하려는 경우 알림
+      alert('태그는 3개까지');
+    } else {
+      // 태그 추가
+      setInterestUrl((prevInterestUrl) => [...prevInterestUrl, imageUrl]);
     }
   };
 
   //채팅 url 유효성검사
-  const onChangeChatUrl = function (value: string) {
+  const chatUrlValidation = (value: string): boolean => {
     const urlPattern = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
     if (urlPattern.test(value)) {
-      setChatUrl(value);
-    } else {
-      alert('유효한 주소 url을 입력해주세요');
+      return true;
     }
+    return false;
   };
 
   const currentTime = function () {
@@ -94,38 +80,51 @@ function PartnerWriteTemplate() {
     return now;
   };
 
-  //작성자 id 가져오기
-  const getWriterId = async () => {
-    const authId = await getAuthId();
-    if (authId) {
-      setWriterId(authId);
+  const validation = (): boolean => {
+    if (location.length < 1) {
+      alert('지역입력');
+      return false;
+    } else if (partnerDates.length < 1) {
+      alert('날짜입력');
+      return false;
+    } else if (title.length < 1) {
+      alert('제목입력');
+      return false;
+    } else if (content.length < 1) {
+      alert('내용입력');
+      return false;
     }
+    if (chatUrl.length >= 1 && !chatUrlValidation(chatUrl)) {
+      alert('올바른 오픈채팅 주소가 아닙니다.');
+      return false;
+    }
+    return true;
   };
-
   // 글 작성 버튼 클릭 핸들러
   const handleWriteClick = async () => {
-    const time = currentTime();
-    const dataToInsert = [
-      {
-        title,
-        content: contents,
-        isOpen: true,
-        startDate,
-        endDate,
-        openChat: chatUrl,
-        createdAt: time,
-        interestUrl: filteredInterestUrl, // todo. 후에 이미지 url로 변환해야함
-        region,
-        country,
-        numOfPeople,
-        writerId,
-      },
-    ];
-    console.log(dataToInsert);
-    setLoading(true);
-    await insertPost(dataToInsert);
-    setLoading(false);
-    navigate('/partner');
+    if (validation()) {
+      const time = currentTime();
+      const dataToInsert = [
+        {
+          title,
+          content,
+          isOpen: true,
+          startDate: partnerDates[0],
+          endDate: partnerDates[1],
+          openChat: chatUrl,
+          createdAt: time,
+          interestUrl,
+          region: location[0],
+          country: location[1],
+          numOfPeople: partner,
+          writerId,
+        },
+      ];
+      setLoading(true);
+      await insertPost(dataToInsert);
+      setLoading(false);
+      navigate('/partner');
+    }
   };
 
   return (
@@ -133,24 +132,13 @@ function PartnerWriteTemplate() {
       <form>
         <LocationDropDown setLocation={setLocation} />
         <br />
-        <Space direction="vertical" size={12}>
-          <RangePicker onChange={getDateHandle} />
-        </Space>
-        <Space style={{ width: '100%' }} direction="vertical">
-          <Row>
-            <Col span={12}>
-              <Slider min={1} max={10} onChange={numOfPeopleHandler} value={numOfPeople} />
-            </Col>
-            <Col span={4}>
-              <InputNumber min={1} max={10} style={{ margin: '0 16px' }} value={numOfPeople} onChange={numOfPeopleHandler} />
-            </Col>
-          </Row>
-        </Space>
+        <PartnerCalendar setPartnerDates={setPartnerDates} />
+        <br />
+        <PartnerDropDown setPartner={setPartner} />
         <span>오픈채팅 주소</span>
         <input
           value={chatUrl}
           onChange={(event) => {
-            // onChangeChatUrl(event.target.value);
             setChatUrl(event.target.value);
           }}
           placeholder="오픈채팅방 주소를 입력해주세요"
@@ -166,9 +154,9 @@ function PartnerWriteTemplate() {
         ></input>
         <br />
         <textarea
-          value={contents}
+          value={content}
           onChange={(event) => {
-            setContents(event.target.value);
+            setContent(event.target.value);
           }}
           rows={10}
           cols={100}
@@ -177,13 +165,19 @@ function PartnerWriteTemplate() {
         <br />
         <span>태그선택</span>
         {interestTagList &&
-          interestTagList.map((item: any) => {
+          interestTagList.map((item) => {
             return (
-              <div key={item.id}>
-                <span onClick={() => handleInterestClick(item.name)} style={{ margin: '10px' }}>
-                  {item.name}
-                </span>
-              </div>
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => handleInterestClick(item.imageUrl as string)}
+                style={{
+                  margin: '20px',
+                  backgroundColor: interestUrl.includes(item.imageUrl as string) ? 'lightblue' : 'white',
+                }}
+              >
+                <p>{item.name}</p>
+              </button>
             );
           })}
         <br />
@@ -194,6 +188,7 @@ function PartnerWriteTemplate() {
           취소하기
         </Button>
       </form>
+      {loading && <p>로딩중</p>}
     </>
   );
 }

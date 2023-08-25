@@ -23,6 +23,12 @@ export const getPartnerComments = async () => {
   return partnerComments;
 };
 
+export const updatePartnerPost = async (updatePost: any) => {
+  const { data: updatedData, error } = await supabase.from('partnerPosts').update(updatePost).eq('id', updatePost.id);
+  console.log('updatePost', error);
+};
+
+// 댓글 작성
 // 동행 댓글 작성
 export const postPartnerComment = async (newPartnerComment: TPartnerInsert) => {
   const { error } = await supabase.from('partnerComments').insert(newPartnerComment);
