@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Tables } from '../../api/supabase/supabase';
-import * as St from './style';
 import defaultProfileImage from '../../assets/imgs/users/default_profile_img.png';
 import classifyingAge from '../common/classifyingAge/classifyingAge';
+import * as St from './style';
 
 type PartnerItemProps = {
   post: Tables<'partnerPosts'>;
@@ -38,9 +38,9 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
     setImageSrc(imageUrl);
   };
 
-  useEffect(() => {
-    getFlagAndDisplayImage();
-  }, []);
+  // useEffect(() => {
+  //   getFlagAndDisplayImage();
+  // }, []);
 
   return (
     <Link to={`detail/${post.id}`}>

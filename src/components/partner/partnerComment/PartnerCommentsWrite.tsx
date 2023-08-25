@@ -75,8 +75,9 @@ const Input = styled.input`
   height: 56px;
 
   margin-top: 20px;
+  margin-bottom: 25px;
   padding: 10px;
 
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 15px;
+  border: 1px solid lightgray;
 `;
