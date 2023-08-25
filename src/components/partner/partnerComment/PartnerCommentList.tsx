@@ -1,8 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { styled } from 'styled-components';
-import { deletePartnerComment, deletePartnerReComment, getFUser, getPartnerReComments, getReCommentWriterIds, getWriterIds, postPartnerRecomment, updatePartnerComments, updatePartnerReComment } from '../../../api/supabase/partner';
-import { getUsers } from '../../../api/supabase/users';
+import { deletePartnerComment, deletePartnerReComment, getPartnerReComments, getReCommentWriterIds, getTest, getWriterIds, postPartnerRecomment, updatePartnerComments, updatePartnerReComment } from '../../../api/supabase/partner';
+import { Tables } from '../../../api/supabase/supabase';
+import { getAuthId, getUsers } from '../../../api/supabase/users';
+
+type reCommentsProps = {
+  data: Tables<'reComments'>;
+};
 
 type CommentProps = {
   content: string;
@@ -12,10 +17,10 @@ type CommentProps = {
   writerId: string;
 };
 
-export interface PartnerCommentListProps {
+export type PartnerCommentListProps = {
   comment: CommentProps | undefined;
   isLoginUser: boolean;
-}
+};
 
 function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
   // const params = useParams();
@@ -28,8 +33,18 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
   const [updateReComment, setUpdateReComment] = useState('');
   const [reCommentId, setReCommentId] = useState('');
 
+  const { isLoading, data: authId } = useQuery(['auth'], getAuthId);
+
   // 답댓글 조회
   const { data: allReComments } = useQuery(['partnerReComments'], getPartnerReComments);
+
+  const { data: test } = useQuery(['reComments'], getTest);
+  // console.log('왜안떠', test && test[0] && test[0].users);
+  // 답댓글 작성한 모든 유저 정보
+  const reCommentUsers = test?.map((user) => {
+    return user.users;
+  });
+  console.log('reCommentUsers', reCommentUsers);
 
   // 댓글 수정
   const mutation = useMutation(updatePartnerComments, {
@@ -94,7 +109,7 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
 
     const newReComment = {
       reContent: updateReComment,
-      writerId: comment?.writerId,
+      writerId: authId,
       commentId: comment?.id,
       id: reCommentId,
     };
@@ -112,7 +127,7 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
     const reComment = {
       reContent: reContent,
       date: currentTime(),
-      writerId: comment!.writerId,
+      writerId: authId,
       commentId: comment!.id,
     };
 
@@ -155,8 +170,7 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
   // 유저 ID, 닉네임, 프로필사진 배열
   const { data: users } = useQuery(['userData'], getUsers);
   // 답댓글용 유저 정보
-  const { data: reCommentUsers } = useQuery(['userData'], getFUser);
-  console.log('gg', reCommentUsers);
+  // const { data: reCommentUsers } = useQuery(['userData'], getFUser);
 
   // 댓글 작성자 ID 배열
   const { data: writerId } = useQuery(['writerId'], getWriterIds);
@@ -237,35 +251,39 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
           )}
         </div>
         <div>
-          <div></div>
+          {/* allReComments : 모든 답댓글 */}
           {allReComments?.map((reComment) => {
             if (reComment.commentId === comment?.id) {
               return (
                 <UpdateReCommentBox key={reComment.id}>
-                  {/* {reCommentUsers?.map((user) => {
+                  {/* reCommentUsers : 답댓글 작성한 모든 유저 정보 */}
+                  {reCommentUsers?.map((user) => {
                     if (user.id === reComment.writerId) {
                       return (
-                        <div key={user.id}>
+                        <div>
                           <Img src={user && user.profileImageUrl!} />
                           <p>{user.nickName}</p>
                         </div>
                       );
                     }
-                  })} */}
+                  })}
                   <p>{reComment.reContent}</p>
-                  <button onClick={() => handleReUpdateBtn(reComment.id)}>수정</button>
-                  {isUpdateReComment ? (
-                    <form onSubmit={handleReSubmitBtn}>
-                      <input type="text" placeholder="댓글을 남겨보세요" value={updateReComment} onChange={(event) => setUpdateReComment(event.target.value)} />
-                      <button type="submit" onClick={() => setIsUpdateReComment(false)}>
-                        취소
-                      </button>
-                      <button type="submit">수정등록</button>
-                    </form>
-                  ) : (
-                    ''
-                  )}
-                  <button onClick={() => handleReDelBtn(reComment.id)}>삭제</button>
+                  <p>{comment?.date.substring(0, 10) + ' ' + comment?.date.substring(11, 16)}</p>
+                  <>
+                    <button onClick={() => handleReUpdateBtn(reComment.id)}>수정</button>
+                    {isUpdateReComment ? (
+                      <form onSubmit={handleReSubmitBtn}>
+                        <input type="text" placeholder="댓글을 남겨보세요" value={updateReComment} onChange={(event) => setUpdateReComment(event.target.value)} />
+                        <button type="submit" onClick={() => setIsUpdateReComment(false)}>
+                          취소
+                        </button>
+                        <button type="submit">수정등록</button>
+                      </form>
+                    ) : (
+                      ''
+                    )}
+                  </>
+                  <button onClick={() => handleReDelBtn(reComment!.id)}>삭제</button>
                 </UpdateReCommentBox>
               );
             }

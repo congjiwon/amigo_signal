@@ -179,6 +179,12 @@ export const getApplicantList = async (postId: string) => {
   return { data: applicantList, error };
 };
 
+// 동행 답댓글 가져오기dfasfd
+export const getTest = async () => {
+  let { data: rePartnerComments, error } = await supabase.from('reComments').select('*, users!reComments_writerId_fkey(*)').order('date', { ascending: false });
+  return rePartnerComments;
+};
+
 // 신청자 목록 -> 수락 / 거절
 export const updateStatus = async (applicantId: string, isAccepted: boolean) => {
   const { data: updatedData, error } = await supabase.from('applicants').update({ isAccepted, isConfirmed: true }).eq('applicantId', applicantId);

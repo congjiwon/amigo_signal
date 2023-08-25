@@ -252,6 +252,12 @@ export interface Database {
           id: string;
           reContent: string;
           writerId: string;
+          users?: {
+            birthday: string;
+            gender: string;
+            nickName: string;
+            profileImageUrl: string | null;
+          };
         };
         Insert: {
           commentId?: string;
