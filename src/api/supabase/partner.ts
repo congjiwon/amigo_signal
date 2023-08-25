@@ -131,3 +131,9 @@ export const getApplicantStatus = async (applicantId: string) => {
   }
   return data;
 };
+
+// 참여 수락된 신청자 정보 가져오기
+export const getConfirmedApplicantList = async (postId: string) => {
+  const { data: applicantList, error } = await supabase.from('applicants').select('*, users!applicants_applicantId_fkey(*)').eq('postId', postId).eq('isAccepted', true);
+  return { data: applicantList, error };
+};

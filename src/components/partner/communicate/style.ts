@@ -128,3 +128,30 @@ export const ApplicantContent = styled.p`
   margin-top: 20px;
   margin-left: 40px;
 `;
+
+export const ConfirmedApplicantList = styled.div`
+  padding: 30px;
+  border: 1px solid lightgray;
+  border-radius: 10px;
+  h1 {
+    font-weight: 600;
+  }
+`;
+
+export const ConfirmedApplicantItem = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+`;
+
+export const ConfirmedApplicantInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+export const ConfirmedApplicantAgeNGender = styled.p`
+  color: gray;
+  font-size: 14px;
+`;

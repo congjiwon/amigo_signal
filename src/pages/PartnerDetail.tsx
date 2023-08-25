@@ -5,6 +5,8 @@ import PartnerCommentsList from '../components/partner/partnerComment/PartnerCom
 import PartnerDetailInfo from '../components/partner/partnerDetailInfo/PartnerDetailInfo';
 import Communication from '../components/partner/communicate/Communication';
 import useSessionStore from '../zustand/store';
+import ConfirmedPartnerList from '../components/partner/communicate/ConfirmedPartnerList';
+import * as St from './style';
 
 function PartnerDetail() {
   const { postid } = useParams<string>();
@@ -26,8 +28,14 @@ function PartnerDetail() {
 
   return (
     <>
-      <PartnerDetailInfo partnerPostData={partnerPostData} />
-      {logInUserId ? <Communication postId={postid} writerId={partnerPostData.writerId} logInUserId={logInUserId} /> : <></>}
+      <St.PartnerDetailMain>
+        <PartnerDetailInfo partnerPostData={partnerPostData} />
+        <St.CommunicateDiv>
+          <ConfirmedPartnerList postId={postid} />
+          <br />
+          {logInUserId ? <Communication postId={postid} writerId={partnerPostData.writerId} logInUserId={logInUserId} /> : <></>}
+        </St.CommunicateDiv>
+      </St.PartnerDetailMain>
       <PartnerCommentsList />
     </>
   );
