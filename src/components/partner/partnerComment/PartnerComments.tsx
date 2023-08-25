@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router';
+import { styled } from 'styled-components';
 import { getPartnerComments, getPartnerPostId, getWriterIds, updatePartnerComments } from '../../../api/supabase/partner';
 import PartnerCommentList from './PartnerCommentList';
 import PartnerCommentsWrite from './PartnerCommentsWrite';
@@ -18,6 +19,7 @@ const PartnerCommentsList = () => {
     },
   });
 
+  // 모든 동행 댓글 ID
   const { data: partnerPostIdData } = useQuery(['partnerPostId'], getPartnerPostId);
   const findFilteredComments = partnerPostIdData?.filter((comment) => {
     return comment.id === params.postid; // postid,,,ㅠㅠ
@@ -42,7 +44,9 @@ const PartnerCommentsList = () => {
 
   return (
     <div>
-      <p>댓글 {filteredComments?.length}개</p>
+      <CommentLengthBox>
+        <CommentLengthParagraph>댓글 {filteredComments?.length}개</CommentLengthParagraph>
+      </CommentLengthBox>
       <PartnerCommentsWrite />
       {filteredComments &&
         filteredIds &&
@@ -55,3 +59,12 @@ const PartnerCommentsList = () => {
 };
 
 export default PartnerCommentsList;
+
+const CommentLengthBox = styled.div`
+  /* width: 49px; */
+  height: 21px;
+`;
+
+const CommentLengthParagraph = styled.p`
+  font-size: 14px;
+`;

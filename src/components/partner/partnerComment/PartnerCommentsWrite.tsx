@@ -71,7 +71,8 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
-  width: 70%;
+  width: 1240px;
+  height: 56px;
 
   margin-top: 20px;
   padding: 10px;

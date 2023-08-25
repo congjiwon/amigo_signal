@@ -77,9 +77,7 @@ export const getFUser = async () => {
   users (
     id, profileImageUrl, nickName
   )`);
-  // console.log('ㅎㅎ', reComments);
 };
-// getFUser();
 
 // 코멘트 ID 배열
 export const getCommentIds = async () => {
@@ -180,7 +178,7 @@ export const getApplicantList = async (postId: string) => {
 };
 
 // 동행 답댓글 가져오기dfasfd
-export const getTest = async () => {
+export const getReCommentData = async () => {
   let { data: rePartnerComments, error } = await supabase.from('reComments').select('*, users!reComments_writerId_fkey(*)').order('date', { ascending: false });
   return rePartnerComments;
 };
@@ -188,6 +186,7 @@ export const getTest = async () => {
 // 신청자 목록 -> 수락 / 거절
 export const updateStatus = async (applicantId: string, isAccepted: boolean) => {
   const { data: updatedData, error } = await supabase.from('applicants').update({ isAccepted, isConfirmed: true }).eq('applicantId', applicantId);
+
   return { data: updatedData, error };
 };
 
