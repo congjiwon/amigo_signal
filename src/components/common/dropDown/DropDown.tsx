@@ -21,7 +21,7 @@ export function PartnerDropDown({ setPartner }: PartnerProps) {
   return (
     <Space wrap>
       <Select
-        defaultValue="모집인원"
+        placeholder="모집인원"
         style={{ width: 140 }}
         onChange={handleChange}
         options={[

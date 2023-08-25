@@ -1,4 +1,4 @@
-import { Inserts, TPartnerInsert, TPartnerUpdate } from './supabase';
+import { Tables, Inserts, TPartnerInsert, TPartnerUpdate } from './supabase';
 import { supabase } from './supabaseClient';
 
 export const getPartnerPosts = async () => {
@@ -14,6 +14,11 @@ export const getPartnerPost = async ({ postId }: { postId: string }) => {
 export const deletePartnerPost = async ({ postId }: { postId: string }) => {
   const { error } = await supabase.from('partnerPosts').delete().eq('id', postId);
   console.log('deletePost', error);
+};
+
+export const updatePartnerPost = async (updatePost: any) => {
+  const { data: updatedData, error } = await supabase.from('partnerPosts').update(updatePost).eq('id', updatePost.id);
+  console.log('updatePost', error);
 };
 
 // 댓글 작성

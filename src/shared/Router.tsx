@@ -23,6 +23,7 @@ const Router: React.FC = () => {
           <Route path="/partner" element={<Partner />} />
           <Route path="/partner/detail/:postid" element={<PartnerDetail />} />
           <Route path="/partner/write" element={<PartnerWrite />} />
+          <Route path="/partner/write/:postid" element={<PartnerWrite />} />
           <Route path="/spotshare" element={<SpotShare />} />
           <Route path="/spotshare/detail/:postid" element={<SpotShareDetail />} />
           <Route path="/spotshare/write" element={<SpotShareWrite />} />
