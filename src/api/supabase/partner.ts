@@ -118,6 +118,7 @@ export const getUsers = async (userId: string) => {
   return data;
 };
 
+//동행 글 추가
 export const insertPost = async (dataToInsert: any) => {
   try {
     const { data, error } = await supabase.from('partnerPosts').insert(dataToInsert);
