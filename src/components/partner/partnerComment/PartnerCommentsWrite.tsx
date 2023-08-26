@@ -1,9 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import { styled } from 'styled-components';
-import { postPartnerComment } from '../../../api/supabase/partner';
 import { getAuthId } from '../../../api/supabase/users';
+import { usePartnerComments } from '../../../hooks/usePartnerComment';
 import { BtnStyleType } from '../../../types/styleTypes';
 import Button from '../../common/button/Button';
 
@@ -12,13 +12,7 @@ function PartnerCommentsWrite() {
   const [content, setContent] = useState('');
   const { isLoading, data: authId } = useQuery(['auth'], getAuthId);
 
-  const queryClient = useQueryClient();
-  const mutation = useMutation(postPartnerComment, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(['partnerComments']);
-      setContent('');
-    },
-  });
+  const { postCommentMutation } = usePartnerComments();
 
   // 항상 뜸
   if (isLoading) {
@@ -48,14 +42,16 @@ function PartnerCommentsWrite() {
       postId: params.postid,
     };
 
-    mutation.mutateAsync(newComment);
+    postCommentMutation.mutateAsync(newComment);
+
+    setContent('');
   };
 
   return (
     <>
       <Form onSubmit={handleSubmitBtnClick}>
         <Input type="text" name="content" placeholder="content" value={content} onChange={(e) => setContent(e.target.value)} />
-        <Button type="submit" styleType={BtnStyleType.BTN_DARK}>
+        <Button type="submit" styleType={BtnStyleType.BTN_DARK} disabled={content.length < 1}>
           댓글 등록
         </Button>
       </Form>

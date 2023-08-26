@@ -1,9 +1,10 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import { styled } from 'styled-components';
-import { deletePartnerComment, deletePartnerReComment, getPartnerPost, getReCommentData, getReCommentWriterIds, getWriterIds, postPartnerRecomment, updatePartnerComments, updatePartnerReComment } from '../../../api/supabase/partner';
+import { getPartnerPost, getReCommentData, getReCommentWriterIds, getWriterIds } from '../../../api/supabase/partner';
 import { getAuthId, getUsers } from '../../../api/supabase/users';
+import { usePartnerComments } from '../../../hooks/usePartnerComment';
 
 type allCommentsProps =
   | {
@@ -43,38 +44,16 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
   const [updateReComment, setUpdateReComment] = useState('');
   const [reCommentId, setReCommentId] = useState('');
 
+  const { updateCommentMutation, deleteCommentMutation, postReCommentMutation, updateReCommentMutation, deleteReCommentMutation } = usePartnerComments();
+
   const { isLoading, data: authId } = useQuery(['auth'], getAuthId);
   const { data: partnerPost } = useQuery(['partnerPost', postid], () => getPartnerPost({ postId: postid as string }));
-
   const postWriterId = partnerPost?.data?.writerId;
 
   const { data: allReCommentsData } = useQuery(['partnerReComments'], getReCommentData);
   // 답댓글 작성한 모든 유저 정보
   const reCommentUsers = allReCommentsData?.map((user) => {
     return user.users;
-  });
-
-  // 댓글 수정
-  const mutation = useMutation(updatePartnerComments, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(['partnerComments']);
-    },
-  });
-
-  // 답댓글 수정
-  const reUpdateMutation = useMutation(updatePartnerReComment, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(['partnerReComments']);
-    },
-  });
-
-  // 답댓글 작성
-  const reCommentMutation = useMutation(postPartnerRecomment, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(['partnerReComments']);
-      setReContent('');
-      setIsReComment(false);
-    },
   });
 
   // 지원님 시간 가져옴.
@@ -102,7 +81,7 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
       id: comment?.id,
     };
 
-    await mutation.mutateAsync(newComment);
+    await updateCommentMutation.mutateAsync(newComment);
 
     setUpdateComment('');
     setIsUpdate(false);
@@ -120,7 +99,7 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
       isUpdate: false,
     };
 
-    reUpdateMutation.mutate(newReComment);
+    updateReCommentMutation.mutate(newReComment);
 
     setUpdateReComment('');
     setIsUpdateReComment(false);
@@ -138,7 +117,10 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
       isUpdate: false,
     };
 
-    reCommentMutation.mutateAsync(reComment);
+    postReCommentMutation.mutateAsync(reComment);
+
+    setReContent('');
+    setIsReComment(false);
   };
 
   // 댓글 수정 버튼 여기로
@@ -149,32 +131,17 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
       setUpdateComment(commentToEdit.content);
     }
   };
-
-  // 댓글 삭제
-  const delMutation = useMutation(deletePartnerComment, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(['partnerComments']);
-    },
-  });
-
-  // 답댓글 삭제
-  const delReMutation = useMutation(deletePartnerReComment, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(['partnerReComment']);
-    },
-  });
-
   // 답댓글 삭제 버튼 클릭
   const handleReDelBtn = async (id: string) => {
     if (window.confirm('삭제하시겠습니까?')) {
-      await delReMutation.mutateAsync(id);
+      await deleteReCommentMutation.mutateAsync(id);
     }
   };
 
   /// 댓글 삭제 버튼
   const handleDelBtn = async (id: string) => {
     if (window.confirm('삭제하시겠습니까?')) {
-      await delMutation.mutateAsync(id);
+      await deleteCommentMutation.mutateAsync(id);
     }
   };
 
