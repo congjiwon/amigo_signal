@@ -5,6 +5,7 @@ import { styled } from 'styled-components';
 import { getPartnerPost, getReCommentData, getReCommentWriterIds, getWriterIds } from '../../../api/supabase/partner';
 import { getAuthId, getUsers } from '../../../api/supabase/users';
 import { usePartnerComments } from '../../../hooks/usePartnerComment';
+import useCurrentUserStore from '../../../zustand/currentUser';
 
 type allCommentsProps =
   | {
@@ -45,6 +46,8 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
   const [reCommentId, setReCommentId] = useState('');
 
   const { updateCommentMutation, deleteCommentMutation, postReCommentMutation, updateReCommentMutation, deleteReCommentMutation } = usePartnerComments();
+
+  const currentUser = useCurrentUserStore((state) => state.currentUser);
 
   const { isLoading, data: authId } = useQuery(['auth'], getAuthId);
   const { data: partnerPost } = useQuery(['partnerPost', postid], () => getPartnerPost({ postId: postid as string }));
@@ -97,6 +100,8 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
       commentId: comment?.id,
       id: reCommentId,
       isUpdate: false,
+      date: comment?.date,
+      currentDate: currentTime(),
     };
 
     updateReCommentMutation.mutate(newReComment);
@@ -115,6 +120,7 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
       writerId: authId,
       commentId: comment!.id,
       isUpdate: false,
+      currentDate: currentTime(),
     };
 
     postReCommentMutation.mutateAsync(reComment);
@@ -218,7 +224,7 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
               );
             }
           })}
-          {isLoginUser && (
+          {isLoginUser ? (
             <CommentBottomBox>
               <DateButtonBox>
                 <DateBox>
@@ -248,6 +254,8 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
                 </div>
               )}
             </CommentBottomBox>
+          ) : (
+            ''
           )}
           {!isLoginUser && (
             <CommentBottomBox>
@@ -255,9 +263,9 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
                 <DateBox>
                   <DateParagraph>{comment?.date.substring(0, 10) + ' ' + comment?.date.substring(11, 16)}</DateParagraph>
                 </DateBox>{' '}
-                {/* <button type="submit" onClick={handleRecommentBtn}>
+                <button type="submit" onClick={handleRecommentBtn}>
                   답글쓰기
-                </button> */}
+                </button>
               </DateButtonBox>
             </CommentBottomBox>
           )}
@@ -303,7 +311,7 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
                     <CommentBottomBox>
                       <DateButtonBox>
                         <DateBox>
-                          <p>{reComment?.date.substring(0, 10) + ' ' + reComment?.date.substring(11, 16)}</p>
+                          <p>{reComment?.currentDate.substring(0, 10) + ' ' + reComment?.currentDate.substring(11, 16)}</p>
                         </DateBox>
                         <button type="button" onClick={() => handleReUpdateBtn(reComment.id, reComment.isUpdate)}>
                           수정
@@ -335,7 +343,7 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
                     <CommentBottomBox>
                       <DateButtonBox>
                         <DateBox>
-                          <p>{reComment?.date.substring(0, 10) + ' ' + reComment?.date.substring(11, 16)}</p>
+                          <p>{reComment?.currentDate.substring(0, 10) + ' ' + reComment?.currentDate.substring(11, 16)}</p>
                         </DateBox>
                       </DateButtonBox>
                     </CommentBottomBox>
