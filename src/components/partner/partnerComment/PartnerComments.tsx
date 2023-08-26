@@ -52,7 +52,7 @@ const PartnerCommentsList = () => {
         filteredIds &&
         filteredComments.map((comment) => {
           const isLoginUser = localStorage.getItem('authId') === comment.writerId;
-          return <PartnerCommentList key={comment.id} comment={comment} isLoginUser={isLoginUser!} />;
+          return <PartnerCommentList key={comment.id} allComments={allComments} comment={comment} isLoginUser={isLoginUser!} />;
         })}
     </div>
   );

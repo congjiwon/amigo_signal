@@ -5,6 +5,16 @@ import { styled } from 'styled-components';
 import { deletePartnerComment, deletePartnerReComment, getPartnerPost, getReCommentData, getReCommentWriterIds, getWriterIds, postPartnerRecomment, updatePartnerComments, updatePartnerReComment } from '../../../api/supabase/partner';
 import { getAuthId, getUsers } from '../../../api/supabase/users';
 
+type allCommentsProps =
+  | {
+      content: string;
+      date: string;
+      id: string;
+      postId: string;
+      writerId: string;
+    }[]
+  | null;
+
 type CommentProps = {
   content: string;
   date: string;
@@ -14,17 +24,19 @@ type CommentProps = {
 };
 
 export type PartnerCommentListProps = {
+  allComments: allCommentsProps;
   comment: CommentProps | undefined;
   isLoginUser: boolean;
 };
 
-function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
+function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommentListProps) {
   // params : 게시글 ID
   const params = useParams();
   const { postid } = useParams<string>();
   const queryClient = useQueryClient();
   const [isUpdate, setIsUpdate] = useState(false);
-  const [updateComment, setUpdateComment] = useState(comment?.content);
+  // const [updateComment, setUpdateComment] = useState(comment?.content);
+  const [updateComment, setUpdateComment] = useState('');
   const [isReComment, setIsReComment] = useState(false);
   const [reContent, setReContent] = useState('');
   const [isUpdateReComment, setIsUpdateReComment] = useState(false);
@@ -105,6 +117,7 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
       writerId: authId,
       commentId: comment?.id,
       id: reCommentId,
+      isUpdate: false,
     };
 
     reUpdateMutation.mutate(newReComment);
@@ -122,14 +135,19 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
       date: currentTime(),
       writerId: authId,
       commentId: comment!.id,
+      isUpdate: false,
     };
 
     reCommentMutation.mutateAsync(reComment);
   };
 
-  // 댓글 수정 버튼
-  const handleUpdateBtn = () => {
+  // 댓글 수정 버튼 여기로
+  const handleUpdateBtn = (id: string) => {
     setIsUpdate(true);
+    const commentToEdit = allComments!.find((comment) => comment.id === id);
+    if (commentToEdit) {
+      setUpdateComment(commentToEdit.content);
+    }
   };
 
   // 댓글 삭제
@@ -180,10 +198,31 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
   };
 
   // 답글 수정 버튼
-  const handleReUpdateBtn = (id: string) => {
-    setReCommentId(id);
-    // localStorage.setItem('reCommentData', reComment)
-    setIsUpdateReComment(true);
+  const handleReUpdateBtn = async (id: string, isUpdate: boolean) => {
+    const reCommentToEdit = allReCommentsData!.find((reComment) => reComment.id === id);
+    // isUpdate = true;
+    // setReCommentId(id);
+    // setUpdateReComment(reCommentToEdit!.reContent);
+    // isUpdate = true;
+    // // console.log(isUpdate);
+
+    if (reCommentToEdit) {
+      isUpdate = true;
+      setReCommentId(id); // 수정할 게시글 아이디 담아서 보내야함.
+      setUpdateReComment(reCommentToEdit.reContent); // 수정 클릭 시 초기값으로 원댓글 넣어줌.
+      setIsUpdateReComment(isUpdate);
+    }
+  };
+
+  // 취소버튼
+  const handleCancelBtn = (name: string, event: React.MouseEvent<HTMLButtonElement>) => {
+    if (name === 'reCommentCancelBtn') {
+      setIsUpdateReComment(false);
+    } else if (name === 'updateCancel') {
+      setIsUpdate(false);
+    } else if ('reCommentCancel') {
+      setIsReComment(false);
+    }
   };
 
   {
@@ -219,7 +258,7 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
                   <p>{comment?.date.substring(0, 10) + ' ' + comment?.date.substring(11, 16)}</p>
                 </DateBox>
                 <div>
-                  <button onClick={handleUpdateBtn}>수정</button>
+                  <button onClick={() => handleUpdateBtn(comment!.id)}>수정</button>
                 </div>
                 <div>
                   <button onClick={() => handleDelBtn(comment!.id)}>삭제</button>
@@ -232,7 +271,7 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
                     <InputBox>
                       <Input type="text" placeholder="댓글을 남겨보세요" value={updateComment} onChange={(event) => setUpdateComment(event.target.value)} required />
                       <CancelSubmitButtonBox>
-                        <Button type="submit" onClick={() => setIsUpdate(false)}>
+                        <Button type="button" onClick={(e) => handleCancelBtn('updateCancel', e)}>
                           취소
                         </Button>
                         <button type="submit">등록</button>
@@ -249,7 +288,9 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
                 <DateBox>
                   <DateParagraph>{comment?.date.substring(0, 10) + ' ' + comment?.date.substring(11, 16)}</DateParagraph>
                 </DateBox>{' '}
-                <button onClick={handleRecommentBtn}>답글쓰기</button>
+                {/* <button type="submit" onClick={handleRecommentBtn}>
+                  답글쓰기
+                </button> */}
               </DateButtonBox>
             </CommentBottomBox>
           )}
@@ -259,7 +300,9 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
                 <InputBox>
                   <Input type="text" placeholder="댓글을 입력하세요" value={reContent} onChange={(event) => setReContent(event?.target.value)} />
                   <CancelSubmitButtonBox>
-                    <Button onClick={() => setIsReComment(false)}>취소</Button>
+                    <Button type="button" onClick={(e) => handleCancelBtn('reCommentCancel', e)}>
+                      취소
+                    </Button>
                     <button type="submit">등록</button>
                   </CancelSubmitButtonBox>
                 </InputBox>
@@ -295,26 +338,29 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
                         <DateBox>
                           <p>{reComment?.date.substring(0, 10) + ' ' + reComment?.date.substring(11, 16)}</p>
                         </DateBox>
-                        <button onClick={() => handleReUpdateBtn(reComment.id)}>수정</button>
+                        <button type="button" onClick={() => handleReUpdateBtn(reComment.id, reComment.isUpdate)}>
+                          수정
+                        </button>
                         {/* <button onClick={() => handleReUpdateBtn(reComment)}>수정</button> */}
-                        <button onClick={() => handleReDelBtn(reComment.id)}>삭제</button>
+                        <button type="submit" onClick={() => handleReDelBtn(reComment.id)}>
+                          삭제
+                        </button>
                       </DateButtonBox>
                       {/* 모든애들 인풋창 보이게되어있다. */}
                       {/* 테이블에 isopen 상태를 넣는게 좋다. 각각 코멘트에 속성 상태 넣는것도 쉬운 방법 */}
-                      {isUpdateReComment ? (
+                      {isUpdateReComment && (
                         <form onSubmit={handleReSubmitBtn}>
                           <InputBox>
                             <Input type="text" placeholder="댓글을 남겨보세요" value={updateReComment} onChange={(event) => setUpdateReComment(event.target.value)} />
                             <CancelSubmitButtonBox>
-                              <Button type="submit" onClick={() => setIsUpdateReComment(false)}>
+                              <Button type="button" onClick={(e) => handleCancelBtn('reCommentCancelBtn', e)}>
                                 취소
                               </Button>
-                              <button type="submit">수정등록</button>
+                              {/* <Button onClick={() => setIsUpdateReComment(false)}>취소</Button> */}
+                              <button type="submit">등록</button>
                             </CancelSubmitButtonBox>
                           </InputBox>
                         </form>
-                      ) : (
-                        ''
                       )}
                     </CommentBottomBox>
                   )}

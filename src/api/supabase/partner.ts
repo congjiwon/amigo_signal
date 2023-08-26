@@ -6,7 +6,6 @@ export const getPartnerPosts = async () => {
   return { data: partnerPosts, error };
 };
 
-// 덕분에 댓글 작성자 띄웠어요. 감사합니다^0^
 export const getPartnerPost = async ({ postId }: { postId: string }) => {
   let { data: partnerPosts } = await supabase.from('partnerPosts').select('*').eq('id', postId).single();
   return { data: partnerPosts };
@@ -69,6 +68,11 @@ export const postPartnerRecomment = async (newPartnerRecomment: TPartnerReCommen
 // 동행 답댓글 수정
 export const updatePartnerReComment = async (updateReComment: TPartnerReCommentsUpdate) => {
   const { error } = await supabase.from('reComments').update(updateReComment).eq('id', updateReComment.id);
+};
+
+// 동행 답댓글 isUpdate 수정
+export const updateIsUpdate = async (reCommentId: string, isOpen: boolean) => {
+  const { error } = await supabase.from('reComments').update({ isUpdate: isOpen }).eq('id', reCommentId);
 };
 
 export const getPartnerPostId = async () => {
