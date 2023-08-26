@@ -10,6 +10,7 @@ import LocationDropDown from '../../common/dropDown/LocationDropDown';
 import { PartnerDropDown } from '../../common/dropDown/DropDown';
 import PartnerCalendar from '../../common/calendar/PartnerCalendar';
 import useSessionStore from '../../../zustand/store';
+import * as St from './style';
 
 function PartnerUpdateTemplate({ postId }: { postId: string }) {
   const { data: partnerPost } = useQuery(['partnerPost', postId], () => getPartnerPost({ postId }));
@@ -152,68 +153,80 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
   };
 
   return (
-    <>
-      <form>
-        <LocationDropDown setLocation={setLocation} />
-        <br />
-        <PartnerCalendar setPartnerDates={setPartnerDates} />
-        <br />
-        <PartnerDropDown setPartner={setPartner} />
-        <span>오픈채팅 주소</span>
-        <input
-          value={chatUrl}
-          onChange={(event) => {
-            setChatUrl(event.target.value);
-          }}
-          placeholder="오픈채팅방 주소를 입력해주세요"
-        ></input>
-        <br />
-        <span>제목</span>
-        <input
+    <St.FormContainer>
+      <St.WriteForm>
+        <St.SelectListBox>
+          <St.ExplanationBox>
+            <p>국가 선택</p>
+            <LocationDropDown setLocation={setLocation} />
+          </St.ExplanationBox>
+          <St.ExplanationBox>
+            <p>나라 선택</p>
+            <PartnerCalendar setPartnerDates={setPartnerDates} />
+          </St.ExplanationBox>
+          <St.ExplanationBox>
+            <p>모집인원 선택</p>
+            <PartnerDropDown setPartner={setPartner} />
+          </St.ExplanationBox>
+        </St.SelectListBox>
+        <St.WriteInput
           value={title}
           onChange={(event) => {
             setTitle(event.target.value);
           }}
           placeholder="원활한 동료찾기를 위해 지역명을 함께 입력해주세요"
-        ></input>
-        <br />
-        <textarea
+        ></St.WriteInput>
+        <St.TextArea
           value={content}
           onChange={(event) => {
             setContent(event.target.value);
           }}
-          rows={10}
-          cols={100}
           placeholder="1. 현제 동행이 있나요? &#13;&#10;2. 어떤 동행을 찾고 있나요? &#13;&#10;3. 원하는 여행 코스가 있다면 적어주세요  "
-        ></textarea>
-        <br />
-        <span>태그선택</span>
-        {interestTagList &&
-          interestTagList.map((item) => {
-            return (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => handleInterestClick(item.imageUrl as string)}
-                style={{
-                  margin: '20px',
-                  backgroundColor: interestUrl.includes(item.imageUrl as string) ? 'lightblue' : 'white',
-                }}
-              >
-                <p>{item.content}</p>
-              </button>
-            );
-          })}
-        <br />
-        <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={handleUpdateClick}>
-          수정하기
-        </Button>
-        <Button type="button" styleType={BtnStyleType.BTN_DARK}>
-          취소하기
-        </Button>
-      </form>
+        ></St.TextArea>
+        <St.ExplanationBox>
+          <p>오픈채팅 주소</p>
+          <St.WriteInput
+            value={chatUrl}
+            onChange={(event) => {
+              setChatUrl(event.target.value);
+            }}
+            placeholder="오픈채팅방 주소를 입력해주세요"
+          ></St.WriteInput>
+        </St.ExplanationBox>
+        <St.ExplanationBox>
+          <p>태그선택</p>
+          <St.TegBox>
+            {interestTagList &&
+              interestTagList.map((item) => {
+                return (
+                  <St.TegButton
+                    key={item.id}
+                    type="button"
+                    onClick={() => handleInterestClick(item.imageUrl as string)}
+                    style={{
+                      backgroundColor: interestUrl.includes(item.imageUrl as string) ? 'lightblue' : 'white',
+                    }}
+                  >
+                    <St.TegImgBox>
+                      <St.TegImg src={item.imageUrl!} />
+                    </St.TegImgBox>
+                    <span>{item.content}</span>
+                  </St.TegButton>
+                );
+              })}
+          </St.TegBox>
+        </St.ExplanationBox>
+        <St.ButtonBox>
+          <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={handleUpdateClick}>
+            작성하기
+          </Button>
+          <Button type="button" styleType={BtnStyleType.BTN_DARK}>
+            취소하기
+          </Button>
+        </St.ButtonBox>
+      </St.WriteForm>
       {loading && <p>로딩중</p>}
-    </>
+    </St.FormContainer>
   );
 }
 
