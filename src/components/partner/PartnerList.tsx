@@ -16,7 +16,6 @@ interface passType {
 
 const PartnerList = () => {
   const [postStorage, setPostStorage] = useState<Tables<'partnerPosts'>[]>([]);
-  console.log('전체', postStorage);
   const [location, setLocation] = useState<string[]>([]);
   const [date, setDate] = useState<string[]>([]);
 
@@ -67,7 +66,6 @@ const PartnerList = () => {
   );
 
   //나라 필터
-
   useEffect(() => {
     const getfilteredPost = async () => {
       console.log(location[1], date[0], date[1]);

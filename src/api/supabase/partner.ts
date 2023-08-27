@@ -243,11 +243,11 @@ type filteredPostProps = {
 };
 
 export const getFilteredPartnerPost = async ({ country, startDate, endDate }: filteredPostProps) => {
-  // let { data: partnerPosts, error } = await supabase.from('partnerPosts').select('*').eq('country', country).gte('startDate', startDate).lte('endDate', endDate);
   let partnerPosts = supabase.from('partnerPosts').select('*, users!partnerPosts_writerId_fkey(*)');
+  // let partnerPosts = supabase.from('partnerPosts').select('*');
 
   if (country == undefined) {
-    partnerPosts = partnerPosts.gte('startDate', startDate).lte('endDate', endDate);
+    partnerPosts = partnerPosts.gt('startDate', startDate).lt('endDate', endDate);
     const { data: test } = await partnerPosts;
     return test;
   }
@@ -259,7 +259,7 @@ export const getFilteredPartnerPost = async ({ country, startDate, endDate }: fi
   }
 
   if (typeof country == 'string' && typeof endDate == 'string' && typeof startDate == 'string') {
-    partnerPosts = partnerPosts.eq('country', country).gte('startDate', startDate).lte('endDate', endDate);
+    partnerPosts = partnerPosts.eq('country', country).gt('startDate', startDate).lt('endDate', endDate);
     const { data: test } = await partnerPosts;
     return test;
   }
