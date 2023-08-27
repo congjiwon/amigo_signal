@@ -50,7 +50,7 @@ function PartnerCommentsWrite() {
   return (
     <>
       <Form onSubmit={handleSubmitBtnClick}>
-        <Input type="text" name="content" placeholder="content" value={content} onChange={(e) => setContent(e.target.value)} />
+        <Textarea name="content" placeholder="댓글을 남겨보세요" value={content} onChange={(e) => setContent(e.target.value)} />
         <Button type="submit" styleType={BtnStyleType.BTN_DARK} disabled={content.length < 1}>
           댓글 등록
         </Button>
@@ -66,7 +66,11 @@ const Form = styled.form`
   justify-content: space-between;
 `;
 
-const Input = styled.input`
+const Textarea = styled.textarea`
+  /* text-indent: 24px; */
+
+  resize: none;
+
   width: 1240px;
   height: 56px;
 

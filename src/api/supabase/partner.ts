@@ -48,7 +48,7 @@ export const deletePartnerReComment = async (reCommentId: string) => {
 };
 
 // 동행 댓글 수정
-export const updatePartnerComments = async (updateComment: TPartnerUpdate) => {
+export const updatePartnerComment = async (updateComment: TPartnerUpdate) => {
   // 수정할 댓글 ID = updateComment.id
   const { data: updatedData, error } = await supabase.from('partnerComments').update(updateComment).eq('id', updateComment.id);
   console.log('error', error);

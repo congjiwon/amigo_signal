@@ -6,6 +6,7 @@ import { getPartnerPost, getReCommentData, getReCommentWriterIds, getWriterIds }
 import { getAuthId, getUsers } from '../../../api/supabase/users';
 import { usePartnerComments } from '../../../hooks/usePartnerComment';
 import useCurrentUserStore from '../../../zustand/currentUser';
+import { ConfirmDelete } from '../../common/modal/alert';
 
 type allCommentsProps =
   | {
@@ -139,15 +140,23 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
   };
   // 답댓글 삭제 버튼 클릭
   const handleReDelBtn = async (id: string) => {
-    if (window.confirm('삭제하시겠습니까?')) {
+    const isConfirmed = await ConfirmDelete('');
+
+    if (isConfirmed) {
       await deleteReCommentMutation.mutateAsync(id);
+    } else {
+      return;
     }
   };
 
   /// 댓글 삭제 버튼
   const handleDelBtn = async (id: string) => {
-    if (window.confirm('삭제하시겠습니까?')) {
+    const isConfirmed = await ConfirmDelete('');
+
+    if (isConfirmed) {
       await deleteCommentMutation.mutateAsync(id);
+    } else {
+      return;
     }
   };
 
@@ -189,11 +198,12 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
 
   // 취소버튼
   const handleCancelBtn = (name: string, event: React.MouseEvent<HTMLButtonElement>) => {
-    if (name === 'reCommentCancelBtn') {
+    if (name === 'reCommentUpdateCancelBtn') {
       setIsUpdateReComment(false);
     } else if (name === 'updateCancel') {
       setIsUpdate(false);
     } else if ('reCommentCancel') {
+      setReContent('');
       setIsReComment(false);
     }
   };
@@ -242,7 +252,7 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
                 <div>
                   <form onSubmit={handleSubmitBtn}>
                     <InputBox>
-                      <Input type="text" placeholder="댓글을 남겨보세요" value={updateComment} onChange={(event) => setUpdateComment(event.target.value)} required />
+                      <Textarea placeholder="댓글을 남겨보세요" value={updateComment} onChange={(event) => setUpdateComment(event.target.value)} required />
                       <CancelSubmitButtonBox>
                         <Button type="button" onClick={(e) => handleCancelBtn('updateCancel', e)}>
                           취소
@@ -273,7 +283,7 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
             <CommentBottomBox>
               <form onSubmit={handleReCommentSubmit}>
                 <InputBox>
-                  <Input type="text" placeholder="댓글을 입력하세요" value={reContent} onChange={(event) => setReContent(event?.target.value)} />
+                  <Textarea placeholder="댓글을 입력하세요" value={reContent} onChange={(event) => setReContent(event?.target.value)} />
                   <CancelSubmitButtonBox>
                     <Button type="button" onClick={(e) => handleCancelBtn('reCommentCancel', e)}>
                       취소
@@ -326,9 +336,9 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
                       {isUpdateReComment && (
                         <form onSubmit={handleReSubmitBtn}>
                           <InputBox>
-                            <Input type="text" placeholder="댓글을 남겨보세요" value={updateReComment} onChange={(event) => setUpdateReComment(event.target.value)} />
+                            <Textarea placeholder="댓글을 남겨보세요" value={updateReComment} onChange={(event) => setUpdateReComment(event.target.value)} />
                             <CancelSubmitButtonBox>
-                              <Button type="button" onClick={(e) => handleCancelBtn('reCommentCancelBtn', e)}>
+                              <Button type="button" onClick={(e) => handleCancelBtn('reCommentUpdateCancelBtn', e)}>
                                 취소
                               </Button>
                               {/* <Button onClick={() => setIsUpdateReComment(false)}>취소</Button> */}
@@ -431,7 +441,9 @@ const InputBox = styled.div`
   position: relative;
 `;
 
-const Input = styled.input`
+const Textarea = styled.textarea`
+  resize: none;
+
   width: 1220px;
   height: 100px;
 

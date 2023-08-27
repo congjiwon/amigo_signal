@@ -1,9 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deletePartnerComment, deletePartnerReComment, postPartnerComment, postPartnerRecomment, updatePartnerComments, updatePartnerReComment } from '../api/supabase/partner';
+import { deletePartnerComment, deletePartnerReComment, postPartnerComment, postPartnerRecomment, updatePartnerComment, updatePartnerReComment } from '../api/supabase/partner';
 
 export function usePartnerComments() {
   const queryClient = useQueryClient();
 
+  // 댓글 작성
   const postCommentMutation = useMutation(postPartnerComment, {
     onSuccess: async () => {
       await queryClient.invalidateQueries(['partnerComments']);
@@ -11,7 +12,7 @@ export function usePartnerComments() {
   });
 
   // 댓글 수정
-  const updateCommentMutation = useMutation(updatePartnerComments, {
+  const updateCommentMutation = useMutation(updatePartnerComment, {
     onSuccess: async () => {
       await queryClient.invalidateQueries(['partnerComments']);
     },
@@ -41,7 +42,7 @@ export function usePartnerComments() {
   // 답댓글 삭제
   const deleteReCommentMutation = useMutation(deletePartnerReComment, {
     onSuccess: async () => {
-      await queryClient.invalidateQueries(['partnerReComment']);
+      await queryClient.invalidateQueries(['partnerReComments']);
     },
   });
 
