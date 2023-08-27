@@ -14,6 +14,7 @@ export const ImageWrapper = styled.div`
 export const MainImage = styled.img`
   position: absolute;
   width: 100%;
+  /* width: 1920px; */
   transform: translate(0%, -20%);
 `;
 
