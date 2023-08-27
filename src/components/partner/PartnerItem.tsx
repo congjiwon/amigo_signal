@@ -7,6 +7,7 @@ import defaultProfileImage from '../../assets/imgs/users/default_profile_img.png
 import classifyingAge from '../common/classifyingAge/classifyingAge';
 import { getConfirmedApplicantList, updatePostStatus } from '../../api/supabase/partner';
 import { useQuery } from '@tanstack/react-query';
+import Calender from '../../assets/imgs/partner/Calendar.svg';
 
 type PartnerItemProps = {
   post: Tables<'partnerPosts'>;
@@ -44,9 +45,9 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
     setImageSrc(imageUrl);
   };
 
-  // useEffect(() => {
-  //   getFlagAndDisplayImage();
-  // }, []);
+  useEffect(() => {
+    getFlagAndDisplayImage();
+  }, []);
 
   useEffect(() => {
     const updateStatus = async () => {
@@ -68,25 +69,23 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
   return (
     <Link to={`detail/${post.id}`}>
       <St.PostCard>
-        <St.Head>
-          <St.Location>
-            <St.FlagBox>{imageSrc && <St.FlagImage src={imageSrc} alt="Image" />}</St.FlagBox>
-            <h1>{post.country}</h1>
-          </St.Location>
-          <St.Status localPartnerStatus={localPartnerStatus}>{localPartnerStatus === '모집중' ? '모집중' : '모집완료'}</St.Status>
-        </St.Head>
+        <St.Location>
+          <St.FlagBox>{imageSrc && <St.FlagImage src={imageSrc} alt="Image" />}</St.FlagBox>
+          <h1>{post.country}</h1>
+        </St.Location>
         <St.Main>
-          <p>
-            여행기간 | {post.startDate} ~ {post.endDate}
-          </p>
-          <h1>{post.title}</h1>
+          <St.TravelDate>
+            <img src={Calender} alt="여행기간" />
+            <p>
+              {post.startDate} ~ {post.endDate}
+            </p>
+          </St.TravelDate>
+          <St.TitleBox>
+            <h1>{post.title}</h1>
+          </St.TitleBox>
         </St.Main>
         <St.Body>
-          <picture>
-            {/* {post.interestUrl.map((url, index) => (
-              <St.InterestImage key={index} src={url} alt={`interest-${index}`} />
-            ))} */}
-          </picture>
+          <St.Status localPartnerStatus={localPartnerStatus}>{localPartnerStatus === '모집중' ? '모집중' : '모집완료'}</St.Status>
           <p>모집인원: {post.numOfPeople}명</p>
         </St.Body>
         <St.Footer>
