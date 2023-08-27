@@ -144,8 +144,6 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
 
     if (isConfirmed) {
       await deleteReCommentMutation.mutateAsync(id);
-    } else {
-      return;
     }
   };
 
@@ -155,8 +153,6 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
 
     if (isConfirmed) {
       await deleteCommentMutation.mutateAsync(id);
-    } else {
-      return;
     }
   };
 
@@ -411,10 +407,15 @@ const WriterContainerBox = styled.div`
 
 const CommentBox = styled.div`
   margin-bottom: 6px;
+
   /* margin-right: 12px; */
 `;
 
-const CommentParagraph = styled.p``;
+const CommentParagraph = styled.p`
+  white-space: pre-line;
+
+  line-height: 130%;
+`;
 
 const CommentBottomBox = styled.div`
   display: flex;
