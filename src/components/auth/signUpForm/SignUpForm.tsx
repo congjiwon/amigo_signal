@@ -110,7 +110,7 @@ export default function SignUpForm() {
           let msg = '';
           let currentStatus = false;
           if (!validateValue(name, value)) {
-            msg = '영문 대/소문자 + 숫자 + 특수문자(~?!@#$%^&*_-)가 포함 8자이상 15자이하';
+            msg = '영문 대/소문자 + 숫자 + 특수문자(~?!@#$%^&*_-) 포함 8자이상 15자이하';
             currentStatus = false;
           } else {
             msg = '사용가능한 비밀번호입니다.';

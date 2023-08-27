@@ -38,10 +38,11 @@ export default function AppliedPosts() {
   }
 
   return (
-    <div>
+    <St.AppliedPostsSection>
+      <h2>동행 찾기 참여글</h2>
       <St.FilterBtns>
         <St.FilterBtn className={filterStatus === null ? 'active' : ''} onClick={() => handleClickFilter(null)}>
-          대기중
+          신청중
         </St.FilterBtn>
         <St.FilterBtn className={filterStatus === true ? 'active' : ''} onClick={() => handleClickFilter(true)}>
           수락됨
@@ -69,6 +70,6 @@ export default function AppliedPosts() {
           );
         })}
       </St.AppliedPostCardList>
-    </div>
+    </St.AppliedPostsSection>
   );
 }

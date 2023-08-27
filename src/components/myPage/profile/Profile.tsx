@@ -1,8 +1,6 @@
-import useSessionStore, { useModalStore } from '../../../zustand/store';
+import { useModalStore } from '../../../zustand/store';
 import ModifyProfile from '../modifyProfile/ModifyProfile';
 import Modal from '../../common/modal/Modal';
-import Button from '../../common/button/Button';
-import { BtnStyleType } from '../../../types/styleTypes';
 import classifyingAge from '../../common/classifyingAge/classifyingAge';
 import defaultImg from '../../../assets/imgs/users/default_profile_img.png';
 import * as St from './style';
@@ -20,11 +18,12 @@ export default function Profile() {
         <St.ProfileImgBox>
           <img src={currentUser?.profileImageUrl ? `${storagaUrl}/${currentUser?.profileImageUrl}` : defaultImg} />
         </St.ProfileImgBox>
-        <div>
+        <St.ProfileInfo>
           <p>{currentUser?.nickName}</p>
-          <p>{currentUser?.gender}</p>
-          <p>{ageRange}</p>
-        </div>
+          <p>
+            {ageRange} | {currentUser?.gender}
+          </p>
+        </St.ProfileInfo>
       </St.ProfileBox>
       <button onClick={() => openModal('modifyProfile')}>프로필 수정</button>
       {openedModals.modifyProfile && (
