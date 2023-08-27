@@ -6,6 +6,7 @@ import LocationDropDown from '../../common/dropDown/LocationDropDown';
 import { PartnerDropDown } from '../../common/dropDown/DropDown';
 import PartnerCalendar from '../../common/calendar/PartnerCalendar';
 import Button from '../../common/button/Button';
+import { AlertWarning } from '../../common/modal/alert';
 import { insertPost } from '../../../api/supabase/partner';
 import { Tables } from '../../../api/supabase/supabase';
 import useSessionStore from '../../../zustand/store';
@@ -51,8 +52,8 @@ function PartnerWriteTemplate() {
       // 이미 추가된 태그를 클릭한 경우 제거
       setInterestUrl((prevInterestUrl) => prevInterestUrl.filter((url) => url !== imageUrl));
     } else if (interestUrl.length >= 3) {
-      // 3개 이상의 태그를 추가하려는 경우 알림
-      alert('태그는 3개까지');
+      // 3개 이상의 태그를 추가하려는 경우 return
+      return;
     } else {
       // 태그 추가
       setInterestUrl((prevInterestUrl) => [...prevInterestUrl, imageUrl]);
@@ -82,20 +83,20 @@ function PartnerWriteTemplate() {
 
   const validation = (): boolean => {
     if (location.length < 1) {
-      alert('지역입력');
+      AlertWarning({ title: '국가를 선택해주세요.', position: 'top' });
       return false;
     } else if (partnerDates.length < 1) {
-      alert('날짜입력');
+      AlertWarning({ title: '날짜를 선택해주세요.', position: 'top' });
       return false;
     } else if (title.length < 1) {
-      alert('제목입력');
+      AlertWarning({ title: '제목을 입력해주세요.', position: 'top' });
       return false;
     } else if (content.length < 1) {
-      alert('내용입력');
+      AlertWarning({ title: '내용을 입력해주세요.', position: 'top' });
       return false;
     }
     if (chatUrl.length >= 1 && !chatUrlValidation(chatUrl)) {
-      alert('올바른 오픈채팅 주소가 아닙니다.');
+      AlertWarning({ title: '오픈채팅 주소를 확인해주세요.', position: 'top' });
       return false;
     }
     return true;
@@ -136,7 +137,7 @@ function PartnerWriteTemplate() {
             <LocationDropDown setLocation={setLocation} />
           </St.ExplanationBox>
           <St.ExplanationBox>
-            <p>나라 선택</p>
+            <p>날짜 선택</p>
             <PartnerCalendar setPartnerDates={setPartnerDates} />
           </St.ExplanationBox>
           <St.ExplanationBox>
@@ -169,7 +170,7 @@ function PartnerWriteTemplate() {
           ></St.WriteInput>
         </St.ExplanationBox>
         <St.ExplanationBox>
-          <p>태그선택</p>
+          <p>태그 선택 (최대 3개까지 선택가능)</p>
           <St.TegBox>
             {interestTagList &&
               interestTagList.map((item) => {
@@ -192,11 +193,11 @@ function PartnerWriteTemplate() {
           </St.TegBox>
         </St.ExplanationBox>
         <St.ButtonBox>
+          <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={() => navigate('/partner')}>
+            취소하기
+          </Button>
           <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={handleWriteClick}>
             작성하기
-          </Button>
-          <Button type="button" styleType={BtnStyleType.BTN_DARK}>
-            취소하기
           </Button>
         </St.ButtonBox>
       </St.WriteForm>
