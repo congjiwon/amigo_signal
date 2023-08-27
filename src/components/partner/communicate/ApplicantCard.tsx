@@ -2,9 +2,11 @@ import { Tables } from '../../../api/supabase/supabase';
 import * as St from './style';
 import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import classifyingAge from '../../common/classifyingAge/classifyingAge';
-import { getApplicantStatus, updateStatus } from '../../../api/supabase/partner';
+import { getApplicantStatus, getConfirmedApplicantList, updateStatus, getNumOfPeople } from '../../../api/supabase/partner';
 import { useEffect, useState } from 'react';
 import { ConfirmCustom } from '../../common/modal/alert';
+import { useConfirmedListStore, useStateStore } from '../../../zustand/communicate';
+import { useQuery } from '@tanstack/react-query';
 
 type ApplicantCardProps = {
   data: Tables<'applicants'>;
@@ -18,15 +20,26 @@ const ApplicantCard = ({ data, onClick, isSelected, removeConfirmedApplicant }: 
 
   const applicantId = data.applicantId;
 
+  const { setApplicantStatus } = useStateStore();
+  const { addConfirmedApplicant } = useConfirmedListStore();
+
+  const { data: confirmedApplicants } = useQuery(['confirmedApplicants', data.postId], () => getConfirmedApplicantList(data.postId!));
+  const { data: getNumberOfPeople } = useQuery(['numOfPeople', data.postId], () => getNumOfPeople(data.postId));
+
+  const confirmedLength = confirmedApplicants?.data?.length || 0;
+  const numOfPeople = getNumberOfPeople?.[0]?.numOfPeople || 0;
+
   useEffect(() => {
     const fetchApplicantStatus = async () => {
       const response = await getApplicantStatus(applicantId);
-      if (response.isAccepted) {
-        setIsAccepted(response.isAccepted === true);
+      if (response.isAccepted === null) {
+        setApplicantStatus('참여 신청 중');
+      } else if (response.isAccepted !== null) {
+        setApplicantStatus(response.isAccepted ? '참여 수락됨' : '참여 거절됨');
       }
     };
     fetchApplicantStatus();
-  }, [isAccepted, applicantId]);
+  }, [applicantId, setApplicantStatus]);
 
   const handleAccept = async () => {
     setIsAccepted(true);
@@ -43,6 +56,8 @@ const ApplicantCard = ({ data, onClick, isSelected, removeConfirmedApplicant }: 
     }
     try {
       await updateStatus(applicantId, true);
+      setApplicantStatus('참여 수락됨');
+      addConfirmedApplicant(data);
       removeConfirmedApplicant(applicantId);
     } catch (error) {
       console.error('수락 과정 중 error 발생', error);
@@ -64,6 +79,7 @@ const ApplicantCard = ({ data, onClick, isSelected, removeConfirmedApplicant }: 
     }
     try {
       await updateStatus(applicantId, false);
+      setApplicantStatus('참여 거절됨');
       removeConfirmedApplicant(applicantId);
     } catch (error) {
       console.error('거절 과정 중 error 발생', error);

@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 
 type StatusProps = {
-  isOpen: boolean;
+  partnerStatus: string;
 };
 
 export const PartnerDetailMain = styled.div`
@@ -22,12 +22,12 @@ export const PostStatus = styled.span<StatusProps>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 2.5rem;
+  width: 2.8rem;
   padding: 5px;
-  background-color: ${(props) => (props.isOpen ? '#FF7000' : '#994504')};
+  background-color: ${(props) => (props.partnerStatus === '모집중' ? '#FF7000' : '#994504')};
   border-radius: 30px;
-  font-size: 0.7rem;
-  color: ${(props) => (props.isOpen ? '#000000' : '#ffffff')};
+  font-size: 0.8rem;
+  color: ${(props) => (props.partnerStatus === '모집중' ? '#000000' : '#ffffff')};
 `;
 
 export const ApplyStatus = styled.div`
@@ -38,5 +38,5 @@ export const ApplyStatus = styled.div`
   padding: 5px;
   background-color: #ffb67c;
   border-radius: 30px;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
 `;

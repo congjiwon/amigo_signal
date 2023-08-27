@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
-import { checkApply, getPartnerPost } from '../api/supabase/partner';
+import { checkApply, getConfirmedApplicantList, getPartnerPost, updatePostStatus } from '../api/supabase/partner';
 import PartnerCommentsList from '../components/partner/partnerComment/PartnerComments';
 import PartnerDetailInfo from '../components/partner/partnerDetailInfo/PartnerDetailInfo';
 import Communication from '../components/partner/communicate/Communication';
@@ -8,14 +8,21 @@ import useSessionStore from '../zustand/store';
 import ConfirmedPartnerList from '../components/partner/communicate/ConfirmedPartnerList';
 import * as St from './style';
 import { useEffect, useState } from 'react';
+import { useStateStore } from '../zustand/communicate';
 
 function PartnerDetail() {
   const { postid } = useParams<string>();
   const { session } = useSessionStore();
   const logInUserId = session?.user.id;
 
+  const { partnerStatus, applicantStatus, setPartnerStatus, setApplicantStatus } = useStateStore();
+
   const [isApply, setIsApply] = useState<boolean | null>(null);
-  const [isAccepted, setIsAccepted] = useState<boolean | null>();
+
+  const { data: partnerPost, isLoading, isError } = useQuery(['partnerPost', postid], () => getPartnerPost({ postId: postid as string }));
+  const partnerPostData = partnerPost?.data!;
+
+  const { data: confirmedApplicants } = useQuery(['confirmedApplicants', postid], () => getConfirmedApplicantList(postid!));
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,17 +31,35 @@ function PartnerDetail() {
         if (applyHistory && applyHistory.length > 0) {
           setIsApply(true);
           const AcceptedStatus = applyHistory[0].isAccepted;
-          setIsAccepted(AcceptedStatus);
+          if (AcceptedStatus === null) {
+            setApplicantStatus('참여 신청 중');
+          }
+          if (AcceptedStatus !== null) {
+            setApplicantStatus(AcceptedStatus ? '참여 수락됨' : '참여 거절됨');
+          }
         } else {
           setIsApply(false);
-          setIsAccepted(null);
+          setApplicantStatus(null);
         }
       }
     };
     fetchData();
-  }, [postid, logInUserId]);
+  }, [postid, logInUserId, setApplicantStatus]);
 
-  const { data: partnerPost, isLoading, isError } = useQuery(['partnerPost', postid], () => getPartnerPost({ postId: postid as string }));
+  useEffect(() => {
+    const currentDate = new Date();
+    if (partnerPostData && confirmedApplicants) {
+      const endDate = new Date(partnerPostData.endDate);
+      if (endDate < currentDate || confirmedApplicants.data!.length >= partnerPostData.numOfPeople) {
+        updatePostStatus(postid!, false);
+        setPartnerStatus('모집완료');
+      } else if (endDate >= currentDate || confirmedApplicants.data!.length < partnerPostData.numOfPeople) {
+        updatePostStatus(postid!, true);
+        setPartnerStatus('모집중');
+      }
+    }
+  }, [partnerPostData, postid, confirmedApplicants, setPartnerStatus]);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -42,8 +67,6 @@ function PartnerDetail() {
   if (isError) {
     return <div>Error loading data</div>;
   }
-
-  const partnerPostData = partnerPost.data!;
 
   return (
     <>
@@ -56,8 +79,8 @@ function PartnerDetail() {
         </St.CommunicateDiv>
       </St.PartnerDetailMain>
       <St.Status>
-        <St.PostStatus isOpen={partnerPostData.isOpen}>{partnerPostData.isOpen ? '모집중' : '모집완료'}</St.PostStatus>
-        {isApply && <St.ApplyStatus>{isAccepted === null ? '참여 신청 중' : isAccepted ? '참여 수락됨' : '참여 거절됨'}</St.ApplyStatus>}
+        <St.PostStatus partnerStatus={partnerStatus}>{partnerStatus === '모집중' ? '모집중' : '모집완료'}</St.PostStatus>
+        {isApply && <St.ApplyStatus>{applicantStatus}</St.ApplyStatus>}
       </St.Status>
       <PartnerCommentsList />
     </>

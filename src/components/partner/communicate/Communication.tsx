@@ -64,7 +64,7 @@ const Communication = ({ postId, writerId, logInUserId }: CommunicationProps) =>
       {writerId !== logInUserId ? (
         <St.ApplyDiv>{isConfirmed ? <></> : <button onClick={isApply ? handleApplyCancel : handleApply}>{isApply ? '참여 취소' : '참여하기'}</button>}</St.ApplyDiv>
       ) : (
-        <button onClick={() => openModal('applicantList')}>신청자 목록</button>
+        <button onClick={() => openModal('applicantList')}>동행 신청자 목록</button>
       )}
       {openedModals.applyWithInfo && (
         <Modal id="applyWithInfo" size="medium">

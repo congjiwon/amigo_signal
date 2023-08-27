@@ -5,12 +5,18 @@ import { Tables } from '../../api/supabase/supabase';
 import * as St from './style';
 import defaultProfileImage from '../../assets/imgs/users/default_profile_img.png';
 import classifyingAge from '../common/classifyingAge/classifyingAge';
+import { getConfirmedApplicantList, updatePostStatus } from '../../api/supabase/partner';
+import { useQuery } from '@tanstack/react-query';
 
 type PartnerItemProps = {
   post: Tables<'partnerPosts'>;
 };
 
 const PartnerItem = ({ post }: PartnerItemProps) => {
+  const [localPartnerStatus, setLocalPartnerStatus] = useState<string>('모집중');
+
+  const { data: confirmedApplicants } = useQuery(['confirmedApplicants', post.id], () => getConfirmedApplicantList(post.id!));
+
   const [imageSrc, setImageSrc] = useState<string>('');
 
   // 동행찾기 게시글작성할 때 선택한 country
@@ -38,9 +44,26 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
     setImageSrc(imageUrl);
   };
 
+  // useEffect(() => {
+  //   getFlagAndDisplayImage();
+  // }, []);
+
   useEffect(() => {
-    getFlagAndDisplayImage();
-  }, []);
+    const updateStatus = async () => {
+      const currentDate = new Date();
+      if (post && confirmedApplicants) {
+        const endDate = new Date(post.endDate);
+        if (endDate < currentDate || confirmedApplicants.data!.length >= post.numOfPeople) {
+          await updatePostStatus(post.id!, false);
+          setLocalPartnerStatus('모집완료');
+        } else if (endDate >= currentDate || confirmedApplicants.data!.length < post.numOfPeople) {
+          await updatePostStatus(post.id!, true);
+          setLocalPartnerStatus('모집중');
+        }
+      }
+    };
+    updateStatus();
+  }, [post, confirmedApplicants, setLocalPartnerStatus]);
 
   return (
     <Link to={`detail/${post.id}`}>
@@ -50,7 +73,7 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
             <St.FlagBox>{imageSrc && <St.FlagImage src={imageSrc} alt="Image" />}</St.FlagBox>
             <h1>{post.country}</h1>
           </St.Location>
-          <St.Status isOpen={post.isOpen}>{post.isOpen ? '모집중' : '모집완료'}</St.Status>
+          <St.Status localPartnerStatus={localPartnerStatus}>{localPartnerStatus === '모집중' ? '모집중' : '모집완료'}</St.Status>
         </St.Head>
         <St.Main>
           <p>

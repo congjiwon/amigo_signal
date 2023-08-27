@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 type StatusProps = {
-  isOpen: boolean;
+  localPartnerStatus: string;
 };
 
 export const ImageWrapper = styled.div`
@@ -69,10 +69,10 @@ export const Head = styled.div`
 
 export const Status = styled.p<StatusProps>`
   padding: 5px;
-  background-color: ${(props) => (props.isOpen ? '#FF7000' : '#994504')};
+  background-color: ${(props) => (props.localPartnerStatus === '모집중' ? '#FF7000' : '#994504')};
   border-radius: 30px;
   font-size: 0.7rem;
-  color: ${(props) => (props.isOpen ? '#000000' : '#ffffff')};
+  color: ${(props) => (props.localPartnerStatus === '모집중' ? '#000000' : '#ffffff')};
 `;
 
 export const Location = styled.div`

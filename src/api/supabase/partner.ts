@@ -143,3 +143,17 @@ export const getConfirmedApplicantList = async (postId: string) => {
   const { data: applicantList, error } = await supabase.from('applicants').select('*, users!applicants_applicantId_fkey(*)').eq('postId', postId).eq('isAccepted', true);
   return { data: applicantList, error };
 };
+
+// 모집중 <-> 모집완료 바꾸는 로직
+export const updatePostStatus = async (postId: string, isOpen: boolean) => {
+  const { error } = await supabase.from('partnerPosts').update({ isOpen }).eq('id', postId).single();
+  if (error) {
+    console.error('모집 상태 업데이트 중 error 발생', error);
+  }
+};
+
+// 해당 동행 모집 글의 모집 인원 가져오기
+export const getNumOfPeople = async (postId: string) => {
+  const { data } = await supabase.from('partnerPosts').select('numOfPeople').eq('id', postId);
+  return data;
+};
