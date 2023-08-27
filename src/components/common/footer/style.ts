@@ -1,18 +1,40 @@
 import { styled } from 'styled-components';
 
-export const ContainerFooter = styled.footer`
+export const FooterLayout = styled.footer`
   padding: 20px 0;
   background-color: #efefef;
+  height: 316px;
+  margin-top: 120px;
 `;
+
+export const FooterContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  width: 1280px;
+  margin: 0 auto;
+`;
+
+export const FootLogo = styled.div`
+  width: 100px;
+  height: 40px;
+  margin: 40px 0 36px 0;
+
+  background-color: grey;
+`;
+
 export const FootTitle = styled.h5`
   color: #666;
   font-weight: bold;
+  margin-bottom: 10px;
 `;
+
 export const FootText = styled.p`
   font-size: 0.8rem;
   color: #666;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 `;
+
 export const FootInfoBox = styled.div`
   margin: 15px 0;
   span {
