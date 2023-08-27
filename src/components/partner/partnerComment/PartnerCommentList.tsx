@@ -5,7 +5,9 @@ import { styled } from 'styled-components';
 import { getPartnerPost, getReCommentData, getReCommentWriterIds, getWriterIds } from '../../../api/supabase/partner';
 import { getAuthId, getUsers } from '../../../api/supabase/users';
 import { usePartnerComments } from '../../../hooks/usePartnerComment';
+import { BtnStyleType } from '../../../types/styleTypes';
 import useCurrentUserStore from '../../../zustand/currentUser';
+import { CommentButton } from '../../common/button/Button';
 import { ConfirmDelete } from '../../common/modal/alert';
 
 type allCommentsProps =
@@ -132,11 +134,11 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
 
   // 댓글 수정 버튼 여기로
   const handleUpdateBtn = (id: string) => {
-    setIsUpdate(true);
-    const commentToEdit = allComments!.find((comment) => comment.id === id);
-    if (commentToEdit) {
-      setUpdateComment(commentToEdit.content);
-    }
+    // setIsUpdate(true);
+    // const commentToEdit = allComments!.find((comment) => comment.id === id);
+    // if (commentToEdit) {
+    //   setUpdateComment(commentToEdit.content);
+    // }
   };
   // 답댓글 삭제 버튼 클릭
   const handleReDelBtn = async (id: string) => {
@@ -172,23 +174,59 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
 
   // 답글쓰기 버튼
   const handleRecommentBtn = () => {
-    setIsReComment(true);
+    // setIsReComment(true);
   };
 
   // 답글 수정 버튼
   const handleReUpdateBtn = async (id: string, isUpdate: boolean) => {
-    const reCommentToEdit = allReCommentsData!.find((reComment) => reComment.id === id);
-    // isUpdate = true;
-    // setReCommentId(id);
-    // setUpdateReComment(reCommentToEdit!.reContent);
-    // isUpdate = true;
-    // // console.log(isUpdate);
+    // const reCommentToEdit = allReCommentsData!.find((reComment) => reComment.id === id);
+    // // isUpdate = true;
+    // // setReCommentId(id);
+    // // setUpdateReComment(reCommentToEdit!.reContent);
+    // // isUpdate = true;
+    // // // console.log(isUpdate);
+    // if (reCommentToEdit) {
+    //   isUpdate = true;
+    //   setReCommentId(id); // 수정할 게시글 아이디 담아서 보내야함.
+    //   setUpdateReComment(reCommentToEdit.reContent); // 수정 클릭 시 초기값으로 원댓글 넣어줌.
+    //   setIsUpdateReComment(isUpdate);
+    // }
+  };
 
-    if (reCommentToEdit) {
-      isUpdate = true;
-      setReCommentId(id); // 수정할 게시글 아이디 담아서 보내야함.
-      setUpdateReComment(reCommentToEdit.reContent); // 수정 클릭 시 초기값으로 원댓글 넣어줌.
-      setIsUpdateReComment(isUpdate);
+  // textarea open 관리
+  const handleIsOpenBtn = (name: string, id: string | null, isUpdate: boolean | null) => {
+    // 답글쓰기 버튼
+    if (name === 'postReComment') {
+      setIsReComment(true);
+      setIsUpdate(false);
+      setIsUpdateReComment(false);
+      // 댓글 수정 버튼
+    } else if (name === 'updateComment') {
+      setIsUpdate(true);
+      setIsReComment(false);
+      setIsUpdateReComment(false);
+      const commentToEdit = allComments!.find((comment) => comment.id === id);
+
+      if (commentToEdit) {
+        setUpdateComment(commentToEdit.content);
+      }
+      // 답댓글 수정 버튼
+    } else if (name === 'updateReComment') {
+      const reCommentToEdit = allReCommentsData!.find((reComment) => reComment.id === id);
+      // isUpdate = true;
+      // setReCommentId(id);
+      // setUpdateReComment(reCommentToEdit!.reContent);
+      // isUpdate = true;
+      // // console.log(isUpdate);
+
+      if (reCommentToEdit) {
+        isUpdate = true;
+        setReCommentId(id!); // 수정할 게시글 아이디 담아서 보내야함.
+        setUpdateReComment(reCommentToEdit.reContent); // 수정 클릭 시 초기값으로 원댓글 넣어줌.
+        setIsUpdateReComment(true);
+        setIsUpdate(false);
+        setIsReComment(false);
+      }
     }
   };
 
@@ -234,26 +272,36 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
             <CommentBottomBox>
               <DateButtonBox>
                 <DateBox>
-                  <p>{comment?.date.substring(0, 10) + ' ' + comment?.date.substring(11, 16)}</p>
+                  <DateParagraph>{comment?.date.substring(0, 10) + ' ' + comment?.date.substring(11, 16)}</DateParagraph>
                 </DateBox>
                 <div>
-                  <button onClick={() => handleUpdateBtn(comment!.id)}>수정</button>
+                  <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('updateComment', comment!.id, isUpdate)}>
+                    수정
+                  </CommentButton>
                 </div>
+                <Bar>|</Bar>
                 <div>
-                  <button onClick={() => handleDelBtn(comment!.id)}>삭제</button>
-                  <button onClick={handleRecommentBtn}>답글쓰기</button>
+                  <CommentButton type="submit" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleDelBtn(comment!.id)}>
+                    삭제
+                  </CommentButton>
+                  <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('postReComment', comment!.id, isUpdate)}>
+                    답글쓰기
+                  </CommentButton>
                 </div>
               </DateButtonBox>
               {isUpdate && (
                 <div>
                   <form onSubmit={handleSubmitBtn}>
                     <InputBox>
-                      <Textarea placeholder="댓글을 남겨보세요" value={updateComment} onChange={(event) => setUpdateComment(event.target.value)} required />
+                      <Textarea placeholder="댓글을 남겨보세요" value={updateComment} onChange={(event) => setUpdateComment(event.target.value)} />
                       <CancelSubmitButtonBox>
-                        <Button type="button" onClick={(e) => handleCancelBtn('updateCancel', e)}>
+                        <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={(e) => handleCancelBtn('updateCancel', e)}>
                           취소
-                        </Button>
-                        <button type="submit">등록</button>
+                        </CommentButton>
+                        <Bar>|</Bar>
+                        <CommentButton type="submit" disabled={updateComment.length < 1} styleType={BtnStyleType.BTN_ONLYFONT}>
+                          등록
+                        </CommentButton>
                       </CancelSubmitButtonBox>
                     </InputBox>
                   </form>
@@ -263,17 +311,19 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
           ) : (
             ''
           )}
-          {!isLoginUser && (
+          {!isLoginUser && user ? (
             <CommentBottomBox>
               <DateButtonBox>
                 <DateBox>
                   <DateParagraph>{comment?.date.substring(0, 10) + ' ' + comment?.date.substring(11, 16)}</DateParagraph>
                 </DateBox>{' '}
-                <button type="submit" onClick={handleRecommentBtn}>
+                <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('postReComment', comment!.id, isUpdate)}>
                   답글쓰기
-                </button>
+                </CommentButton>
               </DateButtonBox>
             </CommentBottomBox>
+          ) : (
+            ''
           )}
           {isReComment && (
             <CommentBottomBox>
@@ -281,10 +331,13 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
                 <InputBox>
                   <Textarea placeholder="댓글을 입력하세요" value={reContent} onChange={(event) => setReContent(event?.target.value)} />
                   <CancelSubmitButtonBox>
-                    <Button type="button" onClick={(e) => handleCancelBtn('reCommentCancel', e)}>
+                    <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={(e) => handleCancelBtn('reCommentCancel', e)}>
                       취소
-                    </Button>
-                    <button type="submit">등록</button>
+                    </CommentButton>
+                    <Bar>|</Bar>
+                    <CommentButton type="submit" disabled={reContent.length < 1} styleType={BtnStyleType.BTN_ONLYFONT}>
+                      등록
+                    </CommentButton>
                   </CancelSubmitButtonBox>
                 </InputBox>
               </form>
@@ -317,15 +370,16 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
                     <CommentBottomBox>
                       <DateButtonBox>
                         <DateBox>
-                          <p>{reComment?.currentDate.substring(0, 10) + ' ' + reComment?.currentDate.substring(11, 16)}</p>
+                          <DateParagraph>{reComment?.currentDate.substring(0, 10) + ' ' + reComment?.currentDate.substring(11, 16)}</DateParagraph>
                         </DateBox>
-                        <button type="button" onClick={() => handleReUpdateBtn(reComment.id, reComment.isUpdate)}>
+                        <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('updateReComment', reComment.id, reComment.isUpdate)}>
                           수정
-                        </button>
+                        </CommentButton>
+                        <Bar>|</Bar>
                         {/* <button onClick={() => handleReUpdateBtn(reComment)}>수정</button> */}
-                        <button type="submit" onClick={() => handleReDelBtn(reComment.id)}>
+                        <CommentButton type="submit" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleReDelBtn(reComment.id)}>
                           삭제
-                        </button>
+                        </CommentButton>
                       </DateButtonBox>
                       {/* 모든애들 인풋창 보이게되어있다. */}
                       {/* 테이블에 isopen 상태를 넣는게 좋다. 각각 코멘트에 속성 상태 넣는것도 쉬운 방법 */}
@@ -334,11 +388,14 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
                           <InputBox>
                             <Textarea placeholder="댓글을 남겨보세요" value={updateReComment} onChange={(event) => setUpdateReComment(event.target.value)} />
                             <CancelSubmitButtonBox>
-                              <Button type="button" onClick={(e) => handleCancelBtn('reCommentUpdateCancelBtn', e)}>
+                              <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={(e) => handleCancelBtn('reCommentUpdateCancelBtn', e)}>
                                 취소
-                              </Button>
+                              </CommentButton>
+                              <Bar>|</Bar>
                               {/* <Button onClick={() => setIsUpdateReComment(false)}>취소</Button> */}
-                              <button type="submit">등록</button>
+                              <CommentButton type="submit" styleType={BtnStyleType.BTN_ONLYFONT} disabled={updateReComment.length < 1}>
+                                등록
+                              </CommentButton>
                             </CancelSubmitButtonBox>
                           </InputBox>
                         </form>
@@ -349,7 +406,7 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
                     <CommentBottomBox>
                       <DateButtonBox>
                         <DateBox>
-                          <p>{reComment?.currentDate.substring(0, 10) + ' ' + reComment?.currentDate.substring(11, 16)}</p>
+                          <DateParagraph>{reComment?.currentDate.substring(0, 10) + ' ' + reComment?.currentDate.substring(11, 16)}</DateParagraph>
                         </DateBox>
                       </DateButtonBox>
                     </CommentBottomBox>
@@ -436,7 +493,16 @@ const DateBox = styled.div`
   margin-right: 12px;
 `;
 
-const DateParagraph = styled.p``;
+const DateParagraph = styled.p`
+  color: gray;
+`;
+
+const Bar = styled.p`
+  margin-bottom: 1px;
+  font-size: 12px;
+  color: gray;
+  /* letter-spacing: 6px; */
+`;
 
 const InputBox = styled.div`
   position: relative;
@@ -456,6 +522,9 @@ const CancelSubmitButtonBox = styled.div`
   position: absolute;
   top: 62px;
   right: 24px;
+
+  display: flex;
+  align-items: center;
 `;
 
 const Button = styled.button``;

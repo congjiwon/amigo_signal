@@ -18,3 +18,11 @@ const Button = ({ type = 'button', children, styleType, disabled, onClick }: But
 };
 
 export default Button;
+
+export const CommentButton = ({ type, children, styleType, disabled, onClick }: ButtonProps) => {
+  return (
+    <St.CommentButton type={type} styleType={styleType} disabled={disabled} onClick={onClick}>
+      {children}
+    </St.CommentButton>
+  );
+};
