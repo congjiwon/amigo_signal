@@ -135,7 +135,8 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
   const validation = (): boolean => {
     if (applicantList.length >= 1 || confirmedApplicantList.length >= 1) {
       AlertError({ title: '수정이 불가능 합니다.', text: '동행 신청이 시작되었습니다.' });
-      navigate(`partner/detail/${postId}`);
+      navigate(`/partner/detail/${postId}`);
+      return false;
     }
     if (location.length < 1) {
       AlertWarning({ title: '국가를 선택해주세요.', position: 'top' });
