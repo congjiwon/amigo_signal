@@ -9,7 +9,21 @@ export interface Database {
           content: string;
           id: string;
           isConfirmed: boolean;
-          postId: string;
+          postId: {
+            content: string;
+            country: string;
+            createdAt: string;
+            endDate: string;
+            id: string;
+            interestUrl: string[];
+            isOpen: boolean;
+            numOfPeople: number;
+            openChat: string;
+            region: string;
+            startDate: string;
+            title: string;
+            writerId: string | null;
+          };
           isAccepted?: boolean;
           users?: {
             birthday: string;
