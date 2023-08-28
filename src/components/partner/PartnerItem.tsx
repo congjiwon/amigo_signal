@@ -15,6 +15,7 @@ type PartnerItemProps = {
 
 const PartnerItem = ({ post }: PartnerItemProps) => {
   const [imageSrc, setImageSrc] = useState<string>('');
+  const storagaUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
 
   const { data: confirmedApplicants } = useQuery(['confirmedApplicants', post.id], () => getConfirmedApplicantList(post.id!));
 
@@ -84,7 +85,7 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
         </St.Body>
         <St.Footer>
           <St.UserProfile>
-            {post.users.profileImageUrl ? <St.ProfileImage src={post.users.profileImageUrl} alt="profile" /> : <St.ProfileImage src={defaultProfileImage} alt="profile" />}
+            {post.users.profileImageUrl ? <St.ProfileImage src={`${storagaUrl}/${post.users.profileImageUrl}`} alt="profile" /> : <St.ProfileImage src={defaultProfileImage} alt="profile" />}
             <p>{post.users?.nickName!}</p>
           </St.UserProfile>
           <div>

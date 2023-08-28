@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router';
 import { getPartnerPost, getReCommentData, getReCommentWriterIds, getWriterIds } from '../../../api/supabase/partner';
 import { getAuthId, getUsers } from '../../../api/supabase/users';
+import DefaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import { usePartnerComments } from '../../../hooks/usePartnerComment';
 import { BtnStyleType } from '../../../types/styleTypes';
 import useCurrentUserStore from '../../../zustand/currentUser';
@@ -243,6 +244,8 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
     }
   };
 
+  const storagaUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
+
   {
     return (
       <St.PartnerCommentsContainerBox>
@@ -254,7 +257,7 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
               return (
                 <St.CommentTopBox key={user.id}>
                   <div>
-                    <St.Img src={user && user.profileImageUrl!} />
+                    <St.Img src={user && user.profileImageUrl ? `${storagaUrl}/${user.profileImageUrl}` : DefaultProfileImage} />
                   </div>
                   <St.WriterContainerBox>
                     <St.WriterBox>
