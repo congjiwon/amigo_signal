@@ -17,16 +17,17 @@ export default function MyPartnerPost() {
   };
 
   return (
-    <St.MyPartnerPostsWrapper>
+    <St.MyPartnerPostsSection>
+      <h2>동행 찾기 작성글</h2>
       <St.FilterBtns>
         <St.FilterBtn className={filterStatus === null ? 'active' : ''} onClick={() => handleClickFilter(null)}>
-          전체
+          전체 보기
         </St.FilterBtn>
         <St.FilterBtn className={filterStatus === true ? 'active' : ''} onClick={() => handleClickFilter(true)}>
           모집중
         </St.FilterBtn>
         <St.FilterBtn className={filterStatus === false ? 'active' : ''} onClick={() => handleClickFilter(false)}>
-          모집마감
+          모집 완료
         </St.FilterBtn>
       </St.FilterBtns>
       <St.MyPartnerPostCardList>
@@ -44,6 +45,6 @@ export default function MyPartnerPost() {
           </St.MyPartnerPostCard>
         ))}
       </St.MyPartnerPostCardList>
-    </St.MyPartnerPostsWrapper>
+    </St.MyPartnerPostsSection>
   );
 }
