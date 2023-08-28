@@ -50,10 +50,10 @@ function PartnerDetail() {
     const currentDate = new Date();
     if (partnerPostData && confirmedApplicants) {
       const endDate = new Date(partnerPostData.endDate);
-      if (endDate < currentDate || confirmedApplicants.data!.length >= partnerPostData.numOfPeople) {
+      if (endDate < currentDate || (confirmedApplicants.data && confirmedApplicants.data.length >= partnerPostData.numOfPeople)) {
         updatePostStatus(postid!, false);
         setPartnerStatus('모집완료');
-      } else if (endDate >= currentDate || confirmedApplicants.data!.length < partnerPostData.numOfPeople) {
+      } else if (endDate >= currentDate || (confirmedApplicants.data ? confirmedApplicants.data.length : 0) < partnerPostData.numOfPeople) {
         updatePostStatus(postid!, true);
         setPartnerStatus('모집중');
       }

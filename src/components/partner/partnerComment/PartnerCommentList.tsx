@@ -9,6 +9,7 @@ import { BtnStyleType } from '../../../types/styleTypes';
 import useCurrentUserStore from '../../../zustand/currentUser';
 import { CommentButton } from '../../common/button/Button';
 import { ConfirmDelete } from '../../common/modal/alert';
+import DefaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 
 type allCommentsProps =
   | {
@@ -242,183 +243,183 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
     }
   };
 
-  {
-    return (
-      <PartnerCommentsContainerBox>
-        <PartnerCommentsBox>
-          {/* user : 댓글 작성자의 유저 ID, 닉네임, 프로필사진 배열 */}
-          {user?.map((user) => {
-            if (user.id === comment?.writerId) {
-              const isPostWriter = comment.writerId === postWriterId;
-              return (
-                <CommentTopBox key={user.id}>
-                  <div>
-                    <Img src={user && user.profileImageUrl!} />
-                  </div>
-                  <WriterContainerBox>
-                    <WriterBox>
-                      <NickNameParagraph>{user.nickName}</NickNameParagraph>
-                      {isPostWriter && <WriterParagraph>작성자</WriterParagraph>}
-                    </WriterBox>
-                    <CommentBox>
-                      <CommentParagraph>{comment?.content}</CommentParagraph>
-                    </CommentBox>
-                  </WriterContainerBox>
-                </CommentTopBox>
-              );
-            }
-          })}
-          {isLoginUser ? (
-            <CommentBottomBox>
-              <DateButtonBox>
-                <DateBox>
-                  <DateParagraph>{comment?.date.substring(0, 10) + ' ' + comment?.date.substring(11, 16)}</DateParagraph>
-                </DateBox>
+  const storagaUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
+
+  return (
+    <PartnerCommentsContainerBox>
+      <PartnerCommentsBox>
+        {/* user : 댓글 작성자의 유저 ID, 닉네임, 프로필사진 배열 */}
+        {user?.map((user) => {
+          if (user.id === comment?.writerId) {
+            const isPostWriter = comment.writerId === postWriterId;
+            return (
+              <CommentTopBox key={user.id}>
                 <div>
-                  <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('updateComment', comment!.id, isUpdate)}>
-                    수정
-                  </CommentButton>
+                  <Img src={user && user.profileImageUrl ? `${storagaUrl}/${user.profileImageUrl}` : DefaultProfileImage} />
                 </div>
-                <Bar>|</Bar>
-                <div>
-                  <CommentButton type="submit" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleDelBtn(comment!.id)}>
-                    삭제
-                  </CommentButton>
-                  <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('postReComment', comment!.id, isUpdate)}>
-                    답글쓰기
-                  </CommentButton>
-                </div>
-              </DateButtonBox>
-              {isUpdate && (
-                <div>
-                  <form onSubmit={handleSubmitBtn}>
-                    <InputBox>
-                      <Textarea placeholder="댓글을 남겨보세요" value={updateComment} onChange={(event) => setUpdateComment(event.target.value)} />
-                      <CancelSubmitButtonBox>
-                        <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={(e) => handleCancelBtn('updateCancel', e)}>
-                          취소
-                        </CommentButton>
-                        <Bar>|</Bar>
-                        <CommentButton type="submit" disabled={updateComment.length < 1} styleType={BtnStyleType.BTN_ONLYFONT}>
-                          등록
-                        </CommentButton>
-                      </CancelSubmitButtonBox>
-                    </InputBox>
-                  </form>
-                </div>
-              )}
-            </CommentBottomBox>
-          ) : (
-            ''
-          )}
-          {!isLoginUser && user ? (
-            <CommentBottomBox>
-              <DateButtonBox>
-                <DateBox>
-                  <DateParagraph>{comment?.date.substring(0, 10) + ' ' + comment?.date.substring(11, 16)}</DateParagraph>
-                </DateBox>{' '}
+                <WriterContainerBox>
+                  <WriterBox>
+                    <NickNameParagraph>{user.nickName}</NickNameParagraph>
+                    {isPostWriter && <WriterParagraph>작성자</WriterParagraph>}
+                  </WriterBox>
+                  <CommentBox>
+                    <CommentParagraph>{comment?.content}</CommentParagraph>
+                  </CommentBox>
+                </WriterContainerBox>
+              </CommentTopBox>
+            );
+          }
+        })}
+        {isLoginUser ? (
+          <CommentBottomBox>
+            <DateButtonBox>
+              <DateBox>
+                <DateParagraph>{comment?.date.substring(0, 10) + ' ' + comment?.date.substring(11, 16)}</DateParagraph>
+              </DateBox>
+              <div>
+                <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('updateComment', comment!.id, isUpdate)}>
+                  수정
+                </CommentButton>
+              </div>
+              <Bar>|</Bar>
+              <div>
+                <CommentButton type="submit" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleDelBtn(comment!.id)}>
+                  삭제
+                </CommentButton>
                 <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('postReComment', comment!.id, isUpdate)}>
                   답글쓰기
                 </CommentButton>
-              </DateButtonBox>
-            </CommentBottomBox>
-          ) : (
-            ''
-          )}
-          {isReComment && (
-            <CommentBottomBox>
-              <form onSubmit={handleReCommentSubmit}>
-                <InputBox>
-                  <Textarea placeholder="댓글을 입력하세요" value={reContent} onChange={(event) => setReContent(event?.target.value)} />
-                  <CancelSubmitButtonBox>
-                    <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={(e) => handleCancelBtn('reCommentCancel', e)}>
-                      취소
-                    </CommentButton>
-                    <Bar>|</Bar>
-                    <CommentButton type="submit" disabled={reContent.length < 1} styleType={BtnStyleType.BTN_ONLYFONT}>
-                      등록
-                    </CommentButton>
-                  </CancelSubmitButtonBox>
-                </InputBox>
-              </form>
-            </CommentBottomBox>
-          )}
-        </PartnerCommentsBox>
-        <PartnerReCommentsBox>
-          {/* allReCommentsData : 모든 답댓글 정보(유저포함) */}
-          {allReCommentsData?.map((reComment) => {
-            if (reComment.commentId === comment?.id) {
-              const isPostWriter = reComment.writerId === postWriterId;
-              const isLoginCommentUser = authId === reComment.writerId;
-              return (
-                <ReCommentBox key={reComment.id}>
-                  <CommentTopBox>
-                    <div>
-                      <Img src={reComment.users && reComment.users.profileImageUrl!} />
-                    </div>
-                    <WriterContainerBox>
-                      <WriterBox>
-                        <NickNameParagraph>{reComment.users && reComment.users.nickName}</NickNameParagraph>
-                        {isPostWriter && <WriterParagraph>작성자</WriterParagraph>}
-                      </WriterBox>
-                      <CommentBox>
-                        <CommentParagraph>{reComment.reContent}</CommentParagraph>
-                      </CommentBox>
-                    </WriterContainerBox>
-                  </CommentTopBox>
-                  {isLoginCommentUser && (
-                    <CommentBottomBox>
-                      <DateButtonBox>
-                        <DateBox>
-                          <DateParagraph>{reComment?.currentDate.substring(0, 10) + ' ' + reComment?.currentDate.substring(11, 16)}</DateParagraph>
-                        </DateBox>
-                        <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('updateReComment', reComment.id, reComment.isUpdate)}>
-                          수정
-                        </CommentButton>
-                        <Bar>|</Bar>
-                        {/* <button onClick={() => handleReUpdateBtn(reComment)}>수정</button> */}
-                        <CommentButton type="submit" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleReDelBtn(reComment.id)}>
-                          삭제
-                        </CommentButton>
-                      </DateButtonBox>
-                      {/* 모든애들 인풋창 보이게되어있다. */}
-                      {/* 테이블에 isopen 상태를 넣는게 좋다. 각각 코멘트에 속성 상태 넣는것도 쉬운 방법 */}
-                      {isUpdateReComment && (
-                        <form onSubmit={handleReSubmitBtn}>
-                          <InputBox>
-                            <Textarea placeholder="댓글을 남겨보세요" value={updateReComment} onChange={(event) => setUpdateReComment(event.target.value)} />
-                            <CancelSubmitButtonBox>
-                              <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={(e) => handleCancelBtn('reCommentUpdateCancelBtn', e)}>
-                                취소
-                              </CommentButton>
-                              <Bar>|</Bar>
-                              {/* <Button onClick={() => setIsUpdateReComment(false)}>취소</Button> */}
-                              <CommentButton type="submit" styleType={BtnStyleType.BTN_ONLYFONT} disabled={updateReComment.length < 1}>
-                                등록
-                              </CommentButton>
-                            </CancelSubmitButtonBox>
-                          </InputBox>
-                        </form>
-                      )}
-                    </CommentBottomBox>
-                  )}
-                  {!isLoginCommentUser && (
-                    <CommentBottomBox>
-                      <DateButtonBox>
-                        <DateBox>
-                          <DateParagraph>{reComment?.currentDate.substring(0, 10) + ' ' + reComment?.currentDate.substring(11, 16)}</DateParagraph>
-                        </DateBox>
-                      </DateButtonBox>
-                    </CommentBottomBox>
-                  )}
-                </ReCommentBox>
-              );
-            }
-          })}
-        </PartnerReCommentsBox>
-      </PartnerCommentsContainerBox>
-    );
-  }
+              </div>
+            </DateButtonBox>
+            {isUpdate && (
+              <div>
+                <form onSubmit={handleSubmitBtn}>
+                  <InputBox>
+                    <Textarea placeholder="댓글을 남겨보세요" value={updateComment} onChange={(event) => setUpdateComment(event.target.value)} />
+                    <CancelSubmitButtonBox>
+                      <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={(e) => handleCancelBtn('updateCancel', e)}>
+                        취소
+                      </CommentButton>
+                      <Bar>|</Bar>
+                      <CommentButton type="submit" disabled={updateComment.length < 1} styleType={BtnStyleType.BTN_ONLYFONT}>
+                        등록
+                      </CommentButton>
+                    </CancelSubmitButtonBox>
+                  </InputBox>
+                </form>
+              </div>
+            )}
+          </CommentBottomBox>
+        ) : (
+          ''
+        )}
+        {!isLoginUser && user ? (
+          <CommentBottomBox>
+            <DateButtonBox>
+              <DateBox>
+                <DateParagraph>{comment?.date.substring(0, 10) + ' ' + comment?.date.substring(11, 16)}</DateParagraph>
+              </DateBox>{' '}
+              <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('postReComment', comment!.id, isUpdate)}>
+                답글쓰기
+              </CommentButton>
+            </DateButtonBox>
+          </CommentBottomBox>
+        ) : (
+          ''
+        )}
+        {isReComment && (
+          <CommentBottomBox>
+            <form onSubmit={handleReCommentSubmit}>
+              <InputBox>
+                <Textarea placeholder="댓글을 입력하세요" value={reContent} onChange={(event) => setReContent(event?.target.value)} />
+                <CancelSubmitButtonBox>
+                  <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={(e) => handleCancelBtn('reCommentCancel', e)}>
+                    취소
+                  </CommentButton>
+                  <Bar>|</Bar>
+                  <CommentButton type="submit" disabled={reContent.length < 1} styleType={BtnStyleType.BTN_ONLYFONT}>
+                    등록
+                  </CommentButton>
+                </CancelSubmitButtonBox>
+              </InputBox>
+            </form>
+          </CommentBottomBox>
+        )}
+      </PartnerCommentsBox>
+      <PartnerReCommentsBox>
+        {/* allReCommentsData : 모든 답댓글 정보(유저포함) */}
+        {allReCommentsData?.map((reComment) => {
+          if (reComment.commentId === comment?.id) {
+            const isPostWriter = reComment.writerId === postWriterId;
+            const isLoginCommentUser = authId === reComment.writerId;
+            return (
+              <ReCommentBox key={reComment.id}>
+                <CommentTopBox>
+                  <div>
+                    <Img src={reComment.users && reComment.users.profileImageUrl ? `${storagaUrl}/${reComment.users.profileImageUrl}` : DefaultProfileImage} />
+                  </div>
+                  <WriterContainerBox>
+                    <WriterBox>
+                      <NickNameParagraph>{reComment.users && reComment.users.nickName}</NickNameParagraph>
+                      {isPostWriter && <WriterParagraph>작성자</WriterParagraph>}
+                    </WriterBox>
+                    <CommentBox>
+                      <CommentParagraph>{reComment.reContent}</CommentParagraph>
+                    </CommentBox>
+                  </WriterContainerBox>
+                </CommentTopBox>
+                {isLoginCommentUser && (
+                  <CommentBottomBox>
+                    <DateButtonBox>
+                      <DateBox>
+                        <DateParagraph>{reComment?.currentDate.substring(0, 10) + ' ' + reComment?.currentDate.substring(11, 16)}</DateParagraph>
+                      </DateBox>
+                      <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('updateReComment', reComment.id, reComment.isUpdate)}>
+                        수정
+                      </CommentButton>
+                      <Bar>|</Bar>
+                      {/* <button onClick={() => handleReUpdateBtn(reComment)}>수정</button> */}
+                      <CommentButton type="submit" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleReDelBtn(reComment.id)}>
+                        삭제
+                      </CommentButton>
+                    </DateButtonBox>
+                    {/* 모든애들 인풋창 보이게되어있다. */}
+                    {/* 테이블에 isopen 상태를 넣는게 좋다. 각각 코멘트에 속성 상태 넣는것도 쉬운 방법 */}
+                    {isUpdateReComment && (
+                      <form onSubmit={handleReSubmitBtn}>
+                        <InputBox>
+                          <Textarea placeholder="댓글을 남겨보세요" value={updateReComment} onChange={(event) => setUpdateReComment(event.target.value)} />
+                          <CancelSubmitButtonBox>
+                            <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={(e) => handleCancelBtn('reCommentUpdateCancelBtn', e)}>
+                              취소
+                            </CommentButton>
+                            <Bar>|</Bar>
+                            {/* <Button onClick={() => setIsUpdateReComment(false)}>취소</Button> */}
+                            <CommentButton type="submit" styleType={BtnStyleType.BTN_ONLYFONT} disabled={updateReComment.length < 1}>
+                              등록
+                            </CommentButton>
+                          </CancelSubmitButtonBox>
+                        </InputBox>
+                      </form>
+                    )}
+                  </CommentBottomBox>
+                )}
+                {!isLoginCommentUser && (
+                  <CommentBottomBox>
+                    <DateButtonBox>
+                      <DateBox>
+                        <DateParagraph>{reComment?.currentDate.substring(0, 10) + ' ' + reComment?.currentDate.substring(11, 16)}</DateParagraph>
+                      </DateBox>
+                    </DateButtonBox>
+                  </CommentBottomBox>
+                )}
+              </ReCommentBox>
+            );
+          }
+        })}
+      </PartnerReCommentsBox>
+    </PartnerCommentsContainerBox>
+  );
 }
 
 export default PartnerCommentList;
