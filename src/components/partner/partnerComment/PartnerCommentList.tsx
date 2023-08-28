@@ -106,7 +106,6 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
       id: reCommentId,
       isUpdate: false,
       date: comment?.date,
-      currentDate: currentTime(),
     };
 
     updateReCommentMutation.mutate(newReComment);
@@ -125,7 +124,6 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
       writerId: authId,
       commentId: comment!.id,
       isUpdate: false,
-      currentDate: currentTime(),
     };
 
     postReCommentMutation.mutateAsync(reComment);
@@ -179,23 +177,24 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
     // setIsReComment(true);
   };
 
-  // 답글 수정 버튼
-  const handleReUpdateBtn = async (id: string, isUpdate: boolean) => {
-    const reCommentToEdit = allReCommentsData!.find((reComment) => reComment.id === id);
-    // isUpdate = true;
-    // setReCommentId(id);
-    // setUpdateReComment(reCommentToEdit!.reContent);
-    // isUpdate = true;
-    // // console.log(isUpdate);
-    if (reCommentToEdit) {
-      setIsUpdateReComment(true);
-      // isUpdate = true;
-      setReCommentId(id); // 수정할 게시글 아이디 담아서 보내야함.
-      setUpdateReComment(reCommentToEdit.reContent); // 수정 클릭 시 초기값으로 원댓글 넣어줌.
-    }
-  };
+  // 답글 수정 버튼 이거다
+  // const handleReUpdateBtn = async (id: string, isUpdate: boolean) => {
+  //   const reCommentToEdit = allReCommentsData!.find((reComment) => reComment.id === id);
+  //   // isUpdate = true;
+  //   // setReCommentId(id);
+  //   // setUpdateReComment(reCommentToEdit!.reContent);
+  //   // isUpdate = true;
+  //   // // console.log(isUpdate);
+  //   if (reCommentToEdit) {
+  //     setIsUpdateReComment(true);
+  //     // isUpdate = true;
+  //     setReCommentId(id); // 수정할 게시글 아이디 담아서 보내야함.
+  //     setUpdateReComment(reCommentToEdit.reContent); // 수정 클릭 시 초기값으로 원댓글 넣어줌.
+  //   }
+  // };
 
   // textarea open 관리
+
   const handleIsOpenBtn = (name: string, id: string | null, isUpdate: boolean | null) => {
     // 답글쓰기 버튼
     if (name === 'postReComment') {
@@ -213,24 +212,23 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
         setUpdateComment(commentToEdit.content);
       }
       // 답댓글 수정 버튼
-    }
-    // else if (name === 'updateReComment') {
-    //   const reCommentToEdit = allReCommentsData!.find((reComment) => reComment.id === id);
-    //   // isUpdate = true;
-    //   // setReCommentId(id);
-    //   // setUpdateReComment(reCommentToEdit!.reContent);
-    //   // isUpdate = true;
-    //   // // console.log(isUpdate);
+    } else if (name === 'updateReComment') {
+      const reCommentToEdit = allReCommentsData!.find((reComment) => reComment.id === id);
+      // isUpdate = true;
+      // setReCommentId(id);
+      // setUpdateReComment(reCommentToEdit!.reContent);
+      // isUpdate = true;
+      // // console.log(isUpdate);
 
-    //   if (reCommentToEdit) {
-    //     isUpdate = true;
-    //     setReCommentId(id!); // 수정할 게시글 아이디 담아서 보내야함.
-    //     setUpdateReComment(reCommentToEdit.reContent); // 수정 클릭 시 초기값으로 원댓글 넣어줌.
-    //     setIsUpdateReComment(true);
-    //     setIsUpdate(false);
-    //     setIsReComment(false);
-    //   }
-    // }
+      if (reCommentToEdit) {
+        isUpdate = true;
+        setReCommentId(id!); // 수정할 게시글 아이디 담아서 보내야함.
+        setUpdateReComment(reCommentToEdit.reContent); // 수정 클릭 시 초기값으로 원댓글 넣어줌.
+        setIsUpdateReComment(true);
+        setIsUpdate(false);
+        setIsReComment(false);
+      }
+    }
   };
 
   // 취소버튼
@@ -361,7 +359,7 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
                   reComment={reComment}
                   handleCancelBtn={handleCancelBtn}
                   handleIsOpenBtn={handleIsOpenBtn}
-                  handleReUpdateBtn={handleReUpdateBtn}
+                  // handleReUpdateBtn={handleReUpdateBtn} 이거다
                   handleReSubmitBtn={handleReSubmitBtn}
                   isPostWriter={isPostWriter}
                   isLoginCommentUser={isLoginCommentUser}

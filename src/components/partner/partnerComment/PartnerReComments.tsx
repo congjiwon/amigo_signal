@@ -18,7 +18,6 @@ type PartnerReCommentsProps = {
   reComment:
     | {
         commentId: string;
-        currentDate: string;
         date: string;
         id: string;
         isUpdate: boolean;
@@ -40,11 +39,10 @@ type PartnerReCommentsProps = {
   setUpdateReComment: React.Dispatch<React.SetStateAction<string>>;
   handleCancelBtn: (name: string, event: React.MouseEvent<HTMLButtonElement>) => void;
   handleIsOpenBtn: (name: string, id: string | null, isUpdate: boolean | null) => void;
-  handleReUpdateBtn: (id: string, isUpdate: boolean) => Promise<void>;
+  // handleReUpdateBtn: (id: string, isUpdate: boolean) => Promise<void>; 이거다
   handleReSubmitBtn: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
   allReCommentsData: {
     commentId: string;
-    currentDate: string;
     date: string;
     id: string;
     isUpdate: boolean;
@@ -71,12 +69,10 @@ function PartnerReComments({
   setUpdateReComment,
   handleCancelBtn,
   handleIsOpenBtn,
-  handleReUpdateBtn,
+  // handleReUpdateBtn, 이거다
   handleReSubmitBtn,
 }: PartnerReCommentsProps) {
   const { deleteReCommentMutation, updateReCommentMutation } = usePartnerComments();
-
-  console.log(allReCommentsData);
 
   // 답댓글 삭제 버튼 클릭
   const handleReDelBtn = async (id: string) => {
@@ -120,11 +116,12 @@ function PartnerReComments({
         <St.CommentBottomBox>
           <St.DateButtonBox>
             <St.DateBox>
-              <St.DateParagraph>{reComment?.currentDate.substring(0, 10) + ' ' + reComment?.currentDate.substring(11, 16)}</St.DateParagraph>
+              <St.DateParagraph>{reComment?.date.substring(0, 10) + ' ' + reComment?.date.substring(11, 16)}</St.DateParagraph>
             </St.DateBox>
             {/* <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleReSubmitBtn('updateReComment', reComment!.id, reComment!.isUpdate)}> */}
             {/* <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleReUpdateBtn(reComment!.id, reComment!.isUpdate)}> */}
-            <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleReUpdateBtn(reComment!.id, reComment!.isUpdate)}>
+            {/* <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleReUpdateBtn(reComment!.id, reComment!.isUpdate)}> */}
+            <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('updateReComment', reComment!.id, reComment!.isUpdate)}>
               수정
             </CommentButton>
             <St.Bar>|</St.Bar>
@@ -160,7 +157,7 @@ function PartnerReComments({
         <St.CommentBottomBox>
           <St.DateButtonBox>
             <St.DateBox>
-              <St.DateParagraph>{reComment?.currentDate.substring(0, 10) + ' ' + reComment?.currentDate.substring(11, 16)}</St.DateParagraph>
+              <St.DateParagraph>{reComment?.date.substring(0, 10) + ' ' + reComment?.date.substring(11, 16)}</St.DateParagraph>
             </St.DateBox>
           </St.DateButtonBox>
         </St.CommentBottomBox>
