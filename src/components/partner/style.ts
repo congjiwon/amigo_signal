@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 type StatusProps = {
-  localPartnerStatus: string;
+  isOpen: boolean;
 };
 
 export const ImageWrapper = styled.div`
@@ -61,14 +61,6 @@ export const PostCard = styled.div`
   padding-bottom: 15px;
   border-radius: 20px;
   box-shadow: 5px 5px 10px 3px rgba(0, 0, 0, 0.2);
-`;
-
-export const Status = styled.p<StatusProps>`
-  padding: 5px;
-  background-color: ${(props) => (props.localPartnerStatus === '모집중' ? '#FF7000' : '#994504')};
-  border-radius: 30px;
-  font-size: 0.7rem;
-  color: ${(props) => (props.localPartnerStatus === '모집중' ? '#000000' : '#ffffff')};
 `;
 
 export const Location = styled.div`
@@ -134,6 +126,16 @@ export const Body = styled.div`
     border-radius: 30px;
     font-size: 0.7rem;
   }
+`;
+
+export const Status = styled.div<StatusProps>`
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  background-color: ${(props) => (props.isOpen ? '#FF7000' : '#994504')};
+  border-radius: 30px;
+  font-size: 0.7rem;
+  color: ${(props) => (props.isOpen ? '#000000' : '#ffffff')};
 `;
 
 export const InterestImage = styled.img`
