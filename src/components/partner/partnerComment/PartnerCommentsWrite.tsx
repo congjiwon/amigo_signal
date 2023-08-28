@@ -1,9 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import { styled } from 'styled-components';
-import { postPartnerComment } from '../../../api/supabase/partner';
 import { getAuthId } from '../../../api/supabase/users';
+import { usePartnerComments } from '../../../hooks/usePartnerComment';
 import { BtnStyleType } from '../../../types/styleTypes';
 import Button from '../../common/button/Button';
 
@@ -12,13 +12,7 @@ function PartnerCommentsWrite() {
   const [content, setContent] = useState('');
   const { isLoading, data: authId } = useQuery(['auth'], getAuthId);
 
-  const queryClient = useQueryClient();
-  const mutation = useMutation(postPartnerComment, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(['partnerComments']);
-      setContent('');
-    },
-  });
+  const { postCommentMutation } = usePartnerComments();
 
   // 항상 뜸
   if (isLoading) {
@@ -48,14 +42,16 @@ function PartnerCommentsWrite() {
       postId: params.postid,
     };
 
-    mutation.mutateAsync(newComment);
+    postCommentMutation.mutateAsync(newComment);
+
+    setContent('');
   };
 
   return (
     <>
       <Form onSubmit={handleSubmitBtnClick}>
-        <Input type="text" name="content" placeholder="content" value={content} onChange={(e) => setContent(e.target.value)} />
-        <Button type="submit" styleType={BtnStyleType.BTN_DARK}>
+        <Textarea name="content" placeholder="댓글을 남겨보세요" value={content} onChange={(e) => setContent(e.target.value)} />
+        <Button type="submit" styleType={BtnStyleType.BTN_DARK} disabled={content.length < 1}>
           댓글 등록
         </Button>
       </Form>
@@ -70,13 +66,18 @@ const Form = styled.form`
   justify-content: space-between;
 `;
 
-const Input = styled.input`
+const Textarea = styled.textarea`
+  /* text-indent: 24px; */
+
+  resize: none;
+
   width: 1240px;
   height: 56px;
 
   margin-top: 20px;
+  margin-bottom: 25px;
   padding: 10px;
 
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 15px;
+  border: 1px solid lightgray;
 `;

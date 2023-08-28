@@ -1,13 +1,13 @@
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { getConfirmedApplicantList, updatePostStatus } from '../../api/supabase/partner';
 import { Tables } from '../../api/supabase/supabase';
-import * as St from './style';
+import Calender from '../../assets/imgs/partner/Calendar.svg';
 import defaultProfileImage from '../../assets/imgs/users/default_profile_img.png';
 import classifyingAge from '../common/classifyingAge/classifyingAge';
-import Calender from '../../assets/imgs/partner/Calendar.svg';
-import { getConfirmedApplicantList, updatePostStatus } from '../../api/supabase/partner';
-import { useQuery } from '@tanstack/react-query';
+import * as St from './style';
 
 type PartnerItemProps = {
   post: Tables<'partnerPosts'>;

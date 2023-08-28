@@ -1,12 +1,12 @@
-import { Link, useNavigate } from 'react-router-dom';
-import * as St from './style';
-import { supabase } from '../../../api/supabase/supabaseClient';
-import useSessionStore from '../../../zustand/store';
-import { useEffect } from 'react';
-import { Alert } from '../modal/alert';
 import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { supabase } from '../../../api/supabase/supabaseClient';
 import { getCurrentUser } from '../../../api/supabase/users';
 import useCurrentUserStore from '../../../zustand/currentUser';
+import useSessionStore from '../../../zustand/store';
+import { Alert } from '../modal/alert';
+import * as St from './style';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -32,8 +32,12 @@ export default function Header() {
   }, [currentUserDB]);
 
   const handleSignout = async () => {
+    localStorage.removeItem('authId');
     await supabase.auth.signOut();
     Alert({ title: '로그아웃 되었습니다.' });
+    navigate('/login');
+    // 설빈 : 이거 넣으면 로그아웃했을 때 댓글작성X / 답댓글 수정삭제X
+    window.location.reload();
   };
 
   return (

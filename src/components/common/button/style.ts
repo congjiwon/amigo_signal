@@ -14,6 +14,32 @@ const btnCommonStyles = css`
   cursor: pointer;
 `;
 
+const btnCommentStyles = css`
+  background-color: transparent;
+  border: none;
+  text-decoration: none; // 이걸 disabled만 안주기
+  color: gray;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+export const CommentButton = styled.button<{ styleType: BtnStyleType; disabled: boolean | undefined }>`
+  ${(props) => {
+    if (props.disabled) {
+      return css`
+        ${btnCommentStyles}
+        cursor: not-allowed;
+      `;
+    } else if (props.styleType === 'BTN_ONLYFONT') {
+      return css`
+        ${btnCommentStyles}
+      `;
+    }
+  }}
+`;
+
 export const Button = styled.button<{ $styleType: BtnStyleType; disabled: boolean | undefined }>`
   cursor: pointer;
 

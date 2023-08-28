@@ -4,4 +4,5 @@ export enum BtnStyleType {
   BTN_DANGER = 'BTN_DANGER',
   BTN_DARK = 'BTN_DARK',
   BTN_DISABLED = 'BTN_DISABLED',
+  BTN_ONLYFONT = 'BTN_ONLYFONT',
 }

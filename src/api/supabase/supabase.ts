@@ -265,8 +265,10 @@ export interface Database {
       reComments: {
         Row: {
           commentId: string;
+          currentDate: string;
           date: string;
           id: string;
+          isUpdate: boolean;
           reContent: string;
           writerId: string;
           users?: {
@@ -278,15 +280,19 @@ export interface Database {
         };
         Insert: {
           commentId?: string;
+          currentDate: string;
           date: string;
           id?: string;
+          isUpdate: boolean;
           reContent: string;
           writerId?: string;
         };
         Update: {
           commentId?: string;
+          currentDate?: string;
           date?: string;
           id?: string;
+          isUpdate?: boolean;
           reContent?: string;
           writerId?: string;
         };
@@ -426,7 +432,21 @@ export interface Database {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      get_applicants_with_users: {
+        Args: Record<PropertyKey, never>;
+        Returns: {
+          applicant_id: string;
+          content: string;
+          id: string;
+          is_confirmed: boolean;
+          post_id: string;
+          is_accepted: boolean;
+          birthday: string;
+          gender: string;
+          nick_name: string;
+          profile_image_url: string;
+        }[];
+      };
     };
     Enums: {
       [_ in never]: never;
