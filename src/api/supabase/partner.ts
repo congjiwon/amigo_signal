@@ -1,4 +1,4 @@
-import { Tables, Inserts, TPartnerInsert, TPartnerUpdate } from './supabase';
+import { Inserts, TPartnerInsert, TPartnerReCommentsInsert, TPartnerReCommentsUpdate, TPartnerUpdate } from './supabase';
 import { supabase } from './supabaseClient';
 
 export const getPartnerPosts = async () => {
@@ -16,6 +16,13 @@ export const deletePartnerPost = async ({ postId }: { postId: string }) => {
   console.log('deletePost', error);
 };
 
+// 동행 댓글 가져오기(정렬)
+export const getPartnerComments = async () => {
+  let { data: partnerComments, error } = await supabase.from('partnerComments').select('*').order('date', { ascending: false });
+  // console.log('getPartnerComments');
+  return partnerComments;
+};
+
 export const updatePartnerPost = async (updatePost: any) => {
   const { data: updatedData, error } = await supabase.from('partnerPosts').update(updatePost).eq('id', updatePost.id);
   console.log('updatePost', error);
@@ -28,13 +35,52 @@ export const postPartnerComment = async (newPartnerComment: TPartnerInsert) => {
   console.log('error', error);
 };
 
-// 동행 댓글 가져오기(정렬)
-export const getPartnerComments = async () => {
-  let { data: partnerComments, error } = await supabase.from('partnerComments').select('*').order('date');
-  return partnerComments;
+// 동행 댓글 삭제
+export const deletePartnerComment = async (commentId: string) => {
+  const { error } = await supabase.from('partnerComments').delete().eq('id', commentId);
+  console.log('error', error);
 };
 
-export const getCommentId = async () => {
+// 동행 답댓글 삭제
+export const deletePartnerReComment = async (reCommentId: string) => {
+  const { error } = await supabase.from('reComments').delete().eq('id', reCommentId);
+  console.log('error', error);
+};
+
+// 동행 댓글 수정
+export const updatePartnerComments = async (updateComment: TPartnerUpdate) => {
+  // 수정할 댓글 ID = updateComment.id
+  const { data: updatedData, error } = await supabase.from('partnerComments').update(updateComment).eq('id', updateComment.id);
+  console.log('error', error);
+};
+
+// 동행 답댓글 가져오기
+export const getPartnerReComments = async () => {
+  let { data: rePartnerComments, error } = await supabase.from('reComments').select('*').order('date', { ascending: false });
+  return rePartnerComments;
+};
+
+// 동행 답댓글 작성
+export const postPartnerRecomment = async (newPartnerRecomment: TPartnerReCommentsInsert) => {
+  const { error } = await supabase.from('reComments').insert(newPartnerRecomment);
+};
+
+// 동행 답댓글 수정
+export const updatePartnerReComment = async (updateReComment: TPartnerReCommentsUpdate) => {
+  const { error } = await supabase.from('reComments').update(updateReComment).eq('id', updateReComment.id);
+};
+
+// 동행 답댓글 commentId로 쓸 partnerComments.id 찾기
+export const getFUser = async () => {
+  let { data: reComments, error } = await supabase.from('reComments').select(`
+  writerId,
+  users (
+    id, profileImageUrl, nickName
+  )`);
+};
+
+// 코멘트 ID 배열
+export const getCommentIds = async () => {
   let { data: commentId } = await supabase.from('partnerComments').select('id');
   return commentId;
 };
@@ -49,22 +95,31 @@ export const getPartnerPostId = async () => {
   return partnerPostId;
 };
 
-export const getWriterId = async () => {
+// 코멘트 작성자 ID 배열
+export const getWriterIds = async () => {
   let { data: writerId, error } = await supabase.from('partnerComments').select('writerId');
   return writerId;
 };
-getWriterId();
 
-// 동행 댓글 삭제
-export const deletePartnerComments = async (commentId: string) => {
-  const { error } = await supabase.from('partnerComments').delete().eq('id', commentId);
-  console.log('error', error);
+// 답댓글 작성자 ID 배열
+export const getReCommentWriterIds = async () => {
+  let { data: reCommentWriterId, error } = await supabase.from('reComments').select('writerId');
+  return reCommentWriterId;
 };
 
-export const updatePartnerComments = async (updateComment: TPartnerUpdate) => {
-  // 수정할 댓글 ID = updateComment.id
-  const { data: updatedData, error } = await supabase.from('partnerComments').update(updateComment).eq('id', updateComment.id);
-  console.log('error', error);
+// 테스트
+export const getUsers = async (userId: string) => {
+  const { data, error } = await supabase
+    .from('users') // 사용자 테이블 이름
+    .select('id, nickName, profileImageUrl') // 가져올 필드 목록
+    .eq('id', userId) // 필터 조건: id가 userId와 일치하는 경우
+    .single(); // 단일 결과를 가져오기
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
 };
 
 //동행 글 추가
@@ -122,9 +177,16 @@ export const getApplicantList = async (postId: string) => {
   return { data: applicantList, error };
 };
 
+// 동행 답댓글 가져오기dfasfd
+export const getReCommentData = async () => {
+  let { data: rePartnerComments, error } = await supabase.from('reComments').select('*, users!reComments_writerId_fkey(*)').order('date', { ascending: false });
+  return rePartnerComments;
+};
+
 // 신청자 목록 -> 수락 / 거절
 export const updateStatus = async (applicantId: string, isAccepted: boolean) => {
   const { data: updatedData, error } = await supabase.from('applicants').update({ isAccepted, isConfirmed: true }).eq('applicantId', applicantId);
+
   return { data: updatedData, error };
 };
 
@@ -142,6 +204,38 @@ export const getApplicantStatus = async (applicantId: string) => {
 export const getConfirmedApplicantList = async (postId: string) => {
   const { data: applicantList, error } = await supabase.from('applicants').select('*, users!applicants_applicantId_fkey(*)').eq('postId', postId).eq('isAccepted', true);
   return { data: applicantList, error };
+};
+
+// 내가 작성한 동행찾기 포스트 가져오기 (filterIsOpen 조건)
+type MyPartnerPostProps = {
+  userId: string | undefined;
+  filterIsOpen?: boolean | null;
+};
+
+export const getMyPartnerPosts = async ({ userId, filterIsOpen }: MyPartnerPostProps) => {
+  let partnerPosts = supabase.from('partnerPosts').select('*').eq('writerId', userId);
+
+  if (filterIsOpen === null) {
+    const { data: filteredPartnerPosts } = await partnerPosts;
+    return filteredPartnerPosts;
+  }
+
+  if (filterIsOpen === true) {
+    partnerPosts = partnerPosts.eq('isOpen', true);
+  }
+  if (filterIsOpen === false) {
+    partnerPosts = partnerPosts.eq('isOpen', false);
+  }
+
+  const { data: filteredPartnerPosts } = await partnerPosts;
+  return filteredPartnerPosts;
+};
+
+// 내가 지원한 포스트들
+export const getAppliedPosts = async (userId: string) => {
+  const { data: appliedPosts, error } = await supabase.from('applicants').select('*, postId (id, country, title)').eq('applicantId', userId).eq('isAccepted', true);
+
+  return appliedPosts;
 };
 
 // 모집중 <-> 모집완료 바꾸는 로직
