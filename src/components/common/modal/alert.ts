@@ -30,6 +30,16 @@ export const Alert = ({ title, position = 'center' }: AlertProps) => {
   });
 };
 
+export const AlertWarning = ({ title, position = 'center' }: AlertProps) => {
+  Swal.fire({
+    position,
+    icon: 'warning',
+    title,
+    showConfirmButton: false,
+    timer: 1000,
+  });
+};
+
 // alert창 (error) -> title과 text 바꿔서 재사용 가능
 export const AlertError = ({ title = '에러가 발생했습니다.', text = '다시 시도해 주세요!' }: AlertErrorProps) => {
   Swal.fire({
