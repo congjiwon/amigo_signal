@@ -24,6 +24,8 @@ export const PostCard = styled.div`
   height: 282px;
   /* padding: 24px; */
   /* padding-bottom: 15px; */
+  position: relative;
+
   border-radius: 20px;
   box-shadow: 5px 5px 10px 3px rgba(0, 0, 0, 0.2);
 `;
@@ -59,5 +61,30 @@ export const ContentBox = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
     padding-left: 20px;
+    margin-bottom: 17px;
   }
+`;
+
+export const CountryNameBox = styled.div`
+  display: flex;
+  height: 20px;
+  flex-direction: column;
+  justify-content: center;
+  background-color: aliceblue;
+  span {
+    padding: 6px 14px;
+    border-radius: 18px;
+    display: inline-block;
+  }
+`;
+
+export const Span = styled.span`
+  padding: 6px 14px;
+  border-radius: 18px;
+  display: inline-block;
+  font-size: 12px;
+  background-color: aliceblue;
+  position: absolute;
+  bottom: 110px;
+  left: 20px;
 `;
