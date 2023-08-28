@@ -48,7 +48,7 @@ export const deletePartnerReComment = async (reCommentId: string) => {
 };
 
 // 동행 댓글 수정
-export const updatePartnerComments = async (updateComment: TPartnerUpdate) => {
+export const updatePartnerComment = async (updateComment: TPartnerUpdate) => {
   // 수정할 댓글 ID = updateComment.id
   const { data: updatedData, error } = await supabase.from('partnerComments').update(updateComment).eq('id', updateComment.id);
   console.log('error', error);
@@ -56,7 +56,7 @@ export const updatePartnerComments = async (updateComment: TPartnerUpdate) => {
 
 // 동행 답댓글 가져오기
 export const getPartnerReComments = async () => {
-  let { data: rePartnerComments, error } = await supabase.from('reComments').select('*').order('date', { ascending: false });
+  let { data: rePartnerComments, error } = await supabase.from('reComments').select('*').order('date', { ascending: true });
   return rePartnerComments;
 };
 
@@ -70,24 +70,9 @@ export const updatePartnerReComment = async (updateReComment: TPartnerReComments
   const { error } = await supabase.from('reComments').update(updateReComment).eq('id', updateReComment.id);
 };
 
-// 동행 답댓글 commentId로 쓸 partnerComments.id 찾기
-export const getFUser = async () => {
-  let { data: reComments, error } = await supabase.from('reComments').select(`
-  writerId,
-  users (
-    id, profileImageUrl, nickName
-  )`);
-};
-
-// 코멘트 ID 배열
-export const getCommentIds = async () => {
-  let { data: commentId } = await supabase.from('partnerComments').select('id');
-  return commentId;
-};
-
-export const getCommentPostId = async () => {
-  let { data: commentPostId, error } = await supabase.from('partnerComments').select('postId');
-  return commentPostId;
+// 동행 답댓글 isUpdate 수정
+export const updateIsUpdate = async (reCommentId: string, isOpen: boolean) => {
+  const { error } = await supabase.from('reComments').update({ isUpdate: isOpen }).eq('id', reCommentId);
 };
 
 export const getPartnerPostId = async () => {
@@ -105,21 +90,6 @@ export const getWriterIds = async () => {
 export const getReCommentWriterIds = async () => {
   let { data: reCommentWriterId, error } = await supabase.from('reComments').select('writerId');
   return reCommentWriterId;
-};
-
-// 테스트
-export const getUsers = async (userId: string) => {
-  const { data, error } = await supabase
-    .from('users') // 사용자 테이블 이름
-    .select('id, nickName, profileImageUrl') // 가져올 필드 목록
-    .eq('id', userId) // 필터 조건: id가 userId와 일치하는 경우
-    .single(); // 단일 결과를 가져오기
-
-  if (error) {
-    throw error;
-  }
-
-  return data;
 };
 
 //동행 글 추가
@@ -177,10 +147,16 @@ export const getApplicantList = async (postId: string) => {
   return { data: applicantList, error };
 };
 
-// 동행 답댓글 가져오기dfasfd
+// 동행 답댓글 가져오기
 export const getReCommentData = async () => {
-  let { data: rePartnerComments, error } = await supabase.from('reComments').select('*, users!reComments_writerId_fkey(*)').order('date', { ascending: false });
+  let { data: rePartnerComments, error } = await supabase.from('reComments').select('*, users!reComments_writerId_fkey(*)').order('date', { ascending: true });
   return rePartnerComments;
+};
+
+// 동행 글 가져오기
+export const getPostData = async () => {
+  let { data: partnerComments, error } = await supabase.from('partnerComments').select('*, users!comments_writerId_fkey(*)');
+  return partnerComments;
 };
 
 // 신청자 목록 -> 수락 / 거절

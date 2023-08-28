@@ -1,9 +1,24 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import { styled } from 'styled-components';
-import { deletePartnerComment, deletePartnerReComment, getReCommentData, getReCommentWriterIds, getWriterIds, postPartnerRecomment, updatePartnerComments, updatePartnerReComment } from '../../../api/supabase/partner';
+import { getPartnerPost, getReCommentData, getReCommentWriterIds, getWriterIds } from '../../../api/supabase/partner';
 import { getAuthId, getUsers } from '../../../api/supabase/users';
+import { usePartnerComments } from '../../../hooks/usePartnerComment';
+import { BtnStyleType } from '../../../types/styleTypes';
+import useCurrentUserStore from '../../../zustand/currentUser';
+import { CommentButton } from '../../common/button/Button';
+import { ConfirmDelete } from '../../common/modal/alert';
+
+type allCommentsProps =
+  | {
+      content: string;
+      date: string;
+      id: string;
+      postId: string;
+      writerId: string;
+    }[]
+  | null;
 
 type CommentProps = {
   content: string;
@@ -14,15 +29,18 @@ type CommentProps = {
 };
 
 export type PartnerCommentListProps = {
+  allComments: allCommentsProps;
   comment: CommentProps | undefined;
   isLoginUser: boolean;
 };
 
-function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
+function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommentListProps) {
   // params : 게시글 ID
   const params = useParams();
+  const { postid } = useParams<string>();
   const queryClient = useQueryClient();
   const [isUpdate, setIsUpdate] = useState(false);
+  // const [updateComment, setUpdateComment] = useState(comment?.content);
   const [updateComment, setUpdateComment] = useState('');
   const [isReComment, setIsReComment] = useState(false);
   const [reContent, setReContent] = useState('');
@@ -30,36 +48,18 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
   const [updateReComment, setUpdateReComment] = useState('');
   const [reCommentId, setReCommentId] = useState('');
 
+  const { updateCommentMutation, deleteCommentMutation, postReCommentMutation, updateReCommentMutation, deleteReCommentMutation } = usePartnerComments();
+
+  const currentUser = useCurrentUserStore((state) => state.currentUser);
+
   const { isLoading, data: authId } = useQuery(['auth'], getAuthId);
+  const { data: partnerPost } = useQuery(['partnerPost', postid], () => getPartnerPost({ postId: postid as string }));
+  const postWriterId = partnerPost?.data?.writerId;
 
   const { data: allReCommentsData } = useQuery(['partnerReComments'], getReCommentData);
   // 답댓글 작성한 모든 유저 정보
   const reCommentUsers = allReCommentsData?.map((user) => {
     return user.users;
-  });
-
-  console.log(allReCommentsData);
-  // 댓글 수정
-  const mutation = useMutation(updatePartnerComments, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(['partnerComments']);
-    },
-  });
-
-  // 답댓글 수정
-  const reUpdateMutation = useMutation(updatePartnerReComment, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(['partnerReComments']);
-    },
-  });
-
-  // 답댓글 작성
-  const reCommentMutation = useMutation(postPartnerRecomment, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(['partnerReComments']);
-      setReContent('');
-      setIsReComment(false);
-    },
   });
 
   // 지원님 시간 가져옴.
@@ -87,7 +87,7 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
       id: comment?.id,
     };
 
-    await mutation.mutateAsync(newComment);
+    await updateCommentMutation.mutateAsync(newComment);
 
     setUpdateComment('');
     setIsUpdate(false);
@@ -102,9 +102,12 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
       writerId: authId,
       commentId: comment?.id,
       id: reCommentId,
+      isUpdate: false,
+      date: comment?.date,
+      currentDate: currentTime(),
     };
 
-    reUpdateMutation.mutate(newReComment);
+    updateReCommentMutation.mutate(newReComment);
 
     setUpdateReComment('');
     setIsUpdateReComment(false);
@@ -119,41 +122,39 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
       date: currentTime(),
       writerId: authId,
       commentId: comment!.id,
+      isUpdate: false,
+      currentDate: currentTime(),
     };
 
-    reCommentMutation.mutateAsync(reComment);
+    postReCommentMutation.mutateAsync(reComment);
+
+    setReContent('');
+    setIsReComment(false);
   };
 
-  // 댓글 수정 버튼
-  const handleUpdateBtn = () => {
-    setIsUpdate(true);
+  // 댓글 수정 버튼 여기로
+  const handleUpdateBtn = (id: string) => {
+    // setIsUpdate(true);
+    // const commentToEdit = allComments!.find((comment) => comment.id === id);
+    // if (commentToEdit) {
+    //   setUpdateComment(commentToEdit.content);
+    // }
   };
-
-  // 댓글 삭제
-  const delMutation = useMutation(deletePartnerComment, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(['partnerComments']);
-    },
-  });
-
-  // 답댓글 삭제
-  const delReMutation = useMutation(deletePartnerReComment, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(['partnerReComment']);
-    },
-  });
-
   // 답댓글 삭제 버튼 클릭
   const handleReDelBtn = async (id: string) => {
-    if (window.confirm('삭제하시겠습니까?')) {
-      await delReMutation.mutateAsync(id);
+    const isConfirmed = await ConfirmDelete('');
+
+    if (isConfirmed) {
+      await deleteReCommentMutation.mutateAsync(id);
     }
   };
 
   /// 댓글 삭제 버튼
   const handleDelBtn = async (id: string) => {
-    if (window.confirm('삭제하시겠습니까?')) {
-      await delMutation.mutateAsync(id);
+    const isConfirmed = await ConfirmDelete('');
+
+    if (isConfirmed) {
+      await deleteCommentMutation.mutateAsync(id);
     }
   };
 
@@ -173,13 +174,72 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
 
   // 답글쓰기 버튼
   const handleRecommentBtn = () => {
-    setIsReComment(true);
+    // setIsReComment(true);
   };
 
   // 답글 수정 버튼
-  const handleReUpdateBtn = (id: string) => {
-    setReCommentId(id);
-    setIsUpdateReComment(true);
+  const handleReUpdateBtn = async (id: string, isUpdate: boolean) => {
+    // const reCommentToEdit = allReCommentsData!.find((reComment) => reComment.id === id);
+    // // isUpdate = true;
+    // // setReCommentId(id);
+    // // setUpdateReComment(reCommentToEdit!.reContent);
+    // // isUpdate = true;
+    // // // console.log(isUpdate);
+    // if (reCommentToEdit) {
+    //   isUpdate = true;
+    //   setReCommentId(id); // 수정할 게시글 아이디 담아서 보내야함.
+    //   setUpdateReComment(reCommentToEdit.reContent); // 수정 클릭 시 초기값으로 원댓글 넣어줌.
+    //   setIsUpdateReComment(isUpdate);
+    // }
+  };
+
+  // textarea open 관리
+  const handleIsOpenBtn = (name: string, id: string | null, isUpdate: boolean | null) => {
+    // 답글쓰기 버튼
+    if (name === 'postReComment') {
+      setIsReComment(true);
+      setIsUpdate(false);
+      setIsUpdateReComment(false);
+      // 댓글 수정 버튼
+    } else if (name === 'updateComment') {
+      setIsUpdate(true);
+      setIsReComment(false);
+      setIsUpdateReComment(false);
+      const commentToEdit = allComments!.find((comment) => comment.id === id);
+
+      if (commentToEdit) {
+        setUpdateComment(commentToEdit.content);
+      }
+      // 답댓글 수정 버튼
+    } else if (name === 'updateReComment') {
+      const reCommentToEdit = allReCommentsData!.find((reComment) => reComment.id === id);
+      // isUpdate = true;
+      // setReCommentId(id);
+      // setUpdateReComment(reCommentToEdit!.reContent);
+      // isUpdate = true;
+      // // console.log(isUpdate);
+
+      if (reCommentToEdit) {
+        isUpdate = true;
+        setReCommentId(id!); // 수정할 게시글 아이디 담아서 보내야함.
+        setUpdateReComment(reCommentToEdit.reContent); // 수정 클릭 시 초기값으로 원댓글 넣어줌.
+        setIsUpdateReComment(true);
+        setIsUpdate(false);
+        setIsReComment(false);
+      }
+    }
+  };
+
+  // 취소버튼
+  const handleCancelBtn = (name: string, event: React.MouseEvent<HTMLButtonElement>) => {
+    if (name === 'reCommentUpdateCancelBtn') {
+      setIsUpdateReComment(false);
+    } else if (name === 'updateCancel') {
+      setIsUpdate(false);
+    } else if ('reCommentCancel') {
+      setReContent('');
+      setIsReComment(false);
+    }
   };
 
   {
@@ -189,98 +249,169 @@ function PartnerCommentList({ comment, isLoginUser }: PartnerCommentListProps) {
           {/* user : 댓글 작성자의 유저 ID, 닉네임, 프로필사진 배열 */}
           {user?.map((user) => {
             if (user.id === comment?.writerId) {
-              const isPostWriter = comment.writerId === user.id;
+              const isPostWriter = comment.writerId === postWriterId;
               return (
-                <div key={user.id}>
-                  <CommentTopBox>
-                    <div>
-                      <Img src={user && user.profileImageUrl!} />
-                    </div>
-                    <WriterContainerBox>
-                      {/* {isPostWriter && ( */}
-                      <WriterBox>
-                        <NickNameParagraph>{user.nickName}</NickNameParagraph>
-                        <WriterParagraph>작성자</WriterParagraph>
-                      </WriterBox>
-                      {/* )} */}
-                      <CommentBox>
-                        <CommentParagraph>{comment?.content}</CommentParagraph>
-                      </CommentBox>
-                    </WriterContainerBox>
-                  </CommentTopBox>
-                </div>
+                <CommentTopBox key={user.id}>
+                  <div>
+                    <Img src={user && user.profileImageUrl!} />
+                  </div>
+                  <WriterContainerBox>
+                    <WriterBox>
+                      <NickNameParagraph>{user.nickName}</NickNameParagraph>
+                      {isPostWriter && <WriterParagraph>작성자</WriterParagraph>}
+                    </WriterBox>
+                    <CommentBox>
+                      <CommentParagraph>{comment?.content}</CommentParagraph>
+                    </CommentBox>
+                  </WriterContainerBox>
+                </CommentTopBox>
               );
             }
           })}
-          {isLoginUser && (
+          {isLoginUser ? (
             <CommentBottomBox>
-              <DateBox>
-                <p>{comment?.date.substring(0, 10) + ' ' + comment?.date.substring(11, 16)}</p>
-              </DateBox>
-              <div>
-                <button onClick={handleUpdateBtn}>수정</button>
-              </div>
-              <div>
-                <button onClick={() => handleDelBtn(comment!.id)}>삭제</button>
-                <button onClick={handleRecommentBtn}>답글쓰기</button>
-                {isUpdate ? (
+              <DateButtonBox>
+                <DateBox>
+                  <DateParagraph>{comment?.date.substring(0, 10) + ' ' + comment?.date.substring(11, 16)}</DateParagraph>
+                </DateBox>
+                <div>
+                  <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('updateComment', comment!.id, isUpdate)}>
+                    수정
+                  </CommentButton>
+                </div>
+                <Bar>|</Bar>
+                <div>
+                  <CommentButton type="submit" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleDelBtn(comment!.id)}>
+                    삭제
+                  </CommentButton>
+                  <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('postReComment', comment!.id, isUpdate)}>
+                    답글쓰기
+                  </CommentButton>
+                </div>
+              </DateButtonBox>
+              {isUpdate && (
+                <div>
                   <form onSubmit={handleSubmitBtn}>
-                    <Input type="text" placeholder="댓글을 남겨보세요" value={updateComment} onChange={(event) => setUpdateComment(event.target.value)} required />
-                    <button type="submit" onClick={() => setIsUpdate(false)}>
-                      취소
-                    </button>
-                    <button type="submit">수정등록</button>
+                    <InputBox>
+                      <Textarea placeholder="댓글을 남겨보세요" value={updateComment} onChange={(event) => setUpdateComment(event.target.value)} />
+                      <CancelSubmitButtonBox>
+                        <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={(e) => handleCancelBtn('updateCancel', e)}>
+                          취소
+                        </CommentButton>
+                        <Bar>|</Bar>
+                        <CommentButton type="submit" disabled={updateComment.length < 1} styleType={BtnStyleType.BTN_ONLYFONT}>
+                          등록
+                        </CommentButton>
+                      </CancelSubmitButtonBox>
+                    </InputBox>
                   </form>
-                ) : (
-                  ''
-                )}
-              </div>
+                </div>
+              )}
+            </CommentBottomBox>
+          ) : (
+            ''
+          )}
+          {!isLoginUser && user ? (
+            <CommentBottomBox>
+              <DateButtonBox>
+                <DateBox>
+                  <DateParagraph>{comment?.date.substring(0, 10) + ' ' + comment?.date.substring(11, 16)}</DateParagraph>
+                </DateBox>{' '}
+                <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('postReComment', comment!.id, isUpdate)}>
+                  답글쓰기
+                </CommentButton>
+              </DateButtonBox>
+            </CommentBottomBox>
+          ) : (
+            ''
+          )}
+          {isReComment && (
+            <CommentBottomBox>
+              <form onSubmit={handleReCommentSubmit}>
+                <InputBox>
+                  <Textarea placeholder="댓글을 입력하세요" value={reContent} onChange={(event) => setReContent(event?.target.value)} />
+                  <CancelSubmitButtonBox>
+                    <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={(e) => handleCancelBtn('reCommentCancel', e)}>
+                      취소
+                    </CommentButton>
+                    <Bar>|</Bar>
+                    <CommentButton type="submit" disabled={reContent.length < 1} styleType={BtnStyleType.BTN_ONLYFONT}>
+                      등록
+                    </CommentButton>
+                  </CancelSubmitButtonBox>
+                </InputBox>
+              </form>
             </CommentBottomBox>
           )}
-          <div>
-            {!isLoginUser && <button onClick={handleRecommentBtn}>답글쓰기</button>}
-            {isReComment ? (
-              <form onSubmit={handleReCommentSubmit}>
-                <input type="text" placeholder="댓글을 입력하세요" value={reContent} onChange={(event) => setReContent(event?.target.value)} />
-                <button onClick={() => setIsReComment(false)}>취소</button>
-                <button type="submit">등록</button>
-              </form>
-            ) : (
-              ''
-            )}
-          </div>
         </PartnerCommentsBox>
         <PartnerReCommentsBox>
           {/* allReCommentsData : 모든 답댓글 정보(유저포함) */}
           {allReCommentsData?.map((reComment) => {
             if (reComment.commentId === comment?.id) {
+              const isPostWriter = reComment.writerId === postWriterId;
               const isLoginCommentUser = authId === reComment.writerId;
               return (
-                <UpdateReCommentBox key={reComment.id}>
-                  <Img src={reComment.users && reComment.users.profileImageUrl!} />
-                  <p>{reComment.users && reComment.users.nickName}</p>
-                  <p>{reComment.reContent}</p>
-                  <p>{comment?.date.substring(0, 10) + ' ' + comment?.date.substring(11, 16)}</p>
+                <ReCommentBox key={reComment.id}>
+                  <CommentTopBox>
+                    <div>
+                      <Img src={reComment.users && reComment.users.profileImageUrl!} />
+                    </div>
+                    <WriterContainerBox>
+                      <WriterBox>
+                        <NickNameParagraph>{reComment.users && reComment.users.nickName}</NickNameParagraph>
+                        {isPostWriter && <WriterParagraph>작성자</WriterParagraph>}
+                      </WriterBox>
+                      <CommentBox>
+                        <CommentParagraph>{reComment.reContent}</CommentParagraph>
+                      </CommentBox>
+                    </WriterContainerBox>
+                  </CommentTopBox>
                   {isLoginCommentUser && (
-                    <>
-                      <button onClick={() => handleReUpdateBtn(reComment.id)}>수정</button>
+                    <CommentBottomBox>
+                      <DateButtonBox>
+                        <DateBox>
+                          <DateParagraph>{reComment?.currentDate.substring(0, 10) + ' ' + reComment?.currentDate.substring(11, 16)}</DateParagraph>
+                        </DateBox>
+                        <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('updateReComment', reComment.id, reComment.isUpdate)}>
+                          수정
+                        </CommentButton>
+                        <Bar>|</Bar>
+                        {/* <button onClick={() => handleReUpdateBtn(reComment)}>수정</button> */}
+                        <CommentButton type="submit" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleReDelBtn(reComment.id)}>
+                          삭제
+                        </CommentButton>
+                      </DateButtonBox>
                       {/* 모든애들 인풋창 보이게되어있다. */}
                       {/* 테이블에 isopen 상태를 넣는게 좋다. 각각 코멘트에 속성 상태 넣는것도 쉬운 방법 */}
-                      {isUpdateReComment ? (
+                      {isUpdateReComment && (
                         <form onSubmit={handleReSubmitBtn}>
-                          <input type="text" placeholder="댓글을 남겨보세요" value={updateReComment} onChange={(event) => setUpdateReComment(event.target.value)} />
-                          <button type="submit" onClick={() => setIsUpdateReComment(false)}>
-                            취소
-                          </button>
-                          <button type="submit">수정등록</button>
+                          <InputBox>
+                            <Textarea placeholder="댓글을 남겨보세요" value={updateReComment} onChange={(event) => setUpdateReComment(event.target.value)} />
+                            <CancelSubmitButtonBox>
+                              <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={(e) => handleCancelBtn('reCommentUpdateCancelBtn', e)}>
+                                취소
+                              </CommentButton>
+                              <Bar>|</Bar>
+                              {/* <Button onClick={() => setIsUpdateReComment(false)}>취소</Button> */}
+                              <CommentButton type="submit" styleType={BtnStyleType.BTN_ONLYFONT} disabled={updateReComment.length < 1}>
+                                등록
+                              </CommentButton>
+                            </CancelSubmitButtonBox>
+                          </InputBox>
                         </form>
-                      ) : (
-                        ''
                       )}
-                      <button onClick={() => handleReDelBtn(reComment.id)}>삭제</button>
-                    </>
+                    </CommentBottomBox>
                   )}
-                </UpdateReCommentBox>
+                  {!isLoginCommentUser && (
+                    <CommentBottomBox>
+                      <DateButtonBox>
+                        <DateBox>
+                          <DateParagraph>{reComment?.currentDate.substring(0, 10) + ' ' + reComment?.currentDate.substring(11, 16)}</DateParagraph>
+                        </DateBox>
+                      </DateButtonBox>
+                    </CommentBottomBox>
+                  )}
+                </ReCommentBox>
               );
             }
           })}
@@ -297,7 +428,7 @@ const PartnerCommentsContainerBox = styled.div``;
 const PartnerCommentsBox = styled.div`
   margin-bottom: 24px;
 
-  border: 1px solid;
+  /* border: 1px solid; */
 `;
 
 const CommentTopBox = styled.div`
@@ -305,12 +436,17 @@ const CommentTopBox = styled.div`
 `;
 
 const WriterBox = styled.div`
+  align-items: center;
+
   display: flex;
+
+  margin-bottom: 6px;
 `;
 
 const NickNameParagraph = styled.p`
   margin-right: 12px;
-  margin-bottom: 6px;
+
+  font-weight: bold;
 `;
 
 const Img = styled.img`
@@ -328,25 +464,70 @@ const WriterContainerBox = styled.div`
 
 const CommentBox = styled.div`
   margin-bottom: 6px;
+
   /* margin-right: 12px; */
 `;
 
-const CommentParagraph = styled.p``;
+const CommentParagraph = styled.p`
+  white-space: pre-line;
+
+  line-height: 130%;
+`;
 
 const CommentBottomBox = styled.div`
   display: flex;
+  flex-direction: column;
 
   margin-left: 52px;
+`;
+
+const DateButtonBox = styled.div`
+  align-items: center;
+
+  display: flex;
+
+  margin-bottom: 24px;
 `;
 
 const DateBox = styled.div`
   margin-right: 12px;
 `;
 
-const Input = styled.input`
-  width: 1188px;
-  height: 100px;
+const DateParagraph = styled.p`
+  color: gray;
 `;
+
+const Bar = styled.p`
+  margin-bottom: 1px;
+  font-size: 12px;
+  color: gray;
+  /* letter-spacing: 6px; */
+`;
+
+const InputBox = styled.div`
+  position: relative;
+`;
+
+const Textarea = styled.textarea`
+  resize: none;
+
+  width: 1220px;
+  height: 100px;
+
+  border-radius: 15px;
+  border: 1px solid lightgray;
+`;
+
+const CancelSubmitButtonBox = styled.div`
+  position: absolute;
+  top: 62px;
+  right: 24px;
+
+  display: flex;
+  align-items: center;
+`;
+
+const Button = styled.button``;
 
 const WriterParagraph = styled.p`
   text-align: center;
@@ -361,17 +542,17 @@ const WriterParagraph = styled.p`
   border-radius: 30px;
 
   font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%;
+  /* font-style: normal; */
+  /* font-weight: 400; */
+  line-height: 170%;
 `;
 
-const UpdateReCommentBox = styled.div`
+const ReCommentBox = styled.div`
   margin-bottom: 24px;
   margin-left: 52px;
-  border: 1px solid;
+  /* border: 1px solid; */
 `;
 
 const PartnerReCommentsBox = styled.div`
-  border: 1px solid;
+  /* border: 1px solid; */
 `;
