@@ -60,12 +60,16 @@ export default function Header() {
           <>
             <span>{currentUser?.nickName}&nbsp;님</span>
             <Link to="/mypage">마이페이지</Link>
-            <button onClick={handleSignout}>로그아웃</button>
+            <Link to="/login" style={{ marginLeft: '20px' }} onClick={handleSignout}>
+              로그아웃
+            </Link>
           </>
         ) : (
           <>
             <Link to="/login">로그인</Link>
-            <Link to="/signup">회원가입</Link>
+            <Link to="/signup" style={{ marginLeft: '20px' }}>
+              회원가입
+            </Link>
           </>
         )}
       </St.Utils>

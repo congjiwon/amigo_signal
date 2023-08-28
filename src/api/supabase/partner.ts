@@ -94,15 +94,11 @@ export const getReCommentWriterIds = async () => {
 
 //동행 글 추가
 export const insertPost = async (dataToInsert: any) => {
-  try {
-    const { data, error } = await supabase.from('partnerPosts').insert(dataToInsert);
-    if (error) {
-      console.error('Insert error:', error);
-    } else {
-      console.log('Inserted data:', data);
-    }
-  } catch (error) {
-    console.error('Error:', error);
+  const { data, error } = await supabase.from('partnerPosts').insert(dataToInsert);
+  if (error) {
+    console.error('Insert error:', error);
+  } else {
+    console.log('Inserted data:', data);
   }
 };
 
@@ -228,6 +224,37 @@ export const getAppliedPosts = async ({ userId, filterIsAccepted }: AppliedPostP
 
   const { data: appliedPostsData } = await appliedPosts;
   return appliedPostsData;
+};
+
+//동행 메인 리스트 국가 + 기간별 필터... ㅇㅔ휴
+
+type filteredPostProps = {
+  country: string | undefined;
+  startDate: string | undefined;
+  endDate: string | undefined;
+};
+
+export const getFilteredPartnerPost = async ({ country, startDate, endDate }: filteredPostProps) => {
+  let partnerPosts = supabase.from('partnerPosts').select('*, users!partnerPosts_writerId_fkey(*)');
+  // let partnerPosts = supabase.from('partnerPosts').select('*');
+
+  if (country == undefined) {
+    partnerPosts = partnerPosts.gt('startDate', startDate).lt('endDate', endDate);
+    const { data: test } = await partnerPosts;
+    return test;
+  }
+
+  if (startDate == undefined || endDate == undefined) {
+    partnerPosts = partnerPosts.eq('country', country);
+    const { data: test } = await partnerPosts;
+    return test;
+  }
+
+  if (typeof country == 'string' && typeof endDate == 'string' && typeof startDate == 'string') {
+    partnerPosts = partnerPosts.eq('country', country).gt('startDate', startDate).lt('endDate', endDate);
+    const { data: test } = await partnerPosts;
+    return test;
+  }
 };
 
 // 모집중 <-> 모집완료 바꾸는 로직
