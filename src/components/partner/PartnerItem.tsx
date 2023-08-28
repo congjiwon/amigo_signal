@@ -1,11 +1,13 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Tables } from '../../api/supabase/supabase';
 import * as St from './style';
 import defaultProfileImage from '../../assets/imgs/users/default_profile_img.png';
 import classifyingAge from '../common/classifyingAge/classifyingAge';
 import Calender from '../../assets/imgs/partner/Calendar.svg';
+import { getConfirmedApplicantList, updatePostStatus } from '../../api/supabase/partner';
+import { useQuery } from '@tanstack/react-query';
 
 type PartnerItemProps = {
   post: Tables<'partnerPosts'>;
@@ -13,6 +15,8 @@ type PartnerItemProps = {
 
 const PartnerItem = ({ post }: PartnerItemProps) => {
   const [imageSrc, setImageSrc] = useState<string>('');
+
+  const { data: confirmedApplicants } = useQuery(['confirmedApplicants', post.id], () => getConfirmedApplicantList(post.id!));
 
   // 동행찾기 게시글작성할 때 선택한 country
   let filteredCountry = post.country;
@@ -42,6 +46,18 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
   // useEffect(() => {
   //   getFlagAndDisplayImage();
   // }, []);
+
+  useEffect(() => {
+    const currentDate = new Date();
+    if (post && confirmedApplicants) {
+      const endDate = new Date(post.endDate);
+      if (endDate < currentDate || confirmedApplicants.data!.length >= post.numOfPeople) {
+        updatePostStatus(post.id!, false);
+      } else if (endDate >= currentDate || confirmedApplicants.data!.length < post.numOfPeople) {
+        updatePostStatus(post.id!, true);
+      }
+    }
+  }, [post, confirmedApplicants]);
 
   return (
     <Link to={`detail/${post.id}`}>
