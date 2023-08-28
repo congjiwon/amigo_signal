@@ -56,7 +56,7 @@ export const updatePartnerComment = async (updateComment: TPartnerUpdate) => {
 
 // 동행 답댓글 가져오기
 export const getPartnerReComments = async () => {
-  let { data: rePartnerComments, error } = await supabase.from('reComments').select('*').order('date', { ascending: true });
+  let { data: rePartnerComments, error } = await supabase.from('reComments').select('*').order('date', { ascending: false });
   return rePartnerComments;
 };
 

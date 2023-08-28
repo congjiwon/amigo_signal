@@ -44,9 +44,9 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
     setImageSrc(imageUrl);
   };
 
-  // useEffect(() => {
-  //   getFlagAndDisplayImage();
-  // }, []);
+  useEffect(() => {
+    getFlagAndDisplayImage();
+  }, []);
 
   useEffect(() => {
     const currentDate = new Date();

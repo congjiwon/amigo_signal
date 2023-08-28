@@ -265,7 +265,6 @@ export interface Database {
       reComments: {
         Row: {
           commentId: string;
-          currentDate: string;
           date: string;
           id: string;
           isUpdate: boolean;
@@ -280,7 +279,6 @@ export interface Database {
         };
         Insert: {
           commentId?: string;
-          currentDate: string;
           date: string;
           id?: string;
           isUpdate: boolean;
@@ -289,7 +287,6 @@ export interface Database {
         };
         Update: {
           commentId?: string;
-          currentDate?: string;
           date?: string;
           id?: string;
           isUpdate?: boolean;
