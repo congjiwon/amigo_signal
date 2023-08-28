@@ -6,9 +6,11 @@ import LocationDropDown from '../../common/dropDown/LocationDropDown';
 import { PartnerDropDown } from '../../common/dropDown/DropDown';
 import PartnerCalendar from '../../common/calendar/PartnerCalendar';
 import Button from '../../common/button/Button';
+import { AlertWarning } from '../../common/modal/alert';
 import { insertPost } from '../../../api/supabase/partner';
 import { Tables } from '../../../api/supabase/supabase';
 import useSessionStore from '../../../zustand/store';
+import * as St from './style';
 
 function PartnerWriteTemplate() {
   const [location, setLocation] = useState<string[]>([]);
@@ -50,8 +52,8 @@ function PartnerWriteTemplate() {
       // 이미 추가된 태그를 클릭한 경우 제거
       setInterestUrl((prevInterestUrl) => prevInterestUrl.filter((url) => url !== imageUrl));
     } else if (interestUrl.length >= 3) {
-      // 3개 이상의 태그를 추가하려는 경우 알림
-      alert('태그는 3개까지');
+      // 3개 이상의 태그를 추가하려는 경우 return
+      return;
     } else {
       // 태그 추가
       setInterestUrl((prevInterestUrl) => [...prevInterestUrl, imageUrl]);
@@ -81,20 +83,20 @@ function PartnerWriteTemplate() {
 
   const validation = (): boolean => {
     if (location.length < 1) {
-      alert('지역입력');
+      AlertWarning({ title: '국가를 선택해주세요.', position: 'top' });
       return false;
     } else if (partnerDates.length < 1) {
-      alert('날짜입력');
+      AlertWarning({ title: '날짜를 선택해주세요.', position: 'top' });
       return false;
     } else if (title.length < 1) {
-      alert('제목입력');
+      AlertWarning({ title: '제목을 입력해주세요.', position: 'top' });
       return false;
     } else if (content.length < 1) {
-      alert('내용입력');
+      AlertWarning({ title: '내용을 입력해주세요.', position: 'top' });
       return false;
     }
     if (chatUrl.length >= 1 && !chatUrlValidation(chatUrl)) {
-      alert('올바른 오픈채팅 주소가 아닙니다.');
+      AlertWarning({ title: '오픈채팅 주소를 확인해주세요.', position: 'top' });
       return false;
     }
     return true;
@@ -127,68 +129,80 @@ function PartnerWriteTemplate() {
   };
 
   return (
-    <>
-      <form>
-        <LocationDropDown setLocation={setLocation} />
-        <br />
-        <PartnerCalendar setPartnerDates={setPartnerDates} />
-        <br />
-        <PartnerDropDown setPartner={setPartner} />
-        <span>오픈채팅 주소</span>
-        <input
-          value={chatUrl}
-          onChange={(event) => {
-            setChatUrl(event.target.value);
-          }}
-          placeholder="오픈채팅방 주소를 입력해주세요"
-        ></input>
-        <br />
-        <span>제목</span>
-        <input
+    <St.FormContainer>
+      <St.WriteForm>
+        <St.SelectListBox>
+          <St.ExplanationBox>
+            <p>국가 선택</p>
+            <LocationDropDown setLocation={setLocation} />
+          </St.ExplanationBox>
+          <St.ExplanationBox>
+            <p>날짜 선택</p>
+            <PartnerCalendar setPartnerDates={setPartnerDates} />
+          </St.ExplanationBox>
+          <St.ExplanationBox>
+            <p>모집인원 선택</p>
+            <PartnerDropDown setPartner={setPartner} />
+          </St.ExplanationBox>
+        </St.SelectListBox>
+        <St.WriteInput
           value={title}
           onChange={(event) => {
             setTitle(event.target.value);
           }}
           placeholder="원활한 동료찾기를 위해 지역명을 함께 입력해주세요"
-        ></input>
-        <br />
-        <textarea
+        ></St.WriteInput>
+        <St.TextArea
           value={content}
           onChange={(event) => {
             setContent(event.target.value);
           }}
-          rows={10}
-          cols={100}
-          placeholder="1. 현재 동행이 있나요? &#13;&#10;2. 어떤 동행을 찾고 있나요? &#13;&#10;3. 원하는 여행 코스가 있다면 적어주세요 "
-        ></textarea>
-        <br />
-        <span>태그선택</span>
-        {interestTagList &&
-          interestTagList.map((item) => {
-            return (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => handleInterestClick(item.imageUrl as string)}
-                style={{
-                  margin: '20px',
-                  backgroundColor: interestUrl.includes(item.imageUrl as string) ? 'lightblue' : 'white',
-                }}
-              >
-                <p>{item.content}</p>
-              </button>
-            );
-          })}
-        <br />
-        <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={handleWriteClick}>
-          작성하기
-        </Button>
-        <Button type="button" styleType={BtnStyleType.BTN_DARK}>
-          취소하기
-        </Button>
-      </form>
+          placeholder="1. 현제 동행이 있나요? &#13;&#10;2. 어떤 동행을 찾고 있나요? &#13;&#10;3. 원하는 여행 코스가 있다면 적어주세요  "
+        ></St.TextArea>
+        <St.ExplanationBox>
+          <p>오픈채팅 주소</p>
+          <St.WriteInput
+            value={chatUrl}
+            onChange={(event) => {
+              setChatUrl(event.target.value);
+            }}
+            placeholder="오픈채팅방 주소를 입력해주세요"
+          ></St.WriteInput>
+        </St.ExplanationBox>
+        <St.ExplanationBox>
+          <p>태그 선택 (최대 3개까지 선택가능)</p>
+          <St.TegBox>
+            {interestTagList &&
+              interestTagList.map((item) => {
+                return (
+                  <St.TegButton
+                    key={item.id}
+                    type="button"
+                    onClick={() => handleInterestClick(item.imageUrl as string)}
+                    style={{
+                      backgroundColor: interestUrl.includes(item.imageUrl as string) ? 'lightblue' : 'white',
+                    }}
+                  >
+                    <St.TegImgBox>
+                      <St.TegImg src={item.imageUrl!} />
+                    </St.TegImgBox>
+                    <span>{item.content}</span>
+                  </St.TegButton>
+                );
+              })}
+          </St.TegBox>
+        </St.ExplanationBox>
+        <St.ButtonBox>
+          <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={() => navigate('/partner')}>
+            취소하기
+          </Button>
+          <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={handleWriteClick}>
+            작성하기
+          </Button>
+        </St.ButtonBox>
+      </St.WriteForm>
       {loading && <p>로딩중</p>}
-    </>
+    </St.FormContainer>
   );
 }
 

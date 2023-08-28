@@ -22,7 +22,7 @@ export function PartnerDropDown({ setPartner }: PartnerProps) {
     <Space wrap>
       <Select
         placeholder="모집인원"
-        style={{ width: 140 }}
+        style={{ width: '100%' }}
         onChange={handleChange}
         options={[
           { value: '1', label: '1명' },
@@ -49,7 +49,7 @@ export function StarDropDown({ setStar }: StarProps) {
     <Space wrap>
       <Select
         defaultValue="⭐⭐⭐⭐⭐"
-        style={{ width: 140 }}
+        style={{ width: '100%' }}
         onChange={handleChange}
         options={[
           { value: '5', label: '⭐⭐⭐⭐⭐' },
