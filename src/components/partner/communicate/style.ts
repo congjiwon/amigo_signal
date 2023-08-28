@@ -14,14 +14,6 @@ export const ApplyDiv = styled.div`
   gap: 10px;
 `;
 
-export const ApplyStatus = styled.div`
-  padding: 5px;
-  background-color: #ffb67c;
-  border: 1px solid gray;
-  border-radius: 20px;
-  font-size: 12px;
-`;
-
 export const ModalTitle = styled.h1`
   padding-left: 50px;
   font-size: 1.4rem;
