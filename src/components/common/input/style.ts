@@ -23,9 +23,10 @@ const baseStyles = css<BaseStylesProps>`
         `;
       case 'auth':
         return css`
-          width: 350px;
-          height: 15px;
-          padding: 7px 10px;
+          width: 100%;
+          height: 36px;
+          padding: 9px 20px;
+          box-sizing: border-box;
         `;
       case 'search':
         return css`
@@ -62,7 +63,8 @@ const baseStyles = css<BaseStylesProps>`
   ${(props) =>
     props.border
       ? css`
-          border: 1px solid gray;
+          border: 1px solid #e8ebee;
+          border-radius: 10px;
         `
       : css`
           border: none;

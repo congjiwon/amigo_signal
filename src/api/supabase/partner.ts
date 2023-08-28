@@ -232,10 +232,26 @@ export const getMyPartnerPosts = async ({ userId, filterIsOpen }: MyPartnerPostP
 };
 
 // 내가 지원한 포스트들
-export const getAppliedPosts = async (userId: string) => {
-  const { data: appliedPosts, error } = await supabase.from('applicants').select('*, postId (id, country, title)').eq('applicantId', userId).eq('isAccepted', true);
+type AppliedPostProps = {
+  userId: string | undefined;
+  filterIsAccepted?: boolean | null;
+};
 
-  return appliedPosts;
+export const getAppliedPosts = async ({ userId, filterIsAccepted }: AppliedPostProps) => {
+  let appliedPosts = supabase.from('applicants').select('*, postId (*)').eq('applicantId', userId);
+
+  if (filterIsAccepted === null) {
+    appliedPosts = appliedPosts.is('isAccepted', null);
+  }
+  if (filterIsAccepted === true) {
+    appliedPosts = appliedPosts.is('isAccepted', true);
+  }
+  if (filterIsAccepted === false) {
+    appliedPosts = appliedPosts.is('isAccepted', false);
+  }
+
+  const { data: appliedPostsData } = await appliedPosts;
+  return appliedPostsData;
 };
 
 // 모집중 <-> 모집완료 바꾸는 로직
