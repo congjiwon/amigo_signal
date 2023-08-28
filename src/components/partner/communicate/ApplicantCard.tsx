@@ -1,12 +1,12 @@
-import { Tables } from '../../../api/supabase/supabase';
-import * as St from './style';
-import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
-import classifyingAge from '../../common/classifyingAge/classifyingAge';
-import { getApplicantStatus, getConfirmedApplicantList, updateStatus, getNumOfPeople } from '../../../api/supabase/partner';
-import { useEffect, useState } from 'react';
-import { ConfirmCustom } from '../../common/modal/alert';
-import { useConfirmedListStore, useStateStore } from '../../../zustand/communicate';
 import { useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+import { getApplicantStatus, getConfirmedApplicantList, getNumOfPeople, updateStatus } from '../../../api/supabase/partner';
+import { Tables } from '../../../api/supabase/supabase';
+import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
+import { useConfirmedListStore, useStateStore } from '../../../zustand/communicate';
+import classifyingAge from '../../common/classifyingAge/classifyingAge';
+import { ConfirmCustom } from '../../common/modal/alert';
+import * as St from './style';
 
 type ApplicantCardProps = {
   data: Tables<'applicants'>;
@@ -23,8 +23,8 @@ const ApplicantCard = ({ data, onClick, isSelected, removeConfirmedApplicant }: 
   const { setApplicantStatus } = useStateStore();
   const { addConfirmedApplicant } = useConfirmedListStore();
 
-  const { data: confirmedApplicants } = useQuery(['confirmedApplicants', data.postId], () => getConfirmedApplicantList(data.postId!));
-  const { data: getNumberOfPeople } = useQuery(['numOfPeople', data.postId], () => getNumOfPeople(data.postId));
+  const { data: confirmedApplicants } = useQuery(['confirmedApplicants', data.postId], () => getConfirmedApplicantList(data.postId!.id));
+  const { data: getNumberOfPeople } = useQuery(['numOfPeople', data.postId], () => getNumOfPeople(data.postId.id));
 
   const confirmedLength = confirmedApplicants?.data?.length || 0;
   const numOfPeople = getNumberOfPeople?.[0]?.numOfPeople || 0;
