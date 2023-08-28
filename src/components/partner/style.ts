@@ -55,24 +55,12 @@ export const Grid = styled.div`
 `;
 
 export const PostCard = styled.div`
+  width: 210px;
+  height: 210px;
   padding: 20px;
   padding-bottom: 15px;
   border-radius: 20px;
   box-shadow: 5px 5px 10px 3px rgba(0, 0, 0, 0.2);
-`;
-
-export const Head = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-export const Status = styled.p<StatusProps>`
-  padding: 5px;
-  background-color: ${(props) => (props.isOpen ? '#FF7000' : '#994504')};
-  border-radius: 30px;
-  font-size: 0.7rem;
-  color: ${(props) => (props.isOpen ? '#000000' : '#ffffff')};
 `;
 
 export const Location = styled.div`
@@ -106,11 +94,31 @@ export const Main = styled.div`
   }
 `;
 
+export const TravelDate = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  p {
+    margin-top: 3px;
+  }
+`;
+
+export const TitleBox = styled.div`
+  width: 200px;
+  margin-bottom: 10px;
+  h1 {
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+`;
+
 export const Body = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  gap: 5px;
   margin-top: 15px;
+  padding-bottom: 10px;
   border-bottom: 1px solid #d9d9d9;
   p {
     padding: 7px;
@@ -118,6 +126,16 @@ export const Body = styled.div`
     border-radius: 30px;
     font-size: 0.7rem;
   }
+`;
+
+export const Status = styled.div<StatusProps>`
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  background-color: ${(props) => (props.isOpen ? '#FF7000' : '#994504')};
+  border-radius: 30px;
+  font-size: 0.7rem;
+  color: ${(props) => (props.isOpen ? '#000000' : '#ffffff')};
 `;
 
 export const InterestImage = styled.img`
