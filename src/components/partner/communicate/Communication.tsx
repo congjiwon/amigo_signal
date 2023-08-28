@@ -1,7 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { checkApply, deleteApplicant, isPostOpen } from '../../../api/supabase/partner';
+import { checkApply, deleteApplicant, getApplicantList, isPostOpen } from '../../../api/supabase/partner';
+import { Tables } from '../../../api/supabase/supabase';
+import { BtnStyleType } from '../../../types/styleTypes';
 import { useModalStore } from '../../../zustand/store';
+import Button from '../../common/button/Button';
 import Modal from '../../common/modal/Modal';
 import { Alert, ConfirmCancel } from '../../common/modal/alert';
 import ApplicantList from './ApplicantList';
@@ -19,6 +22,7 @@ const Communication = ({ postId, writerId, logInUserId }: CommunicationProps) =>
 
   const [isApply, setIsApply] = useState<boolean | null>(null);
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
+  const [applicantList, setApplicantList] = useState<Tables<'applicants'>[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,6 +40,22 @@ const Communication = ({ postId, writerId, logInUserId }: CommunicationProps) =>
     };
     fetchData();
   }, [postId, logInUserId]);
+
+  // 신청자 목록에 수락/거절하지 않은 신청자가 존재하는지 확인
+  useEffect(() => {
+    const fetchApplicant = async () => {
+      if (!postId) return;
+      const { data, error } = await getApplicantList(postId);
+      if (error || !data) {
+        console.error('신청자 목록을 가져오는 과정에서 error 발생', error);
+        setApplicantList([]);
+      } else {
+        setApplicantList(data);
+      }
+    };
+    fetchApplicant();
+  }, [postId]);
+  const hasApplicants = applicantList && applicantList.length > 0;
 
   // 모집 완료 시 참여하기 버튼 보이지 않도록 조건 추가
   const { data: isPartnerPostsOpen } = useQuery<{ data: { isOpen: boolean } | null }>(['postOpenStatus', postId], () => isPostOpen(postId!));
@@ -67,9 +87,22 @@ const Communication = ({ postId, writerId, logInUserId }: CommunicationProps) =>
   return (
     <div>
       {writerId !== logInUserId ? (
-        <St.ApplyDiv>{isConfirmed || !isThisPostOpen ? <></> : <button onClick={isApply ? handleApplyCancel : handleApply}>{isApply ? '참여 취소' : '참여하기'}</button>}</St.ApplyDiv>
+        <St.ApplyDiv>
+          {isConfirmed || !isThisPostOpen ? (
+            <></>
+          ) : (
+            <Button styleType={BtnStyleType.BTN_DARK} onClick={isApply ? handleApplyCancel : handleApply}>
+              {isApply ? '참여 취소' : '참여하기'}
+            </Button>
+          )}
+        </St.ApplyDiv>
       ) : (
-        <button onClick={() => openModal('applicantList')}>동행 신청자 목록</button>
+        <>
+          <Button styleType={BtnStyleType.BTN_DARK} onClick={() => openModal('applicantList')}>
+            동행 신청자 목록
+          </Button>
+          {hasApplicants ? <St.NewApplicantAlert>새로운 동행 신청이 있습니다.</St.NewApplicantAlert> : <></>}
+        </>
       )}
 
       {openedModals.applyWithInfo && (
