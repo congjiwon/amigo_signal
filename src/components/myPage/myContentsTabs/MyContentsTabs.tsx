@@ -5,6 +5,7 @@ import Profile from '../profile/Profile';
 interface Tab {
   label: string;
   content: React.ReactNode;
+  iconUrl: string;
 }
 
 interface TabsProps {
@@ -20,7 +21,8 @@ const MyContentsTabs: React.FC<TabsProps> = ({ tabs }) => {
         <Profile />
         {tabs.map((tab, index) => (
           <St.MyContentsTab key={index} className={index === activeTab ? 'active' : ''} onClick={() => setActiveTab(index)}>
-            {tab.label}
+            <img src={tab.iconUrl} alt="" />
+            <span>{tab.label}</span>
           </St.MyContentsTab>
         ))}
       </St.MyContentsLeftBox>
