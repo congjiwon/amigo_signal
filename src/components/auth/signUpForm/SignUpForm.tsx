@@ -110,7 +110,7 @@ export default function SignUpForm() {
           let msg = '';
           let currentStatus = false;
           if (!validateValue(name, value)) {
-            msg = '영문 대/소문자 + 숫자 + 특수문자(~?!@#$%^&*_-)가 포함 8자이상 15자이하';
+            msg = '영문 대/소문자 + 숫자 + 특수문자(~?!@#$%^&*_-) 포함 8자이상 15자이하';
             currentStatus = false;
           } else {
             msg = '사용가능한 비밀번호입니다.';
@@ -227,72 +227,82 @@ export default function SignUpForm() {
         return;
     }
   };
-  return (
-    <St.FormWrapper>
-      <St.FormTitle>회원가입</St.FormTitle>
-      <form onSubmit={signUpFn}>
-        <St.FormRow>
-          <div>
-            <label htmlFor="email">이메일</label>
-            <Input id="email" name="email" type="email" value={newUser.email} inputStyleType="auth" placeholder="이메일을 입력해주세요." border={false} onChange={onChangeInput} />
-          </div>
-          <St.ValidationMsgBox $validationStatusColor={validationStatus.emailStatus}>{validationMsg.emailMsg}</St.ValidationMsgBox>
-        </St.FormRow>
-        <St.FormRow>
-          <div>
-            <label htmlFor="nickName">닉네임</label>
-            <Input id="nickName" name="nickName" type="text" value={newUser.nickName} inputStyleType="auth" placeholder="닉네임을 입력해주세요." border={false} onChange={onChangeInput} />
-          </div>
-          <St.ValidationMsgBox $validationStatusColor={validationStatus.nickNameStatus}>{validationMsg.nickNameMsg}</St.ValidationMsgBox>
-        </St.FormRow>
-        <St.FormRow>
-          <div>
-            <label htmlFor="password">비밀번호</label>
-            <Input id="password" name="password" type="password" value={newUser.password} inputStyleType="auth" placeholder="비밀번호를 입력해주세요." border={false} onChange={onChangeInput} />
-          </div>
-          <St.ValidationMsgBox $validationStatusColor={validationStatus.passwordStatus}>{validationMsg.pwasswordMsg}</St.ValidationMsgBox>
-        </St.FormRow>
-        <St.FormRow>
-          <div>
-            <label htmlFor="passwordConfirm">비밀번호 확인</label>
-            <Input id="passwordConfirm" name="passwordConfirm" type="password" value={newUser.passwordConfirm} inputStyleType="auth" placeholder="비밀번호를 입력해주세요." border={false} onChange={onChangeInput} />
-          </div>
-          <St.ValidationMsgBox $validationStatusColor={validationStatus.passwordConfirmStatus}>{validationMsg.passwordConfirmMsg}</St.ValidationMsgBox>
-        </St.FormRow>
-        <St.FormRow>
-          <label htmlFor="">생년월일</label>
-          <div onFocus={() => setReadyBirthday(true)}>
-            <BirthdaySelect />
-          </div>
-          <St.ValidationMsgBox $validationStatusColor={validationStatus.birthdayStatus}>{validationMsg.birthdayMsg}</St.ValidationMsgBox>
-        </St.FormRow>
-        <St.FormRow>
-          <St.GenderRow>
-            <span>성별</span>
-            <div>
-              <label htmlFor="female">
-                여성
-                <input id="female" type="radio" name="gender" value="여성" checked={newUser.gender === '여성'} onChange={onChangeInput} />
-              </label>
-            </div>
-            <div>
-              <label htmlFor="male">
-                남성
-                <input id="male" type="radio" name="gender" value="남성" checked={newUser.gender === '남성'} onChange={onChangeInput} />
-              </label>
-            </div>
-          </St.GenderRow>
-        </St.FormRow>
 
-        <div>
-          <Button styleType={BtnStyleType.BTN_PRIMARY} onClick={() => navigate('/')}>
-            홈으로
-          </Button>
-          <Button type="submit" styleType={BtnStyleType.BTN_SUBMIT} disabled={btnSubmitStatus}>
-            가입하기
-          </Button>
-        </div>
-      </form>
-    </St.FormWrapper>
+  return (
+    <St.SignUpSection>
+      <St.SignUpLayout>
+        <form onSubmit={signUpFn}>
+          <St.SignUpInputsBox>
+            <St.SignUpTitle>회원가입</St.SignUpTitle>
+            <St.FormRow>
+              <div>
+                <label htmlFor="email" className="label-text">
+                  이메일
+                </label>
+                <Input id="email" name="email" type="email" value={newUser.email} inputStyleType="auth" placeholder="이메일을 입력해주세요." border={true} onChange={onChangeInput} />
+              </div>
+              <St.ValidationMsgBox $validationStatusColor={validationStatus.emailStatus}>{validationMsg.emailMsg}</St.ValidationMsgBox>
+            </St.FormRow>
+            <St.FormRow>
+              <div>
+                <label htmlFor="password" className="label-text">
+                  비밀번호
+                </label>
+                <Input id="password" name="password" type="password" value={newUser.password} inputStyleType="auth" placeholder="비밀번호를 입력해주세요." border={true} onChange={onChangeInput} />
+              </div>
+              <St.ValidationMsgBox $validationStatusColor={validationStatus.passwordStatus}>{validationMsg.pwasswordMsg}</St.ValidationMsgBox>
+            </St.FormRow>
+            <St.FormRow>
+              <div>
+                <label htmlFor="passwordConfirm" className="label-text">
+                  비밀번호 재확인
+                </label>
+                <Input id="passwordConfirm" name="passwordConfirm" type="password" value={newUser.passwordConfirm} inputStyleType="auth" placeholder="비밀번호를 입력해주세요." border={true} onChange={onChangeInput} />
+              </div>
+              <St.ValidationMsgBox $validationStatusColor={validationStatus.passwordConfirmStatus}>{validationMsg.passwordConfirmMsg}</St.ValidationMsgBox>
+            </St.FormRow>
+            <St.FormRow>
+              <div>
+                <label htmlFor="nickName" className="label-text">
+                  닉네임
+                </label>
+                <Input id="nickName" name="nickName" type="text" value={newUser.nickName} inputStyleType="auth" placeholder="닉네임을 입력해주세요." border={true} onChange={onChangeInput} />
+              </div>
+              <St.ValidationMsgBox $validationStatusColor={validationStatus.nickNameStatus}>{validationMsg.nickNameMsg}</St.ValidationMsgBox>
+            </St.FormRow>
+            <St.FormRow>
+              <St.GenderRow>
+                <span className="label-text">성별</span>
+                <div className="gender-inputs">
+                  <div>
+                    <input id="female" type="radio" name="gender" value="여성" checked={newUser.gender === '여성'} onChange={onChangeInput} />
+                    <label htmlFor="female">여자</label>
+                  </div>
+                  <div>
+                    <input id="male" type="radio" name="gender" value="남성" checked={newUser.gender === '남성'} onChange={onChangeInput} />
+                    <label htmlFor="male">남자</label>
+                  </div>
+                </div>
+              </St.GenderRow>
+            </St.FormRow>
+            <St.FormRow>
+              <label htmlFor="" className="label-text">
+                생년월일
+              </label>
+              <div onFocus={() => setReadyBirthday(true)}>
+                <BirthdaySelect />
+              </div>
+              <St.ValidationMsgBox $validationStatusColor={validationStatus.birthdayStatus}>{validationMsg.birthdayMsg}</St.ValidationMsgBox>
+            </St.FormRow>
+          </St.SignUpInputsBox>
+
+          <St.BtnSignUpBox>
+            <button type="submit" disabled={btnSubmitStatus}>
+              가입하기
+            </button>
+          </St.BtnSignUpBox>
+        </form>
+      </St.SignUpLayout>
+    </St.SignUpSection>
   );
 }
