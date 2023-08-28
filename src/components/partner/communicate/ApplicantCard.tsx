@@ -1,6 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
-import { getApplicantStatus, getConfirmedApplicantList, getNumOfPeople, updateStatus } from '../../../api/supabase/partner';
+import { useState } from 'react';
+import { updateStatus } from '../../../api/supabase/partner';
 import { Tables } from '../../../api/supabase/supabase';
 import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import { useConfirmedListStore, useStateStore } from '../../../zustand/communicate';
@@ -24,11 +23,11 @@ const ApplicantCard = ({ data, onClick, isSelected, removeConfirmedApplicant }: 
   const { setApplicantStatus } = useStateStore();
   const { addConfirmedApplicant } = useConfirmedListStore();
 
-  const { data: confirmedApplicants } = useQuery(['confirmedApplicants', data.postId], () => getConfirmedApplicantList(data.postId!.id));
-  const { data: getNumberOfPeople } = useQuery(['numOfPeople', data.postId], () => getNumOfPeople(data.postId.id));
+  // const { data: confirmedApplicants } = useQuery(['confirmedApplicants', data.postId], () => getConfirmedApplicantList(data.postId!.id));
+  // const { data: getNumberOfPeople } = useQuery(['numOfPeople', data.postId], () => getNumOfPeople(data.postId.id));
 
-  const confirmedLength = confirmedApplicants?.data?.length || 0;
-  const numOfPeople = getNumberOfPeople?.[0]?.numOfPeople || 0;
+  // const confirmedLength = confirmedApplicants?.data?.length || 0;
+  // const numOfPeople = getNumberOfPeople?.[0]?.numOfPeople || 0;
 
   // useEffect(() => {
   //   const fetchApplicantStatus = async () => {
