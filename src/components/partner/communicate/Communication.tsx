@@ -1,11 +1,12 @@
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import * as St from './style';
+import { checkApply, deleteApplicant, isPostOpen } from '../../../api/supabase/partner';
 import { useModalStore } from '../../../zustand/store';
 import Modal from '../../common/modal/Modal';
+import { Alert, ConfirmCancel } from '../../common/modal/alert';
 import ApplicantList from './ApplicantList';
 import ApplyWithInfo from './ApplyWithInfo';
-import { checkApply, deleteApplicant } from '../../../api/supabase/partner';
-import { Alert, ConfirmCancel } from '../../common/modal/alert';
+import * as St from './style';
 
 type CommunicationProps = {
   postId: string | undefined;
@@ -36,6 +37,10 @@ const Communication = ({ postId, writerId, logInUserId }: CommunicationProps) =>
     fetchData();
   }, [postId, logInUserId]);
 
+  // 모집 완료 시 참여하기 버튼 보이지 않도록 조건 추가
+  const { data: isPartnerPostsOpen } = useQuery<{ data: { isOpen: boolean } | null }>(['postOpenStatus', postId], () => isPostOpen(postId!));
+  const isThisPostOpen = isPartnerPostsOpen?.data?.isOpen;
+
   const handleApplyCancel = async () => {
     if (!postId || !logInUserId) {
       console.error('postId 또는 applicantId 유효하지 않습니다.');
@@ -62,15 +67,17 @@ const Communication = ({ postId, writerId, logInUserId }: CommunicationProps) =>
   return (
     <div>
       {writerId !== logInUserId ? (
-        <St.ApplyDiv>{isConfirmed ? <></> : <button onClick={isApply ? handleApplyCancel : handleApply}>{isApply ? '참여 취소' : '참여하기'}</button>}</St.ApplyDiv>
+        <St.ApplyDiv>{isConfirmed || !isThisPostOpen ? <></> : <button onClick={isApply ? handleApplyCancel : handleApply}>{isApply ? '참여 취소' : '참여하기'}</button>}</St.ApplyDiv>
       ) : (
         <button onClick={() => openModal('applicantList')}>동행 신청자 목록</button>
       )}
+
       {openedModals.applyWithInfo && (
         <Modal id="applyWithInfo" size="medium">
           <ApplyWithInfo postId={postId} applicantId={logInUserId} setIsApply={setIsApply} />
         </Modal>
       )}
+
       {openedModals.applicantList && (
         <Modal id="applicantList" size="large">
           <ApplicantList postId={postId} />
