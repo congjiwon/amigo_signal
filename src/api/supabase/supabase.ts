@@ -354,7 +354,8 @@ export interface Database {
           content: string;
           createdAt: string;
           id: string;
-          location: number;
+          region: string;
+          country: string;
           postImageUrl: string[] | null;
           starRate: number;
           title: string;
@@ -366,7 +367,8 @@ export interface Database {
           content?: string;
           createdAt?: string;
           id?: string;
-          location: number;
+          region: string;
+          country: string;
           postImageUrl?: string[] | null;
           starRate: number;
           title?: string;
@@ -378,7 +380,8 @@ export interface Database {
           content?: string;
           createdAt?: string;
           id?: string;
-          location?: number;
+          region: string;
+          country: string;
           postImageUrl?: string[] | null;
           starRate?: number;
           title?: string;
@@ -386,12 +389,6 @@ export interface Database {
           writerId?: string;
         };
         Relationships: [
-          {
-            foreignKeyName: 'spotPosts_location_fkey';
-            columns: ['location'];
-            referencedRelation: 'location';
-            referencedColumns: ['id'];
-          },
           {
             foreignKeyName: 'spotPosts_writerId_fkey';
             columns: ['writerId'];

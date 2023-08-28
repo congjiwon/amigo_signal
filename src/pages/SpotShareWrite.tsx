@@ -1,11 +1,10 @@
-import React from 'react';
-import SpotCalendar from '../components/common/calendar/SpotCalendar';
+import SpotShareUpdate from '../components/spotShare/spotShareUpdate/SpotShareUpdate';
 
 function SpotShareWrite() {
   return (
     <div>
       SpotShareWrite
-      <SpotCalendar />
+      <SpotShareUpdate />
     </div>
   );
 }
