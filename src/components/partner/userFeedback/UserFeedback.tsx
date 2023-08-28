@@ -23,6 +23,8 @@ const UserFeedback = ({ id, createdAt, writerId, openChat }: Props) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+  const storagaUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
+
   //북마크
   const bookmarkCheck = async (logInUserId: string, postId: string) => {
     try {
@@ -94,7 +96,7 @@ const UserFeedback = ({ id, createdAt, writerId, openChat }: Props) => {
     <St.UserFeedbackBox>
       <St.UserProfileBox>
         <St.UserProfileImgBox>
-          <St.UserProfileImg src={profileImageUrl!} alt="Image" />
+          <St.UserProfileImg src={`${storagaUrl}/${profileImageUrl!}`} alt="Image" />
         </St.UserProfileImgBox>
         <div>
           <St.BlackParagraph>{nickName}</St.BlackParagraph>
