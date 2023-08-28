@@ -1,7 +1,8 @@
 import React from 'react';
+import SpotShareList from '../components/spotShare/spotShareList/SpotShareList';
 
 function SpotShare() {
-  return <div>SpotShare</div>;
+  return <SpotShareList />;
 }
 
 export default SpotShare;
