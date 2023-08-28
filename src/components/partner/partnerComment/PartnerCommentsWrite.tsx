@@ -4,8 +4,6 @@ import { useParams } from 'react-router';
 import { styled } from 'styled-components';
 import { getAuthId } from '../../../api/supabase/users';
 import { usePartnerComments } from '../../../hooks/usePartnerComment';
-import { BtnStyleType } from '../../../types/styleTypes';
-import Button from '../../common/button/Button';
 
 function PartnerCommentsWrite() {
   const params = useParams();
@@ -51,8 +49,11 @@ function PartnerCommentsWrite() {
     <>
       <Form onSubmit={handleSubmitBtnClick}>
         <Textarea name="content" placeholder="댓글을 남겨보세요" value={content} onChange={(e) => setContent(e.target.value)} />
-        <Button type="submit" styleType={BtnStyleType.BTN_DARK} disabled={content.length < 1}>
+        {/* <Button type="submit" styleType={BtnStyleType.BTN_DARK} disabled={content.length < 1}>
           댓글 등록
+        </Button> */}
+        <Button type="submit" disabled={content.length < 1}>
+          등록
         </Button>
       </Form>
     </>
@@ -71,13 +72,21 @@ const Textarea = styled.textarea`
 
   resize: none;
 
-  width: 1240px;
-  height: 56px;
+  width: 1097px;
+  height: 48px;
 
-  margin-top: 20px;
-  margin-bottom: 25px;
-  padding: 10px;
+  margin-bottom: 32px;
 
   border-radius: 15px;
-  border: 1px solid lightgray;
+  border: 1px solid var(--light-gray, #e8ebee);
+`;
+
+const Button = styled.button`
+  width: 78px;
+  height: 48px;
+
+  background-color: black;
+  color: white;
+
+  border-radius: 15px;
 `;

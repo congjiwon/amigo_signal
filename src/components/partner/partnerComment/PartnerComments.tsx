@@ -48,8 +48,10 @@ const PartnerCommentsList = () => {
         <CommentLengthParagraph>댓글 {filteredComments?.length}개</CommentLengthParagraph>
       </CommentLengthBox>
       <PartnerCommentsWrite />
+      {/* filteredComments : 해당 게시글 댓글 목록 */}
       {filteredComments &&
-        filteredIds &&
+        // filteredIds : 현재 로그인한 유저의 댓글 목록
+        // filteredIds &&
         filteredComments.map((comment) => {
           const isLoginUser = localStorage.getItem('authId') === comment.writerId;
           return <PartnerCommentList key={comment.id} allComments={allComments} comment={comment} isLoginUser={isLoginUser!} />;
@@ -66,5 +68,7 @@ const CommentLengthBox = styled.div`
 `;
 
 const CommentLengthParagraph = styled.p`
+  margin-top: 31px;
+  margin-bottom: 10px;
   font-size: 14px;
 `;
