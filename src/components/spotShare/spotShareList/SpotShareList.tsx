@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as St from './style';
-import { getSpotSharePost } from '../../../api/supabase/spotshare';
 import { Tables } from '../../../api/supabase/supabase';
 import SpotShareItem from './SpotShareItem';
+import { getAllSpotSharePost } from '../../../api/supabase/spotshare';
 
 const SpotShareList = () => {
   const [postStorage, setPostStorage] = useState<Tables<'spotPosts'>[]>([]);
@@ -13,7 +13,7 @@ const SpotShareList = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const { data, error } = await getSpotSharePost();
+      const { data, error } = await getAllSpotSharePost();
       if (error || !data) {
         console.error('스팟공유 게시글 목록을 가져오는 과정에서 에러 발생', error);
         setPostStorage([]);
