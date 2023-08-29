@@ -49,7 +49,7 @@ export function StarDropDown({ setStar }: StarProps) {
     <Space wrap>
       <Select
         defaultValue="⭐⭐⭐⭐⭐"
-        style={{ width: '100%' }}
+        style={{ width: '140px' }}
         onChange={handleChange}
         options={[
           { value: '5', label: '⭐⭐⭐⭐⭐' },
