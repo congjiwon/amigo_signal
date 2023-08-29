@@ -1,13 +1,14 @@
-import { useQuery } from '@tanstack/react-query';
-import React, { useState } from 'react';
-import { getDetailSpotSharePost } from '../../../api/supabase/spotshare';
-import { useParams } from 'react-router';
+import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+import { deleteSpotSharePost, getDetailSpotSharePost } from '../../../api/supabase/spotshare';
+import { useNavigate, useParams } from 'react-router';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
 import { styled } from 'styled-components';
 import { RiHeartLine, RiHeartFill } from 'react-icons/ri';
 import { FiEdit, FiTrash2 } from 'react-icons/fi';
 import useSessionStore from '../../../zustand/store';
+import { ConfirmDelete } from '../../common/modal/alert';
 
 type postIdProps = {
   postId: string | undefined;
@@ -18,11 +19,11 @@ function SpotShareDetailContents() {
   const [like, setLike] = useState(false);
   const session = useSessionStore((state) => state.session);
   const logInUserId = session?.user.id;
-
-  console.log('logInUserId', logInUserId);
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   // 디테일 포스트 불러오기
-  const { data: spotSharePost, isLoading, isError } = useQuery(['partnerPost', postid], () => getDetailSpotSharePost(postid));
+  const { data: spotSharePost, isLoading, isError } = useQuery(['spotSharePost', postid], () => getDetailSpotSharePost(postid));
   const spotSharePostData = spotSharePost?.data![0];
   console.log('해당글 데이터 모음', spotSharePostData);
   if (isLoading) {
@@ -31,6 +32,47 @@ function SpotShareDetailContents() {
   if (isError) {
     return <div>Error loading data</div>;
   }
+
+  // 게시글 삭제
+
+  // const mutation = useMutation(deleteSpotSharePost, {
+  //   onSuccess: async () => {
+  //     await queryClient.invalidateQueries(['spotSharePost']);
+  //   },
+  // });
+
+  // const deletePostHandle = async (id: string | undefined) => {
+  //   const isConfirmed = await ConfirmDelete('해당 글이 삭제되었습니다.');
+  //   if (!isConfirmed) {
+  //     return;
+  //   }
+  //   mutation.mutate(id);
+  //   navigate('/spotshare');
+  // };
+
+  //ㅡㅡㅡㅡㅡㅡㅡㅡ
+
+  // const mutation = useMutation(deleteSpotSharePost, {
+  //   onSuccess: async () => {
+  //     await queryClient.invalidateQueries(['spotSharePost']);
+  //   },
+  // });
+
+  // const deletePostHandle = async (id: string | undefined) => {
+  //   const isConfirmed = ConfirmDelete('해당 글이 삭제되었습니다.');
+  //   if (!isConfirmed) {
+  //     return;
+  //   }
+  //   try {
+  //     if (typeof id == 'string') {
+  //       await mutation.mutateAsync(id);
+  //       navigate('/partner');
+  //     }
+  //   } catch (error) {}
+  // };
+
+  // 글 작성자인지 확인하는 함수
+  const isPostWriter = () => logInUserId == spotSharePostData?.writerId;
 
   return (
     <>
@@ -46,9 +88,10 @@ function SpotShareDetailContents() {
       <SpotShareBox>
         <ButtonBox>
           <span>{like ? <RiHeartFill style={{ height: '22px', width: '22px' }} /> : <RiHeartLine style={{ height: '22px', width: '22px' }} />}</span>
-          {logInUserId == spotSharePostData?.writerId ? (
+          {isPostWriter() ? (
             <>
               <span>{<FiEdit style={{ height: '22px', width: '22px' }} />}</span>
+              {/* <span>{<FiTrash2 onClick={() => deletePostHandle(spotSharePostData?.id)} style={{ height: '22px', width: '22px' }} />}</span> */}
               <span>{<FiTrash2 style={{ height: '22px', width: '22px' }} />}</span>
             </>
           ) : (
