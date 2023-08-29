@@ -1,28 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
-import SpotShareEditor from '../spotShareEditor/SpotShareEditor';
-import useSessionStore from '../../../zustand/store';
+import React, { useState } from 'react';
 import { insertSpotPost } from '../../../api/supabase/spotPosts';
 import { supabase } from '../../../api/supabase/supabaseClient';
-import LocationDropDown from '../../common/dropDown/LocationDropDown';
-import { StarDropDown } from '../../common/dropDown/DropDown';
+import useSessionStore from '../../../zustand/store';
 import SpotCalendar from '../../common/calendar/SpotCalendar';
-import * as St from './style';
-import { Alert } from 'antd';
+import { StarDropDown } from '../../common/dropDown/DropDown';
+import LocationDropDown from '../../common/dropDown/LocationDropDown';
 import { AlertError } from '../../common/modal/alert';
+import SpotShareEditor from '../spotShareEditor/SpotShareEditor';
+import * as St from './style';
 
 export default function SpotShareUpdate() {
   const session = useSessionStore((state) => state.session);
   const userId = session?.user.id;
   const [title, setTitle] = useState('');
   const [editorHtml, setEditorHtml] = useState('');
-  const quillRef = useRef();
   const [location, setLocation] = useState<string[]>([]);
   const [spotDate, setSpotDate] = useState<string>('');
   const [star, setStar] = useState<number>(5);
-
-  const handleEditorChange = (newHtml: string) => {
-    setEditorHtml(newHtml);
-  };
 
   const currentTime = function () {
     const today = new Date();
@@ -52,7 +46,7 @@ export default function SpotShareUpdate() {
   const [receivedData, setReceivedData] = useState<string | undefined>('');
 
   const getDataTest = async () => {
-    let { data: spotPosts, error } = await supabase.from('spotPosts').select('*').eq('id', '4fb153e8-6af9-43c4-b7a3-fa26ddcff294').single();
+    let { data: spotPosts, error } = await supabase.from('spotPosts').select('*').eq('id', 'a09053db-3cd0-4f09-860a-70029f04188e').single();
 
     setReceivedData(spotPosts?.content);
   };
@@ -67,10 +61,11 @@ export default function SpotShareUpdate() {
         <div>
           <St.SpotShareTitleInput type="text" placeholder="제목을 입력해주세요" value={title} onChange={(e) => setTitle(e.target.value)} />
         </div>
-        <SpotShareEditor quillRef={quillRef} editorHtml={editorHtml} onEditorChange={handleEditorChange} />
-        <button type="submit">등록</button>
+        <SpotShareEditor editorHtml={editorHtml} setEditorHtml={setEditorHtml} />
 
+        <button></button>
         <hr />
+        <button type="submit">등록</button>
         <button onClick={getDataTest}>가져오기</button>
         {receivedData && <div dangerouslySetInnerHTML={{ __html: receivedData }} />}
       </form>
