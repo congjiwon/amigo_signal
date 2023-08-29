@@ -9,6 +9,7 @@ import { BtnStyleType } from '../../../types/styleTypes';
 import useCurrentUserStore from '../../../zustand/currentUser';
 import { CommentButton } from '../../common/button/Button';
 import { ConfirmDelete } from '../../common/modal/alert';
+import SpotReCommentList from './SpotReCommentList';
 import * as St from './style';
 
 type allCommentsProps =
@@ -124,7 +125,6 @@ function SpotCommentList({ allComments, comment, isLoginUser }: PartnerCommentLi
       date: currentTime(),
       writerId: authId,
       commentId: comment!.id,
-      isUpdate: false,
     };
 
     postReCommentMutation.mutateAsync(reComment);
@@ -142,7 +142,6 @@ function SpotCommentList({ allComments, comment, isLoginUser }: PartnerCommentLi
       writerId: authId,
       commentId: comment?.id,
       id: reCommentId,
-      isUpdate: false,
       date: comment?.date!,
     };
 
@@ -367,12 +366,12 @@ function SpotCommentList({ allComments, comment, isLoginUser }: PartnerCommentLi
         </St.PartnerCommentsBox>
         <St.PartnerReCommentsBox>
           {/* allReCommentsData : 모든 답댓글 정보(유저포함) */}
-          {/* {allReCommentsData?.map((reComment) => {
+          {allReCommentsData?.map((reComment) => {
             if (reComment.commentId === comment?.id) {
               const isPostWriter = reComment.writerId === postWriterId; // 작성자 태그 띄울 때 씀.
               const isLoginCommentUser = authId === reComment.writerId; // 로그인한 댓글작성자
               return (
-                <PartnerReComments
+                <SpotReCommentList
                   key={reComment.id}
                   // allReCommentsData={allReCommentsData}
                   // authId={authId}
@@ -393,7 +392,7 @@ function SpotCommentList({ allComments, comment, isLoginUser }: PartnerCommentLi
                 />
               );
             }
-          })} */}
+          })}
         </St.PartnerReCommentsBox>
       </St.PartnerCommentsContainerBox>
     );

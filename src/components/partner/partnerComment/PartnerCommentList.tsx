@@ -108,7 +108,7 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
       writerId: authId,
       commentId: comment?.id,
       id: reCommentId,
-      isUpdate: false,
+      // isUpdate: false, 이건 테이블 isUpdate랑 다르지않나..?
       date: comment?.date,
     };
 
@@ -128,7 +128,6 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
       date: currentTime(),
       writerId: authId,
       commentId: comment!.id,
-      isUpdate: false,
     };
 
     postReCommentMutation.mutateAsync(reComment);
