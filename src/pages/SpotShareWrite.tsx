@@ -1,10 +1,11 @@
+import SpotMap from '../components/spotShare/map/SpotMap';
 import SpotShareUpdate from '../components/spotShare/spotShareUpdate/SpotShareUpdate';
 
 function SpotShareWrite() {
   return (
     <div>
-      SpotShareWrite
       <SpotShareUpdate />
+      <SpotMap />
     </div>
   );
 }
