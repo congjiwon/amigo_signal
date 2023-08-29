@@ -60,7 +60,6 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
     }
   }, [post, confirmedApplicants]);
 
-  console.log();
   return (
     <Link to={`detail/${post.id}`}>
       <St.PostCard>
