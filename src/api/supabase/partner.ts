@@ -1,3 +1,4 @@
+import { NUMBER_OF_ITEMS, getRangePagination } from '../../components/common/getRangePagination/getRangePagination';
 import { Inserts, TPartnerInsert, TPartnerReCommentsInsert, TPartnerReCommentsUpdate, TPartnerUpdate } from './supabase';
 import { supabase } from './supabaseClient';
 
@@ -182,35 +183,40 @@ export const getConfirmedApplicantList = async (postId: string) => {
 type MyPartnerPostProps = {
   userId: string | undefined;
   filterIsOpen?: boolean | null;
+  page: number;
 };
 
-export const getMyPartnerPosts = async ({ userId, filterIsOpen }: MyPartnerPostProps) => {
-  let partnerPosts = supabase.from('partnerPosts').select('*').eq('writerId', userId);
+export const getMyPartnerPosts = async ({ userId, filterIsOpen, page }: MyPartnerPostProps) => {
+  const { from, to } = getRangePagination(page, NUMBER_OF_ITEMS);
+
+  let partnerPosts = supabase.from('partnerPosts').select('*', { count: 'exact' }).eq('writerId', userId);
 
   if (filterIsOpen === null) {
-    const { data: filteredPartnerPosts } = await partnerPosts;
-    return filteredPartnerPosts;
+    partnerPosts = partnerPosts;
   }
 
   if (filterIsOpen === true) {
-    partnerPosts = partnerPosts.eq('isOpen', true);
+    partnerPosts = partnerPosts.is('isOpen', true);
   }
   if (filterIsOpen === false) {
-    partnerPosts = partnerPosts.eq('isOpen', false);
+    partnerPosts = partnerPosts.is('isOpen', false);
   }
 
-  const { data: filteredPartnerPosts } = await partnerPosts;
-  return filteredPartnerPosts;
+  const { data, count } = await partnerPosts.order('startDate', { ascending: true }).range(from, to);
+  return { data, count };
 };
 
-// 내가 지원한 포스트들
+// 내가 지원한 동행 포스트들
 type AppliedPostProps = {
   userId: string | undefined;
   filterIsAccepted?: boolean | null;
+  page: number;
 };
 
-export const getAppliedPosts = async ({ userId, filterIsAccepted }: AppliedPostProps) => {
-  let appliedPosts = supabase.from('applicants').select('*, postId (*)').eq('applicantId', userId);
+export const getAppliedPosts = async ({ userId, filterIsAccepted, page }: AppliedPostProps) => {
+  const { from, to } = getRangePagination(page, NUMBER_OF_ITEMS);
+
+  let appliedPosts = supabase.from('applicants').select('*, postId (*)', { count: 'exact' }).eq('applicantId', userId);
 
   if (filterIsAccepted === null) {
     appliedPosts = appliedPosts.is('isAccepted', null);
@@ -222,8 +228,8 @@ export const getAppliedPosts = async ({ userId, filterIsAccepted }: AppliedPostP
     appliedPosts = appliedPosts.is('isAccepted', false);
   }
 
-  const { data: appliedPostsData } = await appliedPosts;
-  return appliedPostsData;
+  const { data, count } = await appliedPosts.order('postId(startDate)', { ascending: true }).range(from, to);
+  return { data, count };
 };
 
 //동행 메인 리스트 국가 + 기간별 필터... ㅇㅔ휴

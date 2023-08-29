@@ -11,7 +11,9 @@ export const AppliedPostsSection = styled.section`
 export const FilterBtns = styled.div`
   display: flex;
   gap: 16px;
+  margin-bottom: 33px;
 `;
+
 export const FilterBtn = styled.button`
   padding: 7px 14px;
   color: #81858a;
