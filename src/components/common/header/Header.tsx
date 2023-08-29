@@ -37,7 +37,7 @@ export default function Header() {
     Alert({ title: '로그아웃 되었습니다.' });
     navigate('/login');
     // 설빈 : 이거 넣으면 로그아웃했을 때 댓글작성X / 답댓글 수정삭제X
-    window.location.reload();
+    // window.location.reload();
   };
 
   return (
