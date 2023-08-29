@@ -14,6 +14,12 @@ export const ApplyDiv = styled.div`
   gap: 10px;
 `;
 
+export const NewApplicantAlert = styled.p`
+  margin: 10px auto;
+  font-size: 12px;
+  color: red;
+`;
+
 export const ModalTitle = styled.h1`
   padding-left: 50px;
   font-size: 1.4rem;

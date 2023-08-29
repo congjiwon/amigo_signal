@@ -18,7 +18,7 @@ const btnCommentStyles = css`
   background-color: transparent;
   border: none;
   text-decoration: none; // 이걸 disabled만 안주기
-  color: gray;
+  color: var(--gray, #adb1b8);
   cursor: pointer;
   &:hover {
     text-decoration: underline;

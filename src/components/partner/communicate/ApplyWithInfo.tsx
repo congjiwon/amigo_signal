@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Input } from '../../common/input/Input';
-import * as St from './style';
-import Button from '../../common/button/Button';
+import { insertApplicant } from '../../../api/supabase/partner';
 import { BtnStyleType } from '../../../types/styleTypes';
 import { useModalStore } from '../../../zustand/store';
-import { insertApplicant } from '../../../api/supabase/partner';
+import Button from '../../common/button/Button';
+import { Input } from '../../common/input/Input';
+import * as St from './style';
 
 type ApplyWithInfoProps = {
   postId: string | undefined;
@@ -18,7 +18,8 @@ const ApplyWithInfo = ({ postId, applicantId, setIsApply }: ApplyWithInfoProps) 
   const [text, setText] = useState('');
 
   const handleText = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setText(e.target.value);
+    const newText = e.target.value;
+    if (newText.length <= 300) setText(newText);
   };
 
   const handleSubmit = async () => {

@@ -56,7 +56,7 @@ export const updatePartnerComment = async (updateComment: TPartnerUpdate) => {
 
 // 동행 답댓글 가져오기
 export const getPartnerReComments = async () => {
-  let { data: rePartnerComments, error } = await supabase.from('reComments').select('*').order('date', { ascending: true });
+  let { data: rePartnerComments, error } = await supabase.from('reComments').select('*').order('date', { ascending: false });
   return rePartnerComments;
 };
 
@@ -269,4 +269,10 @@ export const updatePostStatus = async (postId: string, isOpen: boolean) => {
 export const getNumOfPeople = async (postId: string) => {
   const { data } = await supabase.from('partnerPosts').select('numOfPeople').eq('id', postId);
   return data;
+};
+
+// 해당 동행 모집글의 모집 상태 여부만 가져오기
+export const isPostOpen = async (postId: string): Promise<{ data: { isOpen: boolean } | null }> => {
+  let { data: isPartnerPostsOpen } = await supabase.from('partnerPosts').select('isOpen').eq('id', postId).single();
+  return { data: isPartnerPostsOpen };
 };
