@@ -6,6 +6,7 @@ import SpotCalendar from '../../common/calendar/SpotCalendar';
 import { StarDropDown } from '../../common/dropDown/DropDown';
 import LocationDropDown from '../../common/dropDown/LocationDropDown';
 import { AlertError } from '../../common/modal/alert';
+import SpotMap from '../map/SpotMap';
 import SpotShareEditor from '../spotShareEditor/SpotShareEditor';
 import * as St from './style';
 
@@ -17,6 +18,8 @@ export default function SpotShareUpdate() {
   const [location, setLocation] = useState<string[]>([]);
   const [spotDate, setSpotDate] = useState<string>('');
   const [star, setStar] = useState<number>(5);
+  const [latitude, setLatitude] = useState<number | null>(null);
+  const [longitude, setLongitude] = useState<number | null>(null);
 
   const currentTime = function () {
     const today = new Date();
@@ -65,6 +68,7 @@ export default function SpotShareUpdate() {
 
         <button></button>
         <hr />
+        <SpotMap setLatitude={setLatitude} setLongitude={setLongitude} />
         <button type="submit">등록</button>
         <button onClick={getDataTest}>가져오기</button>
         {receivedData && <div dangerouslySetInnerHTML={{ __html: receivedData }} />}
