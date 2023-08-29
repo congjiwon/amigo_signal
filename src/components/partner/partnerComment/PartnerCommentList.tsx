@@ -240,9 +240,7 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
   // 취소버튼
   const handleCancelBtn = (name: string) => {
     if (name === 'reCommentUpdateCancelBtn') {
-      setIsUpdateReComment((isUpdateReComment) => {
-        return !isUpdateReComment;
-      });
+      setReCommentId('');
     } else if (name === 'updateCancel') {
       setIsUpdate(false);
     } else if ('reCommentCancel') {

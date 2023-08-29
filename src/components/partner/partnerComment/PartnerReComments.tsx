@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import DefaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import { usePartnerComments } from '../../../hooks/usePartnerComment';
 import { BtnStyleType } from '../../../types/styleTypes';
@@ -95,16 +94,10 @@ function PartnerReComments({
   // console.log('1', reCommentId);
   // console.log('2', reComment?.id);
 
-  const handleCancelButton = () => {
-    // console.log(isUpdateReComment);
-    setIsUpdateReComment(!isUpdateReComment);
-  };
-
-  useEffect(() => {
-    if (isUpdateReComment) {
-      setIsUpdateReComment(false);
-    }
-  }, [isUpdateReComment]);
+  // const handleCancelButton = () => {
+  //   // console.log(isUpdateReComment);
+  //   setIsUpdateReComment(!isUpdateReComment);
+  // };
 
   return (
     <St.ReCommentBox>
@@ -141,7 +134,7 @@ function PartnerReComments({
               <St.InputBox>
                 <St.Textarea placeholder="댓글을 남겨보세요" value={updateReComment} onChange={(event) => setUpdateReComment(event.target.value)} />
                 <St.CancelSubmitButtonBox>
-                  <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={handleCancelButton}>
+                  <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleCancelBtn('reCommentUpdateCancelBtn')}>
                     취소
                   </CommentButton>
                   {/* <St.Bar>|</St.Bar> */}

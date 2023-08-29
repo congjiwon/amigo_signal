@@ -142,7 +142,7 @@ function SpotCommentList({ allComments, comment, isLoginUser }: PartnerCommentLi
       writerId: authId,
       commentId: comment?.id,
       id: reCommentId,
-      date: comment?.date!,
+      // date: comment?.date!,
     };
 
     updateReCommentMutation.mutate(newReComment);
@@ -259,9 +259,10 @@ function SpotCommentList({ allComments, comment, isLoginUser }: PartnerCommentLi
   // 취소버튼
   const handleCancelBtn = (name: string) => {
     if (name === 'reCommentUpdateCancelBtn') {
-      setIsUpdateReComment((isUpdateReComment) => {
-        return !isUpdateReComment;
-      });
+      console.log('name', name);
+      // setIsUpdateReComment(false);
+      setReCommentId('');
+      console.log('zz', isUpdateReComment);
     } else if (name === 'updateCancel') {
       setIsUpdate(false);
     } else if ('reCommentCancel') {
@@ -379,12 +380,12 @@ function SpotCommentList({ allComments, comment, isLoginUser }: PartnerCommentLi
                   storageUrl={storageUrl}
                   reCommentId={reCommentId}
                   reComment={reComment}
-                  handleCancelBtn={handleCancelBtn}
+                  onCancelBtn={handleCancelBtn}
                   handleIsOpenBtn={handleIsOpenBtn}
                   handleReSubmitBtn={handleReSubmitBtn}
                   isPostWriter={isPostWriter}
                   isLoginCommentUser={isLoginCommentUser}
-                  isUpdateReComment={isUpdateReComment}
+                  // isUpdateReComment={isUpdateReComment}
                   updateReComment={updateReComment}
                   setUpdateReComment={setUpdateReComment}
                   setIsUpdateReComment={setIsUpdateReComment}

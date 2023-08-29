@@ -9,7 +9,7 @@ export const getSpotPost = async ({ postId }: { postId: string }) => {
 
 // 스팟 댓글 가져오기(댓글 작성한 모든 유저 정보도 함께)
 export const getSpotComments = async () => {
-  let { data: spotCommentsData, error } = await supabase.from('spotComments').select('*, users!spotComments_writerId_fkey(*)');
+  let { data: spotCommentsData, error } = await supabase.from('spotComments').select('*, users!spotComments_writerId_fkey(*)').order('date', { ascending: false });
   return spotCommentsData;
 };
 getSpotComments();
@@ -43,7 +43,7 @@ export const getCommentWriterIds = async () => {
 
 // 스팟 답댓글 가져오기(답글 작성한 모든 유저도 같이)
 export const getReCommentData = async () => {
-  let { data: reCommentsData } = await supabase.from('spotReComments').select('*, users!spotReComments_writerId_fkey(*)');
+  let { data: reCommentsData } = await supabase.from('spotReComments').select('*, users!spotReComments_writerId_fkey(*)').order('date', { ascending: true });
   return reCommentsData;
 };
 
@@ -67,3 +67,5 @@ export const getReCommentWriterIds = async () => {
   let { data: reCommentWriterId } = await supabase.from('spotReComments').select('writerId');
   return reCommentWriterId;
 };
+
+// let { data: count } = await supabase.from('spotReComments').select('id');

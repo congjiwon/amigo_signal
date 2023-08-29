@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { styled } from 'styled-components';
-import { getPartnerComments, getPartnerPostId, getWriterIds, updatePartnerComment } from '../../../api/supabase/partner';
+import { getPartnerComments, getPartnerPostId, getReCommentData, getWriterIds, updatePartnerComment } from '../../../api/supabase/partner';
 import PartnerCommentList from './PartnerCommentList';
 import PartnerCommentsWrite from './PartnerCommentsWrite';
 
@@ -35,6 +36,21 @@ const PartnerCommentsList = () => {
     return comment.postId === filteredPostId;
   });
 
+  const { data: reCommentsData } = useQuery(['partnerReComments'], getReCommentData);
+  const [reCommentCount, setReCommentCount] = useState(0);
+  useEffect(() => {
+    // spotReComments 테이블에서 해당 게시글에 대한 답댓글 수 계산
+    const reCommentCountForPost =
+      reCommentsData?.filter((reComment) => {
+        const parentComment = filteredComments?.find((comment) => comment.id === reComment.commentId);
+        return parentComment;
+      }).length || 0;
+
+    setReCommentCount(reCommentCountForPost);
+  }, [reCommentsData, filteredComments]);
+
+  const commentsCount = (filteredComments?.length || 0) + reCommentCount;
+
   const { data: writerId } = useQuery(['partnerCommentId'], getWriterIds); // 안씀
 
   // 현재 로그인한 유저의 댓글목록(writerId) // 안씀
@@ -51,7 +67,7 @@ const PartnerCommentsList = () => {
   return (
     <div>
       <CommentLengthBox>
-        <CommentLengthParagraph>댓글 {filteredComments?.length}개</CommentLengthParagraph>
+        <CommentLengthParagraph>댓글 {commentsCount}개</CommentLengthParagraph>
       </CommentLengthBox>
       <PartnerCommentsWrite />
       {/* filteredComments : 해당 게시글 댓글 목록 */}
@@ -74,7 +90,7 @@ const CommentLengthBox = styled.div`
 `;
 
 const CommentLengthParagraph = styled.p`
-  margin-top: 31px;
+  /* margin-top: 31px; */
   margin-bottom: 10px;
   font-size: 14px;
 `;
