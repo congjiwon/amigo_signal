@@ -373,7 +373,8 @@ export interface Database {
           country: string;
           createdAt: string;
           id: string;
-          marker: string;
+          latitude: number;
+          longitude: number;
           postImageUrl: string[] | null;
           region: string;
           starRate: number;
@@ -387,7 +388,8 @@ export interface Database {
           country: string;
           createdAt?: string;
           id?: string;
-          marker: string;
+          latitude: number;
+          longitude: number;
           postImageUrl?: string[] | null;
           region: string;
           starRate: number;
@@ -401,7 +403,8 @@ export interface Database {
           country?: string;
           createdAt?: string;
           id?: string;
-          marker?: string;
+          latitude?: number;
+          longitude?: number;
           postImageUrl?: string[] | null;
           region?: string;
           starRate?: number;
