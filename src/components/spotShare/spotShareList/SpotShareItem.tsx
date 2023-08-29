@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import * as St from './style';
 import Calendar from '../../../assets/imgs/partner/Calendar.svg';
 import { getSpotShareDefaultImg } from '../../../api/supabase/spotshare';
+import styled from 'styled-components';
 
 type SpotItemProps = {
   post: Tables<'spotPosts'>;
@@ -38,9 +39,7 @@ function SpotShareItem({ post }: SpotItemProps) {
         <St.ContentBox>
           <p>{post.content}</p>
         </St.ContentBox>
-        <div>
-          <img src="countryImg" style={{ width: '100px', height: '100px' }}></img>
-        </div>
+        <DefaultImg src={countryImg}></DefaultImg>
         <St.Span>{post.country}</St.Span>
       </St.PostCard>
     </Link>
@@ -48,3 +47,11 @@ function SpotShareItem({ post }: SpotItemProps) {
 }
 
 export default SpotShareItem;
+
+const DefaultImg = styled.img`
+  width: 282px;
+  height: 143px;
+  object-fit: cover;
+
+  border-radius: 0px 0px 30px 30px;
+`;
