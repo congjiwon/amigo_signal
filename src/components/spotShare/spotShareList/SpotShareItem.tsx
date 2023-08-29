@@ -12,6 +12,7 @@ type SpotItemProps = {
 
 function SpotShareItem({ post }: SpotItemProps) {
   const [countryImg, setCountryImg] = useState<string>('');
+
   //국가 디폴트 이미지 넣기
   useEffect(() => {
     const getDefaultImgHandler = async () => {
@@ -25,13 +26,21 @@ function SpotShareItem({ post }: SpotItemProps) {
     getDefaultImgHandler();
   }, []);
 
-  console.log('durl', countryImg);
+  const visitDate = post.visitDate.split('-');
+  if (visitDate[1][0] == '0') {
+    visitDate[1] = visitDate[1].substring(1);
+  }
+  if (visitDate[2][0] == '0') {
+    visitDate[2] = visitDate[2].substring(1);
+  }
   return (
     <Link to={`detail/${post.id}`}>
       <St.PostCard>
         <St.TravelDateBox>
           <img style={{ paddingLeft: '21px' }} src={Calendar} alt="방문날짜" />
-          <p>{post.visitDate}</p>
+          <p>
+            {visitDate[0]}년 {visitDate[1]}월 {visitDate[2]}일
+          </p>
         </St.TravelDateBox>
         <St.TitleBox>
           <h1>{post.title}</h1>
