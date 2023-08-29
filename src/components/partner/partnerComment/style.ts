@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 export const PartnerCommentsContainerBox = styled.div``;
 
 export const PartnerCommentsBox = styled.div`
-  margin-bottom: 24px;
+  margin-bottom: 25px;
 
   /* border: 1px solid; */
 `;
@@ -21,7 +21,7 @@ export const WriterBox = styled.div`
 `;
 
 export const NickNameParagraph = styled.p`
-  margin-right: 12px;
+  margin-right: 22px;
 
   font-weight: bold;
 `;
@@ -55,7 +55,7 @@ export const CommentBottomBox = styled.div`
   display: flex;
   flex-direction: column;
 
-  margin-left: 52px;
+  /* margin-left: 52px; */
 `;
 
 export const DateButtonBox = styled.div`
@@ -63,7 +63,13 @@ export const DateButtonBox = styled.div`
 
   display: flex;
 
+  margin-left: 52px;
   margin-bottom: 24px;
+`;
+
+export const ButtonBox = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 export const DateBox = styled.div`
@@ -71,13 +77,13 @@ export const DateBox = styled.div`
 `;
 
 export const DateParagraph = styled.p`
-  color: gray;
+  color: var(--gray, #adb1b8);
 `;
 
 export const Bar = styled.p`
   margin-bottom: 1px;
   font-size: 12px;
-  color: gray;
+  color: var(--gray, #adb1b8);
   /* letter-spacing: 6px; */
 `;
 
@@ -88,17 +94,17 @@ export const InputBox = styled.div`
 export const Textarea = styled.textarea`
   resize: none;
 
-  width: 1220px;
+  width: 1097px;
   height: 100px;
 
   border-radius: 15px;
-  border: 1px solid lightgray;
+  border: 1px solid var(--light-gray, #e8ebee);
 `;
 
 export const CancelSubmitButtonBox = styled.div`
   position: absolute;
-  top: 62px;
-  right: 24px;
+  top: 65px;
+  right: 109px;
 
   display: flex;
   align-items: center;
@@ -114,7 +120,7 @@ export const WriterParagraph = styled.p`
   height: 23px;
 
   color: white;
-  background-color: gray;
+  background: var(--gray, #adb1b8);
 
   border-radius: 30px;
 
