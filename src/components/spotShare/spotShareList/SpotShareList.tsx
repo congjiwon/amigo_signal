@@ -22,7 +22,6 @@ const SpotShareList = () => {
           return new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf();
         });
         setPostStorage(data);
-        console.log(data);
       }
     };
     fetchPosts();
