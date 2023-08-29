@@ -26,6 +26,7 @@ function SpotShareItem({ post }: SpotItemProps) {
     getDefaultImgHandler();
   }, []);
 
+  //방문날짜 2023-05-05 => 2023년 5월 5일 바꾸는 로직
   const visitDate = post.visitDate.split('-');
   if (visitDate[1][0] == '0') {
     visitDate[1] = visitDate[1].substring(1);
@@ -33,6 +34,7 @@ function SpotShareItem({ post }: SpotItemProps) {
   if (visitDate[2][0] == '0') {
     visitDate[2] = visitDate[2].substring(1);
   }
+
   return (
     <Link to={`detail/${post.id}`}>
       <St.PostCard>
