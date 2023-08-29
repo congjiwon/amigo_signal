@@ -35,7 +35,7 @@ export default function SpotShareUpdate() {
 
     const nowData = currentTime();
 
-    const newData = { createdAt: nowData, title, content: editorHtml, region: location[0], country: location[1], starRate: star, visitDate: spotDate, writerId: userId as string, marker: ['위도', '경도'], address: '한국 부산~' };
+    const newData = { createdAt: nowData, title, content: editorHtml, region: location[0], country: location[1], starRate: star, visitDate: spotDate, writerId: userId as string, latitude: 37.5642135, longitude: 127.0016985, address: '한국 부산~' };
     try {
       await insertSpotPost(newData);
     } catch (err) {
