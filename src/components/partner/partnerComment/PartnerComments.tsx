@@ -21,9 +21,13 @@ const PartnerCommentsList = () => {
 
   // 모든 동행 댓글 ID
   const { data: partnerPostIdData } = useQuery(['partnerPostId'], getPartnerPostId);
+  // console.log('partnerPostIdData', partnerPostIdData);
+  // 해당 게시글 ID 찾기(배열의 0번쨰)
   const findFilteredComments = partnerPostIdData?.filter((comment) => {
+    // console.log('comment', comment.id); // 모든 동행 댓글 ID 중에서, 게시글 params랑 같은거,, 해당 게시글 postId
     return comment.id === params.postid; // postid,,,ㅠㅠ
   });
+  // console.log('findFilteredComments', findFilteredComments);
 
   // 왜 이렇게까지 써야하는거지?
   const filteredPostId = findFilteredComments && findFilteredComments[0] && findFilteredComments[0].id;
@@ -31,13 +35,15 @@ const PartnerCommentsList = () => {
     return comment.postId === filteredPostId;
   });
 
-  const { data: writerId } = useQuery(['partnerCommentId'], getWriterIds);
+  const { data: writerId } = useQuery(['partnerCommentId'], getWriterIds); // 안씀
 
-  // 현재 로그인한 유저의 댓글목록(writerId)
+  // 현재 로그인한 유저의 댓글목록(writerId) // 안씀
   const filteredIds = writerId?.filter((id) => {
     return id.writerId === localStorage.getItem('authId');
   });
 
+  // 대박 얘 없으면 58번 props 내려주는 allComments 에러남!!!
+  // 이거 없으면 allComments! 이렇게 써줘야함 대박
   if (getIsLoading || getIsError || fixIsLoading || fixIsError) {
     return <div>로딩 || 에러</div>;
   }

@@ -24,7 +24,6 @@ type PartnerReCommentsProps = {
         commentId: string;
         date: string;
         id: string;
-        isUpdate: boolean;
         reContent: string;
         writerId: string;
         users: {

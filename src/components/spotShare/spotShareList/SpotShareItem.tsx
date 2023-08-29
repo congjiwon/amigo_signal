@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Tables } from '../../../api/supabase/supabase';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import * as St from './style';
-import Calendar from '../../../assets/imgs/partner/Calendar.svg';
 import { getSpotShareDefaultImg } from '../../../api/supabase/spotshare';
+import { Tables } from '../../../api/supabase/supabase';
+import Calendar from '../../../assets/imgs/partner/Calendar.svg';
+import * as St from './style';
 
 type SpotItemProps = {
   post: Tables<'spotPosts'>;
@@ -24,7 +24,7 @@ function SpotShareItem({ post }: SpotItemProps) {
     getDefaultImgHandler();
   }, []);
 
-  console.log('durl', countryImg);
+  // console.log('durl', countryImg);
   return (
     <Link to={`detail/${post.id}`}>
       <St.PostCard>

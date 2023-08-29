@@ -1,7 +1,7 @@
-import React from 'react';
+import SpotComments from '../components/spotShare/spotComment/SpotComments';
 
 function SpotShareDetail() {
-  return <div>SpotShareDetail</div>;
+  return <SpotComments />;
 }
 
 export default SpotShareDetail;

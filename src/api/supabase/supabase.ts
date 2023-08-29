@@ -288,7 +288,6 @@ export interface Database {
           commentId: string;
           date: string;
           id: string;
-          isUpdate: boolean;
           reContent: string;
           writerId: string;
           users?: {
@@ -302,7 +301,6 @@ export interface Database {
           commentId?: string;
           date: string;
           id?: string;
-          isUpdate: boolean;
           reContent: string;
           writerId?: string;
         };
@@ -310,7 +308,6 @@ export interface Database {
           commentId?: string;
           date?: string;
           id?: string;
-          isUpdate?: boolean;
           reContent?: string;
           writerId?: string;
         };
@@ -421,6 +418,43 @@ export interface Database {
           },
         ];
       };
+      spotReComments: {
+        Row: {
+          commentId: string;
+          date: string;
+          id: string;
+          reContent: string;
+          writerId: string;
+        };
+        Insert: {
+          commentId: string;
+          date: string;
+          id?: string;
+          reContent: string;
+          writerId?: string;
+        };
+        Update: {
+          commentId?: string;
+          date?: string;
+          id?: string;
+          reContent?: string;
+          writerId?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'spotReComments_commentId_fkey';
+            columns: ['commentId'];
+            referencedRelation: 'spotComments';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'spotReComments_writerId_fkey';
+            columns: ['writerId'];
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       users: {
         Row: {
           birthday: string;
@@ -480,6 +514,7 @@ export interface Database {
 
 export type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row'];
 export type Inserts<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Insert'];
+export type Update<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Update'];
 
 export type TPartnerComment = Database['public']['Tables']['partnerComments']['Row'];
 export type TPartnerInsert = Database['public']['Tables']['partnerComments']['Insert'];
