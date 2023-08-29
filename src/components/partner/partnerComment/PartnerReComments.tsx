@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import DefaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import { usePartnerComments } from '../../../hooks/usePartnerComment';
 import { BtnStyleType } from '../../../types/styleTypes';
 import { CommentButton } from '../../common/button/Button';
@@ -13,8 +15,10 @@ type CommentProps = {
 };
 
 type PartnerReCommentsProps = {
-  authId: string | undefined;
-  comment: CommentProps;
+  // authId: string | undefined;
+  // comment: CommentProps;
+  storageUrl: string | undefined;
+  reCommentId: string;
   reComment:
     | {
         commentId: string;
@@ -37,30 +41,34 @@ type PartnerReCommentsProps = {
   isUpdateReComment: boolean;
   updateReComment: string;
   setUpdateReComment: React.Dispatch<React.SetStateAction<string>>;
-  handleCancelBtn: (name: string, event: React.MouseEvent<HTMLButtonElement>) => void;
-  handleIsOpenBtn: (name: string, id: string | null, isUpdate: boolean | null) => void;
+  handleCancelBtn: (name: string) => void;
+  handleIsOpenBtn: (name: string, id: string | null) => void;
   // handleReUpdateBtn: (id: string, isUpdate: boolean) => Promise<void>; 이거다
   handleReSubmitBtn: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
-  allReCommentsData: {
-    commentId: string;
-    date: string;
-    id: string;
-    isUpdate: boolean;
-    reContent: string;
-    writerId: string;
-    users: {
-      birthday: string;
-      gender: string;
-      nickName: string;
-      profileImageUrl: string | null;
-    };
-  }[];
+  setIsUpdateReComment: React.Dispatch<React.SetStateAction<boolean>>;
+  // handleCancelButton: (isUpdateReComment: boolean) => void;
+  // allReCommentsData: {
+  //   commentId: string;
+  //   date: string;
+  //   id: string;
+  //   isUpdate: boolean;
+  //   reContent: string;
+  //   writerId: string;
+  //   users: {
+  //     birthday: string;
+  //     gender: string;
+  //     nickName: string;
+  //     profileImageUrl: string | null;
+  //   };
+  // }[];
 };
 
 function PartnerReComments({
-  allReCommentsData,
-  authId,
-  comment,
+  // allReCommentsData,
+  // authId,
+  // comment,
+  storageUrl,
+  reCommentId,
   reComment,
   isPostWriter,
   isLoginCommentUser,
@@ -68,9 +76,11 @@ function PartnerReComments({
   updateReComment,
   setUpdateReComment,
   handleCancelBtn,
+  // handleCancelButton,
   handleIsOpenBtn,
   // handleReUpdateBtn, 이거다
   handleReSubmitBtn,
+  setIsUpdateReComment,
 }: PartnerReCommentsProps) {
   const { deleteReCommentMutation, updateReCommentMutation } = usePartnerComments();
 
@@ -83,24 +93,25 @@ function PartnerReComments({
     }
   };
 
-  // 지원님 시간 가져옴.
-  const currentTime = function () {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = ('0' + (today.getMonth() + 1)).slice(-2);
-    const day = ('0' + today.getDate()).slice(-2);
-    const hours = ('0' + today.getHours()).slice(-2);
-    const minutes = ('0' + today.getMinutes()).slice(-2);
-    const seconds = ('0' + today.getSeconds()).slice(-2);
-    const now = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
-    return now;
+  // console.log('1', reCommentId);
+  // console.log('2', reComment?.id);
+
+  const handleCancelButton = () => {
+    // console.log(isUpdateReComment);
+    setIsUpdateReComment(!isUpdateReComment);
   };
 
+  useEffect(() => {
+    if (isUpdateReComment) {
+      setIsUpdateReComment(false);
+    }
+  }, [isUpdateReComment]);
+
   return (
-    <St.ReCommentBox key={reComment?.id}>
+    <St.ReCommentBox>
       <St.CommentTopBox>
         <div>
-          <St.Img src={reComment!.users && reComment?.users.profileImageUrl!} />
+          <St.Img src={reComment!.users && reComment?.users.profileImageUrl! ? `${storageUrl}/${reComment!.users && reComment?.users.profileImageUrl!}` : DefaultProfileImage} />
         </div>
         <St.WriterContainerBox>
           <St.WriterBox>
@@ -112,35 +123,29 @@ function PartnerReComments({
           </St.CommentBox>
         </St.WriterContainerBox>
       </St.CommentTopBox>
-      {isLoginCommentUser && (
+      {isLoginCommentUser ? (
         <St.CommentBottomBox>
           <St.DateButtonBox>
             <St.DateBox>
               <St.DateParagraph>{reComment?.date.substring(0, 10) + ' ' + reComment?.date.substring(11, 16)}</St.DateParagraph>
             </St.DateBox>
-            {/* <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleReSubmitBtn('updateReComment', reComment!.id, reComment!.isUpdate)}> */}
-            {/* <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleReUpdateBtn(reComment!.id, reComment!.isUpdate)}> */}
-            {/* <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleReUpdateBtn(reComment!.id, reComment!.isUpdate)}> */}
-            <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('updateReComment', reComment!.id, reComment!.isUpdate)}>
+            <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('updateReComment', reComment!.id)}>
               수정
             </CommentButton>
             <St.Bar>|</St.Bar>
-            {/* <button onClick={() => handleReUpdateBtn(reComment)}>수정</button> */}
             <CommentButton type="submit" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleReDelBtn(reComment!.id)}>
               삭제
             </CommentButton>
           </St.DateButtonBox>
-          {/* 모든애들 인풋창 보이게되어있다. */}
-          {/* 테이블에 isopen 상태를 넣는게 좋다. 각각 코멘트에 속성 상태 넣는것도 쉬운 방법 */}
-          {isUpdateReComment ? (
+          {reCommentId === reComment?.id ? (
             <form onSubmit={handleReSubmitBtn}>
               <St.InputBox>
                 <St.Textarea placeholder="댓글을 남겨보세요" value={updateReComment} onChange={(event) => setUpdateReComment(event.target.value)} />
                 <St.CancelSubmitButtonBox>
-                  <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={(e) => handleCancelBtn('reCommentUpdateCancelBtn', e)}>
+                  <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={handleCancelButton}>
                     취소
                   </CommentButton>
-                  <St.Bar>|</St.Bar>
+                  {/* <St.Bar>|</St.Bar> */}
                   {/* <Button onClick={() => setIsUpdateReComment(false)}>취소</Button> */}
                   <CommentButton type="submit" styleType={BtnStyleType.BTN_ONLYFONT} disabled={updateReComment.length < 1}>
                     등록
@@ -152,8 +157,7 @@ function PartnerReComments({
             ''
           )}
         </St.CommentBottomBox>
-      )}
-      {!isLoginCommentUser && (
+      ) : (
         <St.CommentBottomBox>
           <St.DateButtonBox>
             <St.DateBox>
