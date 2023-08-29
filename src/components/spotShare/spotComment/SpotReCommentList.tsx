@@ -14,7 +14,6 @@ type CommentProps = {
 };
 
 type PartnerReCommentsProps = {
-  // authId: string | undefined;
   // comment: CommentProps;
   storageUrl: string | undefined;
   reCommentId: string;
@@ -35,47 +34,25 @@ type PartnerReCommentsProps = {
   };
   isPostWriter: boolean;
   isLoginCommentUser: boolean;
-  // isUpdateReComment: boolean;
   updateReComment: string;
   setUpdateReComment: React.Dispatch<React.SetStateAction<string>>;
   onCancelBtn: (name: string) => void;
   handleIsOpenBtn: (name: string, id: string | null) => void;
-  // handleReUpdateBtn: (id: string, isUpdate: boolean) => Promise<void>; 이거다
   handleReSubmitBtn: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
   setIsUpdateReComment: React.Dispatch<React.SetStateAction<boolean>>;
-  // handleCancelButton: (isUpdateReComment: boolean) => void;
-  // allReCommentsData: {
-  //   commentId: string;
-  //   date: string;
-  //   id: string;
-  //   isUpdate: boolean;
-  //   reContent: string;
-  //   writerId: string;
-  //   users: {
-  //     birthday: string;
-  //     gender: string;
-  //     nickName: string;
-  //     profileImageUrl: string | null;
-  //   };
-  // }[];
 };
 
 function SpotReCommentList({
-  // allReCommentsData,
-  // authId,
   // comment,
   storageUrl,
   reCommentId,
   reComment,
   isPostWriter,
   isLoginCommentUser,
-  // isUpdateReComment,
   updateReComment,
   setUpdateReComment,
   onCancelBtn,
-  // handleCancelButton,
   handleIsOpenBtn,
-  // handleReUpdateBtn, 이거다
   handleReSubmitBtn,
   setIsUpdateReComment,
 }: PartnerReCommentsProps) {
@@ -89,23 +66,6 @@ function SpotReCommentList({
       await deleteReCommentMutation.mutateAsync(id);
     }
   };
-
-  // console.log('1', reCommentId);
-  // console.log('2', reComment?.id);
-
-  // 수정 취소 버튼 클릭 >> 콘솔은 찍힘, 처음엔 true, 두번째 false
-  // const handleCancelButton = (name: string) => {
-  //   if (name === 'reCommentUpdateCancelBtn') {
-  //     console.log(isUpdateReComment);
-  //     setIsUpdateReComment(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (isUpdateReComment) {
-  //     setIsUpdateReComment(false);
-  //   }
-  // }, [isUpdateReComment]);
 
   return (
     <St.ReCommentBox>
@@ -146,8 +106,6 @@ function SpotReCommentList({
                   <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => onCancelBtn('reCommentUpdateCancelBtn')}>
                     취소
                   </CommentButton>
-                  {/* <St.Bar>|</St.Bar> */}
-                  {/* <Button onClick={() => setIsUpdateReComment(false)}>취소</Button> */}
                   <CommentButton type="submit" styleType={BtnStyleType.BTN_ONLYFONT} disabled={updateReComment.length < 1}>
                     등록
                   </CommentButton>

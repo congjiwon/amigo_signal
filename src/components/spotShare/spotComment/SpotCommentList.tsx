@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import { getReCommentData, getSpotPost } from '../../../api/supabase/spotComments';
@@ -54,10 +54,7 @@ export type PartnerCommentListProps = {
 };
 
 function SpotCommentList({ allComments, comment, isLoginUser }: PartnerCommentListProps) {
-  // params : 게시글 ID
-  const params = useParams();
   const { postid } = useParams<string>();
-  const queryClient = useQueryClient();
   const [isUpdate, setIsUpdate] = useState(false);
   const [updateComment, setUpdateComment] = useState('');
   const [isReComment, setIsReComment] = useState(false);
@@ -152,24 +149,6 @@ function SpotCommentList({ allComments, comment, isLoginUser }: PartnerCommentLi
     setReCommentId('');
   };
 
-  // 댓글 수정 버튼 여기로
-  const handleUpdateBtn = (id: string) => {
-    // setIsUpdate(true);
-    // const commentToEdit = allComments!.find((comment) => comment.id === id);
-    // if (commentToEdit) {
-    //   setUpdateComment(commentToEdit.content);
-    // }
-  };
-
-  // 나중에. 답댓글 삭제 버튼 클릭
-  const handleReDelBtn = async (id: string) => {
-    const isConfirmed = await ConfirmDelete('');
-
-    if (isConfirmed) {
-      await deleteReCommentMutation.mutateAsync(id);
-    }
-  };
-
   /// 댓글 삭제 버튼
   const handleDelBtn = async (id: string) => {
     const isConfirmed = await ConfirmDelete('');
@@ -179,58 +158,17 @@ function SpotCommentList({ allComments, comment, isLoginUser }: PartnerCommentLi
     }
   };
 
-  // 안쓰는듯
-  // // 댓글 작성자 ID 배열
-  // const { data: writerId } = useQuery(['writerId'], getWriterIds);
-  // // 답댓글 작성자 ID 배열
-  // const { data: reCommentIds } = useQuery(['reCommentId'], getReCommentWriterIds);
-  // // 댓글 작성자의 유저 ID, 닉네임, 프로필사진 배열
-  // const user = users?.filter((user) => {
-  //   return writerId?.filter((id) => {
-  //     return user.id === id.writerId;
-  //   });
-  // });
-  // // 답댓글 작성자의 유저 정보들
-  // const userReComment = users?.filter((user) => {
-  //   return reCommentIds?.filter((id) => {
-  //     return user.id === id.writerId;
-  //   });
-  // });
-
-  // 답글쓰기 버튼
-  const handleRecommentBtn = () => {
-    // setIsReComment(true);
-  };
-
-  // 답글 수정 버튼 이거다
-  // const handleReUpdateBtn = async (id: string, isUpdate: boolean) => {
-  //   const reCommentToEdit = allReCommentsData!.find((reComment) => reComment.id === id);
-  //   // isUpdate = true;
-  //   // setReCommentId(id);
-  //   // setUpdateReComment(reCommentToEdit!.reContent);
-  //   // isUpdate = true;
-  //   // // console.log(isUpdate);
-  //   if (reCommentToEdit) {
-  //     setIsUpdateReComment(true);
-  //     // isUpdate = true;
-  //     setReCommentId(id); // 수정할 게시글 아이디 담아서 보내야함.
-  //     setUpdateReComment(reCommentToEdit.reContent); // 수정 클릭 시 초기값으로 원댓글 넣어줌.
-  //   }
-  // };
-
-  // textarea open 관리
-
   const handleIsOpenBtn = (name: string, id: string | null) => {
     // 답글쓰기 버튼
     if (name === 'postReComment') {
       setIsReComment(true);
       setIsUpdate(false);
-      setIsUpdateReComment(false);
+      setReCommentId('');
       // 댓글 수정 버튼
     } else if (name === 'updateComment') {
       setIsUpdate(true);
       setIsReComment(false);
-      setIsUpdateReComment(false);
+      setReCommentId('');
       const commentToEdit = allComments!.find((comment) => comment.id === id);
 
       if (commentToEdit) {
@@ -240,18 +178,12 @@ function SpotCommentList({ allComments, comment, isLoginUser }: PartnerCommentLi
     } // 나중에
     else if (name === 'updateReComment') {
       const reCommentToEdit = allReCommentsData!.find((reComment) => reComment.id === id);
-      // isUpdate = true;
-      // setReCommentId(id);
-      // setUpdateReComment(reCommentToEdit!.reContent);
-      // isUpdate = true;
-      // // console.log(isUpdate);
 
       if (reCommentToEdit) {
         setReCommentId(id!); // 수정할 게시글 아이디 담아서 보내야함.
         setUpdateReComment(reCommentToEdit.reContent); // 수정 클릭 시 초기값으로 원댓글 넣어줌.
-        setIsUpdateReComment(true); // 얘떄문에 다같이 열림.
-        // setIsUpdate(false);
-        // setIsReComment(false);
+        setIsUpdate(false);
+        setIsReComment(false);
       }
     }
   };
@@ -259,10 +191,7 @@ function SpotCommentList({ allComments, comment, isLoginUser }: PartnerCommentLi
   // 취소버튼
   const handleCancelBtn = (name: string) => {
     if (name === 'reCommentUpdateCancelBtn') {
-      console.log('name', name);
-      // setIsUpdateReComment(false);
       setReCommentId('');
-      console.log('zz', isUpdateReComment);
     } else if (name === 'updateCancel') {
       setIsUpdate(false);
     } else if ('reCommentCancel') {
@@ -336,7 +265,6 @@ function SpotCommentList({ allComments, comment, isLoginUser }: PartnerCommentLi
                         <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleCancelBtn('updateCancel')}>
                           취소
                         </CommentButton>
-                        {/* <St.Bar>|</St.Bar> */}
                         <CommentButton type="submit" disabled={updateComment.length < 1} styleType={BtnStyleType.BTN_ONLYFONT}>
                           등록
                         </CommentButton>
@@ -374,8 +302,6 @@ function SpotCommentList({ allComments, comment, isLoginUser }: PartnerCommentLi
               return (
                 <SpotReCommentList
                   key={reComment.id}
-                  // allReCommentsData={allReCommentsData}
-                  // authId={authId}
                   // comment={comment}
                   storageUrl={storageUrl}
                   reCommentId={reCommentId}
@@ -385,11 +311,9 @@ function SpotCommentList({ allComments, comment, isLoginUser }: PartnerCommentLi
                   handleReSubmitBtn={handleReSubmitBtn}
                   isPostWriter={isPostWriter}
                   isLoginCommentUser={isLoginCommentUser}
-                  // isUpdateReComment={isUpdateReComment}
                   updateReComment={updateReComment}
                   setUpdateReComment={setUpdateReComment}
                   setIsUpdateReComment={setIsUpdateReComment}
-                  // handleCancelButton={handleCancelButton}
                 />
               );
             }

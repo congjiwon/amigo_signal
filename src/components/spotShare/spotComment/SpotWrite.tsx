@@ -44,9 +44,6 @@ function SpotWrite() {
     <>
       <St.Form onSubmit={handleSubmitBtnClick}>
         <St.CommentTextarea name="content" placeholder="댓글을 남겨보세요" value={content} onChange={(e) => setContent(e.target.value)} />
-        {/* <Button type="submit" styleType={BtnStyleType.BTN_DARK} disabled={content.length < 1}>
-          댓글 등록
-        </Button> */}
         <St.CommentButton type="submit" disabled={content.length < 1}>
           등록
         </St.CommentButton>
