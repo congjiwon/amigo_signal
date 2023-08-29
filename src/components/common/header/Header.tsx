@@ -39,7 +39,7 @@ export default function Header() {
     // 설빈 : 이거 넣으면 로그아웃했을 때 댓글작성X / 답댓글 수정삭제X
     // window.location.reload();
   };
-
+  console.log(currentUser?.profileImageUrl);
   return (
     <St.Header>
       <St.H1>
@@ -58,8 +58,10 @@ export default function Header() {
       <St.Utils>
         {session ? (
           <>
-            <span>{currentUser?.nickName}&nbsp;님</span>
-            <Link to="/mypage">마이페이지</Link>
+            <Link to="/mypage">
+              {/* {currentUser?.profileImageUrl && <img style={{ width: '20px', height: '20px' }} src={currentUser.profileImageUrl} />} */}
+              {currentUser?.nickName}&nbsp;님
+            </Link>
             <Link to="/login" style={{ marginLeft: '20px' }} onClick={handleSignout}>
               로그아웃
             </Link>

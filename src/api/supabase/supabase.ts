@@ -1,5 +1,4 @@
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
-
 export interface Database {
   public: {
     Tables: {
@@ -511,7 +510,6 @@ export interface Database {
     };
   };
 }
-
 export type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row'];
 export type Inserts<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Insert'];
 export type Update<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Update'];
@@ -519,7 +517,6 @@ export type Update<T extends keyof Database['public']['Tables']> = Database['pub
 export type TPartnerComment = Database['public']['Tables']['partnerComments']['Row'];
 export type TPartnerInsert = Database['public']['Tables']['partnerComments']['Insert'];
 export type TPartnerUpdate = Database['public']['Tables']['partnerComments']['Update'];
-
 export type TPartnerReComments = Database['public']['Tables']['reComments']['Row'];
 export type TPartnerReCommentsInsert = Database['public']['Tables']['reComments']['Insert'];
 export type TPartnerReCommentsUpdate = Database['public']['Tables']['reComments']['Update'];
