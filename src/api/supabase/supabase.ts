@@ -94,6 +94,27 @@ export interface Database {
           },
         ];
       };
+      countyInfo: {
+        Row: {
+          country: string;
+          flagUrl: string;
+          id: number;
+          imageUrl: string;
+        };
+        Insert: {
+          country: string;
+          flagUrl: string;
+          id?: number;
+          imageUrl: string;
+        };
+        Update: {
+          country?: string;
+          flagUrl?: string;
+          id?: number;
+          imageUrl?: string;
+        };
+        Relationships: [];
+      };
       interest: {
         Row: {
           content: string | null;
@@ -349,11 +370,12 @@ export interface Database {
         Row: {
           address: string;
           content: string;
+          country: string;
           createdAt: string;
           id: string;
-          region: string;
-          country: string;
+          marker: string;
           postImageUrl: string[] | null;
+          region: string;
           starRate: number;
           title: string;
           visitDate: string;
@@ -362,11 +384,12 @@ export interface Database {
         Insert: {
           address?: string;
           content?: string;
+          country: string;
           createdAt?: string;
           id?: string;
-          region: string;
-          country: string;
+          marker: string;
           postImageUrl?: string[] | null;
+          region: string;
           starRate: number;
           title?: string;
           visitDate: string;
@@ -375,11 +398,12 @@ export interface Database {
         Update: {
           address?: string;
           content?: string;
+          country?: string;
           createdAt?: string;
           id?: string;
-          region: string;
-          country: string;
+          marker?: string;
           postImageUrl?: string[] | null;
+          region?: string;
           starRate?: number;
           title?: string;
           visitDate?: string;
