@@ -1,6 +1,7 @@
 import { styled } from 'styled-components';
 
-export const SpotShareBox = styled.div`
+export const EditorBox = styled.div`
+  height: auto;
   & strong {
     font-weight: 700;
   }
