@@ -23,6 +23,7 @@ export default function SpotShareUpdate() {
   const [star, setStar] = useState<number>(5);
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
+  const [address, setAddress] = useState<string | null>('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -69,7 +70,19 @@ export default function SpotShareUpdate() {
 
     const nowData = currentTime();
 
-    const newData = { createdAt: nowData, title, content: editorHtml, region: location[0], country: location[1], starRate: star, visitDate: spotDate, writerId: userId as string, latitude: 37.5642135, longitude: 127.0016985, address: '한국 부산~' };
+    const newData = {
+      createdAt: nowData,
+      title,
+      content: editorHtml,
+      region: location[0],
+      country: location[1],
+      starRate: star,
+      visitDate: spotDate,
+      writerId: userId as string,
+      latitude,
+      longitude,
+      address,
+    };
     if (validation()) {
       try {
         await insertSpotPost(newData);
@@ -92,7 +105,7 @@ export default function SpotShareUpdate() {
           <St.SpotShareTitleInput type="text" placeholder="제목을 입력해주세요" value={title} onChange={(e) => setTitle(e.target.value)} />
         </div>
         <SpotShareEditor editorHtml={editorHtml} setEditorHtml={setEditorHtml} />
-        <SpotMap setLatitude={setLatitude} setLongitude={setLongitude} />
+        <SpotMap setLatitude={setLatitude} setLongitude={setLongitude} address={address} setAddress={setAddress} />
         <St.ButtonBox>
           <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={() => navigate('/spotshare')}>
             취소하기
