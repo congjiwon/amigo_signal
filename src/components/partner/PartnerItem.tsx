@@ -87,11 +87,11 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
             {post.users.profileImageUrl ? <St.ProfileImage src={`${storagaUrl}/${post.users.profileImageUrl}`} alt="profile" /> : <St.ProfileImage src={defaultProfileImage} alt="profile" />}
             <p>{post.users?.nickName!}</p>
           </St.UserProfile>
-          <div>
+          <St.WriterInfoBox>
             <p>
               {classifyingAge(post.users?.birthday)} | {post.users?.gender}
             </p>
-          </div>
+          </St.WriterInfoBox>
         </St.Footer>
       </St.PostCard>
     </Link>
