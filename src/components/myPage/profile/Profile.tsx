@@ -15,6 +15,7 @@ export default function Profile() {
   return (
     <St.ProfileWrapper>
       <St.ProfileBox>
+        {/* TODO: 이미지 스타일 동그라미에 꽉차게 변경 */}
         <St.ProfileImgBox>
           <img src={currentUser?.profileImageUrl ? `${storagaUrl}/${currentUser?.profileImageUrl}` : defaultImg} />
         </St.ProfileImgBox>
