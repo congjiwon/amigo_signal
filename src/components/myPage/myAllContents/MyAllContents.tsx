@@ -13,6 +13,7 @@ export default function () {
     { label: '동행 찾기 참여글', content: <AppliedPosts />, iconUrl: icon_tab_02 },
     { label: '동행 찾기 북마크', content: <div>북마크</div>, iconUrl: icon_tab_03 },
   ];
+
   return (
     <>
       <MyContentsTabs tabs={tabs} />

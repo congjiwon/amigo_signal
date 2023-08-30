@@ -4,6 +4,9 @@ import useSessionStore from '../../../zustand/store';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import * as St from './style';
+import { Pagination, PaginationProps } from 'antd';
+import { NUMBER_OF_ITEMS } from '../../common/getRangePagination/getRangePagination';
+import useMyPageTabPanel from '../../../zustand/myPageTabPanel';
 
 interface Post {
   id: string;
@@ -25,17 +28,32 @@ export default function AppliedPosts() {
   const session = useSessionStore((state) => state.session);
   const userId = session?.user.id;
   const [filterStatus, setFilterStatus] = useState<boolean | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const isTabActive = useMyPageTabPanel((state) => state.active)[1];
 
-  const { data: appliedPosts, isLoading, isError } = useQuery(['appliedPosts', userId, filterStatus], () => getAppliedPosts({ userId, filterIsAccepted: filterStatus }));
+  const {
+    data: appliedPosts,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['appliedPosts', userId, filterStatus, currentPage - 1],
+    queryFn: () => getAppliedPosts({ userId, filterIsAccepted: filterStatus, page: currentPage - 1 }),
+    enabled: isTabActive,
+  });
 
   const handleClickFilter = (value: boolean | null) => {
     setFilterStatus(value);
+    setCurrentPage(1);
   };
   let appliedPostsData: Post[] = [];
 
-  if (appliedPosts) {
-    appliedPostsData = appliedPosts.map((data) => data.postId as Post);
+  if (appliedPosts?.data) {
+    appliedPostsData = appliedPosts?.data.map((data) => data.postId as Post);
   }
+
+  const handlePageChange: PaginationProps['onChange'] = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <St.AppliedPostsSection>
@@ -52,24 +70,35 @@ export default function AppliedPosts() {
         </St.FilterBtn>
       </St.FilterBtns>
 
-      <St.AppliedPostCardList>
-        {appliedPostsData?.map((postData: Post) => {
-          return (
-            <St.AppliedPostCard>
-              <Link to={`/partner/detail/${postData.id}`}>
-                <div>{postData.country}</div>
-                <div>{`${postData.isOpen ? `모집중` : `모집마감`}`}</div>
-                <div>{`${postData.startDate} ~ ${postData.endDate}`}</div>
-                <div>{postData.title}</div>
-                {postData.interestUrl.map((url) => (
-                  <img src={url} />
-                ))}
-                <div>모집인원 {postData.numOfPeople}</div>
-              </Link>
-            </St.AppliedPostCard>
-          );
-        })}
-      </St.AppliedPostCardList>
+      {!!appliedPosts?.count ? (
+        <>
+          <St.AppliedPostCardList>
+            {appliedPostsData?.map((postData: Post) => {
+              return (
+                <St.AppliedPostCard>
+                  <Link to={`/partner/detail/${postData.id}`}>
+                    <div>{postData.country}</div>
+                    <div>{`${postData.isOpen ? `모집중` : `모집마감`}`}</div>
+                    <div>{`${postData.startDate} ~ ${postData.endDate}`}</div>
+                    <div>{postData.title}</div>
+                    {postData.interestUrl.map((url) => (
+                      <img src={url} />
+                    ))}
+                    <div>모집인원 {postData.numOfPeople}</div>
+                  </Link>
+                </St.AppliedPostCard>
+              );
+            })}
+          </St.AppliedPostCardList>
+          <Pagination current={currentPage} defaultPageSize={NUMBER_OF_ITEMS} total={appliedPosts?.count ? appliedPosts.count : 0} onChange={handlePageChange} />
+        </>
+      ) : filterStatus === null ? (
+        <div>신청중인 동행 찾기 참여글이 없습니다.</div>
+      ) : filterStatus === true ? (
+        <div>수락된 동행 찾기 참여글이 없습니다.</div>
+      ) : (
+        <div>거절된 동행 찾기 참여글이 없습니다.</div>
+      )}
     </St.AppliedPostsSection>
   );
 }
