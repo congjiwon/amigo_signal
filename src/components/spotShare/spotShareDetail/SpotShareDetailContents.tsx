@@ -22,17 +22,6 @@ function SpotShareDetailContents() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  // 디테일 포스트 불러오기
-  const { data: spotSharePost, isLoading, isError } = useQuery(['spotSharePost', postid], () => getDetailSpotSharePost(postid));
-  const spotSharePostData = spotSharePost?.data![0];
-  console.log('해당글 데이터 모음', spotSharePostData);
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (isError) {
-    return <div>Error loading data</div>;
-  }
-
   // 게시글 삭제
 
   // const mutation = useMutation(deleteSpotSharePost, {
@@ -49,6 +38,17 @@ function SpotShareDetailContents() {
   //   mutation.mutate(id);
   //   navigate('/spotshare');
   // };
+
+  // 디테일 포스트 불러오기
+  const { data: spotSharePost, isLoading, isError } = useQuery(['spotSharePost', postid], () => getDetailSpotSharePost(postid));
+  const spotSharePostData = spotSharePost?.data![0];
+  console.log('해당글 데이터 모음', spotSharePostData);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  if (isError) {
+    return <div>Error loading data</div>;
+  }
 
   //ㅡㅡㅡㅡㅡㅡㅡㅡ
 
