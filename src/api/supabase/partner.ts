@@ -206,7 +206,7 @@ type AppliedPostProps = {
 export const getAppliedPosts = async ({ userId, filterIsAccepted, page }: AppliedPostProps) => {
   const { from, to } = getRangePagination(page, NUMBER_OF_ITEMS);
 
-  let appliedPosts = supabase.from('applicants').select('*, postId (*)', { count: 'exact' }).eq('applicantId', userId);
+  let appliedPosts = supabase.from('applicants').select('*, postId(*, writerId(*))', { count: 'exact' }).eq('applicantId', userId);
 
   if (filterIsAccepted === null) {
     appliedPosts = appliedPosts.is('isAccepted', null);

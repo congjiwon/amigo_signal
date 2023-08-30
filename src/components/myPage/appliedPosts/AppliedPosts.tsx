@@ -7,6 +7,7 @@ import * as St from './style';
 import { Pagination, PaginationProps } from 'antd';
 import { NUMBER_OF_ITEMS } from '../../common/getRangePagination/getRangePagination';
 import useMyPageTabPanel from '../../../zustand/myPageTabPanel';
+import classifyingAge from '../../common/classifyingAge/classifyingAge';
 
 interface Post {
   id: string;
@@ -45,11 +46,8 @@ export default function AppliedPosts() {
     setFilterStatus(value);
     setCurrentPage(1);
   };
-  let appliedPostsData: Post[] = [];
 
-  if (appliedPosts?.data) {
-    appliedPostsData = appliedPosts?.data.map((data) => data.postId as Post);
-  }
+  const appliedPostsData = appliedPosts?.data?.map((data) => data.postId);
 
   const handlePageChange: PaginationProps['onChange'] = (page) => {
     setCurrentPage(page);
@@ -73,7 +71,7 @@ export default function AppliedPosts() {
       {!!appliedPosts?.count ? (
         <>
           <St.AppliedPostCardList>
-            {appliedPostsData?.map((postData: Post) => {
+            {appliedPostsData?.map((postData) => {
               return (
                 <St.AppliedPostCard>
                   <Link to={`/partner/detail/${postData.id}`}>
@@ -85,6 +83,9 @@ export default function AppliedPosts() {
                       <img src={url} />
                     ))}
                     <div>모집인원 {postData.numOfPeople}</div>
+                    <div>{postData.writerId.nickName}</div>
+                    <div>{postData.writerId.gender}</div>
+                    <div>{classifyingAge(postData.writerId.birthday)}</div>
                   </Link>
                 </St.AppliedPostCard>
               );

@@ -21,7 +21,7 @@ export interface Database {
             region: string;
             startDate: string;
             title: string;
-            writerId: string | null;
+            writerId: { birthday: string; email: string; gender: string; id: string; nickName: string; profileImageUrl: string | null };
           };
           isAccepted?: boolean;
           users?: {
