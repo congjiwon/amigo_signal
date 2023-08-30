@@ -2,7 +2,7 @@ import { styled } from 'styled-components';
 
 export const FooterLayout = styled.footer`
   padding: 20px 0;
-  background-color: #efefef;
+  border-top: 1px solid #efefef;
   height: 316px;
   margin-top: 120px;
 `;
