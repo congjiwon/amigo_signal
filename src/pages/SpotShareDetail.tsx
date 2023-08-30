@@ -1,4 +1,3 @@
-import { useParams } from 'react-router';
 import SpotComments from '../components/spotShare/spotComment/SpotComments';
 import SpotShareDetailContents from '../components/spotShare/spotShareDetail/SpotShareDetailContents';
 
