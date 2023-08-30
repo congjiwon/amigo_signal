@@ -49,7 +49,7 @@ export const ImageSubText = styled.span`
 export const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, minmax(200px, auto));
-  grid-gap: 20px;
+  grid-gap: 24px;
   place-items: center;
   margin: 50px auto;
 
@@ -69,8 +69,6 @@ export const Grid = styled.div`
 export const PostCard = styled.div`
   width: 282px;
   height: 282px;
-  /* padding: 24px; */
-  /* padding-bottom: 15px; */
   position: relative;
   border-radius: 30px;
   box-shadow: 5px 5px 10px 3px rgba(0, 0, 0, 0.2);
