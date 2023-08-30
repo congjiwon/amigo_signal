@@ -1,5 +1,17 @@
 import { styled } from 'styled-components';
 
+// SpotComments
+export const CommentLengthBox = styled.div`
+  /* width: 49px; */
+  height: 21px;
+`;
+
+export const CommentLengthParagraph = styled.p`
+  /* margin-top: 31px; */
+  margin-bottom: 10px;
+  font-size: 14px;
+`;
+
 // Write
 export const Form = styled.form`
   display: flex;

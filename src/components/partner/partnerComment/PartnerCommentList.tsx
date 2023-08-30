@@ -1,8 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useParams } from 'react-router';
-import { styled } from 'styled-components';
-import { getPartnerPost, getReCommentData, getReCommentWriterIds, getWriterIds } from '../../../api/supabase/partner';
+import { getPartnerPost, getReCommentData } from '../../../api/supabase/partner';
 import { getAuthId, getUsers } from '../../../api/supabase/users';
 import DefaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import { usePartnerComments } from '../../../hooks/usePartnerComment';
@@ -21,7 +20,8 @@ type allCommentsProps =
       postId: string;
       writerId: string;
     }[]
-  | null;
+  | null
+  | undefined;
 
 type CommentProps = {
   content: string;
@@ -38,13 +38,11 @@ export type PartnerCommentListProps = {
 };
 
 function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommentListProps) {
-  // params : 게시글 ID
-  const params = useParams();
   const { postid } = useParams<string>();
   const queryClient = useQueryClient();
-  const [isUpdate, setIsUpdate] = useState(false);
+  const [isUpdate, setIsUpdate] = useState('');
   const [updateComment, setUpdateComment] = useState('');
-  const [isReComment, setIsReComment] = useState(false);
+  const [isReComment, setIsReComment] = useState('');
   const [reContent, setReContent] = useState('');
   const [isUpdateReComment, setIsUpdateReComment] = useState(false); // true여도 안되네
   const [updateReComment, setUpdateReComment] = useState('');
@@ -87,7 +85,6 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
 
     const newComment = {
       content: updateComment,
-      // date: currentTime(), 수정시간넣으면 정렬 이상해짐.
       writerId: comment?.writerId,
       postId: comment?.postId!,
       id: comment?.id,
@@ -96,7 +93,7 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
     await updateCommentMutation.mutateAsync(newComment);
 
     setUpdateComment('');
-    setIsUpdate(false);
+    setIsUpdate('');
   };
 
   // 답댓글 수정 submit
@@ -108,8 +105,6 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
       writerId: authId,
       commentId: comment?.id,
       id: reCommentId,
-      // isUpdate: false, 이건 테이블 isUpdate랑 다르지않나..?
-      date: comment?.date,
     };
 
     updateReCommentMutation.mutate(newReComment);
@@ -133,24 +128,7 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
     postReCommentMutation.mutateAsync(reComment);
 
     setReContent('');
-    setIsReComment(false);
-  };
-
-  // 댓글 수정 버튼 여기로
-  const handleUpdateBtn = (id: string) => {
-    // setIsUpdate(true);
-    // const commentToEdit = allComments!.find((comment) => comment.id === id);
-    // if (commentToEdit) {
-    //   setUpdateComment(commentToEdit.content);
-    // }
-  };
-  // 답댓글 삭제 버튼 클릭
-  const handleReDelBtn = async (id: string) => {
-    const isConfirmed = await ConfirmDelete('');
-
-    if (isConfirmed) {
-      await deleteReCommentMutation.mutateAsync(id);
-    }
+    setIsReComment('');
   };
 
   /// 댓글 삭제 버튼
@@ -162,77 +140,32 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
     }
   };
 
-  // 댓글 작성자 ID 배열
-  const { data: writerId } = useQuery(['writerId'], getWriterIds);
-  // 답댓글 작성자 ID 배열
-  const { data: reCommentIds } = useQuery(['reCommentId'], getReCommentWriterIds);
-  // 댓글 작성자의 유저 ID, 닉네임, 프로필사진 배열
-  const user = users?.filter((user) => {
-    return writerId?.filter((id) => {
-      return user.id === id.writerId;
-    });
-  });
-  // 답댓글 작성자의 유저 정보들
-  const userReComment = users?.filter((user) => {
-    return reCommentIds?.filter((id) => {
-      return user.id === id.writerId;
-    });
-  });
-
-  // 답글쓰기 버튼
-  const handleRecommentBtn = () => {
-    // setIsReComment(true);
-  };
-
-  // 답글 수정 버튼 이거다
-  // const handleReUpdateBtn = async (id: string, isUpdate: boolean) => {
-  //   const reCommentToEdit = allReCommentsData!.find((reComment) => reComment.id === id);
-  //   // isUpdate = true;
-  //   // setReCommentId(id);
-  //   // setUpdateReComment(reCommentToEdit!.reContent);
-  //   // isUpdate = true;
-  //   // // console.log(isUpdate);
-  //   if (reCommentToEdit) {
-  //     setIsUpdateReComment(true);
-  //     // isUpdate = true;
-  //     setReCommentId(id); // 수정할 게시글 아이디 담아서 보내야함.
-  //     setUpdateReComment(reCommentToEdit.reContent); // 수정 클릭 시 초기값으로 원댓글 넣어줌.
-  //   }
-  // };
-
-  // textarea open 관리
-
-  const handleIsOpenBtn = (name: string, id: string | null) => {
+  const handleIsOpenBtn = (name: string, commentId: string, reCommentId: string | null) => {
     // 답글쓰기 버튼
     if (name === 'postReComment') {
-      setIsReComment(true);
-      setIsUpdate(false);
-      setIsUpdateReComment(false);
+      setIsReComment(commentId);
+      setIsUpdate('');
+      setReCommentId('');
+
       // 댓글 수정 버튼
     } else if (name === 'updateComment') {
-      setIsUpdate(true);
-      setIsReComment(false);
-      setIsUpdateReComment(false);
-      const commentToEdit = allComments!.find((comment) => comment.id === id);
+      setIsUpdate(commentId);
+      setIsReComment('');
+      setReCommentId('');
+
+      const commentToEdit = allComments!.find((comment) => comment.id === commentId);
 
       if (commentToEdit) {
         setUpdateComment(commentToEdit.content);
       }
       // 답댓글 수정 버튼
     } else if (name === 'updateReComment') {
-      const reCommentToEdit = allReCommentsData!.find((reComment) => reComment.id === id);
-      // isUpdate = true;
-      // setReCommentId(id);
-      // setUpdateReComment(reCommentToEdit!.reContent);
-      // isUpdate = true;
-      // // console.log(isUpdate);
-
+      const reCommentToEdit = allReCommentsData!.find((reComment) => reComment.id === reCommentId);
       if (reCommentToEdit) {
-        setReCommentId(id!); // 수정할 게시글 아이디 담아서 보내야함.
+        setReCommentId(reCommentId!); // 수정할 게시글 아이디 담아서 보내야함.
         setUpdateReComment(reCommentToEdit.reContent); // 수정 클릭 시 초기값으로 원댓글 넣어줌.
-        setIsUpdateReComment(true); // 얘떄문에 다같이 열림.
-        // setIsUpdate(false);
-        // setIsReComment(false);
+        setIsUpdate('');
+        setIsReComment('');
       }
     }
   };
@@ -242,10 +175,10 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
     if (name === 'reCommentUpdateCancelBtn') {
       setReCommentId('');
     } else if (name === 'updateCancel') {
-      setIsUpdate(false);
+      setIsUpdate('');
     } else if ('reCommentCancel') {
       setReContent('');
-      setIsReComment(false);
+      setIsReComment('');
     }
   };
 
@@ -289,7 +222,7 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
                 {isLoginUser && (
                   <St.ButtonBox>
                     <div>
-                      <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('updateComment', comment!.id)}>
+                      <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('updateComment', comment!.id, null)}>
                         수정
                       </CommentButton>
                     </div>
@@ -301,7 +234,7 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
                     </div>
                   </St.ButtonBox>
                 )}
-                <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('postReComment', comment!.id)}>
+                <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('postReComment', comment!.id, null)}>
                   답글쓰기
                 </CommentButton>
               </St.DateButtonBox>
@@ -314,7 +247,6 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
                         <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleCancelBtn('updateCancel')}>
                           취소
                         </CommentButton>
-                        {/* <St.Bar>|</St.Bar> */}
                         <CommentButton type="submit" disabled={updateComment.length < 1} styleType={BtnStyleType.BTN_ONLYFONT}>
                           등록
                         </CommentButton>
@@ -353,9 +285,7 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
               return (
                 <PartnerReComments
                   key={reComment.id}
-                  // allReCommentsData={allReCommentsData}
-                  // authId={authId}
-                  // comment={comment}
+                  comment={comment}
                   storageUrl={storageUrl}
                   reCommentId={reCommentId}
                   reComment={reComment}
@@ -368,7 +298,6 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
                   updateReComment={updateReComment}
                   setUpdateReComment={setUpdateReComment}
                   setIsUpdateReComment={setIsUpdateReComment}
-                  // handleCancelButton={handleCancelButton}
                 />
               );
             }
@@ -380,8 +309,3 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
 }
 
 export default PartnerCommentList;
-
-const Test = styled.div`
-  display: flex;
-  flex-direction: row-reverse;
-`;

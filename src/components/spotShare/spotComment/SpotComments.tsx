@@ -1,10 +1,10 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { styled } from 'styled-components';
 import { getPostWriterId, getReCommentData, getSpotComments } from '../../../api/supabase/spotComments';
 import SpotCommentList from './SpotCommentList';
 import SpotWrite from './SpotWrite';
+import * as St from './style';
 
 function SpotComments() {
   const { postid } = useParams<string>();
@@ -41,18 +41,11 @@ function SpotComments() {
 
   const commentsCount = (filteredComments?.length || 0) + reCommentCount;
 
-  // const spotReCommentsData = getReCommentData(); // getReCommentData 함수가 필요한 모듈로 변경하세요
-  // const adf = console.log('adf', spotReCommentsData);
-  // const spotReCommentsCount = spotReCommentsData.filter(reComment => {
-  //   const parentComment = spotCommentsData.find(comment => comment.id === reComment.commentId);
-  //   return parentComment && parentComment.postId === postId;
-  // }).length;
-
   return (
     <>
-      <CommentLengthBox>
-        <CommentLengthParagraph>댓글 {commentsCount}개</CommentLengthParagraph>
-      </CommentLengthBox>
+      <St.CommentLengthBox>
+        <St.CommentLengthParagraph>댓글 {commentsCount}개</St.CommentLengthParagraph>
+      </St.CommentLengthBox>
       <SpotWrite />
       {filteredComments &&
         // filteredIds : 현재 로그인한 유저의 댓글 목록
@@ -66,14 +59,3 @@ function SpotComments() {
 }
 
 export default SpotComments;
-
-const CommentLengthBox = styled.div`
-  /* width: 49px; */
-  height: 21px;
-`;
-
-const CommentLengthParagraph = styled.p`
-  /* margin-top: 31px; */
-  margin-bottom: 10px;
-  font-size: 14px;
-`;

@@ -14,8 +14,7 @@ type CommentProps = {
 };
 
 type PartnerReCommentsProps = {
-  // authId: string | undefined;
-  // comment: CommentProps;
+  comment: CommentProps;
   storageUrl: string | undefined;
   reCommentId: string;
   reComment:
@@ -40,47 +39,13 @@ type PartnerReCommentsProps = {
   updateReComment: string;
   setUpdateReComment: React.Dispatch<React.SetStateAction<string>>;
   handleCancelBtn: (name: string) => void;
-  handleIsOpenBtn: (name: string, id: string | null) => void;
-  // handleReUpdateBtn: (id: string, isUpdate: boolean) => Promise<void>; 이거다
+  handleIsOpenBtn: (name: string, commentId: string, reCommentId: string | null) => void;
   handleReSubmitBtn: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
   setIsUpdateReComment: React.Dispatch<React.SetStateAction<boolean>>;
-  // handleCancelButton: (isUpdateReComment: boolean) => void;
-  // allReCommentsData: {
-  //   commentId: string;
-  //   date: string;
-  //   id: string;
-  //   isUpdate: boolean;
-  //   reContent: string;
-  //   writerId: string;
-  //   users: {
-  //     birthday: string;
-  //     gender: string;
-  //     nickName: string;
-  //     profileImageUrl: string | null;
-  //   };
-  // }[];
 };
 
-function PartnerReComments({
-  // allReCommentsData,
-  // authId,
-  // comment,
-  storageUrl,
-  reCommentId,
-  reComment,
-  isPostWriter,
-  isLoginCommentUser,
-  isUpdateReComment,
-  updateReComment,
-  setUpdateReComment,
-  handleCancelBtn,
-  // handleCancelButton,
-  handleIsOpenBtn,
-  // handleReUpdateBtn, 이거다
-  handleReSubmitBtn,
-  setIsUpdateReComment,
-}: PartnerReCommentsProps) {
-  const { deleteReCommentMutation, updateReCommentMutation } = usePartnerComments();
+function PartnerReComments({ comment, storageUrl, reCommentId, reComment, isPostWriter, isLoginCommentUser, updateReComment, setUpdateReComment, handleCancelBtn, handleIsOpenBtn, handleReSubmitBtn }: PartnerReCommentsProps) {
+  const { deleteReCommentMutation } = usePartnerComments();
 
   // 답댓글 삭제 버튼 클릭
   const handleReDelBtn = async (id: string) => {
@@ -90,14 +55,6 @@ function PartnerReComments({
       await deleteReCommentMutation.mutateAsync(id);
     }
   };
-
-  // console.log('1', reCommentId);
-  // console.log('2', reComment?.id);
-
-  // const handleCancelButton = () => {
-  //   // console.log(isUpdateReComment);
-  //   setIsUpdateReComment(!isUpdateReComment);
-  // };
 
   return (
     <St.ReCommentBox>
@@ -121,7 +78,7 @@ function PartnerReComments({
             <St.DateBox>
               <St.DateParagraph>{reComment?.date.substring(0, 10) + ' ' + reComment?.date.substring(11, 16)}</St.DateParagraph>
             </St.DateBox>
-            <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('updateReComment', reComment!.id)}>
+            <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('updateReComment', comment.id, reComment!.id)}>
               수정
             </CommentButton>
             <St.Bar>|</St.Bar>
@@ -137,8 +94,6 @@ function PartnerReComments({
                   <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleCancelBtn('reCommentUpdateCancelBtn')}>
                     취소
                   </CommentButton>
-                  {/* <St.Bar>|</St.Bar> */}
-                  {/* <Button onClick={() => setIsUpdateReComment(false)}>취소</Button> */}
                   <CommentButton type="submit" styleType={BtnStyleType.BTN_ONLYFONT} disabled={updateReComment.length < 1}>
                     등록
                   </CommentButton>
