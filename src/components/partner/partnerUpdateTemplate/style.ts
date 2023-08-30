@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 
 export const FormContainer = styled.div`
-  padding: 40px;
+  margin-top: 40px;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;

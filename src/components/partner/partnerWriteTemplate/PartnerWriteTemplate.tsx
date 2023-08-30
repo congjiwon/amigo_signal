@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { getInterests } from '../../../api/supabase/interest';
-import { BtnStyleType } from '../../../types/styleTypes';
-import LocationDropDown from '../../common/dropDown/LocationDropDown';
-import { PartnerDropDown } from '../../common/dropDown/DropDown';
-import PartnerCalendar from '../../common/calendar/PartnerCalendar';
-import Button from '../../common/button/Button';
-import { AlertWarning } from '../../common/modal/alert';
 import { insertPost } from '../../../api/supabase/partner';
 import { Tables } from '../../../api/supabase/supabase';
-import useSessionStore from '../../../zustand/store';
+import { BtnStyleType } from '../../../types/styleTypes';
+import Button from '../../common/button/Button';
+import PartnerCalendar from '../../common/calendar/PartnerCalendar';
+import { PartnerDropDown } from '../../common/dropDown/DropDown';
+import LocationDropDown from '../../common/dropDown/LocationDropDown';
+import { AlertWarning } from '../../common/modal/alert';
 import * as St from './style';
 
 function PartnerWriteTemplate() {
@@ -24,7 +23,7 @@ function PartnerWriteTemplate() {
   const [loading, setLoading] = useState<boolean>(false);
   const [writerId, setWriterId] = useState<string>('');
   const navigate = useNavigate();
-  const session = useSessionStore((state) => state.session);
+  const authId = window.localStorage.getItem('authId');
 
   const getInterestsList = async () => {
     const Interests = await getInterests();
@@ -39,13 +38,13 @@ function PartnerWriteTemplate() {
   }, []);
 
   useEffect(() => {
-    if (!!session) {
-      setWriterId(session.user.id);
+    if (!!authId) {
+      setWriterId(authId);
     }
-    if (!session) {
+    if (!authId) {
       navigate('/login');
     }
-  }, [navigate, session]);
+  }, [navigate, authId]);
 
   const handleInterestClick = (imageUrl: string) => {
     if (interestUrl.includes(imageUrl)) {

@@ -421,6 +421,43 @@ export interface Database {
           },
         ];
       };
+      spotReComments: {
+        Row: {
+          commentId: string;
+          date: string;
+          id: string;
+          reContent: string;
+          writerId: string;
+        };
+        Insert: {
+          commentId: string;
+          date: string;
+          id?: string;
+          reContent: string;
+          writerId?: string;
+        };
+        Update: {
+          commentId?: string;
+          date?: string;
+          id?: string;
+          reContent?: string;
+          writerId?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'spotReComments_commentId_fkey';
+            columns: ['commentId'];
+            referencedRelation: 'spotComments';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'spotReComments_writerId_fkey';
+            columns: ['writerId'];
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       users: {
         Row: {
           birthday: string;

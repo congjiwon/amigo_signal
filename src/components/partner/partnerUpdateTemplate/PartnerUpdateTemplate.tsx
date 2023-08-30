@@ -1,16 +1,15 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Tables } from '../../../api/supabase/supabase';
 import { getInterests } from '../../../api/supabase/interest';
-import { getPartnerPost, updatePartnerPost, getApplicantList, getConfirmedApplicantList } from '../../../api/supabase/partner';
-import Button from '../../common/button/Button';
+import { getApplicantList, getConfirmedApplicantList, getPartnerPost, updatePartnerPost } from '../../../api/supabase/partner';
+import { Tables } from '../../../api/supabase/supabase';
 import { BtnStyleType } from '../../../types/styleTypes';
-import { AlertWarning, AlertError } from '../../common/modal/alert';
-import LocationDropDown from '../../common/dropDown/LocationDropDown';
-import { PartnerDropDown } from '../../common/dropDown/DropDown';
+import Button from '../../common/button/Button';
 import PartnerCalendar from '../../common/calendar/PartnerCalendar';
-import useSessionStore from '../../../zustand/store';
+import { PartnerDropDown } from '../../common/dropDown/DropDown';
+import LocationDropDown from '../../common/dropDown/LocationDropDown';
+import { AlertError, AlertWarning } from '../../common/modal/alert';
 import * as St from './style';
 
 function PartnerUpdateTemplate({ postId }: { postId: string }) {
@@ -29,7 +28,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
   const [writerId, setWriterId] = useState<string>('');
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const session = useSessionStore((state) => state.session);
+  const authId = window.localStorage.getItem('authId');
 
   const getInterestsList = async () => {
     const Interests = await getInterests();
@@ -84,13 +83,13 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
   }, [partnerPost]);
 
   useEffect(() => {
-    if (!!session) {
-      setWriterId(session.user.id);
+    if (!!authId) {
+      setWriterId(authId);
     }
-    if (!session) {
+    if (!authId || authId !== writerId) {
       navigate('/login');
     }
-  }, [navigate, session]);
+  }, [navigate, authId]);
 
   const handleInterestClick = (imageUrl: string) => {
     if (interestUrl.includes(imageUrl)) {
