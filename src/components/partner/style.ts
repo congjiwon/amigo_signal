@@ -4,6 +4,13 @@ type StatusProps = {
   isOpen: boolean;
 };
 
+//탑버튼
+export const MoveButtonArea = styled.div`
+  position: fixed;
+  right: 40px;
+  bottom: 40px;
+`;
+
 export const ImageWrapper = styled.div`
   position: relative;
   width: 1200px;
