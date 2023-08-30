@@ -65,7 +65,7 @@ function SpotShareDetailContents() {
       </InfoBox>
       <SpotShareBox>
         <ButtonBox>
-          <span>{like ? <RiHeartFill style={{ height: '22px', width: '22px' }} /> : <RiHeartLine style={{ height: '22px', width: '22px' }} />}</span>
+          {logInUserId && <span>{like ? <RiHeartFill style={{ height: '22px', width: '22px' }} /> : <RiHeartLine style={{ height: '22px', width: '22px' }} />}</span>}
           {isPostWriter() ? (
             <>
               <span>{<FiEdit style={{ height: '22px', width: '22px' }} />}</span>
