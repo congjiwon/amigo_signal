@@ -17,6 +17,11 @@ export const deletePartnerPost = async ({ postId }: { postId: string }) => {
   console.log('deletePost', error);
 };
 
+export const updatePartnerPost = async (updatePost: any) => {
+  const { data: updatedData, error } = await supabase.from('partnerPosts').update(updatePost).eq('id', updatePost.id);
+  console.log('updatePost', error);
+};
+
 // 동행 댓글 가져오기(정렬)
 export const getPartnerComments = async () => {
   let { data: partnerComments, error } = await supabase.from('partnerComments').select('*').order('date', { ascending: false });
@@ -24,9 +29,10 @@ export const getPartnerComments = async () => {
   return partnerComments;
 };
 
-export const updatePartnerPost = async (updatePost: any) => {
-  const { data: updatedData, error } = await supabase.from('partnerPosts').update(updatePost).eq('id', updatePost.id);
-  console.log('updatePost', error);
+// 동행 댓글(댓글 작성한 모든 유저도 같이) 안씀.
+export const getPostData = async () => {
+  let { data: partnerComments, error } = await supabase.from('partnerComments').select('*, users!comments_writerId_fkey(*)');
+  return partnerComments;
 };
 
 // 댓글 작성
@@ -42,12 +48,6 @@ export const deletePartnerComment = async (commentId: string) => {
   console.log('error', error);
 };
 
-// 동행 답댓글 삭제
-export const deletePartnerReComment = async (reCommentId: string) => {
-  const { error } = await supabase.from('reComments').delete().eq('id', reCommentId);
-  console.log('error', error);
-};
-
 // 동행 댓글 수정
 export const updatePartnerComment = async (updateComment: TPartnerUpdate) => {
   // 수정할 댓글 ID = updateComment.id
@@ -55,9 +55,9 @@ export const updatePartnerComment = async (updateComment: TPartnerUpdate) => {
   console.log('error', error);
 };
 
-// 동행 답댓글 가져오기
-export const getPartnerReComments = async () => {
-  let { data: rePartnerComments, error } = await supabase.from('reComments').select('*').order('date', { ascending: false });
+// 동행 답댓글 가져오기(답글 작성한 모든 유저도 같이)
+export const getReCommentData = async () => {
+  let { data: rePartnerComments, error } = await supabase.from('reComments').select('*, users!reComments_writerId_fkey(*)').order('date', { ascending: true });
   return rePartnerComments;
 };
 
@@ -66,16 +66,18 @@ export const postPartnerRecomment = async (newPartnerRecomment: TPartnerReCommen
   const { error } = await supabase.from('reComments').insert(newPartnerRecomment);
 };
 
+// 동행 답댓글 삭제
+export const deletePartnerReComment = async (reCommentId: string) => {
+  const { error } = await supabase.from('reComments').delete().eq('id', reCommentId);
+  console.log('error', error);
+};
+
 // 동행 답댓글 수정
 export const updatePartnerReComment = async (updateReComment: TPartnerReCommentsUpdate) => {
   const { error } = await supabase.from('reComments').update(updateReComment).eq('id', updateReComment.id);
 };
 
-// 동행 답댓글 isUpdate 수정
-export const updateIsUpdate = async (reCommentId: string, isOpen: boolean) => {
-  const { error } = await supabase.from('reComments').update({ isUpdate: isOpen }).eq('id', reCommentId);
-};
-
+// 포스트 작성자 ID
 export const getPartnerPostId = async () => {
   let { data: partnerPostId, error } = await supabase.from('partnerPosts').select('id');
   return partnerPostId;
@@ -142,18 +144,6 @@ export const deleteApplicant = async (postId: string, logInUserId: string) => {
 export const getApplicantList = async (postId: string) => {
   const { data: applicantList, error } = await supabase.from('applicants').select('*, users!applicants_applicantId_fkey(*)').eq('postId', postId).eq('isConfirmed', false);
   return { data: applicantList, error };
-};
-
-// 동행 답댓글 가져오기
-export const getReCommentData = async () => {
-  let { data: rePartnerComments, error } = await supabase.from('reComments').select('*, users!reComments_writerId_fkey(*)').order('date', { ascending: true });
-  return rePartnerComments;
-};
-
-// 동행 글 가져오기
-export const getPostData = async () => {
-  let { data: partnerComments, error } = await supabase.from('partnerComments').select('*, users!comments_writerId_fkey(*)');
-  return partnerComments;
 };
 
 // 신청자 목록 -> 수락 / 거절
