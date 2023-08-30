@@ -81,6 +81,7 @@ const UserFeedback = ({ id, createdAt, writerId, openChat }: Props) => {
   const { id: userId, nickName, profileImageUrl } = postUser.data!;
   const isPostUser = () => logInUserId === userId;
 
+  //글삭제
   const handleDelBtn = async (id: string) => {
     const isConfirmed = await ConfirmDelete('해당 동행 글이 삭제되었습니다.');
     if (!isConfirmed) {

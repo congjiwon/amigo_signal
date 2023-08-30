@@ -39,7 +39,7 @@ export default function Header() {
     // 설빈 : 이거 넣으면 로그아웃했을 때 댓글작성X / 답댓글 수정삭제X
     // window.location.reload();
   };
-  console.log(currentUser?.profileImageUrl);
+  // console.log(currentUser?.profileImageUrl);
   return (
     <St.Header>
       <St.H1>
