@@ -3,6 +3,7 @@ import * as St from './style';
 import { Tables } from '../../../api/supabase/supabase';
 import SpotShareItem from './SpotShareItem';
 import { getAllSpotSharePost } from '../../../api/supabase/spotshare';
+import TopButton from '../../common/topbutton/TopButton';
 
 const SpotShareList = () => {
   const [postStorage, setPostStorage] = useState<Tables<'spotPosts'>[]>([]);
@@ -58,6 +59,9 @@ const SpotShareList = () => {
         })
         .slice(0, offset + 10)}
       <div ref={divRef}></div>
+      <St.MoveButtonArea>
+        <TopButton />
+      </St.MoveButtonArea>
     </St.Grid>
   );
 };

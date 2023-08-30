@@ -5,6 +5,8 @@ import { getPostWriterId, getReCommentData, getSpotComments } from '../../../api
 import SpotCommentList from './SpotCommentList';
 import SpotWrite from './SpotWrite';
 import * as St from './style';
+import styled from 'styled-components';
+import TopButton from '../../common/topbutton/TopButton';
 
 function SpotComments() {
   const { postid } = useParams<string>();
@@ -54,6 +56,9 @@ function SpotComments() {
           const isLoginUser = localStorage.getItem('authId') === comment.writerId;
           return <SpotCommentList key={comment.id} allComments={allComments} comment={comment} isLoginUser={isLoginUser!} />;
         })}
+      <St.MoveButtonArea>
+        <TopButton />
+      </St.MoveButtonArea>
     </>
   );
 }

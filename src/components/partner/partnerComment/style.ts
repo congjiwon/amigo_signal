@@ -1,5 +1,12 @@
 import { styled } from 'styled-components';
 
+//탑버튼
+export const MoveButtonArea = styled.div`
+  position: fixed;
+  right: 40px;
+  bottom: 40px;
+`;
+
 //PartnerComments
 export const CommentLengthBox = styled.div`
   /* width: 49px; */

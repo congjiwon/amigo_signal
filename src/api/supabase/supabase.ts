@@ -378,13 +378,13 @@ export interface Database {
       };
       spotPosts: {
         Row: {
-          address: string;
+          address: string | null;
           content: string;
           country: string;
           createdAt: string;
           id: string;
-          latitude: number;
-          longitude: number;
+          latitude: number | null;
+          longitude: number | null;
           postImageUrl: string[] | null;
           region: string;
           starRate: number;
@@ -393,13 +393,13 @@ export interface Database {
           writerId: string;
         };
         Insert: {
-          address?: string;
+          address?: string | null;
           content?: string;
           country: string;
           createdAt?: string;
           id?: string;
-          latitude: number;
-          longitude: number;
+          latitude: number | null;
+          longitude: number | null;
           postImageUrl?: string[] | null;
           region: string;
           starRate: number;
@@ -408,13 +408,13 @@ export interface Database {
           writerId: string;
         };
         Update: {
-          address?: string;
+          address?: string | null;
           content?: string;
           country?: string;
           createdAt?: string;
           id?: string;
-          latitude?: number;
-          longitude?: number;
+          latitude?: number | null;
+          longitude?: number | null;
           postImageUrl?: string[] | null;
           region?: string;
           starRate?: number;
