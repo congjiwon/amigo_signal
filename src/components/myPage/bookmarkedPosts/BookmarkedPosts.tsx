@@ -5,6 +5,7 @@ import useSessionStore from '../../../zustand/store';
 import useMyPageTabPanel from '../../../zustand/myPageTabPanel';
 import { Pagination, PaginationProps } from 'antd';
 import { NUMBER_OF_ITEMS } from '../../common/getRangePagination/getRangePagination';
+import classifyingAge from '../../common/classifyingAge/classifyingAge';
 
 export default function BookmarkedPosts() {
   const session = useSessionStore((state) => state.session);
@@ -43,7 +44,7 @@ export default function BookmarkedPosts() {
           </div>
           <div>{post.numOfPeople}</div>
           <div>{post.writerId.nickName}</div>
-          <div>{post.writerId.birthday}</div>
+          <div>{classifyingAge(post.writerId.birthday)}</div>
           <div>{post.writerId.gender}</div>
         </div>
       ))}
