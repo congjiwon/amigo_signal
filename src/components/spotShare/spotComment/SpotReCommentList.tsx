@@ -1,5 +1,5 @@
 import DefaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
-import { usePartnerComments } from '../../../hooks/usePartnerComment';
+import useSpotComment from '../../../hooks/useSpotComment';
 import { BtnStyleType } from '../../../types/styleTypes';
 import { CommentButton } from '../../common/button/Button';
 import { ConfirmDelete } from '../../common/modal/alert';
@@ -14,40 +14,51 @@ type CommentProps = {
 };
 
 type PartnerReCommentsProps = {
-  comment: CommentProps;
+  // comment: CommentProps;
   storageUrl: string | undefined;
   reCommentId: string;
-  reComment:
-    | {
-        commentId: string;
-        date: string;
-        id: string;
-        reContent: string;
-        writerId: string;
-        users: {
-          birthday: string;
-          gender: string;
-          nickName: string;
-          profileImageUrl: string | null;
-        };
-      }
-    | null
-    | undefined;
+  reComment: {
+    commentId: string;
+    date: string;
+    id: string;
+    reContent: string;
+    writerId: string;
+    users: {
+      birthday: string;
+      email: string;
+      gender: string;
+      id: string;
+      nickName: string;
+      profileImageUrl: string | null;
+    } | null;
+  };
   isPostWriter: boolean;
   isLoginCommentUser: boolean;
-  isUpdateReComment: boolean;
   updateReComment: string;
   setUpdateReComment: React.Dispatch<React.SetStateAction<string>>;
-  handleCancelBtn: (name: string) => void;
-  handleIsOpenBtn: (name: string, commentId: string, reCommentId: string | null) => void;
+  onCancelBtn: (name: string) => void;
+  handleIsOpenBtn: (name: string, id: string | null) => void;
   handleReSubmitBtn: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
   setIsUpdateReComment: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function PartnerReComments({ comment, storageUrl, reCommentId, reComment, isPostWriter, isLoginCommentUser, updateReComment, setUpdateReComment, handleCancelBtn, handleIsOpenBtn, handleReSubmitBtn }: PartnerReCommentsProps) {
-  const { deleteReCommentMutation } = usePartnerComments();
+function SpotReCommentList({
+  // comment,
+  storageUrl,
+  reCommentId,
+  reComment,
+  isPostWriter,
+  isLoginCommentUser,
+  updateReComment,
+  setUpdateReComment,
+  onCancelBtn,
+  handleIsOpenBtn,
+  handleReSubmitBtn,
+  setIsUpdateReComment,
+}: PartnerReCommentsProps) {
+  const { deleteReCommentMutation, updateReCommentMutation } = useSpotComment();
 
-  // 답댓글 삭제 버튼 클릭
+  // 답댓글 삭제 버튼 클릭 >> 잘됨
   const handleReDelBtn = async (id: string) => {
     const isConfirmed = await ConfirmDelete('');
 
@@ -78,7 +89,7 @@ function PartnerReComments({ comment, storageUrl, reCommentId, reComment, isPost
             <St.DateBox>
               <St.DateParagraph>{reComment?.date.substring(0, 10) + ' ' + reComment?.date.substring(11, 16)}</St.DateParagraph>
             </St.DateBox>
-            <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('updateReComment', comment.id, reComment!.id)}>
+            <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('updateReComment', reComment!.id)}>
               수정
             </CommentButton>
             <St.Bar>|</St.Bar>
@@ -86,12 +97,13 @@ function PartnerReComments({ comment, storageUrl, reCommentId, reComment, isPost
               삭제
             </CommentButton>
           </St.DateButtonBox>
+          {/* 의미가 있을려면 isUpdateReComment */}
           {reCommentId === reComment?.id ? (
             <form onSubmit={handleReSubmitBtn}>
               <St.InputBox>
                 <St.Textarea placeholder="댓글을 남겨보세요" value={updateReComment} onChange={(event) => setUpdateReComment(event.target.value)} />
                 <St.CancelSubmitButtonBox>
-                  <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleCancelBtn('reCommentUpdateCancelBtn')}>
+                  <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => onCancelBtn('reCommentUpdateCancelBtn')}>
                     취소
                   </CommentButton>
                   <CommentButton type="submit" styleType={BtnStyleType.BTN_ONLYFONT} disabled={updateReComment.length < 1}>
@@ -117,4 +129,4 @@ function PartnerReComments({ comment, storageUrl, reCommentId, reComment, isPost
   );
 }
 
-export default PartnerReComments;
+export default SpotReCommentList;
