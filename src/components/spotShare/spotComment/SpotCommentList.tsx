@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useParams } from 'react-router';
-import { getReCommentData, getSpotPost } from '../../../api/supabase/spotComments';
+import { getReCommentData, getSpotPost } from '../../../api/supabase/spotshare';
 import { getAuthId, getUsers } from '../../../api/supabase/users';
 import DefaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import useSpotComment from '../../../hooks/useSpotComment';

@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { getPostWriterId, getReCommentData, getSpotComments } from '../../../api/supabase/spotComments';
+import { getPostWriterId, getReCommentData, getSpotComments } from '../../../api/supabase/spotshare';
 import SpotCommentList from './SpotCommentList';
 import SpotWrite from './SpotWrite';
 import * as St from './style';
