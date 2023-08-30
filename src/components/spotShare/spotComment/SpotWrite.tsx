@@ -2,20 +2,15 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import { getAuthId } from '../../../api/supabase/users';
-import { usePartnerComments } from '../../../hooks/usePartnerComment';
+import useSpotComment from '../../../hooks/useSpotComment';
 import * as St from './style';
 
-function PartnerCommentsWrite() {
-  const params = useParams();
+function SpotWrite() {
+  const { postid } = useParams<string>();
   const [content, setContent] = useState('');
   const { isLoading, data: authId } = useQuery(['auth'], getAuthId);
 
-  const { postCommentMutation } = usePartnerComments();
-
-  // 항상 뜸
-  if (isLoading) {
-    // console.log('로딩중');
-  }
+  const { postCommentMutation } = useSpotComment();
 
   // 지원님 시간 가져옴.
   const currentTime = function () {
@@ -36,8 +31,8 @@ function PartnerCommentsWrite() {
     const newComment = {
       content: content,
       date: currentTime(),
-      writerId: authId,
-      postId: params.postid,
+      writerId: authId!,
+      postId: postid,
     };
 
     postCommentMutation.mutateAsync(newComment);
@@ -57,4 +52,4 @@ function PartnerCommentsWrite() {
   );
 }
 
-export default PartnerCommentsWrite;
+export default SpotWrite;

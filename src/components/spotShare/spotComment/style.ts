@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
 
-//PartnerComments
+// SpotComments
 export const CommentLengthBox = styled.div`
   /* width: 49px; */
   height: 21px;

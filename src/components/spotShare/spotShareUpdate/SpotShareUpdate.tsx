@@ -8,6 +8,7 @@ import SpotCalendar from '../../common/calendar/SpotCalendar';
 import { StarDropDown } from '../../common/dropDown/DropDown';
 import LocationDropDown from '../../common/dropDown/LocationDropDown';
 import { AlertError, AlertWarning } from '../../common/modal/alert';
+import SpotMap from '../map/SpotMap';
 import SpotShareEditor from '../spotShareEditor/SpotShareEditor';
 import * as St from './style';
 
@@ -20,6 +21,8 @@ export default function SpotShareUpdate() {
   const [location, setLocation] = useState<string[]>([]);
   const [spotDate, setSpotDate] = useState<string>('');
   const [star, setStar] = useState<number>(5);
+  const [latitude, setLatitude] = useState<number | null>(null);
+  const [longitude, setLongitude] = useState<number | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -89,6 +92,7 @@ export default function SpotShareUpdate() {
           <St.SpotShareTitleInput type="text" placeholder="제목을 입력해주세요" value={title} onChange={(e) => setTitle(e.target.value)} />
         </div>
         <SpotShareEditor editorHtml={editorHtml} setEditorHtml={setEditorHtml} />
+        <SpotMap setLatitude={setLatitude} setLongitude={setLongitude} />
         <St.ButtonBox>
           <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={() => navigate('/spotshare')}>
             취소하기
