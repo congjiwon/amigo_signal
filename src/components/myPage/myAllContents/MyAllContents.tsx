@@ -13,8 +13,8 @@ export default function () {
     { label: '동행 찾기 작성글', content: <MyPartnerPost />, iconUrl: icon_tab_01 },
     { label: '동행 찾기 참여글', content: <AppliedPosts />, iconUrl: icon_tab_02 },
     { label: '동행 찾기 북마크', content: <BookmarkedPosts />, iconUrl: icon_tab_03 },
-    { label: '스팟 공유 작성글', content: <div>스팟 공유 작성글</div>, iconUrl: icon_tab_04 },
-    { label: '스팟 공유 좋아요', content: <div>스팟 공유 좋아요</div>, iconUrl: icon_tab_05 },
+    { label: '스팟 공유 작성글', content: <div>작업 진행 전</div>, iconUrl: icon_tab_04 },
+    { label: '스팟 공유 좋아요', content: <div>작업 진행 전</div>, iconUrl: icon_tab_05 },
   ];
 
   return (
