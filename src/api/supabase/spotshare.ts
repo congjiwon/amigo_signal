@@ -98,3 +98,27 @@ export const insertSpotPost = async (spotPostData: Inserts<'spotPosts'>) => {
   }
   return data;
 };
+
+type likes = { id?: number | undefined; postId: string; userId: string };
+
+//스팟공유 좋아요
+// 매개변수로 받은 postId랑 같으면 넣겠다? 뭔소리고;
+// 좋아요 추가
+export const postLike = async (likes: likes) => {
+  const { data, error } = await supabase.from('likes').insert(likes);
+};
+
+// 좋아요 삭제
+export const deleteLike = async (postId: string, userId: string) => {
+  const { error } = await supabase.from('likes').delete().eq('postId', postId).eq('userId', userId);
+};
+
+// 좋아요 가져오기
+// export const getLike = async (postId: string, userId: string) => {
+//   let { data: likes, error } = await supabase.from('likes').select('*').eq('postId', postId).eq('userId', userId);
+//   if (error) {
+//     alert('좋아요 가져오기 오류');
+//   } else {
+//     return { data: likes };
+//   }
+// };

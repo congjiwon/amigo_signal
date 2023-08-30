@@ -1,12 +1,13 @@
-import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { deleteSpotSharePost, getDetailSpotSharePost } from '../../../api/supabase/spotshare';
-import { useNavigate, useParams } from 'react-router';
+import { FiEdit, FiTrash2 } from 'react-icons/fi';
+import { RiHeartFill, RiHeartLine } from 'react-icons/ri';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
+import { useNavigate, useParams } from 'react-router';
 import { styled } from 'styled-components';
-import { RiHeartLine, RiHeartFill } from 'react-icons/ri';
-import { FiEdit, FiTrash2 } from 'react-icons/fi';
+import { deleteLike, deleteSpotSharePost, getDetailSpotSharePost, postLike } from '../../../api/supabase/spotshare';
+import { supabase } from '../../../api/supabase/supabaseClient';
 import useSessionStore from '../../../zustand/store';
 import { ConfirmDelete } from '../../common/modal/alert';
 
@@ -21,6 +22,29 @@ function SpotShareDetailContents() {
   const logInUserId = session?.user.id;
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  // 좋아요 정보 가져오기
+  // const { data: likeData } = useQuery(['likes', postid, logInUserId!], () => getLike(postid!, logInUserId!));
+
+  const LikeCheck = async (logInUserId: string, postid: string) => {
+    try {
+      let { data: likeData, error } = await supabase.from('likes').select('*').eq('postId', postid).eq('userId', logInUserId);
+
+      if (error) {
+        console.log('좋아요 가져오기 실패', error);
+      } else {
+        setLike(likeData!.length > 0);
+      }
+    } catch (error) {
+      console.log('처참히 실패 개웃겨', error);
+    }
+  };
+
+  useEffect(() => {
+    if (logInUserId && postid) {
+      LikeCheck(logInUserId, postid);
+    }
+  }, []);
 
   // 게시글 삭제
   const mutation = useMutation(deleteSpotSharePost, {
@@ -41,7 +65,7 @@ function SpotShareDetailContents() {
   // 디테일 포스트 불러오기
   const { data: spotSharePost, isLoading, isError } = useQuery(['spotSharePost', postid], () => getDetailSpotSharePost(postid));
   const spotSharePostData = spotSharePost?.data![0];
-  console.log('해당글 데이터 모음', spotSharePostData);
+  // console.log('해당글 데이터 모음', spotSharePostData);
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -51,6 +75,21 @@ function SpotShareDetailContents() {
 
   // 글 작성자인지 확인하는 함수
   const isPostWriter = () => logInUserId == spotSharePostData?.writerId;
+
+  // 좋아요 클릭 시
+  const handleFillHeart = async (postId: string, userId: string) => {
+    setLike(!like);
+    const addLike = { postId: spotSharePostData!.id, userId: logInUserId! };
+    await postLike(addLike);
+
+    // 해당 게시물의 데이터를 다시 쿼리하여 업데이트된 데이터로 갱신
+    // queryClient.invalidateQueries(['spotSharePost', postid]);
+  };
+
+  const handleEmptyHeart = async (postId: string, userId: string) => {
+    setLike(!like);
+    await deleteLike(postId, userId);
+  };
 
   return (
     <>
@@ -65,7 +104,15 @@ function SpotShareDetailContents() {
       </InfoBox>
       <SpotShareBox>
         <ButtonBox>
-          {logInUserId && <span>{like ? <RiHeartFill style={{ height: '22px', width: '22px' }} /> : <RiHeartLine style={{ height: '22px', width: '22px' }} />}</span>}
+          {logInUserId && (
+            <span>
+              {like ? (
+                <RiHeartFill onClick={() => handleEmptyHeart(spotSharePostData!.id, logInUserId)} style={{ height: '22px', width: '22px' }} />
+              ) : (
+                <RiHeartLine onClick={() => handleFillHeart(spotSharePostData!.id, logInUserId)} style={{ height: '22px', width: '22px' }} />
+              )}
+            </span>
+          )}
           {isPostWriter() ? (
             <>
               <span>{<FiEdit style={{ height: '22px', width: '22px' }} />}</span>
