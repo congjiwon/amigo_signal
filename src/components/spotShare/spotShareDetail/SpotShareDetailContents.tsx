@@ -23,15 +23,12 @@ function SpotShareDetailContents() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  // 좋아요 정보 가져오기
-  // const { data: likeData } = useQuery(['likes', postid, logInUserId!], () => getLike(postid!, logInUserId!));
-
   const LikeCheck = async (logInUserId: string, postid: string) => {
     try {
-      let { data: likeData, error } = await supabase.from('likes').select('*').eq('postId', postid).eq('userId', logInUserId);
+      let { data: likeData, error } = await supabase.from('likes').select('*').eq('userId', logInUserId).eq('postId', postid);
 
       if (error) {
-        console.log('좋아요 가져오기 실패', error);
+        console.log('좋아요 가져오기 처참히 실패', error);
       } else {
         setLike(likeData!.length > 0);
       }
@@ -41,10 +38,30 @@ function SpotShareDetailContents() {
   };
 
   useEffect(() => {
-    if (logInUserId && postid) {
-      LikeCheck(logInUserId, postid);
+    // async function fetchData() {
+    // const count = await
+    LikeCheck(logInUserId!, postid!);
+    // const likeCount = await
+    countLike(postid!);
+    // console.log('좋아요 수:', likeCount);
+    // }
+    // fetchData();
+  }, [logInUserId!, postid!]);
+
+  const countLike = async (postid: string) => {
+    try {
+      const { count: likeCount, error } = await supabase.from('likes').select('postId', { count: 'exact' }).eq('postId', postid);
+
+      if (error) {
+        console.log('좋아요 수 가져오기 실패', error);
+      } else {
+        return likeCount;
+      }
+    } catch (error) {
+      console.log('에러', error);
     }
-  }, []);
+  };
+
   const mapRef = useRef<HTMLDivElement>(null);
 
   // 게시글 삭제
@@ -67,7 +84,6 @@ function SpotShareDetailContents() {
   const { data: spotSharePost, isLoading, isError } = useQuery(['spotSharePost', postid], () => getDetailSpotSharePost(postid));
   const spotSharePostData = spotSharePost?.data![0];
   // console.log('해당글 데이터 모음', spotSharePostData);
-  console.log('해당글 데이터 모음', spotSharePostData);
 
   // 맵 불러오기
   useEffect(() => {
@@ -114,9 +130,6 @@ function SpotShareDetailContents() {
     setLike(!like);
     const addLike = { postId: spotSharePostData!.id, userId: logInUserId! };
     await postLike(addLike);
-
-    // 해당 게시물의 데이터를 다시 쿼리하여 업데이트된 데이터로 갱신
-    // queryClient.invalidateQueries(['spotSharePost', postid]);
   };
 
   const handleEmptyHeart = async (postId: string, userId: string) => {
@@ -159,6 +172,7 @@ function SpotShareDetailContents() {
         <WriterInfoBox>
           <span>작성자: 작성자 정보 안들어가있어요 </span>
           <span>작성시간: 작성시간 안들어가있어요 </span>
+          {/* <span>좋아요 수: {likeCount}</span> */}
         </WriterInfoBox>
       </SpotShareBox>
       <div style={{ marginTop: '50px', marginBottom: '50px' }}>

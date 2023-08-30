@@ -113,7 +113,27 @@ export const deleteLike = async (postId: string, userId: string) => {
   const { error } = await supabase.from('likes').delete().eq('postId', postId).eq('userId', userId);
 };
 
-// 좋아요 가져오기
+// 좋아요 카운트
+export const countLikes = async (postId: string) => {
+  const { data, count: countLikes } = await supabase.from('likes').select('*', { count: 'exact' }).eq('postId', postId);
+  return { count: countLikes };
+};
+
+const countLike = async (postid: string) => {
+  try {
+    const { count: likeCount, error } = await supabase.from('likes').select('postId', { count: 'exact' }).eq('postId', postid);
+
+    if (error) {
+      console.log('좋아요 수 가져오기 실패', error);
+    } else {
+      return likeCount;
+    }
+  } catch (error) {
+    console.log('에러', error);
+  }
+};
+
+// 좋아요 가져오기 얘를 여기다 두고 getLike를 import해서 쓸 순 없는건가?
 // export const getLike = async (postId: string, userId: string) => {
 //   let { data: likes, error } = await supabase.from('likes').select('*').eq('postId', postId).eq('userId', userId);
 //   if (error) {
