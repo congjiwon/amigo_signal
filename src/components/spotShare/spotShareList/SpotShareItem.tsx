@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { getSpotShareDefaultImg } from '../../../api/supabase/spotshare';
 import { Tables } from '../../../api/supabase/supabase';
 import Calendar from '../../../assets/imgs/partner/Calendar.svg';
 import * as St from './style';
+import { getSpotShareDefaultImg } from '../../../api/supabase/spotshare';
 
 type SpotItemProps = {
   post: Tables<'spotPosts'>;

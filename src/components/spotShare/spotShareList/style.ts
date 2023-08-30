@@ -1,4 +1,11 @@
 import styled from 'styled-components';
+
+export const MoveButtonArea = styled.div`
+  position: fixed;
+  right: 40px;
+  bottom: 40px;
+`;
+
 export const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, minmax(200px, auto));
