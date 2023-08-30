@@ -65,7 +65,21 @@ export interface Database {
       bookmarks: {
         Row: {
           id: string;
-          postId: string;
+          postId: {
+            content: string;
+            country: string;
+            createdAt: string;
+            endDate: string;
+            id: string;
+            interestUrl: string[];
+            isOpen: boolean;
+            numOfPeople: number;
+            openChat: string;
+            region: string;
+            startDate: string;
+            title: string;
+            writerId: { birthday: string; email: string; gender: string; id: string; nickName: string; profileImageUrl: string | null };
+          };
           userId: string;
         };
         Insert: {

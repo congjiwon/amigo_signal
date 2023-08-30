@@ -222,6 +222,19 @@ export const getAppliedPosts = async ({ userId, filterIsAccepted, page }: Applie
   return { data, count };
 };
 
+// 북마크한 포스트들
+type BookmarkedPostProps = {
+  userId: string | undefined;
+  page: number;
+};
+export const getBookmarkedPosts = async ({ userId, page }: BookmarkedPostProps) => {
+  const { from, to } = getRangePagination(page, NUMBER_OF_ITEMS);
+
+  const { data, count } = await supabase.from('bookmarks').select('*, postId (*, writerId(*))', { count: 'exact' }).eq('userId', userId).order('postId(startDate)').range(from, to);
+
+  return { data, count };
+};
+
 //동행 메인 리스트 국가 + 기간별 필터... ㅇㅔ휴
 
 type filteredPostProps = {
