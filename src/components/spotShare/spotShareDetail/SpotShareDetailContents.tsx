@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FiEdit, FiTrash2 } from 'react-icons/fi';
 import { RiHeartFill, RiHeartLine } from 'react-icons/ri';
 import ReactQuill from 'react-quill';
@@ -45,6 +45,7 @@ function SpotShareDetailContents() {
       LikeCheck(logInUserId, postid);
     }
   }, []);
+  const mapRef = useRef<HTMLDivElement>(null);
 
   // 게시글 삭제
   const mutation = useMutation(deleteSpotSharePost, {
@@ -66,6 +67,38 @@ function SpotShareDetailContents() {
   const { data: spotSharePost, isLoading, isError } = useQuery(['spotSharePost', postid], () => getDetailSpotSharePost(postid));
   const spotSharePostData = spotSharePost?.data![0];
   // console.log('해당글 데이터 모음', spotSharePostData);
+  console.log('해당글 데이터 모음', spotSharePostData);
+
+  // 맵 불러오기
+  useEffect(() => {
+    const initializeMap = () => {
+      if (mapRef.current) {
+        const latitude = spotSharePostData?.latitude;
+        const longitude = spotSharePostData?.longitude;
+
+        if (latitude && longitude) {
+          const location = { lat: latitude, lng: longitude };
+          const map = new google.maps.Map(mapRef.current, {
+            center: location,
+            zoom: 17,
+          });
+
+          new google.maps.Marker({
+            map: map,
+            position: location,
+          });
+        }
+      }
+    };
+
+    if (typeof window.google === 'object' && typeof window.google.maps === 'object') {
+      initializeMap();
+    } else {
+      const googleMapScript = document.querySelector('script[src*="googleapis"]');
+      googleMapScript?.addEventListener('load', initializeMap);
+    }
+  }, [spotSharePostData]);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -128,6 +161,10 @@ function SpotShareDetailContents() {
           <span>작성시간: 작성시간 안들어가있어요 </span>
         </WriterInfoBox>
       </SpotShareBox>
+      <div style={{ marginTop: '50px', marginBottom: '50px' }}>
+        {spotSharePostData?.address ? <p style={{ marginBottom: '10px' }}>주소: {spotSharePostData?.address}</p> : <></>}
+        {spotSharePostData?.latitude && spotSharePostData.longitude ? <div ref={mapRef} style={{ width: '100%', height: '50vh' }} /> : <></>}
+      </div>
     </>
   );
 }
