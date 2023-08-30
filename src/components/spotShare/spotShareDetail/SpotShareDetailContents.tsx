@@ -1,12 +1,12 @@
-import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
-import { deleteSpotSharePost, getDetailSpotSharePost } from '../../../api/supabase/spotshare';
-import { useNavigate, useParams } from 'react-router';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { FiEdit, FiTrash2 } from 'react-icons/fi';
+import { RiHeartFill, RiHeartLine } from 'react-icons/ri';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
+import { useNavigate, useParams } from 'react-router';
 import { styled } from 'styled-components';
-import { RiHeartLine, RiHeartFill } from 'react-icons/ri';
-import { FiEdit, FiTrash2 } from 'react-icons/fi';
+import { deleteSpotSharePost, getDetailSpotSharePost } from '../../../api/supabase/spotshare';
 import useSessionStore from '../../../zustand/store';
 import { ConfirmDelete } from '../../common/modal/alert';
 
@@ -68,7 +68,7 @@ function SpotShareDetailContents() {
           <span>{like ? <RiHeartFill style={{ height: '22px', width: '22px' }} /> : <RiHeartLine style={{ height: '22px', width: '22px' }} />}</span>
           {isPostWriter() ? (
             <>
-              <span>{<FiEdit style={{ height: '22px', width: '22px' }} />}</span>
+              <span>{<FiEdit onClick={() => navigate(`/spotshare/write/${spotSharePostData?.id}`)} style={{ height: '22px', width: '22px' }} />}</span>
               <span>{<FiTrash2 onClick={() => deletePostHandle(spotSharePostData?.id)} style={{ height: '22px', width: '22px' }} />}</span>
             </>
           ) : (

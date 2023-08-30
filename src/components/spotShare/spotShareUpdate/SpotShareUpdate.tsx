@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import { insertSpotPost } from '../../../api/supabase/spotshare';
 import { BtnStyleType } from '../../../types/styleTypes';
 import useSessionStore from '../../../zustand/store';
 import Button from '../../common/button/Button';
@@ -10,7 +11,6 @@ import { AlertError, AlertWarning } from '../../common/modal/alert';
 import SpotMap from '../map/SpotMap';
 import SpotShareEditor from '../spotShareEditor/SpotShareEditor';
 import * as St from './style';
-import { insertSpotPost } from '../../../api/supabase/spotshare';
 
 export default function SpotShareUpdate() {
   const session = useSessionStore((state) => state.session);
@@ -98,7 +98,7 @@ export default function SpotShareUpdate() {
             취소하기
           </Button>
           <Button type="submit" styleType={BtnStyleType.BTN_DARK}>
-            등록
+            등록하기
           </Button>
         </St.ButtonBox>
       </St.WriteForm>
