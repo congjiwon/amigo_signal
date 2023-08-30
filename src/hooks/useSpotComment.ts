@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteSpotComment, deleteSpotReComment, postSpotComment, postSpotReComment, updateSpotComment, updateSpotReComment } from '../api/supabase/spotComments';
+import { deleteSpotComment, deleteSpotReComment, postSpotComment, postSpotReComment, updateSpotComment, updateSpotReComment } from '../api/supabase/spotshare';
 
 function useSpotComment() {
   const queryClient = useQueryClient();
