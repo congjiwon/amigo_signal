@@ -23,21 +23,20 @@ function SpotShareDetailContents() {
   const queryClient = useQueryClient();
 
   // 게시글 삭제
+  const mutation = useMutation(deleteSpotSharePost, {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(['spotSharePost']);
+    },
+  });
 
-  // const mutation = useMutation(deleteSpotSharePost, {
-  //   onSuccess: async () => {
-  //     await queryClient.invalidateQueries(['spotSharePost']);
-  //   },
-  // });
-
-  // const deletePostHandle = async (id: string | undefined) => {
-  //   const isConfirmed = await ConfirmDelete('해당 글이 삭제되었습니다.');
-  //   if (!isConfirmed) {
-  //     return;
-  //   }
-  //   mutation.mutate(id);
-  //   navigate('/spotshare');
-  // };
+  const deletePostHandle = async (id: string | undefined) => {
+    const isConfirmed = await ConfirmDelete('해당 글이 삭제되었습니다.');
+    if (!isConfirmed) {
+      return;
+    }
+    mutation.mutate(id);
+    navigate('/spotshare');
+  };
 
   // 디테일 포스트 불러오기
   const { data: spotSharePost, isLoading, isError } = useQuery(['spotSharePost', postid], () => getDetailSpotSharePost(postid));
@@ -49,27 +48,6 @@ function SpotShareDetailContents() {
   if (isError) {
     return <div>Error loading data</div>;
   }
-
-  //ㅡㅡㅡㅡㅡㅡㅡㅡ
-
-  // const mutation = useMutation(deleteSpotSharePost, {
-  //   onSuccess: async () => {
-  //     await queryClient.invalidateQueries(['spotSharePost']);
-  //   },
-  // });
-
-  // const deletePostHandle = async (id: string | undefined) => {
-  //   const isConfirmed = ConfirmDelete('해당 글이 삭제되었습니다.');
-  //   if (!isConfirmed) {
-  //     return;
-  //   }
-  //   try {
-  //     if (typeof id == 'string') {
-  //       await mutation.mutateAsync(id);
-  //       navigate('/partner');
-  //     }
-  //   } catch (error) {}
-  // };
 
   // 글 작성자인지 확인하는 함수
   const isPostWriter = () => logInUserId == spotSharePostData?.writerId;
@@ -91,8 +69,7 @@ function SpotShareDetailContents() {
           {isPostWriter() ? (
             <>
               <span>{<FiEdit style={{ height: '22px', width: '22px' }} />}</span>
-              {/* <span>{<FiTrash2 onClick={() => deletePostHandle(spotSharePostData?.id)} style={{ height: '22px', width: '22px' }} />}</span> */}
-              <span>{<FiTrash2 style={{ height: '22px', width: '22px' }} />}</span>
+              <span>{<FiTrash2 onClick={() => deletePostHandle(spotSharePostData?.id)} style={{ height: '22px', width: '22px' }} />}</span>
             </>
           ) : (
             ''
