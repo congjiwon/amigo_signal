@@ -71,7 +71,6 @@ const PartnerList = () => {
     const getfilteredPost = async () => {
       console.log(location[1], date[0], date[1]);
       const filteredPost = await getFilteredPartnerPost({ country: location[1], startDate: date[0], endDate: date[1] });
-      console.log('메인에서 필터링 잘 받아오나요', filteredPost);
       if (filteredPost) {
         console.log('sdfsdfs', filteredPost);
         setPostStorage(filteredPost);

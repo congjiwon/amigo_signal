@@ -377,6 +377,14 @@ export interface Database {
           title: string;
           visitDate: string;
           writerId: string;
+          users: {
+            birthday: string;
+            email: string;
+            gender: string;
+            id: string;
+            nickName: string;
+            profileImageUrl: string | null;
+          };
         };
         Insert: {
           address?: string | null;

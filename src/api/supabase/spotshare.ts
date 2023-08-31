@@ -1,6 +1,37 @@
 import { Inserts, Update } from './supabase';
 import { supabase } from './supabaseClient';
 
+//스팟 필터링
+
+type filteredPostProps = {
+  country: string | undefined;
+  // date: string | undefined;
+};
+
+export const getFilteredSpotSharePost = async ({ country }: filteredPostProps) => {
+  // export const getFilteredSpotSharePost = async ({ country, date }: filteredPostProps) => {
+  return await supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*)').eq('country', country);
+
+  // let sharePosts = supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*)');
+  // if (country == undefined) {
+  //   partnerPosts = sharePosts.gte('startDate', startDate).lte('endDate', endDate);
+  //   const { data: test } = await partnerPosts;
+  //   return test;
+  // }
+
+  // if (startDate == undefined || endDate == undefined) {
+  //   partnerPosts = partnerPosts.eq('country', country);
+  //   const { data: test } = await partnerPosts;
+  //   return test;
+  // }
+
+  // if (typeof country == 'string' && typeof endDate == 'string' && typeof startDate == 'string') {
+  //   partnerPosts = partnerPosts.eq('country', country).gt('startDate', startDate).lt('endDate', endDate);
+  //   const { data: test } = await partnerPosts;
+  //   return test;
+  // }
+};
+
 // 클릭한 게시글 id?
 export const getSpotPost = async ({ postId }: { postId: string }) => {
   let { data: spotPost } = await supabase.from('spotPosts').select('*').eq('id', postId).single();
@@ -72,7 +103,7 @@ export const getReCommentWriterIds = async () => {
 
 // 스팟공유 모든 글 가져오기
 export const getAllSpotSharePost = async () => {
-  return await supabase.from('spotPosts').select('*');
+  return await supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*)');
 };
 //스팟공유 리스트 디폴트 이미지 가져오기
 export const getSpotShareDefaultImg = async (country: string) => {

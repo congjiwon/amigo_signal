@@ -2,8 +2,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as St from './style';
 import { Tables } from '../../../api/supabase/supabase';
 import SpotShareItem from './SpotShareItem';
-import { getAllSpotSharePost } from '../../../api/supabase/spotshare';
+import { getAllSpotSharePost, getFilteredSpotSharePost } from '../../../api/supabase/spotshare';
 import TopButton from '../../common/topbutton/TopButton';
+import LocationDropDown from '../../common/dropDown/LocationDropDown';
+import SpotCalendar from '../../common/calendar/SpotCalendar';
+import SpotDateFilter from './SpotDateFilter';
 
 const SpotShareList = () => {
   const [postStorage, setPostStorage] = useState<Tables<'spotPosts'>[]>([]);
@@ -11,6 +14,8 @@ const SpotShareList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 10;
   const offset = (currentPage - 1) * limit;
+  const [location, setLocation] = useState<string[]>([]);
+  // const [date, setDate] = useState<string>('');
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -51,18 +56,37 @@ const SpotShareList = () => {
       ...defaultOption,
     },
   );
+
+  //필터
+  useEffect(() => {
+    const getfilteredPost = async () => {
+      const filteredPost = await getFilteredSpotSharePost({ country: location[1] });
+      // if (filteredPost) {
+      //   setPostStorage(filteredPost);
+      // }
+    };
+    getfilteredPost();
+  }, [location]);
+
   return (
-    <St.Grid>
-      {postStorage
-        .map((post) => {
-          return <SpotShareItem key={post.id} post={post} />;
-        })
-        .slice(0, offset + 10)}
-      <div ref={divRef}></div>
-      <St.MoveButtonArea>
-        <TopButton />
-      </St.MoveButtonArea>
-    </St.Grid>
+    <>
+      <div>
+        <LocationDropDown setLocation={setLocation} />
+        {/* <SpotCalendar setSpotDate={setDate} /> */}
+        {/* <SpotDateFilter /> */}
+      </div>
+      <St.Grid>
+        {postStorage
+          .map((post) => {
+            return <SpotShareItem key={post.id} post={post} />;
+          })
+          .slice(0, offset + 10)}
+        <div ref={divRef}></div>
+        <St.MoveButtonArea>
+          <TopButton />
+        </St.MoveButtonArea>
+      </St.Grid>
+    </>
   );
 };
 

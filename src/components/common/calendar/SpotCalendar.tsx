@@ -10,8 +10,6 @@ interface CalendarProps {
 
 function SpotCalendar({ setSpotDate }: CalendarProps) {
   const getDateHandle: DatePickerProps['onChange'] = (date, dateString) => {
-    //dataString => '2023-08-14' 이런식으로 찍힘
-    console.log(date, dateString);
     setSpotDate(dateString);
   };
 

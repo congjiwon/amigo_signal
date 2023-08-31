@@ -231,7 +231,7 @@ export const getAppliedPosts = async ({ userId, filterIsAccepted, page }: Applie
   return { data, count };
 };
 
-//동행 메인 리스트 국가 + 기간별 필터... ㅇㅔ휴
+//동행 메인 리스트 국가 + 기간별 필터
 
 type filteredPostProps = {
   country: string | undefined;
@@ -241,10 +241,9 @@ type filteredPostProps = {
 
 export const getFilteredPartnerPost = async ({ country, startDate, endDate }: filteredPostProps) => {
   let partnerPosts = supabase.from('partnerPosts').select('*, users!partnerPosts_writerId_fkey(*)');
-  // let partnerPosts = supabase.from('partnerPosts').select('*');
 
   if (country == undefined) {
-    partnerPosts = partnerPosts.gt('startDate', startDate).lt('endDate', endDate);
+    partnerPosts = partnerPosts.gte('startDate', startDate).lte('endDate', endDate);
     const { data: test } = await partnerPosts;
     return test;
   }
