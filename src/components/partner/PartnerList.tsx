@@ -28,24 +28,6 @@ const PartnerList = () => {
   const limit = 10;
   const offset = (currentPage - 1) * limit;
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const { data, error } = await getPartnerPosts();
-      if (error || !data) {
-        console.error('동행자 게시글 목록을 가져오는 과정에서 에러 발생', error);
-        setPostStorage([]);
-      } else {
-        setPostStorage(data);
-      }
-    };
-    fetchPosts();
-
-    //무한스크롤 옵저버 인식
-    if (divRef.current) {
-      observer.observe(divRef.current);
-    }
-  }, []);
-
   const defaultOption = {
     root: null,
     threshold: 0.5,
@@ -64,6 +46,24 @@ const PartnerList = () => {
       ...defaultOption,
     },
   );
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const { data, error } = await getPartnerPosts();
+      if (error || !data) {
+        console.error('동행자 게시글 목록을 가져오는 과정에서 에러 발생', error);
+        setPostStorage([]);
+      } else {
+        setPostStorage(data);
+      }
+    };
+    fetchPosts();
+
+    //무한스크롤 옵저버 인식
+    if (divRef.current) {
+      observer.observe(divRef.current);
+    }
+  }, [observer]);
 
   // 3중 필터 (나라, 기간, 모집여부)
   useEffect(() => {

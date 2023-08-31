@@ -16,6 +16,25 @@ const SpotShareList = () => {
   const [location, setLocation] = useState<string[]>([]);
   const [spotDate, setSpotDate] = useState<string[]>([]);
 
+  const defaultOption = {
+    root: null,
+    threshold: 0.5,
+    rootMargin: '0px',
+  };
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting) {
+        setTimeout(() => {
+          setCurrentPage((prevPage) => prevPage + 1);
+        }, 500);
+      }
+    },
+    {
+      ...defaultOption,
+    },
+  );
+
   useEffect(() => {
     const fetchPosts = async () => {
       const { data, error } = await getAllSpotSharePost();
@@ -35,26 +54,7 @@ const SpotShareList = () => {
     if (divRef.current) {
       observer.observe(divRef.current);
     }
-  }, []);
-
-  const defaultOption = {
-    root: null,
-    threshold: 0.5,
-    rootMargin: '0px',
-  };
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      if (entries[0].isIntersecting) {
-        setTimeout(() => {
-          setCurrentPage((prevPage) => prevPage + 1);
-        }, 500);
-      }
-    },
-    {
-      ...defaultOption,
-    },
-  );
+  }, [observer]);
 
   // 필터링
   useEffect(() => {

@@ -18,7 +18,7 @@ export const getPartnerPosts = async () => {
 
 export const getPartnerPost = async ({ postId }: { postId: string }) => {
   let { data } = await supabase.from('partnerPosts').select('*').eq('id', postId).single();
-  return { data };
+  return data;
 };
 
 export const deletePartnerPost = async ({ postId }: { postId: string }) => {

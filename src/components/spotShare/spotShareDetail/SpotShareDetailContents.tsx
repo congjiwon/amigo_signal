@@ -41,7 +41,7 @@ function SpotShareDetailContents() {
   };
 
   // 디테일 포스트 불러오기
-  const { data: spotSharePost, isLoading, isError } = useQuery(['spotSharePost', postid], () => getDetailSpotSharePost(postid));
+  const { data: spotSharePost, isLoading, isError, refetch } = useQuery(['spotSharePost', postid], () => getDetailSpotSharePost(postid));
 
   // 맵 불러오기
   useEffect(() => {
