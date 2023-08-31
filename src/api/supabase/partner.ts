@@ -12,7 +12,7 @@ export const getSpotShareDefaultImg = async (country: string) => {
 };
 
 export const getPartnerPosts = async () => {
-  let { data: partnerPosts, error } = await supabase.from('partnerPosts').select('*, users!partnerPosts_writerId_fkey(*)');
+  let { data: partnerPosts, error } = await supabase.from('partnerPosts').select('*, users!partnerPosts_writerId_fkey(*)').order('createdAt', { ascending: false });
   return { data: partnerPosts, error };
 };
 
@@ -237,35 +237,34 @@ export const getAppliedPosts = async ({ userId, filterIsAccepted, page }: Applie
   return { data, count };
 };
 
-//동행 메인 리스트 국가 + 기간별 필터... ㅇㅔ휴
-
+// 동행 메인 리스트 국가 + 기간별 + 모집여부 필터
 type filteredPostProps = {
-  country: string | undefined;
-  startDate: string | undefined;
-  endDate: string | undefined;
+  country?: string;
+  startDate?: string;
+  endDate?: string;
+  isOpen?: boolean;
 };
 
-export const getFilteredPartnerPost = async ({ country, startDate, endDate }: filteredPostProps) => {
-  let partnerPosts = supabase.from('partnerPosts').select('*, users!partnerPosts_writerId_fkey(*)');
-  // let partnerPosts = supabase.from('partnerPosts').select('*');
+export const getFilteredPartnerPost = async ({ country, startDate, endDate, isOpen }: filteredPostProps) => {
+  let partnerPosts = supabase.from('partnerPosts').select('*, users!partnerPosts_writerId_fkey(*)').order('createdAt', { ascending: false });
 
-  if (country == undefined) {
-    partnerPosts = partnerPosts.gt('startDate', startDate).lt('endDate', endDate);
-    const { data: test } = await partnerPosts;
-    return test;
+  if (isOpen !== undefined) {
+    partnerPosts = partnerPosts.eq('isOpen', isOpen);
   }
 
-  if (startDate == undefined || endDate == undefined) {
+  if (country !== undefined) {
     partnerPosts = partnerPosts.eq('country', country);
-    const { data: test } = await partnerPosts;
-    return test;
   }
 
-  if (typeof country == 'string' && typeof endDate == 'string' && typeof startDate == 'string') {
-    partnerPosts = partnerPosts.eq('country', country).gt('startDate', startDate).lt('endDate', endDate);
-    const { data: test } = await partnerPosts;
-    return test;
+  if (startDate !== undefined && endDate !== undefined) {
+    partnerPosts = partnerPosts.gte('startDate', startDate).lte('endDate', endDate);
   }
+
+  const { data, error } = await partnerPosts;
+  if (error) {
+    return null;
+  }
+  return data;
 };
 
 // 모집중 <-> 모집완료 바꾸는 로직
