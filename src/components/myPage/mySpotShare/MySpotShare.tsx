@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import useSessionStore from '../../../zustand/store';
 import { useQuery } from '@tanstack/react-query';
 import { getMySpotSharePosts } from '../../../api/supabase/spotshare';
@@ -22,6 +22,7 @@ export default function MySpotShare() {
     queryKey: ['mySpotSharePosts', userId, currentPage - 1],
     queryFn: () => getMySpotSharePosts({ writerId: userId, page: currentPage - 1 }!),
     enabled: isTabActive,
+    keepPreviousData: true,
   });
 
   const handlePageChange: PaginationProps['onChange'] = (page) => {
