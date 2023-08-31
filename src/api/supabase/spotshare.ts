@@ -2,34 +2,27 @@ import { Inserts, Update } from './supabase';
 import { supabase } from './supabaseClient';
 
 //스팟 필터링
-
 type filteredPostProps = {
-  country: string | undefined;
-  // date: string | undefined;
+  country?: string;
+  startDate?: string;
+  endDate?: string;
 };
 
-export const getFilteredSpotSharePost = async ({ country }: filteredPostProps) => {
-  // export const getFilteredSpotSharePost = async ({ country, date }: filteredPostProps) => {
-  return await supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*)').eq('country', country);
+export const getFilteredSpotSharePost = async ({ country, startDate, endDate }: filteredPostProps) => {
+  let sharePosts = supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*)').order('createdAt', { ascending: false });
+  if (country !== undefined) {
+    sharePosts = sharePosts.eq('country', country);
+  }
 
-  // let sharePosts = supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*)');
-  // if (country == undefined) {
-  //   partnerPosts = sharePosts.gte('startDate', startDate).lte('endDate', endDate);
-  //   const { data: test } = await partnerPosts;
-  //   return test;
-  // }
+  if (startDate !== undefined && endDate !== undefined) {
+    sharePosts = sharePosts.gte('visitDate', startDate).lte('visitDate', endDate);
+  }
 
-  // if (startDate == undefined || endDate == undefined) {
-  //   partnerPosts = partnerPosts.eq('country', country);
-  //   const { data: test } = await partnerPosts;
-  //   return test;
-  // }
-
-  // if (typeof country == 'string' && typeof endDate == 'string' && typeof startDate == 'string') {
-  //   partnerPosts = partnerPosts.eq('country', country).gt('startDate', startDate).lt('endDate', endDate);
-  //   const { data: test } = await partnerPosts;
-  //   return test;
-  // }
+  const { data, error } = await sharePosts;
+  if (error) {
+    return null;
+  }
+  return data;
 };
 
 // 클릭한 게시글 id?

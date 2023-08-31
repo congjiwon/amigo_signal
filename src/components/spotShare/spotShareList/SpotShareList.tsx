@@ -5,8 +5,7 @@ import SpotShareItem from './SpotShareItem';
 import { getAllSpotSharePost, getFilteredSpotSharePost } from '../../../api/supabase/spotshare';
 import TopButton from '../../common/topbutton/TopButton';
 import LocationDropDown from '../../common/dropDown/LocationDropDown';
-import SpotCalendar from '../../common/calendar/SpotCalendar';
-import SpotDateFilter from './SpotDateFilter';
+import { FilterSpotCalendar } from '../../common/calendar/SpotCalendar';
 
 const SpotShareList = () => {
   const [postStorage, setPostStorage] = useState<Tables<'spotPosts'>[]>([]);
@@ -15,7 +14,7 @@ const SpotShareList = () => {
   const limit = 10;
   const offset = (currentPage - 1) * limit;
   const [location, setLocation] = useState<string[]>([]);
-  // const [date, setDate] = useState<string>('');
+  const [spotDate, setSpotDate] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -57,23 +56,24 @@ const SpotShareList = () => {
     },
   );
 
-  //필터
+  // 필터링
   useEffect(() => {
     const getfilteredPost = async () => {
-      const filteredPost = await getFilteredSpotSharePost({ country: location[1] });
-      // if (filteredPost) {
-      //   setPostStorage(filteredPost);
-      // }
+      const filteredPost = await getFilteredSpotSharePost({ country: location[1], startDate: spotDate[0], endDate: spotDate[1] });
+      if (filteredPost) {
+        setPostStorage(filteredPost);
+      } else {
+        setPostStorage([]);
+      }
     };
     getfilteredPost();
-  }, [location]);
+  }, [location, spotDate]);
 
   return (
     <>
       <div>
         <LocationDropDown setLocation={setLocation} />
-        {/* <SpotCalendar setSpotDate={setDate} /> */}
-        {/* <SpotDateFilter /> */}
+        <FilterSpotCalendar setSpotDate={setSpotDate} />
       </div>
       <St.Grid>
         {postStorage
