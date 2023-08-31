@@ -87,7 +87,6 @@ export const getSpotShareDefaultImg = async (country: string) => {
 export const getDetailSpotSharePost = async (postId: string | undefined) => {
   const { data } = await supabase.from('spotPosts').select('*').eq('id', postId).single();
   return data;
-  // return await supabase.from('spotPosts').select('*').eq('id', postId);
 };
 
 //스팟공유 게시글 삭제

@@ -1,13 +1,14 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { getFilteredPartnerPost, getPartnerPosts } from '../../api/supabase/partner';
 import { Tables } from '../../api/supabase/supabase';
+import TravelWith from '../../assets/imgs/partner/TravelWith.jpg';
+import PartnerCalendar from '../common/calendar/PartnerCalendar';
+import { RecruitmentDropDown } from '../common/dropDown/DropDown';
+import LocationDropDown from '../common/dropDown/LocationDropDown';
+import TopButton from '../common/topbutton/TopButton';
 import PartnerItem from './PartnerItem';
 import * as St from './style';
-import TravelWith from '../../assets/imgs/partner/TravelWith.jpg';
-import { useNavigate } from 'react-router';
-import LocationDropDown from '../common/dropDown/LocationDropDown';
-import PartnerCalendar from '../common/calendar/PartnerCalendar';
-import TopButton from '../common/topbutton/TopButton';
 
 interface passType {
   country?: string;
@@ -19,6 +20,7 @@ const PartnerList = () => {
   const [postStorage, setPostStorage] = useState<Tables<'partnerPosts'>[]>([]);
   const [location, setLocation] = useState<string[]>([]);
   const [date, setDate] = useState<string[]>([]);
+  const [isOpen, setIsOpen] = useState<boolean>();
 
   const navigate = useNavigate();
   const divRef = useRef(null);
@@ -33,9 +35,6 @@ const PartnerList = () => {
         console.error('동행자 게시글 목록을 가져오는 과정에서 에러 발생', error);
         setPostStorage([]);
       } else {
-        data.sort((a, b) => {
-          return new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf();
-        });
         setPostStorage(data);
       }
     };
@@ -66,19 +65,16 @@ const PartnerList = () => {
     },
   );
 
-  //나라 필터
+  // 3중 필터 (나라, 기간, 모집여부)
   useEffect(() => {
     const getfilteredPost = async () => {
-      console.log(location[1], date[0], date[1]);
-      const filteredPost = await getFilteredPartnerPost({ country: location[1], startDate: date[0], endDate: date[1] });
-      console.log('메인에서 필터링 잘 받아오나요', filteredPost);
+      const filteredPost = await getFilteredPartnerPost({ country: location[1], startDate: date[0], endDate: date[1], isOpen });
       if (filteredPost) {
-        console.log('sdfsdfs', filteredPost);
         setPostStorage(filteredPost);
       }
     };
     getfilteredPost();
-  }, [location, date]);
+  }, [location, date, isOpen]);
 
   return (
     <>
@@ -94,6 +90,7 @@ const PartnerList = () => {
       <div>
         <LocationDropDown setLocation={setLocation} />
         <PartnerCalendar setPartnerDates={setDate} />
+        <RecruitmentDropDown setIsOpen={setIsOpen} />
       </div>
       <div>
         <button onClick={() => navigate('/partner/write')}>글쓰기</button>

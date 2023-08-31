@@ -19,6 +19,10 @@ interface SortProps {
   setSort: React.Dispatch<React.SetStateAction<number>>;
 }
 
+interface RecruitmentProps {
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean | undefined>>;
+}
+
 export function PartnerDropDown({ setPartner }: PartnerProps) {
   const handleChange = (value: string) => {
     setPartner(Number(value));
@@ -139,14 +143,36 @@ export function SortDropDown({ setSort }: SortProps) {
   );
 }
 
+export function RecruitmentDropDown({ setIsOpen }: RecruitmentProps) {
+  const handleChange = (value: boolean | undefined) => {
+    setIsOpen(value);
+  };
+  return (
+    <Space wrap>
+      <Select
+        placeholder="모집중"
+        style={{ width: '140px' }}
+        onChange={handleChange}
+        allowClear
+        options={[
+          { value: true, label: '모집중' },
+          { value: false, label: '모집완료' },
+        ]}
+      />
+    </Space>
+  );
+}
+
 // 사용법
 
 // const [star, setStar] = useState<number>(5);
 // const [partner, setPartner] = useState<number>(1);
 // const [sort, setSort] = useState<number>(1);
 // const [location, setLocation] = useState<string[]>([]);
+// const [isOpen, setIsOpen] = useState<boolean>();
 
 // <StarDropDown setStar={setStar} />
 // <PartnerDropDown setPartner={setPartner} />
 // <SortDropDown setSort={setSort} />
 // <LocationDropDown setLocation={setLocation} />
+// <RecruitmentDropDown setIsOpen={setIsOpen} />
