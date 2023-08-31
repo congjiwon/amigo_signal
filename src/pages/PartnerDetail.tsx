@@ -73,7 +73,7 @@ function PartnerDetail() {
         <PartnerDetailInfo partnerPostData={partnerPost!} />
         <St.CommunicateDiv>
           <ConfirmedPartnerList postId={postid} />
-          {logInUserId ? <Communication postId={postid} writerId={partnerPostData.writerId} logInUserId={logInUserId} /> : <></>}
+          {logInUserId ? <Communication postId={postid} writerId={partnerPost?.writerId!} logInUserId={logInUserId} /> : <></>}
         </St.CommunicateDiv>
       </St.PartnerDetailMain>
       <St.Status>
