@@ -27,6 +27,7 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
   const [address, setAddress] = useState<string | null>('');
+  const [like, setLike] = useState<number>(0);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -47,6 +48,7 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
         setLatitude(spotSharePost.latitude);
         setLongitude(spotSharePost.longitude);
         setAddress(spotSharePost.address);
+        setLike(spotSharePost.likeCount);
       }
     };
     fetchPostData();
@@ -101,6 +103,7 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
       latitude,
       longitude,
       address,
+      likeCount: like,
     };
     if (validation()) {
       await mutation.mutate(updateData);

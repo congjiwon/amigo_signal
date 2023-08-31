@@ -205,6 +205,12 @@ export const getMyPartnerPosts = async ({ userId, filterIsOpen, page }: MyPartne
   return { data, count };
 };
 
+// export const getSpotLikes = async () => {
+//   let data = supabase.from('spotPosts').select('*', { count: 'exact' });
+//   console.log(data);
+// };
+// getSpotLikes();
+
 // 내가 지원한 동행 포스트들
 type AppliedPostProps = {
   userId: string | undefined;
