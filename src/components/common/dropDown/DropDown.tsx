@@ -16,7 +16,7 @@ interface UpdateStarProps {
   setStar: React.Dispatch<React.SetStateAction<number>>;
 }
 interface SortProps {
-  setSort: React.Dispatch<React.SetStateAction<number>>;
+  setSort: (value: string) => void;
 }
 
 interface RecruitmentProps {
@@ -145,20 +145,11 @@ export function UpdateStarDropDown({ star, setStar }: UpdateStarProps) {
 
 export function SortDropDown({ setSort }: SortProps) {
   const handleChange = (value: string) => {
-    setSort(Number(value));
+    setSort(value);
   };
   return (
     <Space wrap>
-      <Select
-        defaultValue="최신순"
-        allowClear
-        style={{ width: 140 }}
-        onChange={handleChange}
-        options={[
-          { value: '1', label: '최신순' },
-          { value: '2', label: '인기순' },
-        ]}
-      />
+      <Select defaultValue="최신순" allowClear style={{ width: 140 }} onChange={handleChange} options={[{ value: '최신순' }, { value: '인기순' }]} />
     </Space>
   );
 }

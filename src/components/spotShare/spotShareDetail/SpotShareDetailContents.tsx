@@ -5,11 +5,11 @@ import { RiHeartFill, RiHeartLine } from 'react-icons/ri';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
 import { useNavigate, useParams } from 'react-router';
-import { styled } from 'styled-components';
 import { countLike, countLikes, deleteLike, deleteSpotSharePost, getDetailSpotSharePost, postLike } from '../../../api/supabase/spotshare';
 import { supabase } from '../../../api/supabase/supabaseClient';
 import useSessionStore from '../../../zustand/store';
 import { ConfirmDelete } from '../../common/modal/alert';
+import * as St from './style';
 
 type postIdProps = {
   postId: string | undefined;
@@ -134,17 +134,17 @@ function SpotShareDetailContents() {
 
   return (
     <>
-      <TitleBox>
+      <St.TitleBox>
         <p>제목: {spotSharePost?.title}</p>
-      </TitleBox>
-      <InfoBox>
+      </St.TitleBox>
+      <St.InfoBox>
         <span>{spotSharePost?.region}</span>
         <span>{spotSharePost?.country}</span>
         <span>방문날짜: {spotSharePost?.visitDate}</span>
         <span>{spotSharePost?.starRate}</span>
-      </InfoBox>
-      <SpotShareBox>
-        <ButtonBox>
+      </St.InfoBox>
+      <St.SpotShareBox>
+        <St.ButtonBox>
           {logInUserId && <span>{like ? <RiHeartFill onClick={() => handleEmptyHeart()} style={{ height: '22px', width: '22px' }} /> : <RiHeartLine onClick={() => handleFillHeart()} style={{ height: '22px', width: '22px' }} />}</span>}
           {isPostWriter() ? (
             <>
@@ -154,14 +154,14 @@ function SpotShareDetailContents() {
           ) : (
             ''
           )}
-        </ButtonBox>
+        </St.ButtonBox>
         <ReactQuill readOnly={true} theme="bubble" value={spotSharePost?.content} />
-        <WriterInfoBox>
-          {/* <span>작성자: {spotSharePost?.users.nickName} </span> */}
+        <St.WriterInfoBox>
+          <span>작성자: {spotSharePost?.users?.nickName} </span>
           <span>작성시간: {spotSharePost?.createdAt.substring(0, 10) + ' ' + spotSharePost?.createdAt.substring(11, 16)} </span>
           <span>좋아요 수: {likeCount}</span>
-        </WriterInfoBox>
-      </SpotShareBox>
+        </St.WriterInfoBox>
+      </St.SpotShareBox>
       <div style={{ marginTop: '50px', marginBottom: '50px' }}>
         {spotSharePost?.address ? <p style={{ marginBottom: '10px' }}>주소: {spotSharePost?.address}</p> : <></>}
         {spotSharePost?.latitude && spotSharePost.longitude ? <div ref={mapRef} style={{ width: '100%', height: '50vh' }} /> : <></>}
@@ -171,58 +171,3 @@ function SpotShareDetailContents() {
 }
 
 export default SpotShareDetailContents;
-const WriterInfoBox = styled.div`
-  position: absolute;
-  bottom: 0px;
-  right: 0px;
-  text-align: right;
-  margin: 0px 47px 47px 0px;
-  span {
-    font-size: 13px;
-    margin-left: 10px;
-  }
-`;
-
-const ButtonBox = styled.div`
-  margin: 33px 33px 0px 0px;
-  text-align: right;
-  span {
-    margin-left: 11px;
-  }
-`;
-
-const TitleBox = styled.div`
-  border: 2px solid #efefef;
-  border-radius: 50px;
-  margin-bottom: 29px;
-  height: 51px;
-  p {
-    font-size: 18px;
-    margin: 19px 0 12px 57px;
-  }
-`;
-
-const InfoBox = styled.div`
-  height: 51px;
-  span {
-    margin-right: 20px;
-    border: 2px solid #efefef;
-    border-radius: 50px;
-    padding: 11px 35px;
-  }
-`;
-
-export const SpotShareBox = styled.div`
-  & strong {
-    font-weight: 700;
-  }
-
-  & em {
-    font-style: italic;
-  }
-  border: 2px solid #efefef;
-  border-radius: 10px;
-  padding-left: 37px;
-  padding-bottom: 130px;
-  position: relative;
-`;

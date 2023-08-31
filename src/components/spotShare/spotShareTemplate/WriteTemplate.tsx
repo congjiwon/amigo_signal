@@ -4,13 +4,13 @@ import { insertSpotPost } from '../../../api/supabase/spotshare';
 import { BtnStyleType } from '../../../types/styleTypes';
 import useSessionStore from '../../../zustand/store';
 import Button from '../../common/button/Button';
+import { SpotCalendar } from '../../common/calendar/SpotCalendar';
 import { StarDropDown } from '../../common/dropDown/DropDown';
 import LocationDropDown from '../../common/dropDown/LocationDropDown';
 import { AlertError, AlertWarning } from '../../common/modal/alert';
 import SpotMap from '../map/SpotMap';
 import SpotShareEditor from '../spotShareEditor/SpotShareEditor';
 import * as St from './style';
-import { SpotCalendar } from '../../common/calendar/SpotCalendar';
 
 export default function WriteTemplate() {
   const session = useSessionStore((state) => state.session);
@@ -82,7 +82,7 @@ export default function WriteTemplate() {
       latitude,
       longitude,
       address,
-      likeCount: null,
+      likeCount: 0,
     };
     if (validation()) {
       try {

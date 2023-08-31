@@ -27,7 +27,7 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
   const [address, setAddress] = useState<string | null>('');
-  const [like, setLike] = useState<number | null>(null);
+  const [like, setLike] = useState<number>(0);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 

@@ -401,7 +401,7 @@ export interface Database {
           id: string;
           latitude: number | null;
           longitude: number | null;
-          likeCount: number | null;
+          likeCount: number;
           postImageUrl: string[] | null;
           region: string;
           starRate: number;
@@ -425,7 +425,7 @@ export interface Database {
           id?: string;
           latitude: number | null;
           longitude: number | null;
-          likeCount: number | null;
+          likeCount: number;
           postImageUrl?: string[] | null;
           region: string;
           starRate: number;
@@ -441,7 +441,7 @@ export interface Database {
           id?: string;
           latitude?: number | null;
           longitude?: number | null;
-          likeCount: number | null;
+          likeCount: number;
           postImageUrl?: string[] | null;
           region?: string;
           starRate?: number;
