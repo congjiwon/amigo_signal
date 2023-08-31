@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
-import * as St from './style';
-import { Tables } from '../../../api/supabase/supabase';
-import SpotShareItem from './SpotShareItem';
+import { useEffect, useRef, useState } from 'react';
 import { getAllSpotSharePost } from '../../../api/supabase/spotshare';
+import { Tables } from '../../../api/supabase/supabase';
 import TopButton from '../../common/topbutton/TopButton';
+import SpotShareItem from './SpotShareItem';
+import * as St from './style';
 
 const SpotShareList = () => {
   const [postStorage, setPostStorage] = useState<Tables<'spotPosts'>[]>([]);
