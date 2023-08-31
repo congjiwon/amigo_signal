@@ -6,7 +6,7 @@ import { getAllSpotSharePost, getFilteredSpotSharePost } from '../../../api/supa
 import TopButton from '../../common/topbutton/TopButton';
 import LocationDropDown from '../../common/dropDown/LocationDropDown';
 import { FilterSpotCalendar } from '../../common/calendar/SpotCalendar';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 const SpotShareList = () => {
   const [postStorage, setPostStorage] = useState<Tables<'spotPosts'>[]>([]);
@@ -17,7 +17,7 @@ const SpotShareList = () => {
   const [location, setLocation] = useState<string[]>([]);
   const [spotDate, setSpotDate] = useState<string[]>([]);
   const pageLocation = useLocation();
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchPosts = async () => {
       const { data, error } = await getAllSpotSharePost();
@@ -73,10 +73,13 @@ const SpotShareList = () => {
 
   return (
     <>
-      <div>
-        <LocationDropDown setLocation={setLocation} />
-        <FilterSpotCalendar setSpotDate={setSpotDate} />
-      </div>
+      <St.filterBox>
+        <div>
+          <LocationDropDown setLocation={setLocation} />
+          <FilterSpotCalendar setSpotDate={setSpotDate} />
+        </div>
+        <button onClick={() => navigate('/spotshare/write')}>글쓰기</button>
+      </St.filterBox>
       <St.Grid>
         {postStorage
           .map((post) => {
