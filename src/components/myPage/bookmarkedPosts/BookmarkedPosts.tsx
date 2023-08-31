@@ -9,6 +9,7 @@ import classifyingAge from '../../common/classifyingAge/classifyingAge';
 import * as StCommon from './../common/style/style';
 import { Link } from 'react-router-dom';
 import defaultImg from '../../../assets/imgs/users/default_profile_img.png';
+import MyPartnerCard from '../common/myPartnerCard/MyPartnerCard';
 const storagaUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
 
 export default function BookmarkedPosts() {
@@ -35,50 +36,7 @@ export default function BookmarkedPosts() {
         <>
           <StCommon.MyCards>
             {bookmarkedPosts?.map((post) => (
-              <StCommon.MyCard>
-                <Link to={`/partner/detail/${post.id}`}>
-                  <StCommon.FlexBetween className="partner-top">
-                    <StCommon.CountryInfo>
-                      <div>
-                        <img src="" alt={`${post.country} 국기`} />
-                      </div>
-                      <p>{post.country}</p>
-                    </StCommon.CountryInfo>
-                    <StCommon.OpenStatus>{post.isOpen ? `모집중` : `모집완료`}</StCommon.OpenStatus>
-                  </StCommon.FlexBetween>
-
-                  <StCommon.DateInfo>
-                    {post.startDate} ~ {post.endDate}
-                  </StCommon.DateInfo>
-
-                  <StCommon.CardTitle className="partner-title">{post.title}</StCommon.CardTitle>
-
-                  <StCommon.FlexBetween>
-                    <StCommon.InterestList>
-                      {post.interestUrl.map((url) => (
-                        <li>
-                          <img src={url} />
-                        </li>
-                      ))}
-                    </StCommon.InterestList>
-                    <StCommon.numOfPeople>
-                      모집인원 <span>{post.numOfPeople}</span>
-                    </StCommon.numOfPeople>
-                  </StCommon.FlexBetween>
-
-                  <StCommon.FlexBetween className="partner-bottom">
-                    <StCommon.UserInfoMain>
-                      <div>
-                        <img src={post.writerId.profileImageUrl ? `${storagaUrl}/${post.writerId.profileImageUrl}` : defaultImg} />
-                      </div>
-                      <p>{post.writerId.nickName}</p>
-                    </StCommon.UserInfoMain>
-                    <StCommon.UserInfoSub>
-                      {post.writerId.gender} | {classifyingAge(post.writerId.birthday)}
-                    </StCommon.UserInfoSub>
-                  </StCommon.FlexBetween>
-                </Link>
-              </StCommon.MyCard>
+              <MyPartnerCard partnerPost={post} postUserInfo={true} />
             ))}
           </StCommon.MyCards>
           <StCommon.PaginationBox>
