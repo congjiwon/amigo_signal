@@ -1,20 +1,20 @@
 import { supabase } from './supabaseClient';
 
 export const getUser = async ({ userId }: { userId: string }) => {
-  let { data: user } = await supabase.from('users').select('*').eq('id', userId).single();
-  return { data: user };
+  let { data } = await supabase.from('users').select('*').eq('id', userId).single();
+  return { data };
 };
 
 // user 정보 배열
 export const getUsers = async () => {
-  let { data: userData } = await supabase.from('users').select('id, nickName, profileImageUrl');
-  return userData;
+  let { data } = await supabase.from('users').select('id, nickName, profileImageUrl');
+  return data;
 };
 
 // user ID
 export const getUserIds = async () => {
-  let { data: userIdData } = await supabase.from('users').select('id');
-  return userIdData;
+  let { data } = await supabase.from('users').select('id');
+  return data;
 };
 
 // 현재 로그인 한 유저
@@ -27,13 +27,13 @@ export const getAuthId = async () => {
 const authId = getAuthId();
 
 export const getCurrentUser = async (userId: string) => {
-  let { data: user } = await supabase.from('users').select('*').eq('id', userId).single();
-  return user;
+  let { data } = await supabase.from('users').select('*').eq('id', userId).single();
+  return data;
 };
 
 export const duplicationCheckFromUserTable = async (columnName: string, value: string) => {
-  let { data: users, error } = await supabase.from('users').select(columnName).eq(columnName, value);
-  if (users?.length !== undefined && users.length > 0) {
+  let { data, error } = await supabase.from('users').select(columnName).eq(columnName, value);
+  if (data?.length !== undefined && data.length > 0) {
     return true;
   }
   return;
@@ -86,11 +86,11 @@ export const removeBookMark = async (logInUserId: string, postId: string) => {
 //북마크 상태 확인
 export const bookmarkCheck = async (logInUserId: string, postId: string) => {
   try {
-    let { data: checkBookmark, error } = await supabase.from('bookmarks').select('*').eq('postId', postId).eq('userId', logInUserId);
+    let { data, error } = await supabase.from('bookmarks').select('*').eq('postId', postId).eq('userId', logInUserId);
     if (error) {
       console.log('북마크 데이터 불러오는데 실패함 ..', error);
     }
-    return checkBookmark;
+    return data;
   } catch (error) {
     console.log('처참히 실패', error);
   }

@@ -13,8 +13,8 @@ export const updateSpotPost = async (updateData: Update<'spotPosts'>) => {
 
 // 스팟 댓글 가져오기(댓글 작성한 모든 유저 정보도 함께)
 export const getSpotComments = async () => {
-  let { data: spotCommentsData, error } = await supabase.from('spotComments').select('*, users!spotComments_writerId_fkey(*)').order('date', { ascending: false });
-  return spotCommentsData;
+  let { data, error } = await supabase.from('spotComments').select('*, users!spotComments_writerId_fkey(*)').order('date', { ascending: false });
+  return data;
 };
 getSpotComments();
 
@@ -35,20 +35,20 @@ export const updateSpotComment = async (updateComment: Update<'spotComments'>) =
 
 // 스팟글 작성자 ID 배열인데 이것도 포스트작성자 찾는게 있었떤거같기도
 export const getPostWriterId = async () => {
-  let { data: spotPostWriterId } = await supabase.from('spotPosts').select('id');
-  return spotPostWriterId;
+  let { data } = await supabase.from('spotPosts').select('id');
+  return data;
 };
 
 // 스팟 댓글 작성자 ID 배열 이긴한데 그냥 스팟 댓글 가져오기에서는 filter 돌려서 찾아야되네. 걍 쓰자.
 export const getCommentWriterIds = async () => {
-  let { data: writerId } = await supabase.from('spotComments').select('writerId');
-  return writerId;
+  let { data } = await supabase.from('spotComments').select('writerId');
+  return data;
 };
 
 // 스팟 답댓글 가져오기(답글 작성한 모든 유저도 같이)
 export const getReCommentData = async () => {
-  let { data: reCommentsData } = await supabase.from('spotReComments').select('*, users!spotReComments_writerId_fkey(*)').order('date', { ascending: true });
-  return reCommentsData;
+  let { data } = await supabase.from('spotReComments').select('*, users!spotReComments_writerId_fkey(*)').order('date', { ascending: true });
+  return data;
 };
 
 // 스팟 답댓글 작성
@@ -68,8 +68,8 @@ export const updateSpotReComment = async (updateReComment: Update<'spotReComment
 
 // 스팟 답댓글 작성자 ID 배열
 export const getReCommentWriterIds = async () => {
-  let { data: reCommentWriterId } = await supabase.from('spotReComments').select('writerId');
-  return reCommentWriterId;
+  let { data } = await supabase.from('spotReComments').select('writerId');
+  return data;
 };
 
 // let { data: count } = await supabase.from('spotReComments').select('id');
