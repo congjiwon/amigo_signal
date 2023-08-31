@@ -1,14 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { checkApply, getConfirmedApplicantList, getPartnerPost, updatePostStatus } from '../api/supabase/partner';
+import Communication from '../components/partner/communicate/Communication';
+import ConfirmedPartnerList from '../components/partner/communicate/ConfirmedPartnerList';
 import PartnerCommentsList from '../components/partner/partnerComment/PartnerComments';
 import PartnerDetailInfo from '../components/partner/partnerDetailInfo/PartnerDetailInfo';
-import Communication from '../components/partner/communicate/Communication';
-import useSessionStore from '../zustand/store';
-import ConfirmedPartnerList from '../components/partner/communicate/ConfirmedPartnerList';
-import * as St from './style';
-import { useEffect, useState } from 'react';
 import { useStateStore } from '../zustand/communicate';
+import useSessionStore from '../zustand/store';
+import * as St from './style';
 
 function PartnerDetail() {
   const { postid } = useParams<string>();
@@ -74,7 +74,6 @@ function PartnerDetail() {
         <PartnerDetailInfo partnerPostData={partnerPostData} />
         <St.CommunicateDiv>
           <ConfirmedPartnerList postId={postid} />
-          <br />
           {logInUserId ? <Communication postId={postid} writerId={partnerPostData.writerId} logInUserId={logInUserId} /> : <></>}
         </St.CommunicateDiv>
       </St.PartnerDetailMain>

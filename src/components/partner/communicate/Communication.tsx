@@ -98,9 +98,12 @@ const Communication = ({ postId, writerId, logInUserId }: CommunicationProps) =>
         </St.ApplyDiv>
       ) : (
         <>
-          <Button styleType={BtnStyleType.BTN_DARK} onClick={() => openModal('applicantList')}>
-            동행 신청자 목록
-          </Button>
+          {isThisPostOpen && (
+            <Button styleType={BtnStyleType.BTN_DARK} onClick={() => openModal('applicantList')}>
+              동행 신청자 목록
+            </Button>
+          )}
+
           {hasApplicants ? <St.NewApplicantAlert>새로운 동행 신청이 있습니다.</St.NewApplicantAlert> : <></>}
         </>
       )}

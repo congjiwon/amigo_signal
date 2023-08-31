@@ -6,7 +6,11 @@ type StatusProps = {
 
 export const PartnerDetailMain = styled.div`
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 export const CommunicateDiv = styled.section`
@@ -16,6 +20,8 @@ export const CommunicateDiv = styled.section`
 export const Status = styled.div`
   display: flex;
   gap: 5px;
+  margin-top: 167px;
+  margin-bottom: 24px;
 `;
 
 export const PostStatus = styled.span<StatusProps>`

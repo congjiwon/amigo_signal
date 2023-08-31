@@ -8,6 +8,10 @@ type CheckButtonProps = {
   isAccepted: boolean | null;
 };
 
+type ConfirmedApplicantListProps = {
+  isExist: boolean;
+};
+
 export const ApplyDiv = styled.div`
   display: flex;
   align-items: center;
@@ -127,29 +131,44 @@ export const ApplicantContent = styled.p`
   margin-left: 40px;
 `;
 
-export const ConfirmedApplicantList = styled.div`
-  padding: 30px;
+export const ConfirmedApplicantList = styled.div<ConfirmedApplicantListProps>`
+  width: 282px;
+  padding-bottom: ${(props) => (props.isExist ? '40px' : '0px')};
   border: 1px solid lightgray;
   border-radius: 10px;
   h1 {
+    margin-top: 40px;
+    margin-left: 24px;
     font-weight: 600;
   }
+`;
+
+export const AlertEmpty = styled.p`
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: gray;
 `;
 
 export const ConfirmedApplicantItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 10px;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-top: 16px;
 `;
 
 export const ConfirmedApplicantInfo = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+  font-size: 14px;
 `;
 
 export const ConfirmedApplicantAgeNGender = styled.p`
   color: gray;
-  font-size: 14px;
+  font-size: 12px;
 `;
