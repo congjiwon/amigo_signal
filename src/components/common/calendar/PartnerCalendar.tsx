@@ -34,7 +34,7 @@ function PartnerCalendar({ setPartnerDates }: CalendarProps) {
 
 export default PartnerCalendar;
 
-function UpdatePartnerCalendar({ startDate, endDate, setPartnerDates }: UpdateCalendarProps) {
+export function UpdatePartnerCalendar({ startDate, endDate, setPartnerDates }: UpdateCalendarProps) {
   const getDateHandle = (dates: any, dateString: any) => {
     setPartnerDates(dateString);
   };
