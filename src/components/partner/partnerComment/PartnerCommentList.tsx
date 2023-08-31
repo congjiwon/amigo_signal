@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import { getPartnerPost, getReCommentData } from '../../../api/supabase/partner';
@@ -40,7 +40,6 @@ export type PartnerCommentListProps = {
 
 function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommentListProps) {
   const { postid } = useParams<string>();
-  const queryClient = useQueryClient();
   const [isUpdate, setIsUpdate] = useState('');
   const [updateComment, setUpdateComment] = useState('');
   const [isReComment, setIsReComment] = useState('');
