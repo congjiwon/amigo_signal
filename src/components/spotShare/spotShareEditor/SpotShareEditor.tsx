@@ -14,7 +14,16 @@ type editorHtmlProps = {
 Quill.register('modules/imageActions', ImageActions);
 Quill.register('modules/imageFormats', ImageFormats);
 
-const toolbarOptions = [[{ header: [1, 2, 3, false] }], [{ color: [] }, { background: [] }], ['bold', 'italic', 'underline', 'strike'], ['blockquote'], [{ list: 'ordered' }, { list: 'bullet' }], [{ align: [] }], ['link', 'image']];
+const toolbarOptions = [
+  [{ header: 1 }, { header: 2 }],
+  [{ size: ['small', false, 'large', 'huge'] }],
+  [{ color: [] }, { background: [] }],
+  ['bold', 'italic', 'underline', 'strike'],
+  ['blockquote'],
+  [{ list: 'ordered' }, { list: 'bullet' }],
+  [{ align: [] }],
+  ['link', 'image'],
+];
 
 const formats = ['header', 'font', 'size', 'bold', 'italic', 'underline', 'strike', 'align', 'blockquote', 'list', 'bullet', 'background', 'color', 'link', 'image', 'height', 'width'];
 

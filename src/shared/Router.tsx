@@ -27,6 +27,7 @@ const Router: React.FC = () => {
           <Route path="/spotshare" element={<SpotShare />} />
           <Route path="/spotshare/detail/:postid" element={<SpotShareDetail />} />
           <Route path="/spotshare/write" element={<SpotShareWrite />} />
+          <Route path="/spotshare/write/:postid" element={<SpotShareWrite />} />
         </Route>
       </Routes>
     </BrowserRouter>

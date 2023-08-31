@@ -3,8 +3,12 @@ import { supabase } from './supabaseClient';
 
 // 클릭한 게시글 id?
 export const getSpotPost = async ({ postId }: { postId: string }) => {
-  let { data: spotPost } = await supabase.from('spotPosts').select('*').eq('id', postId).single();
-  return spotPost;
+  const { data } = await supabase.from('spotPosts').select('*').eq('id', postId).single();
+  return data;
+};
+
+export const updateSpotPost = async (updateData: Update<'spotPosts'>) => {
+  const { error } = await supabase.from('spotPosts').update(updateData).eq('id', updateData.id).single();
 };
 
 // 스팟 댓글 가져오기(댓글 작성한 모든 유저 정보도 함께)
@@ -81,7 +85,8 @@ export const getSpotShareDefaultImg = async (country: string) => {
 
 //스팟공유 특정 글 가져오기
 export const getDetailSpotSharePost = async (postId: string | undefined) => {
-  return await supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*)').eq('id', postId);
+  const { data } = await supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*)').eq('id', postId).single();
+  return data;
 };
 
 //스팟공유 게시글 삭제
