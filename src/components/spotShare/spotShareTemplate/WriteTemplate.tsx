@@ -82,6 +82,7 @@ export default function WriteTemplate() {
       latitude,
       longitude,
       address,
+      likeCount: null,
     };
     if (validation()) {
       try {

@@ -1,4 +1,5 @@
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
+
 export interface Database {
   public: {
     Tables: {
@@ -151,7 +152,7 @@ export interface Database {
       };
       likes: {
         Row: {
-          id: number;
+          id: string;
           postId: string;
           userId: string;
           spotPosts: {
@@ -171,12 +172,12 @@ export interface Database {
           };
         };
         Insert: {
-          id?: number;
+          id?: string;
           postId: string;
           userId: string;
         };
         Update: {
-          id?: number;
+          id?: string;
           postId?: string;
           userId?: string;
         };
@@ -400,6 +401,7 @@ export interface Database {
           id: string;
           latitude: number | null;
           longitude: number | null;
+          likeCount: number | null;
           postImageUrl: string[] | null;
           region: string;
           starRate: number;
@@ -407,6 +409,7 @@ export interface Database {
           visitDate: string;
           writerId: string;
           users: { birthday: string; email: string; gender: string; id: string; nickName: string; profileImageUrl: string | null };
+          likes: { id: string; postId: string; userId: string };
         };
         Insert: {
           address?: string | null;
@@ -416,6 +419,7 @@ export interface Database {
           id?: string;
           latitude: number | null;
           longitude: number | null;
+          likeCount: number | null;
           postImageUrl?: string[] | null;
           region: string;
           starRate: number;
@@ -431,6 +435,7 @@ export interface Database {
           id?: string;
           latitude?: number | null;
           longitude?: number | null;
+          likeCount: number | null;
           postImageUrl?: string[] | null;
           region?: string;
           starRate?: number;

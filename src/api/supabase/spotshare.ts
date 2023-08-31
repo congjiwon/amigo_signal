@@ -104,7 +104,7 @@ export const insertSpotPost = async (spotPostData: Inserts<'spotPosts'>) => {
   return data;
 };
 
-type likes = { id?: number | undefined; postId: string; userId: string };
+type likes = { id?: string | undefined; postId: string; userId: string };
 
 //스팟공유 좋아요
 // 매개변수로 받은 postId랑 같으면 넣겠다? 뭔소리고;
@@ -130,6 +130,13 @@ export const getLikes = async () => {
 
 // 스팟공유 인기순 정렬
 export const sortSpot = async () => {
-  const { data } = await supabase.from('likes').select('*, spotPosts!postId_fkey(*)');
+  const { data, count } = await supabase.from('likes').select('postId, COUNT(*) as like_count');
+  return { data };
+};
+
+// 스팟공유 게시글 좋아요 수 업데이트
+export const countLike = async (like: number, postId: string) => {
+  const { data } = await supabase.from('spotPosts').update({ likeCount: like }).eq('id', postId);
+  console.log('data', like);
   return { data };
 };

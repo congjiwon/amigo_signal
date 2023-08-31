@@ -6,7 +6,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
 import { useNavigate, useParams } from 'react-router';
 import { styled } from 'styled-components';
-import { countLikes, deleteLike, deleteSpotSharePost, getDetailSpotSharePost, postLike } from '../../../api/supabase/spotshare';
+import { countLike, countLikes, deleteLike, deleteSpotSharePost, getDetailSpotSharePost, postLike } from '../../../api/supabase/spotshare';
 import { supabase } from '../../../api/supabase/supabaseClient';
 import useSessionStore from '../../../zustand/store';
 import { ConfirmDelete } from '../../common/modal/alert';
@@ -23,13 +23,13 @@ function SpotShareDetailContents() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [likeCount, setLikeCount] = useState(0); // 이 부분을 추가
+  let updateLikeCount = likeCount;
 
   // 디테일 포스트 불러오기
   const { data: spotSharePost, isLoading, isError } = useQuery(['spotSharePost', postid], () => getDetailSpotSharePost(postid));
 
   // 좋아요 수 가져오기
   const { data: likeCountData } = useQuery(['likes', postid], () => countLikes(postid!));
-  console.log('likeData', likeCountData?.count);
 
   useEffect(() => {
     async function updateLikeCount() {
@@ -121,12 +121,14 @@ function SpotShareDetailContents() {
     setLike(!like);
     const addLike = { postId: postid!, userId: logInUserId! };
     await postLike(addLike);
+    await countLike(++updateLikeCount, postid!);
     await queryClient.invalidateQueries(['likes', postid]);
   };
 
   const handleEmptyHeart = async () => {
     setLike(!like);
     await deleteLike(postid!, logInUserId!);
+    await countLike(--updateLikeCount, postid!);
     await queryClient.invalidateQueries(['likes', postid]);
   };
 
@@ -155,7 +157,7 @@ function SpotShareDetailContents() {
         </ButtonBox>
         <ReactQuill readOnly={true} theme="bubble" value={spotSharePost?.content} />
         <WriterInfoBox>
-          <span>작성자: {spotSharePost?.users.nickName} </span>
+          {/* <span>작성자: {spotSharePost?.users.nickName} </span> */}
           <span>작성시간: {spotSharePost?.createdAt.substring(0, 10) + ' ' + spotSharePost?.createdAt.substring(11, 16)} </span>
           <span>좋아요 수: {likeCount}</span>
         </WriterInfoBox>
