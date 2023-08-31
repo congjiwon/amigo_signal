@@ -13,7 +13,6 @@ type PartnerItemProps = {
 };
 
 const PartnerItem = ({ post }: PartnerItemProps) => {
-  const [imageSrc, setImageSrc] = useState<string>('');
   const storagaUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
   const [flagImg, setFlagImg] = useState<string>('');
 
@@ -23,7 +22,7 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
     const getFlagImgHandle = async () => {
       const { data, error } = await getFlag(post.country);
       if (error || !data) {
-        console.error('깃발 가져오는 과정에서 에러 발생..!!!!조져다', error);
+        console.error('깃발 가져오는 과정에서 에러 발생', error);
       } else {
         setFlagImg(data[0].flagUrl);
       }
