@@ -22,6 +22,25 @@ interface SortProps {
 interface RecruitmentProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean | undefined>>;
 }
+interface FilterPeriodProps {
+  setFilterPeriod: React.Dispatch<React.SetStateAction<number>>;
+}
+
+export function SpotSharePeriodFilterDropDown({ setFilterPeriod }: FilterPeriodProps) {
+  const handleChange = (value: string) => {
+    setFilterPeriod(Number(value));
+  };
+  return (
+    <Space wrap>
+      <Select
+        placeholder="월 별 필터링"
+        style={{ width: '100%' }}
+        onChange={handleChange}
+        options={[{ label: '1월' }, { label: '2월' }, { label: '3월' }, { label: '4월' }, { label: '5월' }, { label: '6월' }, { label: '7월' }, { label: '8월' }, { label: '9월' }, { label: '10월' }, { label: '11월' }, { label: '12월' }]}
+      />
+    </Space>
+  );
+}
 
 export function PartnerDropDown({ setPartner }: PartnerProps) {
   const handleChange = (value: string) => {
@@ -132,6 +151,7 @@ export function SortDropDown({ setSort }: SortProps) {
     <Space wrap>
       <Select
         defaultValue="최신순"
+        allowClear
         style={{ width: 140 }}
         onChange={handleChange}
         options={[

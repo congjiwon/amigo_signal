@@ -408,8 +408,14 @@ export interface Database {
           title: string;
           visitDate: string;
           writerId: string;
-          users: { birthday: string; email: string; gender: string; id: string; nickName: string; profileImageUrl: string | null };
-          likes: { id: string; postId: string; userId: string };
+          users: {
+            birthday: string;
+            email: string;
+            gender: string;
+            id: string;
+            nickName: string;
+            profileImageUrl: string | null;
+          };
         };
         Insert: {
           address?: string | null;

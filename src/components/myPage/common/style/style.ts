@@ -76,6 +76,8 @@ export const CountryInfo = styled.div`
       left: 50%;
       top: 50%;
       width: 100%;
+      height: 100%;
+      object-fit: cover;
       transform: translate(-50%, -50%);
     }
   }
