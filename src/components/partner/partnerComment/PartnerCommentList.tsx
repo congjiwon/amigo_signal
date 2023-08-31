@@ -39,6 +39,7 @@ export type PartnerCommentListProps = {
 };
 
 function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommentListProps) {
+  const storageUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
   const { postid } = useParams<string>();
   const [isUpdate, setIsUpdate] = useState('');
   const [updateComment, setUpdateComment] = useState('');
@@ -51,7 +52,7 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
   // 유저 ID, 닉네임, 프로필사진 배열
   const { data: users } = useQuery(['userData'], getUsers);
 
-  const { updateCommentMutation, deleteCommentMutation, postReCommentMutation, updateReCommentMutation, deleteReCommentMutation } = usePartnerComments();
+  const { updateCommentMutation, deleteCommentMutation, postReCommentMutation, updateReCommentMutation } = usePartnerComments();
 
   const currentUser = useCurrentUserStore((state) => state.currentUser);
 
@@ -181,8 +182,6 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
       setIsReComment('');
     }
   };
-
-  const storageUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
 
   {
     return (
