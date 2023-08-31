@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { getAllSpotSharePost } from '../../../api/supabase/spotshare';
+import { getAllSpotSharePost, getFilteredSpotSharePost } from '../../../api/supabase/spotshare';
 import { Tables } from '../../../api/supabase/supabase';
+import { FilterSpotCalendar } from '../../common/calendar/SpotCalendar';
+import LocationDropDown from '../../common/dropDown/LocationDropDown';
 import TopButton from '../../common/topbutton/TopButton';
 import SpotShareItem from './SpotShareItem';
 import * as St from './style';
@@ -11,6 +13,8 @@ const SpotShareList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 10;
   const offset = (currentPage - 1) * limit;
+  const [location, setLocation] = useState<string[]>([]);
+  const [spotDate, setSpotDate] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -51,18 +55,38 @@ const SpotShareList = () => {
       ...defaultOption,
     },
   );
+
+  // 필터링
+  useEffect(() => {
+    const getfilteredPost = async () => {
+      const filteredPost = await getFilteredSpotSharePost({ country: location[1], startDate: spotDate[0], endDate: spotDate[1] });
+      if (filteredPost) {
+        setPostStorage(filteredPost);
+      } else {
+        setPostStorage([]);
+      }
+    };
+    getfilteredPost();
+  }, [location, spotDate]);
+
   return (
-    <St.Grid>
-      {postStorage
-        .map((post) => {
-          return <SpotShareItem key={post.id} post={post} />;
-        })
-        .slice(0, offset + 10)}
-      <div ref={divRef}></div>
-      <St.MoveButtonArea>
-        <TopButton />
-      </St.MoveButtonArea>
-    </St.Grid>
+    <>
+      <div>
+        <LocationDropDown setLocation={setLocation} />
+        <FilterSpotCalendar setSpotDate={setSpotDate} />
+      </div>
+      <St.Grid>
+        {postStorage
+          .map((post) => {
+            return <SpotShareItem key={post.id} post={post} />;
+          })
+          .slice(0, offset + 10)}
+        <div ref={divRef}></div>
+        <St.MoveButtonArea>
+          <TopButton />
+        </St.MoveButtonArea>
+      </St.Grid>
+    </>
   );
 };
 
