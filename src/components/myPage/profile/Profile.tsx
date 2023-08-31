@@ -15,7 +15,6 @@ export default function Profile() {
   return (
     <St.ProfileWrapper>
       <St.ProfileBox>
-        {/* TODO: 이미지 스타일 동그라미에 꽉차게 변경 */}
         <St.ProfileImgBox>
           <img src={currentUser?.profileImageUrl ? `${storagaUrl}/${currentUser?.profileImageUrl}` : defaultImg} />
         </St.ProfileImgBox>
@@ -26,7 +25,7 @@ export default function Profile() {
           </p>
         </St.ProfileInfo>
       </St.ProfileBox>
-      <button onClick={() => openModal('modifyProfile')}>프로필 수정</button>
+      <button onClick={() => openModal('modifyProfile')}>수정</button>
       {openedModals.modifyProfile && (
         <Modal id="modifyProfile" size="medium">
           <ModifyProfile />

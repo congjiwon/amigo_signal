@@ -10,8 +10,9 @@ export const FooterLayout = styled.footer`
 export const FooterContainer = styled.div`
   display: flex;
   flex-direction: column;
-
-  width: 1200px;
+  width: 100%;
+  min-width: 360px;
+  max-width: 1200px;
   margin: 0 auto;
 `;
 

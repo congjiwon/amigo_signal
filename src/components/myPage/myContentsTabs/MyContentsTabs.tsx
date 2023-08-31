@@ -23,25 +23,33 @@ const MyContentsTabs: React.FC<TabsProps> = ({ tabs }) => {
   };
 
   return (
-    <St.MyContentsLayout>
-      <St.MyContentsLeftBox className="tab-buttons">
-        <Profile />
+    <St.MyPageLayout>
+      <St.MyPageTabPanelBox className="tab-panels">
         {tabs.map((tab, index) => (
-          <St.MyContentsTab key={index} className={index === activeTab ? 'active' : ''} onClick={() => handleClickTab(index, index === activeTab)}>
-            <img src={tab.iconUrl} alt={`${tab.label} 메뉴 아이콘`} />
-            <span>{tab.label}</span>
-          </St.MyContentsTab>
+          <St.MyPageTabPanel key={index} className={`tab-panel ${index === activeTab ? 'active' : ''}`}>
+            <section>
+              <St.MyPageTabPanelTitle>
+                <img src={tab.iconUrl} alt={`${tab.label} 아이콘`} />
+                <h2>{tab.label}</h2>
+              </St.MyPageTabPanelTitle>
+              {tab.content}
+            </section>
+          </St.MyPageTabPanel>
         ))}
-      </St.MyContentsLeftBox>
+      </St.MyPageTabPanelBox>
 
-      <St.MyContentsRightBox className="tab-panels">
-        {tabs.map((tab, index) => (
-          <St.MyContentTabPanel key={index} className={`tab-panel ${index === activeTab ? 'active' : ''}`}>
-            {tab.content}
-          </St.MyContentTabPanel>
-        ))}
-      </St.MyContentsRightBox>
-    </St.MyContentsLayout>
+      <St.MyPageLNBBox className="tab-buttons">
+        <Profile />
+        <St.MyPageTabs>
+          {tabs.map((tab, index) => (
+            <St.MyPageTab key={index} className={index === activeTab ? 'active' : ''} onClick={() => handleClickTab(index, index === activeTab)}>
+              <img src={tab.iconUrl} alt={`${tab.label} 메뉴 아이콘`} />
+              <span>{tab.label}</span>
+            </St.MyPageTab>
+          ))}
+        </St.MyPageTabs>
+      </St.MyPageLNBBox>
+    </St.MyPageLayout>
   );
 };
 
