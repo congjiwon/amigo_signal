@@ -7,9 +7,9 @@ import { Tables } from '../../../api/supabase/supabase';
 import { BtnStyleType } from '../../../types/styleTypes';
 import useSessionStore from '../../../zustand/store';
 import Button from '../../common/button/Button';
-import PartnerCalendar from '../../common/calendar/PartnerCalendar';
+import { UpdatePartnerCalendar } from '../../common/calendar/PartnerCalendar';
 import { UpdatePartnerDropDown } from '../../common/dropDown/DropDown';
-import LocationDropDown from '../../common/dropDown/LocationDropDown';
+import { UpdateLocationDropDown } from '../../common/dropDown/LocationDropDown';
 import { AlertError, AlertWarning } from '../../common/modal/alert';
 import * as St from './style';
 
@@ -72,15 +72,14 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
   useEffect(() => {
     const fetchPostData = async () => {
       if (partnerPost) {
-        const postData = partnerPost.data!;
-        setLocation([postData.region, postData.country]);
-        setPartnerDates([postData.startDate, postData.endDate]);
-        setPartner(postData.numOfPeople);
-        setTitle(postData.title);
-        setContent(postData.content);
-        setChatUrl(postData.openChat);
-        setInterestUrl(postData.interestUrl);
-        setWriterId(postData.writerId as string);
+        setLocation([partnerPost.region, partnerPost.country]);
+        setPartnerDates([partnerPost.startDate, partnerPost.endDate]);
+        setPartner(partnerPost.numOfPeople);
+        setTitle(partnerPost.title);
+        setContent(partnerPost.content);
+        setChatUrl(partnerPost.openChat);
+        setInterestUrl(partnerPost.interestUrl);
+        setWriterId(partnerPost.writerId as string);
       }
     };
     fetchPostData();
@@ -181,15 +180,15 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
         <St.SelectListBox>
           <St.ExplanationBox>
             <p>국가 선택</p>
-            <LocationDropDown setLocation={setLocation} />
+            <UpdateLocationDropDown location={[partnerPost?.region!, partnerPost?.country!]} setLocation={setLocation} />
           </St.ExplanationBox>
           <St.ExplanationBox>
             <p>날짜 선택</p>
-            <PartnerCalendar setPartnerDates={setPartnerDates} />
+            <UpdatePartnerCalendar startDate={partnerPost?.startDate!} endDate={partnerPost?.endDate!} setPartnerDates={setPartnerDates} />
           </St.ExplanationBox>
           <St.ExplanationBox>
             <p>모집인원 선택</p>
-            <UpdatePartnerDropDown partner={partnerPost?.data?.numOfPeople!} setPartner={setPartner} />
+            <UpdatePartnerDropDown partner={partnerPost?.numOfPeople!} setPartner={setPartner} />
           </St.ExplanationBox>
         </St.SelectListBox>
         <St.WriteInput
