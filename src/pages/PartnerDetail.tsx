@@ -73,12 +73,11 @@ function PartnerDetail() {
         <PartnerDetailInfo partnerPostData={partnerPost!} />
         <St.CommunicateDiv>
           <ConfirmedPartnerList postId={postid} />
-          <br />
-          {logInUserId ? <Communication postId={postid} writerId={partnerPost?.writerId!} logInUserId={logInUserId} /> : <></>}
+          {logInUserId ? <Communication postId={postid} writerId={partnerPostData.writerId} logInUserId={logInUserId} /> : <></>}
         </St.CommunicateDiv>
       </St.PartnerDetailMain>
       <St.Status>
-        <St.PostStatus partnerStatus={partnerStatus}>{partnerStatus === '모집중' ? '모집중' : '모집완료'}</St.PostStatus>
+        <St.PostStatus $partnerStatus={partnerStatus}>{partnerStatus === '모집중' ? '모집중' : '모집완료'}</St.PostStatus>
         {isApply && <St.ApplyStatus>{applicantStatus}</St.ApplyStatus>}
       </St.Status>
       <PartnerCommentsList />

@@ -7,11 +7,12 @@ interface ButtonProps {
   styleType: BtnStyleType;
   disabled?: boolean | undefined;
   onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  fullWidth?: boolean;
 }
 
-const Button = ({ type = 'button', children, styleType, disabled, onClick }: ButtonProps) => {
+const Button = ({ type = 'button', children, styleType, disabled, onClick, fullWidth }: ButtonProps) => {
   return (
-    <St.Button type={type} $styleType={styleType} disabled={disabled} onClick={onClick}>
+    <St.Button type={type} $styleType={styleType} disabled={disabled} onClick={onClick} $fullWidth={fullWidth}>
       {children}
     </St.Button>
   );

@@ -50,9 +50,9 @@ export default function AppliedPosts() {
       {!!appliedPosts?.count ? (
         <>
           <StCommon.MyCards>
-            {appliedPostsData?.map((postData) => {
-              return <MyPartnerCard partnerPost={postData} postUserInfo={true} />;
-            })}
+            {appliedPostsData?.map((postData) => (
+              <MyPartnerCard partnerPost={postData} postUserInfo={true} key={postData.id} />
+            ))}
           </StCommon.MyCards>
           <StCommon.PaginationBox>
             <Pagination current={currentPage} defaultPageSize={NUMBER_OF_ITEMS} total={appliedPosts?.count ? appliedPosts.count : 0} onChange={handlePageChange} />

@@ -40,7 +40,9 @@ export const CommentButton = styled.button<{ styleType: BtnStyleType; disabled: 
   }}
 `;
 
-export const Button = styled.button<{ $styleType: BtnStyleType; disabled: boolean | undefined }>`
+export const Button = styled.button<{ $styleType: BtnStyleType; disabled: boolean | undefined; $fullWidth?: boolean }>`
+  width: ${({ $fullWidth }) => ($fullWidth ? '100%' : 'auto')};
+
   cursor: pointer;
 
   ${(props) => {
