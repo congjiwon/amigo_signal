@@ -1,7 +1,7 @@
 import { Tables } from '../../../api/supabase/supabase';
+import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import classifyingAge from '../../common/classifyingAge/classifyingAge';
 import * as St from './style';
-import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 
 type ConfirmedPartnerItemProps = {
   data: Tables<'applicants'>;
