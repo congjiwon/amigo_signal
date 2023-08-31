@@ -81,7 +81,7 @@ export const getSpotShareDefaultImg = async (country: string) => {
 
 //스팟공유 특정 글 가져오기
 export const getDetailSpotSharePost = async (postId: string | undefined) => {
-  return await supabase.from('spotPosts').select('*').eq('id', postId);
+  return await supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*)').eq('id', postId);
 };
 
 //스팟공유 게시글 삭제
@@ -105,40 +105,26 @@ type likes = { id?: number | undefined; postId: string; userId: string };
 // 매개변수로 받은 postId랑 같으면 넣겠다? 뭔소리고;
 // 좋아요 추가
 export const postLike = async (likes: likes) => {
-  const { data, error } = await supabase.from('likes').insert(likes);
+  return await supabase.from('likes').insert(likes);
 };
 
 // 좋아요 삭제
 export const deleteLike = async (postId: string, userId: string) => {
-  const { error } = await supabase.from('likes').delete().eq('postId', postId).eq('userId', userId);
+  return await supabase.from('likes').delete().eq('postId', postId).eq('userId', userId);
 };
 
 // 좋아요 카운트
 export const countLikes = async (postId: string) => {
-  const { data, count: countLikes } = await supabase.from('likes').select('*', { count: 'exact' }).eq('postId', postId);
-  return { count: countLikes };
+  return await supabase.from('likes').select('*', { count: 'exact' }).eq('postId', postId);
 };
 
-const countLike = async (postid: string) => {
-  try {
-    const { count: likeCount, error } = await supabase.from('likes').select('postId', { count: 'exact' }).eq('postId', postid);
-
-    if (error) {
-      console.log('좋아요 수 가져오기 실패', error);
-    } else {
-      return likeCount;
-    }
-  } catch (error) {
-    console.log('에러', error);
-  }
+// 좋아요 조회
+export const getLikes = async () => {
+  return await supabase.from('likes').select('*');
 };
 
-// 좋아요 가져오기 얘를 여기다 두고 getLike를 import해서 쓸 순 없는건가?
-// export const getLike = async (postId: string, userId: string) => {
-//   let { data: likes, error } = await supabase.from('likes').select('*').eq('postId', postId).eq('userId', userId);
-//   if (error) {
-//     alert('좋아요 가져오기 오류');
-//   } else {
-//     return { data: likes };
-//   }
-// };
+// 스팟공유 인기순 정렬
+export const sortSpot = async () => {
+  const { data } = await supabase.from('likes').select('*, spotPosts!postId_fkey(*)');
+  return { data };
+};

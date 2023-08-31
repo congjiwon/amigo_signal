@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import { Select, Space } from 'antd';
+import React, { useState } from 'react';
 
 interface PartnerProps {
   setPartner: React.Dispatch<React.SetStateAction<number>>;
@@ -14,7 +14,7 @@ interface LocationProps {
   setLocation: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-export function PartnerDropDown({ setPartner }: PartnerProps) {
+export function PartnerDropDown({ setPartner }: PartnerProps, { setSort }: SortProps) {
   const handleChange = (value: string) => {
     setPartner(Number(value));
   };
@@ -70,12 +70,12 @@ export function SortDropDown({ setSort }: SortProps) {
   return (
     <Space wrap>
       <Select
-        defaultValue="인기순"
+        defaultValue="최신순"
         style={{ width: 140 }}
         onChange={handleChange}
         options={[
-          { value: '1', label: '인기순' },
-          { value: '2', label: '최신순' },
+          { value: '1', label: '최신순' },
+          { value: '2', label: '인기순' },
         ]}
       />
     </Space>

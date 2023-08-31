@@ -2,11 +2,10 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { getPostWriterId, getReCommentData, getSpotComments } from '../../../api/supabase/spotshare';
-import SpotCommentList from './SpotCommentList';
-import SpotWrite from './SpotWrite';
-import * as St from './style';
-import styled from 'styled-components';
 import TopButton from '../../common/topbutton/TopButton';
+import SpotCommentList from './SpotCommentList';
+import SpotWrite from './SpotCommentWrite';
+import * as St from './style';
 
 function SpotComments() {
   const { postid } = useParams<string>();

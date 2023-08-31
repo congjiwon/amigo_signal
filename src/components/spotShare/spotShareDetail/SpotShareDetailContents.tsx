@@ -6,7 +6,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
 import { useNavigate, useParams } from 'react-router';
 import { styled } from 'styled-components';
-import { deleteLike, deleteSpotSharePost, getDetailSpotSharePost, postLike } from '../../../api/supabase/spotshare';
+import { countLikes, deleteLike, deleteSpotSharePost, getDetailSpotSharePost, postLike } from '../../../api/supabase/spotshare';
 import { supabase } from '../../../api/supabase/supabaseClient';
 import useSessionStore from '../../../zustand/store';
 import { ConfirmDelete } from '../../common/modal/alert';
@@ -22,7 +22,26 @@ function SpotShareDetailContents() {
   const logInUserId = session?.user.id;
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [likeCount, setLikeCount] = useState(0); // 이 부분을 추가
 
+  // 디테일 포스트 불러오기
+  const { data: spotSharePost, isLoading, isError } = useQuery(['spotSharePost', postid], () => getDetailSpotSharePost(postid));
+  const spotSharePostData = spotSharePost?.data![0];
+
+  // 좋아요 수 가져오기
+  const { data: likeCountData } = useQuery(['likes', postid], () => countLikes(postid!));
+  console.log('likeData', likeCountData?.count);
+
+  useEffect(() => {
+    async function updateLikeCount() {
+      const updatedCount = await countLikes(postid!);
+      setLikeCount(updatedCount.count!);
+    }
+
+    updateLikeCount();
+  }, [like, likeCountData]);
+
+  // 좋아요
   const LikeCheck = async (logInUserId: string, postid: string) => {
     try {
       let { data: likeData, error } = await supabase.from('likes').select('*').eq('userId', logInUserId).eq('postId', postid);
@@ -36,31 +55,9 @@ function SpotShareDetailContents() {
       console.log('처참히 실패 개웃겨', error);
     }
   };
-
   useEffect(() => {
-    // async function fetchData() {
-    // const count = await
     LikeCheck(logInUserId!, postid!);
-    // const likeCount = await
-    countLike(postid!);
-    // console.log('좋아요 수:', likeCount);
-    // }
-    // fetchData();
   }, [logInUserId!, postid!]);
-
-  const countLike = async (postid: string) => {
-    try {
-      const { count: likeCount, error } = await supabase.from('likes').select('postId', { count: 'exact' }).eq('postId', postid);
-
-      if (error) {
-        console.log('좋아요 수 가져오기 실패', error);
-      } else {
-        return likeCount;
-      }
-    } catch (error) {
-      console.log('에러', error);
-    }
-  };
 
   const mapRef = useRef<HTMLDivElement>(null);
 
@@ -79,11 +76,6 @@ function SpotShareDetailContents() {
     mutation.mutate(id);
     navigate('/spotshare');
   };
-
-  // 디테일 포스트 불러오기
-  const { data: spotSharePost, isLoading, isError } = useQuery(['spotSharePost', postid], () => getDetailSpotSharePost(postid));
-  const spotSharePostData = spotSharePost?.data![0];
-  // console.log('해당글 데이터 모음', spotSharePostData);
 
   // 맵 불러오기
   useEffect(() => {
@@ -126,15 +118,17 @@ function SpotShareDetailContents() {
   const isPostWriter = () => logInUserId == spotSharePostData?.writerId;
 
   // 좋아요 클릭 시
-  const handleFillHeart = async (postId: string, userId: string) => {
+  const handleFillHeart = async () => {
     setLike(!like);
-    const addLike = { postId: spotSharePostData!.id, userId: logInUserId! };
+    const addLike = { postId: postid!, userId: logInUserId! };
     await postLike(addLike);
+    await queryClient.invalidateQueries(['likes', postid]);
   };
 
-  const handleEmptyHeart = async (postId: string, userId: string) => {
+  const handleEmptyHeart = async () => {
     setLike(!like);
-    await deleteLike(postId, userId);
+    await deleteLike(postid!, logInUserId!);
+    await queryClient.invalidateQueries(['likes', postid]);
   };
 
   return (
@@ -150,15 +144,7 @@ function SpotShareDetailContents() {
       </InfoBox>
       <SpotShareBox>
         <ButtonBox>
-          {logInUserId && (
-            <span>
-              {like ? (
-                <RiHeartFill onClick={() => handleEmptyHeart(spotSharePostData!.id, logInUserId)} style={{ height: '22px', width: '22px' }} />
-              ) : (
-                <RiHeartLine onClick={() => handleFillHeart(spotSharePostData!.id, logInUserId)} style={{ height: '22px', width: '22px' }} />
-              )}
-            </span>
-          )}
+          {logInUserId && <span>{like ? <RiHeartFill onClick={() => handleEmptyHeart()} style={{ height: '22px', width: '22px' }} /> : <RiHeartLine onClick={() => handleFillHeart()} style={{ height: '22px', width: '22px' }} />}</span>}
           {isPostWriter() ? (
             <>
               <span>{<FiEdit style={{ height: '22px', width: '22px' }} />}</span>
@@ -170,9 +156,9 @@ function SpotShareDetailContents() {
         </ButtonBox>
         <ReactQuill readOnly={true} theme="bubble" value={spotSharePostData?.content} />
         <WriterInfoBox>
-          <span>작성자: 작성자 정보 안들어가있어요 </span>
-          <span>작성시간: 작성시간 안들어가있어요 </span>
-          {/* <span>좋아요 수: {likeCount}</span> */}
+          <span>작성자: {spotSharePostData?.users?.nickName} </span>
+          <span>작성시간: {spotSharePostData?.createdAt.substring(0, 10) + ' ' + spotSharePostData?.createdAt.substring(11, 16)} </span>
+          <span>좋아요 수: {likeCount}</span>
         </WriterInfoBox>
       </SpotShareBox>
       <div style={{ marginTop: '50px', marginBottom: '50px' }}>
