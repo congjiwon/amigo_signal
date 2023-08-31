@@ -5,9 +5,10 @@ import { getInterests } from '../../../api/supabase/interest';
 import { getApplicantList, getConfirmedApplicantList, getPartnerPost, updatePartnerPost } from '../../../api/supabase/partner';
 import { Tables } from '../../../api/supabase/supabase';
 import { BtnStyleType } from '../../../types/styleTypes';
+import useSessionStore from '../../../zustand/store';
 import Button from '../../common/button/Button';
 import PartnerCalendar from '../../common/calendar/PartnerCalendar';
-import { PartnerDropDown } from '../../common/dropDown/DropDown';
+import { UpdatePartnerDropDown } from '../../common/dropDown/DropDown';
 import LocationDropDown from '../../common/dropDown/LocationDropDown';
 import { AlertError, AlertWarning } from '../../common/modal/alert';
 import * as St from './style';
@@ -28,6 +29,8 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
   const [writerId, setWriterId] = useState<string>('');
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const session = useSessionStore((state) => state.session);
+  const userId = session?.user.id;
   const authId = window.localStorage.getItem('authId');
 
   const getInterestsList = async () => {
@@ -77,16 +80,14 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
         setContent(postData.content);
         setChatUrl(postData.openChat);
         setInterestUrl(postData.interestUrl);
+        setWriterId(postData.writerId as string);
       }
     };
     fetchPostData();
   }, [partnerPost]);
 
   useEffect(() => {
-    if (!!authId) {
-      setWriterId(authId);
-    }
-    if (!authId || authId !== writerId) {
+    if (!authId) {
       navigate('/login');
     }
   }, [navigate, authId]);
@@ -113,18 +114,6 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
     return false;
   };
 
-  const currentTime = function () {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = ('0' + (today.getMonth() + 1)).slice(-2);
-    const day = ('0' + today.getDate()).slice(-2);
-    const hours = ('0' + today.getHours()).slice(-2);
-    const minutes = ('0' + today.getMinutes()).slice(-2);
-    const seconds = ('0' + today.getSeconds()).slice(-2);
-    const now = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
-    return now;
-  };
-
   const mutation = useMutation(updatePartnerPost, {
     onSuccess: () => {
       queryClient.invalidateQueries(['partnerPost']);
@@ -132,26 +121,31 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
   });
 
   const validation = (): boolean => {
+    if (authId !== writerId) {
+      AlertError({ title: '수정이 불가능 합니다.', text: '글 작성유저가 아닙니다.' });
+      navigate(`/partner/detail/${postId}`);
+      return false;
+    }
     if (applicantList.length >= 1 || confirmedApplicantList.length >= 1) {
       AlertError({ title: '수정이 불가능 합니다.', text: '동행 신청이 시작되었습니다.' });
       navigate(`/partner/detail/${postId}`);
       return false;
     }
     if (location.length < 1) {
-      AlertWarning({ title: '국가를 선택해주세요.', position: 'top' });
+      AlertWarning({ title: '국가를 선택해주세요.' });
       return false;
     } else if (partnerDates.length < 1) {
-      AlertWarning({ title: '날짜를 선택해주세요.', position: 'top' });
+      AlertWarning({ title: '날짜를 선택해주세요.' });
       return false;
     } else if (title.length < 1) {
-      AlertWarning({ title: '제목을 입력해주세요.', position: 'top' });
+      AlertWarning({ title: '제목을 입력해주세요.' });
       return false;
     } else if (content.length < 1) {
-      AlertWarning({ title: '내용을 입력해주세요.', position: 'top' });
+      AlertWarning({ title: '내용을 입력해주세요.' });
       return false;
     }
     if (chatUrl.length >= 1 && !chatUrlValidation(chatUrl)) {
-      AlertWarning({ title: '오픈채팅 주소를 확인해주세요.', position: 'top' });
+      AlertWarning({ title: '오픈채팅 주소를 확인해주세요.' });
       return false;
     }
     return true;
@@ -160,7 +154,6 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
   // 글 작성 버튼 클릭 핸들러
   const handleUpdateClick = async () => {
     if (validation()) {
-      const time = currentTime();
       const dataToInsert = {
         id: postId,
         title,
@@ -169,12 +162,11 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
         startDate: partnerDates[0],
         endDate: partnerDates[1],
         openChat: chatUrl,
-        createdAt: time,
         interestUrl,
         region: location[0],
         country: location[1],
         numOfPeople: partner,
-        writerId,
+        writerId: userId,
       };
       setLoading(true);
       await mutation.mutate(dataToInsert);
@@ -197,7 +189,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
           </St.ExplanationBox>
           <St.ExplanationBox>
             <p>모집인원 선택</p>
-            <PartnerDropDown setPartner={setPartner} />
+            <UpdatePartnerDropDown partner={partnerPost?.data?.numOfPeople!} setPartner={setPartner} />
           </St.ExplanationBox>
         </St.SelectListBox>
         <St.WriteInput

@@ -82,20 +82,20 @@ function PartnerWriteTemplate() {
 
   const validation = (): boolean => {
     if (location.length < 1) {
-      AlertWarning({ title: '국가를 선택해주세요.', position: 'top' });
+      AlertWarning({ title: '국가를 선택해주세요.' });
       return false;
     } else if (partnerDates.length < 1) {
-      AlertWarning({ title: '날짜를 선택해주세요.', position: 'top' });
+      AlertWarning({ title: '날짜를 선택해주세요.' });
       return false;
     } else if (title.length < 1) {
-      AlertWarning({ title: '제목을 입력해주세요.', position: 'top' });
+      AlertWarning({ title: '제목을 입력해주세요.' });
       return false;
     } else if (content.length < 1) {
-      AlertWarning({ title: '내용을 입력해주세요.', position: 'top' });
+      AlertWarning({ title: '내용을 입력해주세요.' });
       return false;
     }
     if (chatUrl.length >= 1 && !chatUrlValidation(chatUrl)) {
-      AlertWarning({ title: '오픈채팅 주소를 확인해주세요.', position: 'top' });
+      AlertWarning({ title: '오픈채팅 주소를 확인해주세요.' });
       return false;
     }
     return true;
