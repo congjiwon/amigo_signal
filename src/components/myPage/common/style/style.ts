@@ -118,9 +118,13 @@ export const DateInfo = styled.div`
 `;
 
 export const CardTitle = styled.h3`
+  width: 100%;
   font-size: 16px;
   font-weight: 600;
   line-height: 1.5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 
   &.partner-title {
     margin: 12px 0 21px;
