@@ -21,6 +21,9 @@ export default function Header() {
     enabled: !!userId,
   });
 
+  const handleLinkClick = () => {
+    window.location.reload();
+  };
   useEffect(() => {
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
@@ -39,7 +42,6 @@ export default function Header() {
     // 설빈 : 이거 넣으면 로그아웃했을 때 댓글작성X / 답댓글 수정삭제X
     // window.location.reload();
   };
-  // console.log(currentUser?.profileImageUrl);
   return (
     <St.Header>
       <St.H1>
@@ -48,10 +50,14 @@ export default function Header() {
       <St.Gnb>
         <ul>
           <li>
-            <Link to="/partner">동행 찾기</Link>
+            <Link onClick={handleLinkClick} to="/partner">
+              동행 찾기
+            </Link>
           </li>
           <li>
-            <Link to="/spotshare">스팟 공유</Link>
+            <Link onClick={handleLinkClick} to="/spotshare">
+              스팟 공유
+            </Link>
           </li>
         </ul>
       </St.Gnb>

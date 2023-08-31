@@ -108,8 +108,8 @@ function SpotShareDetailContents() {
         </ButtonBox>
         <ReactQuill readOnly={true} theme="bubble" value={spotSharePost?.content} />
         <WriterInfoBox>
-          <span>작성자: 작성자 정보 안들어가있어요 </span>
-          <span>작성시간: 작성시간 안들어가있어요 </span>
+          {/* <span>작성자: {spotSharePost?.users.nickName!}</span> */}
+          {/* <span>작성시간: {spotSharePost?.createdAt} </span> */}
         </WriterInfoBox>
       </SpotShareBox>
       <div style={{ marginTop: '50px', marginBottom: '50px' }}>
