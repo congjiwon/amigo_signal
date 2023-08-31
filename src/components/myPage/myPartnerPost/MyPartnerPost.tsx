@@ -48,7 +48,7 @@ export default function MyPartnerPost() {
         <>
           <StCommon.MyCards>
             {myPartnerPosts?.data?.map((partnerPost) => (
-              <MyPartnerCard partnerPost={partnerPost} />
+              <MyPartnerCard partnerPost={partnerPost} key={partnerPost.id} />
             ))}
           </StCommon.MyCards>
           <StCommon.PaginationBox>

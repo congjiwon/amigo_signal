@@ -1,3 +1,4 @@
+import { NUMBER_OF_ITEMS, getRangePagination } from '../../components/common/getRangePagination/getRangePagination';
 import { Inserts, Update } from './supabase';
 import { supabase } from './supabaseClient';
 
@@ -163,4 +164,16 @@ export const countLike = async (like: number, postId: string) => {
   const { data } = await supabase.from('spotPosts').update({ likeCount: like }).eq('id', postId);
   console.log('data', like);
   return { data };
+};
+
+// 내가 작성한 스팟공유 글 가져오기
+type mySpotSharePostsType = {
+  writerId: string | undefined;
+  page: number;
+};
+export const getMySpotSharePosts = async ({ writerId, page }: mySpotSharePostsType) => {
+  const { from, to } = getRangePagination(page, NUMBER_OF_ITEMS);
+
+  const { data, count } = await supabase.from('spotPosts').select('*', { count: 'exact' }).eq('writerId', writerId).order('visitDate', { ascending: false }).range(from, to);
+  return { data, count };
 };
