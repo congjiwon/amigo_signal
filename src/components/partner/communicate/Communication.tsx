@@ -85,13 +85,13 @@ const Communication = ({ postId, writerId, logInUserId }: CommunicationProps) =>
   };
 
   return (
-    <div>
+    <St.CommunicationDiv>
       {writerId !== logInUserId ? (
         <St.ApplyDiv>
           {isConfirmed || !isThisPostOpen ? (
             <></>
           ) : (
-            <Button styleType={BtnStyleType.BTN_DARK} onClick={isApply ? handleApplyCancel : handleApply}>
+            <Button styleType={BtnStyleType.BTN_DARK} onClick={isApply ? handleApplyCancel : handleApply} fullWidth>
               {isApply ? '참여 취소' : '참여하기'}
             </Button>
           )}
@@ -99,7 +99,7 @@ const Communication = ({ postId, writerId, logInUserId }: CommunicationProps) =>
       ) : (
         <>
           {isThisPostOpen && (
-            <Button styleType={BtnStyleType.BTN_DARK} onClick={() => openModal('applicantList')}>
+            <Button styleType={BtnStyleType.BTN_DARK} onClick={() => openModal('applicantList')} fullWidth>
               동행 신청자 목록
             </Button>
           )}
@@ -119,7 +119,7 @@ const Communication = ({ postId, writerId, logInUserId }: CommunicationProps) =>
           <ApplicantList postId={postId} />
         </Modal>
       )}
-    </div>
+    </St.CommunicationDiv>
   );
 };
 

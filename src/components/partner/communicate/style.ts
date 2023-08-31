@@ -9,13 +9,17 @@ type CheckButtonProps = {
 };
 
 type ConfirmedApplicantListProps = {
-  isExist: boolean;
+  $isExist: boolean;
 };
 
 export const ApplyDiv = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+`;
+
+export const CommunicationDiv = styled.div`
+  width: 282px;
 `;
 
 export const NewApplicantAlert = styled.p`
@@ -133,7 +137,7 @@ export const ApplicantContent = styled.p`
 
 export const ConfirmedApplicantList = styled.div<ConfirmedApplicantListProps>`
   width: 282px;
-  padding-bottom: ${(props) => (props.isExist ? '40px' : '0px')};
+  padding-bottom: ${(props) => (props.$isExist ? '40px' : '0px')};
   border: 1px solid lightgray;
   border-radius: 10px;
   h1 {
