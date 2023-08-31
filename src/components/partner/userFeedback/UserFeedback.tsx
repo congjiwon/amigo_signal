@@ -1,15 +1,15 @@
-import { useNavigate } from 'react-router';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { addBookmark, bookmarkCheck, getUser, removeBookMark } from '../../../api/supabase/users';
-import { deletePartnerPost } from '../../../api/supabase/partner';
-import useSessionStore from '../../../zustand/store';
-import useCopyClipBoard from '../../../hooks/useCopyClipBoard';
-import { ConfirmDelete } from '../../common/modal/alert';
-import { FiMessageSquare } from 'react-icons/fi';
-import { RiBookmarkLine, RiBookmarkFill } from 'react-icons/ri';
-import * as St from './style';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { FiMessageSquare } from 'react-icons/fi';
+import { RiBookmarkFill, RiBookmarkLine } from 'react-icons/ri';
+import { useNavigate } from 'react-router';
+import { deletePartnerPost } from '../../../api/supabase/partner';
 import { supabase } from '../../../api/supabase/supabaseClient';
+import { addBookmark, getUser, removeBookMark } from '../../../api/supabase/users';
+import useCopyClipBoard from '../../../hooks/useCopyClipBoard';
+import useSessionStore from '../../../zustand/store';
+import { Alert, ConfirmDelete } from '../../common/modal/alert';
+import * as St from './style';
 
 interface Props {
   id: string;
@@ -59,6 +59,7 @@ const UserFeedback = ({ id, createdAt, writerId, openChat }: Props) => {
   const [, onCopy] = useCopyClipBoard();
   const handleCopyClipBoard = (text: string) => {
     onCopy(text);
+    Alert({ title: '복사 완료!' });
   };
 
   const session = useSessionStore((state) => state.session);
