@@ -21,9 +21,6 @@ export default function Header() {
     enabled: !!userId,
   });
 
-  const handleLinkClick = () => {
-    window.location.reload();
-  };
   useEffect(() => {
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
@@ -50,14 +47,10 @@ export default function Header() {
       <St.Gnb>
         <ul>
           <li>
-            <Link onClick={handleLinkClick} to="/partner">
-              동행 찾기
-            </Link>
+            <Link to="/partner">동행 찾기</Link>
           </li>
           <li>
-            <Link onClick={handleLinkClick} to="/spotshare">
-              스팟 공유
-            </Link>
+            <Link to="/spotshare">스팟 공유</Link>
           </li>
         </ul>
       </St.Gnb>

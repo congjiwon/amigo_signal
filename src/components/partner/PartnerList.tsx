@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { getFilteredPartnerPost, getPartnerPosts } from '../../api/supabase/partner';
 import { Tables } from '../../api/supabase/supabase';
 import TravelWith from '../../assets/imgs/partner/TravelWith.jpg';
@@ -27,6 +27,7 @@ const PartnerList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 10;
   const offset = (currentPage - 1) * limit;
+  const pageLocation = useLocation();
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -44,7 +45,7 @@ const PartnerList = () => {
     if (divRef.current) {
       observer.observe(divRef.current);
     }
-  }, []);
+  }, [pageLocation]);
 
   const defaultOption = {
     root: null,

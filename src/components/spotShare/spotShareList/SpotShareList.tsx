@@ -6,6 +6,7 @@ import { getAllSpotSharePost, getFilteredSpotSharePost } from '../../../api/supa
 import TopButton from '../../common/topbutton/TopButton';
 import LocationDropDown from '../../common/dropDown/LocationDropDown';
 import { FilterSpotCalendar } from '../../common/calendar/SpotCalendar';
+import { useLocation } from 'react-router';
 
 const SpotShareList = () => {
   const [postStorage, setPostStorage] = useState<Tables<'spotPosts'>[]>([]);
@@ -15,6 +16,7 @@ const SpotShareList = () => {
   const offset = (currentPage - 1) * limit;
   const [location, setLocation] = useState<string[]>([]);
   const [spotDate, setSpotDate] = useState<string[]>([]);
+  const pageLocation = useLocation();
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -35,7 +37,7 @@ const SpotShareList = () => {
     if (divRef.current) {
       observer.observe(divRef.current);
     }
-  }, []);
+  }, [pageLocation]);
 
   const defaultOption = {
     root: null,
