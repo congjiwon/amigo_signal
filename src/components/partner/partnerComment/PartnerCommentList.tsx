@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import { getPartnerPost, getReCommentData } from '../../../api/supabase/partner';
@@ -9,9 +9,9 @@ import { BtnStyleType } from '../../../types/styleTypes';
 import useCurrentUserStore from '../../../zustand/currentUser';
 import { CommentButton } from '../../common/button/Button';
 import { ConfirmDelete } from '../../common/modal/alert';
+import TopButton from '../../common/topbutton/TopButton';
 import PartnerReComments from './PartnerReComments';
 import * as St from './style';
-import TopButton from '../../common/topbutton/TopButton';
 
 type allCommentsProps =
   | {
@@ -40,7 +40,6 @@ export type PartnerCommentListProps = {
 
 function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommentListProps) {
   const { postid } = useParams<string>();
-  const queryClient = useQueryClient();
   const [isUpdate, setIsUpdate] = useState('');
   const [updateComment, setUpdateComment] = useState('');
   const [isReComment, setIsReComment] = useState('');
@@ -59,7 +58,7 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
   const { isLoading, data: authId } = useQuery(['auth'], getAuthId);
   const { data: partnerPost } = useQuery(['partnerPost', postid], () => getPartnerPost({ postId: postid as string }));
   // 게시글 작성자 찾기
-  const postWriterId = partnerPost?.data?.writerId;
+  const postWriterId = partnerPost?.writerId;
 
   const { data: allReCommentsData } = useQuery(['partnerReComments'], getReCommentData);
   // 답댓글 작성한 모든 유저 정보

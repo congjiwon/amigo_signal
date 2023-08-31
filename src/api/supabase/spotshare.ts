@@ -1,3 +1,4 @@
+import { NUMBER_OF_ITEMS, getRangePagination } from '../../components/common/getRangePagination/getRangePagination';
 import { Inserts, Update } from './supabase';
 import { supabase } from './supabaseClient';
 
@@ -109,7 +110,7 @@ export const getSpotShareDefaultImg = async (country: string) => {
 
 //스팟공유 특정 글 가져오기
 export const getDetailSpotSharePost = async (postId: string | undefined) => {
-  const { data } = await supabase.from('spotPosts').select('*').eq('id', postId).single();
+  const { data } = await supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*)').eq('id', postId).single();
   return data;
 };
 
@@ -126,4 +127,53 @@ export const insertSpotPost = async (spotPostData: Inserts<'spotPosts'>) => {
     console.log(error);
   }
   return data;
+};
+
+type likes = { id?: string | undefined; postId: string; userId: string };
+
+//스팟공유 좋아요
+// 매개변수로 받은 postId랑 같으면 넣겠다? 뭔소리고;
+// 좋아요 추가
+export const postLike = async (likes: likes) => {
+  return await supabase.from('likes').insert(likes);
+};
+
+// 좋아요 삭제
+export const deleteLike = async (postId: string, userId: string) => {
+  return await supabase.from('likes').delete().eq('postId', postId).eq('userId', userId);
+};
+
+// 좋아요 카운트
+export const countLikes = async (postId: string) => {
+  return await supabase.from('likes').select('*', { count: 'exact' }).eq('postId', postId);
+};
+
+// 좋아요 조회
+export const getLikes = async () => {
+  return await supabase.from('likes').select('*');
+};
+
+// 스팟공유 인기순 정렬
+export const sortSpot = async () => {
+  const { data, count } = await supabase.from('likes').select('postId, COUNT(*) as like_count');
+  return { data };
+};
+
+// 스팟공유 게시글 좋아요 수 업데이트
+export const countLike = async (like: number, postId: string) => {
+  const { data } = await supabase.from('spotPosts').update({ likeCount: like }).eq('id', postId);
+  console.log('data', like);
+  return { data };
+};
+
+// 내가 작성한 스팟공유 글 가져오기
+type mySpotSharePostsType = {
+  writerId: string | undefined;
+  page: number;
+};
+export const getMySpotSharePosts = async ({ writerId, page }: mySpotSharePostsType) => {
+  const { from, to } = getRangePagination(page, NUMBER_OF_ITEMS);
+
+  const { data, count } = await supabase.from('spotPosts').select('*', { count: 'exact' }).eq('writerId', writerId).order('visitDate', { ascending: false }).range(from, to);
+  return { data, count };
 };

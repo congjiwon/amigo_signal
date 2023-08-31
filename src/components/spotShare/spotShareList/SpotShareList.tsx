@@ -1,15 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
-import * as St from './style';
-import { Tables } from '../../../api/supabase/supabase';
-import SpotShareItem from './SpotShareItem';
+import { useEffect, useRef, useState } from 'react';
 import { getAllSpotSharePost, getFilteredSpotSharePost } from '../../../api/supabase/spotshare';
-import TopButton from '../../common/topbutton/TopButton';
-import LocationDropDown from '../../common/dropDown/LocationDropDown';
+import { Tables } from '../../../api/supabase/supabase';
+import { supabase } from '../../../api/supabase/supabaseClient';
 import { FilterSpotCalendar } from '../../common/calendar/SpotCalendar';
 import { useLocation, useNavigate } from 'react-router';
+import { SortDropDown } from '../../common/dropDown/DropDown';
+import LocationDropDown from '../../common/dropDown/LocationDropDown';
+import TopButton from '../../common/topbutton/TopButton';
+import SpotShareItem from './SpotShareItem';
+import * as St from './style';
 
 const SpotShareList = () => {
   const [postStorage, setPostStorage] = useState<Tables<'spotPosts'>[]>([]);
+  const [sort, setSort] = useState<string>('최신순');
   const divRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 10;
@@ -71,10 +74,39 @@ const SpotShareList = () => {
     getfilteredPost();
   }, [location, spotDate]);
 
+  const handleSortChange = async (value: string) => {
+    setSort(value);
+
+    if (value === '최신순') {
+      try {
+        const { data: sharePosts, error } = await supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*)').order('createdAt', { ascending: false });
+        if (error) {
+          console.log('스팟 최신순 정렬 실패', error);
+        } else {
+          setPostStorage(sharePosts);
+        }
+      } catch (error) {
+        console.log('이 에러는 또 뭐지', error);
+      }
+    } else {
+      try {
+        const { data: sharePosts, error } = await supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*)').order('likeCount', { ascending: false });
+        if (error) {
+          console.log('스팟 인기순 정렬 실패', error);
+        } else {
+          setPostStorage(sharePosts);
+        }
+      } catch (error) {
+        console.log('이 에러는 또 뭐지', error);
+      }
+    }
+  };
+
   return (
     <>
       <St.filterBox>
         <div>
+          <SortDropDown setSort={handleSortChange} />
           <LocationDropDown setLocation={setLocation} />
           <FilterSpotCalendar setSpotDate={setSpotDate} />
         </div>

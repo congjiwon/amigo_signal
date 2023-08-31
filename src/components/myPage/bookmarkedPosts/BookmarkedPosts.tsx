@@ -36,7 +36,7 @@ export default function BookmarkedPosts() {
         <>
           <StCommon.MyCards>
             {bookmarkedPosts?.map((post) => (
-              <MyPartnerCard partnerPost={post} postUserInfo={true} />
+              <MyPartnerCard partnerPost={post} postUserInfo={true} key={post.id} />
             ))}
           </StCommon.MyCards>
           <StCommon.PaginationBox>

@@ -1,4 +1,4 @@
-import { styled } from 'styled-components';
+import { css, styled } from 'styled-components';
 import iconCalendar from '../../../../assets/imgs/partner/Calendar.svg';
 
 export const MyFilterBtns = styled.div`
@@ -45,10 +45,13 @@ export const MyCard = styled.li`
     display: block;
     width: 100%;
     height: 100%;
-    padding: 20px;
-    box-sizing: border-box;
     cursor: pointer;
   }
+`;
+
+export const PaddingBox = styled.div`
+  padding: 20px;
+  box-sizing: border-box;
 `;
 
 export const MsgNoData = styled.p`
@@ -130,6 +133,10 @@ export const CardTitle = styled.h3`
 
   &.partner-title {
     margin: 12px 0 21px;
+  }
+
+  &.spot-title {
+    margin: 20px 0 10px;
   }
 `;
 
@@ -217,4 +224,41 @@ export const FlexBetween = styled.div`
 export const PaginationBox = styled.div`
   text-align: center;
   margin-top: 40px;
+`;
+
+export const ContentEllipsis = styled.div`
+  display: -webkit-box;
+  height: 36px;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #81858a;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+`;
+
+export const BgCountryBox = styled.div<{ $countryBg?: string }>`
+  ${(props) => {
+    return css`
+      position: relative;
+      height: 140px;
+      border-bottom-right-radius: 30px;
+      border-bottom-left-radius: 30px;
+      background: center / cover url(${props.$countryBg}) no-repeat;
+    `;
+  }}
+`;
+
+export const BadgeCountry = styled.div`
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.8);
 `;
