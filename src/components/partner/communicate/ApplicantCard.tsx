@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { getConfirmedApplicantList, getNumOfPeople, updateStatus } from '../../../api/supabase/partner';
+import { getConfirmedApplicantList, getNumOfPeople, updatePostStatus, updateStatus } from '../../../api/supabase/partner';
 import { Tables } from '../../../api/supabase/supabase';
 import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import { useConfirmedListStore, useStateStore } from '../../../zustand/communicate';
@@ -63,6 +63,7 @@ const ApplicantCard = ({ data, onClick, isSelected, removeConfirmedApplicant }: 
       setApplicantStatus('참여 수락됨');
       if (numOfPeople <= confirmedLength) {
         setPartnerStatus('모집완료');
+        updatePostStatus(data.postId.id, false);
       }
       addConfirmedApplicant(data);
       removeConfirmedApplicant(applicantId);
