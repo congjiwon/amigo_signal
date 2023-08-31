@@ -2,11 +2,11 @@ import { useQuery } from '@tanstack/react-query';
 import { getMyPartnerPosts } from '../../../api/supabase/partner';
 import useSessionStore from '../../../zustand/store';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import * as StCommon from '../common/style/style';
 import { Pagination, PaginationProps } from 'antd';
 import { NUMBER_OF_ITEMS } from '../../common/getRangePagination/getRangePagination';
 import useMyPageTabPanel from '../../../zustand/myPageTabPanel';
+import MyPartnerCard from '../common/myPartnerCard/MyPartnerCard';
 
 export default function MyPartnerPost() {
   const session = useSessionStore((state) => state.session);
@@ -48,38 +48,7 @@ export default function MyPartnerPost() {
         <>
           <StCommon.MyCards>
             {myPartnerPosts?.data?.map((partnerPost) => (
-              <StCommon.MyCard key={partnerPost.id}>
-                <Link to={`/partner/detail/${partnerPost.id}`}>
-                  <StCommon.FlexBetween className="partner-top">
-                    <StCommon.CountryInfo>
-                      <div>
-                        <img src="" alt={`${partnerPost.country} 국기`} />
-                      </div>
-                      <p>{partnerPost.country}</p>
-                    </StCommon.CountryInfo>
-                    <StCommon.OpenStatus>{partnerPost.isOpen ? `모집중` : `모집완료`}</StCommon.OpenStatus>
-                  </StCommon.FlexBetween>
-
-                  <StCommon.DateInfo>
-                    {partnerPost.startDate} ~ {partnerPost.endDate}
-                  </StCommon.DateInfo>
-
-                  <StCommon.CardTitle className="partner-title">{partnerPost.title}</StCommon.CardTitle>
-
-                  <StCommon.FlexBetween>
-                    <StCommon.InterestList>
-                      {partnerPost.interestUrl.map((url) => (
-                        <li>
-                          <img src={url} />
-                        </li>
-                      ))}
-                    </StCommon.InterestList>
-                    <StCommon.numOfPeople>
-                      모집인원 <span>{partnerPost.numOfPeople}</span>
-                    </StCommon.numOfPeople>
-                  </StCommon.FlexBetween>
-                </Link>
-              </StCommon.MyCard>
+              <MyPartnerCard partnerPost={partnerPost} />
             ))}
           </StCommon.MyCards>
           <StCommon.PaginationBox>
