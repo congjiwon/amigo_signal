@@ -1,6 +1,30 @@
 import { Inserts, Update } from './supabase';
 import { supabase } from './supabaseClient';
 
+//스팟 필터링
+type filteredPostProps = {
+  country?: string;
+  startDate?: string;
+  endDate?: string;
+};
+
+export const getFilteredSpotSharePost = async ({ country, startDate, endDate }: filteredPostProps) => {
+  let sharePosts = supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*)').order('createdAt', { ascending: false });
+  if (country !== undefined) {
+    sharePosts = sharePosts.eq('country', country);
+  }
+
+  if (startDate !== undefined && endDate !== undefined) {
+    sharePosts = sharePosts.gte('visitDate', startDate).lte('visitDate', endDate);
+  }
+
+  const { data, error } = await sharePosts;
+  if (error) {
+    return null;
+  }
+  return data;
+};
+
 // 클릭한 게시글 id?
 export const getSpotPost = async ({ postId }: { postId: string }) => {
   const { data } = await supabase.from('spotPosts').select('*').eq('id', postId).single();
@@ -76,7 +100,7 @@ export const getReCommentWriterIds = async () => {
 
 // 스팟공유 모든 글 가져오기
 export const getAllSpotSharePost = async () => {
-  return await supabase.from('spotPosts').select('*');
+  return await supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*)');
 };
 //스팟공유 리스트 디폴트 이미지 가져오기
 export const getSpotShareDefaultImg = async (country: string) => {

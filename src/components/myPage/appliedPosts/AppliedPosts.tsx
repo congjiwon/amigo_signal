@@ -2,14 +2,11 @@ import { useQuery } from '@tanstack/react-query';
 import { getAppliedPosts } from '../../../api/supabase/partner';
 import useSessionStore from '../../../zustand/store';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import * as StCommon from '../common/style/style';
 import { Pagination, PaginationProps } from 'antd';
 import { NUMBER_OF_ITEMS } from '../../common/getRangePagination/getRangePagination';
 import useMyPageTabPanel from '../../../zustand/myPageTabPanel';
-import classifyingAge from '../../common/classifyingAge/classifyingAge';
-import defaultImg from '../../../assets/imgs/users/default_profile_img.png';
-const storagaUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
+import MyPartnerCard from '../common/myPartnerCard/MyPartnerCard';
 
 export default function AppliedPosts() {
   const session = useSessionStore((state) => state.session);
@@ -54,52 +51,7 @@ export default function AppliedPosts() {
         <>
           <StCommon.MyCards>
             {appliedPostsData?.map((postData) => {
-              return (
-                <StCommon.MyCard>
-                  <Link to={`/partner/detail/${postData.id}`}>
-                    <StCommon.FlexBetween className="partner-top">
-                      <StCommon.CountryInfo>
-                        <div>
-                          <img src="" alt={`${postData.country} 국기`} />
-                        </div>
-                        <p>{postData.country}</p>
-                      </StCommon.CountryInfo>
-                      <StCommon.OpenStatus>{postData.isOpen ? `모집중` : `모집완료`}</StCommon.OpenStatus>
-                    </StCommon.FlexBetween>
-
-                    <StCommon.DateInfo>
-                      {postData.startDate} ~ {postData.endDate}
-                    </StCommon.DateInfo>
-
-                    <StCommon.CardTitle className="partner-title">{postData.title}</StCommon.CardTitle>
-
-                    <StCommon.FlexBetween>
-                      <StCommon.InterestList>
-                        {postData.interestUrl.map((url) => (
-                          <li>
-                            <img src={url} />
-                          </li>
-                        ))}
-                      </StCommon.InterestList>
-                      <StCommon.numOfPeople>
-                        모집인원 <span>{postData.numOfPeople}</span>
-                      </StCommon.numOfPeople>
-                    </StCommon.FlexBetween>
-
-                    <StCommon.FlexBetween className="partner-bottom">
-                      <StCommon.UserInfoMain>
-                        <div>
-                          <img src={postData.writerId.profileImageUrl ? `${storagaUrl}/${postData.writerId.profileImageUrl}` : defaultImg} />
-                        </div>
-                        <p>{postData.writerId.nickName}</p>
-                      </StCommon.UserInfoMain>
-                      <StCommon.UserInfoSub>
-                        {postData.writerId.gender} | {classifyingAge(postData.writerId.birthday)}
-                      </StCommon.UserInfoSub>
-                    </StCommon.FlexBetween>
-                  </Link>
-                </StCommon.MyCard>
-              );
+              return <MyPartnerCard partnerPost={postData} postUserInfo={true} />;
             })}
           </StCommon.MyCards>
           <StCommon.PaginationBox>
