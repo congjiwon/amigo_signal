@@ -1,10 +1,13 @@
-import React from 'react';
 import type { DatePickerProps } from 'antd';
 import { DatePicker, Space } from 'antd';
-
-const { RangePicker } = DatePicker;
+import dayjs from 'dayjs';
+import React from 'react';
 
 interface CalendarProps {
+  setSpotDate: React.Dispatch<React.SetStateAction<string>>;
+}
+interface UpdateCalendarProps {
+  spotDate: string;
   setSpotDate: React.Dispatch<React.SetStateAction<string>>;
 }
 
@@ -21,3 +24,15 @@ function SpotCalendar({ setSpotDate }: CalendarProps) {
 }
 
 export default SpotCalendar;
+
+export function UpdateSpotCalendar({ spotDate, setSpotDate }: UpdateCalendarProps) {
+  const getDateHandle: DatePickerProps['onChange'] = (date, dateString) => {
+    setSpotDate(dateString);
+  };
+  const dateFormat = 'YYYY/MM/DD';
+  return (
+    <Space direction="vertical">
+      <DatePicker defaultValue={dayjs(spotDate, dateFormat)} onChange={getDateHandle} />
+    </Space>
+  );
+}

@@ -42,15 +42,13 @@ function SpotShareDetailContents() {
 
   // 디테일 포스트 불러오기
   const { data: spotSharePost, isLoading, isError } = useQuery(['spotSharePost', postid], () => getDetailSpotSharePost(postid));
-  const spotSharePostData = spotSharePost?.data![0];
-  console.log('해당글 데이터 모음', spotSharePostData);
 
   // 맵 불러오기
   useEffect(() => {
     const initializeMap = () => {
       if (mapRef.current) {
-        const latitude = spotSharePostData?.latitude;
-        const longitude = spotSharePostData?.longitude;
+        const latitude = spotSharePost?.latitude;
+        const longitude = spotSharePost?.longitude;
 
         if (latitude && longitude) {
           const location = { lat: latitude, lng: longitude };
@@ -73,7 +71,7 @@ function SpotShareDetailContents() {
       const googleMapScript = document.querySelector('script[src*="googleapis"]');
       googleMapScript?.addEventListener('load', initializeMap);
     }
-  }, [spotSharePostData]);
+  }, [spotSharePost]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -83,40 +81,40 @@ function SpotShareDetailContents() {
   }
 
   // 글 작성자인지 확인하는 함수
-  const isPostWriter = () => logInUserId == spotSharePostData?.writerId;
+  const isPostWriter = () => logInUserId == spotSharePost?.writerId;
 
   return (
     <>
       <TitleBox>
-        <p>제목: {spotSharePostData?.title}</p>
+        <p>제목: {spotSharePost?.title}</p>
       </TitleBox>
       <InfoBox>
-        <span>{spotSharePostData?.region}</span>
-        <span>{spotSharePostData?.country}</span>
-        <span>방문날짜: {spotSharePostData?.visitDate}</span>
-        <span>{spotSharePostData?.starRate}</span>
+        <span>{spotSharePost?.region}</span>
+        <span>{spotSharePost?.country}</span>
+        <span>방문날짜: {spotSharePost?.visitDate}</span>
+        <span>{spotSharePost?.starRate}</span>
       </InfoBox>
       <SpotShareBox>
         <ButtonBox>
           {logInUserId && <span>{like ? <RiHeartFill style={{ height: '22px', width: '22px' }} /> : <RiHeartLine style={{ height: '22px', width: '22px' }} />}</span>}
           {isPostWriter() ? (
             <>
-              <span>{<FiEdit style={{ height: '22px', width: '22px' }} />}</span>
-              <span>{<FiTrash2 onClick={() => deletePostHandle(spotSharePostData?.id)} style={{ height: '22px', width: '22px' }} />}</span>
+              <span>{<FiEdit onClick={() => navigate(`/spotshare/write/${spotSharePost?.id}`)} style={{ height: '22px', width: '22px' }} />}</span>
+              <span>{<FiTrash2 onClick={() => deletePostHandle(spotSharePost?.id)} style={{ height: '22px', width: '22px' }} />}</span>
             </>
           ) : (
             ''
           )}
         </ButtonBox>
-        <ReactQuill readOnly={true} theme="bubble" value={spotSharePostData?.content} />
+        <ReactQuill readOnly={true} theme="bubble" value={spotSharePost?.content} />
         <WriterInfoBox>
           <span>작성자: 작성자 정보 안들어가있어요 </span>
           <span>작성시간: 작성시간 안들어가있어요 </span>
         </WriterInfoBox>
       </SpotShareBox>
       <div style={{ marginTop: '50px', marginBottom: '50px' }}>
-        {spotSharePostData?.address ? <p style={{ marginBottom: '10px' }}>주소: {spotSharePostData?.address}</p> : <></>}
-        {spotSharePostData?.latitude && spotSharePostData.longitude ? <div ref={mapRef} style={{ width: '100%', height: '50vh' }} /> : <></>}
+        {spotSharePost?.address ? <p style={{ marginBottom: '10px' }}>주소: {spotSharePost?.address}</p> : <></>}
+        {spotSharePost?.latitude && spotSharePost.longitude ? <div ref={mapRef} style={{ width: '100%', height: '50vh' }} /> : <></>}
       </div>
     </>
   );
