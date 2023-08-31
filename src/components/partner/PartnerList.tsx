@@ -88,14 +88,14 @@ const PartnerList = () => {
           여행이 더 즐거워질 거에요.
         </St.ImageSubText>
       </St.ImageWrapper>
-      <div>
-        <LocationDropDown setLocation={setLocation} />
-        <PartnerCalendar setPartnerDates={setDate} />
-        <RecruitmentDropDown setIsOpen={setIsOpen} />
-      </div>
-      <div>
+      <St.filterWriteBox>
+        <div>
+          <LocationDropDown setLocation={setLocation} />
+          <PartnerCalendar setPartnerDates={setDate} />
+          <RecruitmentDropDown setIsOpen={setIsOpen} />
+        </div>
         <button onClick={() => navigate('/partner/write')}>글쓰기</button>
-      </div>
+      </St.filterWriteBox>
       <St.Grid>
         {postStorage
           .map((post) => {
