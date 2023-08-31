@@ -47,6 +47,8 @@ export const CommentButton = styled.button`
   color: white;
 
   border-radius: 15px;
+
+  cursor: pointer;
 `;
 
 // PartnerCommentsList, reCommentList

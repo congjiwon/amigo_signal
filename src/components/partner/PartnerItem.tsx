@@ -61,7 +61,7 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
           </St.TitleBox>
         </St.Main>
         <St.Body>
-          <St.Status isOpen={post.isOpen}>{post.isOpen ? '모집중' : '모집완료'}</St.Status>
+          <St.Status $isOpen={post.isOpen}>{post.isOpen ? '모집중' : '모집완료'}</St.Status>
           <p>모집인원: {post.numOfPeople}명</p>
         </St.Body>
         <St.Footer>
