@@ -1,4 +1,11 @@
 import styled from 'styled-components';
+
+export const MoveButtonArea = styled.div`
+  position: fixed;
+  right: 40px;
+  bottom: 40px;
+`;
+
 export const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, minmax(200px, auto));
@@ -22,10 +29,7 @@ export const Grid = styled.div`
 export const PostCard = styled.div`
   width: 282px;
   height: 282px;
-  /* padding: 24px; */
-  /* padding-bottom: 15px; */
   position: relative;
-
   border-radius: 30px;
   box-shadow: 5px 5px 10px 3px rgba(0, 0, 0, 0.2);
 `;
@@ -83,7 +87,7 @@ export const Span = styled.span`
   border-radius: 18px;
   display: inline-block;
   font-size: 12px;
-  background-color: aliceblue;
+  background: rgba(255, 255, 255, 0.8);
   position: absolute;
   bottom: 110px;
   left: 20px;

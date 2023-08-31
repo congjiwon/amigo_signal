@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { getSpotShareDefaultImg } from '../../../api/supabase/spotshare';
 import { Tables } from '../../../api/supabase/supabase';
 import Calendar from '../../../assets/imgs/partner/Calendar.svg';
 import * as St from './style';
+import { getSpotShareDefaultImg } from '../../../api/supabase/spotshare';
 
 type SpotItemProps = {
   post: Tables<'spotPosts'>;
@@ -35,6 +35,8 @@ function SpotShareItem({ post }: SpotItemProps) {
     visitDate[2] = visitDate[2].substring(1);
   }
 
+  const contentWithoutTags = post.content.replace(/<\/?[^>]+(>|$)/g, '');
+
   return (
     <Link to={`detail/${post.id}`}>
       <St.PostCard>
@@ -48,7 +50,7 @@ function SpotShareItem({ post }: SpotItemProps) {
           <h1>{post.title}</h1>
         </St.TitleBox>
         <St.ContentBox>
-          <p>{post.content}</p>
+          <p>{contentWithoutTags}</p>
         </St.ContentBox>
         <DefaultImg src={countryImg}></DefaultImg>
         <St.Span>{post.country}</St.Span>

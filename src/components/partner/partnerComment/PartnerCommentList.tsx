@@ -11,6 +11,7 @@ import { CommentButton } from '../../common/button/Button';
 import { ConfirmDelete } from '../../common/modal/alert';
 import PartnerReComments from './PartnerReComments';
 import * as St from './style';
+import TopButton from '../../common/topbutton/TopButton';
 
 type allCommentsProps =
   | {
@@ -187,6 +188,9 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
   {
     return (
       <St.PartnerCommentsContainerBox>
+        <St.MoveButtonArea>
+          <TopButton />
+        </St.MoveButtonArea>
         <St.PartnerCommentsBox>
           {/* users : 모든 유저 ID, 닉네임, 프로필사진 배열 */}
           {users?.map((user) => {

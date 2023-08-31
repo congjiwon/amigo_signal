@@ -7,6 +7,7 @@ import TravelWith from '../../assets/imgs/partner/TravelWith.jpg';
 import { useNavigate } from 'react-router';
 import LocationDropDown from '../common/dropDown/LocationDropDown';
 import PartnerCalendar from '../common/calendar/PartnerCalendar';
+import TopButton from '../common/topbutton/TopButton';
 
 interface passType {
   country?: string;
@@ -104,6 +105,9 @@ const PartnerList = () => {
           })
           .slice(0, offset + 10)}
         <div ref={divRef}></div>
+        <St.MoveButtonArea>
+          <TopButton />
+        </St.MoveButtonArea>
       </St.Grid>
     </>
   );
