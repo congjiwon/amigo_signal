@@ -17,7 +17,9 @@ export const WriterInfoBox = styled.div`
 `;
 export const ImageWrapper = styled.div`
   position: relative;
-  width: 1200px;
+  width: 100%;
+  min-width: 360px;
+  max-width: 1200px;
   height: 400px;
   overflow: hidden;
 `;

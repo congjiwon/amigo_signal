@@ -3,26 +3,13 @@ import { getAppliedPosts } from '../../../api/supabase/partner';
 import useSessionStore from '../../../zustand/store';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import * as St from './style';
+import * as StCommon from '../common/style/style';
 import { Pagination, PaginationProps } from 'antd';
 import { NUMBER_OF_ITEMS } from '../../common/getRangePagination/getRangePagination';
 import useMyPageTabPanel from '../../../zustand/myPageTabPanel';
-
-interface Post {
-  id: string;
-  writerId: string;
-  title: string;
-  content: string;
-  numOfPeople: number;
-  startDate: string;
-  endDate: string;
-  isOpen: boolean;
-  openChat: string;
-  createdAt: string;
-  interestUrl: string[];
-  region: string;
-  country: string;
-}
+import classifyingAge from '../../common/classifyingAge/classifyingAge';
+import defaultImg from '../../../assets/imgs/users/default_profile_img.png';
+const storagaUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
 
 export default function AppliedPosts() {
   const session = useSessionStore((state) => state.session);
@@ -31,74 +18,101 @@ export default function AppliedPosts() {
   const [currentPage, setCurrentPage] = useState(1);
   const isTabActive = useMyPageTabPanel((state) => state.active)[1];
 
-  const {
-    data: appliedPosts,
-    isLoading,
-    isError,
-  } = useQuery({
+  const { data: appliedPosts, isError } = useQuery({
     queryKey: ['appliedPosts', userId, filterStatus, currentPage - 1],
     queryFn: () => getAppliedPosts({ userId, filterIsAccepted: filterStatus, page: currentPage - 1 }),
     enabled: isTabActive,
+    keepPreviousData: true,
   });
 
   const handleClickFilter = (value: boolean | null) => {
     setFilterStatus(value);
     setCurrentPage(1);
   };
-  let appliedPostsData: Post[] = [];
 
-  if (appliedPosts?.data) {
-    appliedPostsData = appliedPosts?.data.map((data) => data.postId as Post);
-  }
+  const appliedPostsData = appliedPosts?.data?.map((data) => data.postId);
 
   const handlePageChange: PaginationProps['onChange'] = (page) => {
     setCurrentPage(page);
   };
 
   return (
-    <St.AppliedPostsSection>
-      <h2>동행 찾기 참여글</h2>
-      <St.FilterBtns>
-        <St.FilterBtn className={filterStatus === null ? 'active' : ''} onClick={() => handleClickFilter(null)}>
+    <>
+      <StCommon.MyFilterBtns>
+        <StCommon.MyFilterBtn className={filterStatus === null ? 'active' : ''} onClick={() => handleClickFilter(null)}>
           신청중
-        </St.FilterBtn>
-        <St.FilterBtn className={filterStatus === true ? 'active' : ''} onClick={() => handleClickFilter(true)}>
+        </StCommon.MyFilterBtn>
+        <StCommon.MyFilterBtn className={filterStatus === true ? 'active' : ''} onClick={() => handleClickFilter(true)}>
           수락됨
-        </St.FilterBtn>
-        <St.FilterBtn className={filterStatus === false ? 'active' : ''} onClick={() => handleClickFilter(false)}>
+        </StCommon.MyFilterBtn>
+        <StCommon.MyFilterBtn className={filterStatus === false ? 'active' : ''} onClick={() => handleClickFilter(false)}>
           거절됨
-        </St.FilterBtn>
-      </St.FilterBtns>
+        </StCommon.MyFilterBtn>
+      </StCommon.MyFilterBtns>
 
       {!!appliedPosts?.count ? (
         <>
-          <St.AppliedPostCardList>
-            {appliedPostsData?.map((postData: Post) => {
+          <StCommon.MyCards>
+            {appliedPostsData?.map((postData) => {
               return (
-                <St.AppliedPostCard>
+                <StCommon.MyCard>
                   <Link to={`/partner/detail/${postData.id}`}>
-                    <div>{postData.country}</div>
-                    <div>{`${postData.isOpen ? `모집중` : `모집마감`}`}</div>
-                    <div>{`${postData.startDate} ~ ${postData.endDate}`}</div>
-                    <div>{postData.title}</div>
-                    {postData.interestUrl.map((url) => (
-                      <img src={url} />
-                    ))}
-                    <div>모집인원 {postData.numOfPeople}</div>
+                    <StCommon.FlexBetween className="partner-top">
+                      <StCommon.CountryInfo>
+                        <div>
+                          <img src="" alt={`${postData.country} 국기`} />
+                        </div>
+                        <p>{postData.country}</p>
+                      </StCommon.CountryInfo>
+                      <StCommon.OpenStatus>{postData.isOpen ? `모집중` : `모집완료`}</StCommon.OpenStatus>
+                    </StCommon.FlexBetween>
+
+                    <StCommon.DateInfo>
+                      {postData.startDate} ~ {postData.endDate}
+                    </StCommon.DateInfo>
+
+                    <StCommon.CardTitle className="partner-title">{postData.title}</StCommon.CardTitle>
+
+                    <StCommon.FlexBetween>
+                      <StCommon.InterestList>
+                        {postData.interestUrl.map((url) => (
+                          <li>
+                            <img src={url} />
+                          </li>
+                        ))}
+                      </StCommon.InterestList>
+                      <StCommon.numOfPeople>
+                        모집인원 <span>{postData.numOfPeople}</span>
+                      </StCommon.numOfPeople>
+                    </StCommon.FlexBetween>
+
+                    <StCommon.FlexBetween className="partner-bottom">
+                      <StCommon.UserInfoMain>
+                        <div>
+                          <img src={postData.writerId.profileImageUrl ? `${storagaUrl}/${postData.writerId.profileImageUrl}` : defaultImg} />
+                        </div>
+                        <p>{postData.writerId.nickName}</p>
+                      </StCommon.UserInfoMain>
+                      <StCommon.UserInfoSub>
+                        {postData.writerId.gender} | {classifyingAge(postData.writerId.birthday)}
+                      </StCommon.UserInfoSub>
+                    </StCommon.FlexBetween>
                   </Link>
-                </St.AppliedPostCard>
+                </StCommon.MyCard>
               );
             })}
-          </St.AppliedPostCardList>
-          <Pagination current={currentPage} defaultPageSize={NUMBER_OF_ITEMS} total={appliedPosts?.count ? appliedPosts.count : 0} onChange={handlePageChange} />
+          </StCommon.MyCards>
+          <StCommon.PaginationBox>
+            <Pagination current={currentPage} defaultPageSize={NUMBER_OF_ITEMS} total={appliedPosts?.count ? appliedPosts.count : 0} onChange={handlePageChange} />
+          </StCommon.PaginationBox>
         </>
       ) : filterStatus === null ? (
-        <div>신청중인 동행 찾기 참여글이 없습니다.</div>
+        <StCommon.MsgNoData>신청중인 동행 찾기 참여글이 없습니다.</StCommon.MsgNoData>
       ) : filterStatus === true ? (
-        <div>수락된 동행 찾기 참여글이 없습니다.</div>
+        <StCommon.MsgNoData>수락된 동행 찾기 참여글이 없습니다.</StCommon.MsgNoData>
       ) : (
-        <div>거절된 동행 찾기 참여글이 없습니다.</div>
+        <StCommon.MsgNoData>거절된 동행 찾기 참여글이 없습니다.</StCommon.MsgNoData>
       )}
-    </St.AppliedPostsSection>
+    </>
   );
 }

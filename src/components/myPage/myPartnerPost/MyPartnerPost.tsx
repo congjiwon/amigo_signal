@@ -3,7 +3,7 @@ import { getMyPartnerPosts } from '../../../api/supabase/partner';
 import useSessionStore from '../../../zustand/store';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import * as St from './style';
+import * as StCommon from '../common/style/style';
 import { Pagination, PaginationProps } from 'antd';
 import { NUMBER_OF_ITEMS } from '../../common/getRangePagination/getRangePagination';
 import useMyPageTabPanel from '../../../zustand/myPageTabPanel';
@@ -15,14 +15,11 @@ export default function MyPartnerPost() {
   const [currentPage, setCurrentPage] = useState(1);
   const isTabActive = useMyPageTabPanel((state) => state.active)[0];
 
-  const {
-    data: myPartnerPosts,
-    isLoading,
-    isError,
-  } = useQuery({
+  const { data: myPartnerPosts, isError } = useQuery({
     queryKey: ['myPartnerPosts', userId, filterStatus, currentPage - 1],
     queryFn: () => getMyPartnerPosts({ userId, filterIsOpen: filterStatus, page: currentPage - 1 }),
     enabled: isTabActive,
+    keepPreviousData: true,
   });
 
   const handleClickFilter = (value: boolean | null) => {
@@ -34,46 +31,68 @@ export default function MyPartnerPost() {
     setCurrentPage(page);
   };
   return (
-    <St.MyPartnerPostsSection>
-      <h2>동행 찾기 작성글</h2>
-      <St.FilterBtns>
-        <St.FilterBtn className={filterStatus === null ? 'active' : ''} onClick={() => handleClickFilter(null)}>
+    <>
+      <StCommon.MyFilterBtns>
+        <StCommon.MyFilterBtn className={filterStatus === null ? 'active' : ''} onClick={() => handleClickFilter(null)}>
           전체 보기
-        </St.FilterBtn>
-        <St.FilterBtn className={filterStatus === true ? 'active' : ''} onClick={() => handleClickFilter(true)}>
+        </StCommon.MyFilterBtn>
+        <StCommon.MyFilterBtn className={filterStatus === true ? 'active' : ''} onClick={() => handleClickFilter(true)}>
           모집중
-        </St.FilterBtn>
-        <St.FilterBtn className={filterStatus === false ? 'active' : ''} onClick={() => handleClickFilter(false)}>
+        </StCommon.MyFilterBtn>
+        <StCommon.MyFilterBtn className={filterStatus === false ? 'active' : ''} onClick={() => handleClickFilter(false)}>
           모집 완료
-        </St.FilterBtn>
-      </St.FilterBtns>
+        </StCommon.MyFilterBtn>
+      </StCommon.MyFilterBtns>
 
       {!!myPartnerPosts?.count ? (
         <>
-          <St.MyPartnerPostCardList>
+          <StCommon.MyCards>
             {myPartnerPosts?.data?.map((partnerPost) => (
-              <St.MyPartnerPostCard key={partnerPost.id}>
+              <StCommon.MyCard key={partnerPost.id}>
                 <Link to={`/partner/detail/${partnerPost.id}`}>
-                  <div>title: {partnerPost.title}</div>
-                  <div>content: {partnerPost.content}</div>
-                  <div>region: {partnerPost.region}</div>
-                  <div>country: {partnerPost.country}</div>
-                  <div>startDate: {partnerPost.startDate}</div>
-                  <div>endDate: {partnerPost.endDate}</div>
-                  <div>numOfPpl: {partnerPost.numOfPeople}</div>
+                  <StCommon.FlexBetween className="partner-top">
+                    <StCommon.CountryInfo>
+                      <div>
+                        <img src="" alt={`${partnerPost.country} 국기`} />
+                      </div>
+                      <p>{partnerPost.country}</p>
+                    </StCommon.CountryInfo>
+                    <StCommon.OpenStatus>{partnerPost.isOpen ? `모집중` : `모집완료`}</StCommon.OpenStatus>
+                  </StCommon.FlexBetween>
+
+                  <StCommon.DateInfo>
+                    {partnerPost.startDate} ~ {partnerPost.endDate}
+                  </StCommon.DateInfo>
+
+                  <StCommon.CardTitle className="partner-title">{partnerPost.title}</StCommon.CardTitle>
+
+                  <StCommon.FlexBetween>
+                    <StCommon.InterestList>
+                      {partnerPost.interestUrl.map((url) => (
+                        <li>
+                          <img src={url} />
+                        </li>
+                      ))}
+                    </StCommon.InterestList>
+                    <StCommon.numOfPeople>
+                      모집인원 <span>{partnerPost.numOfPeople}</span>
+                    </StCommon.numOfPeople>
+                  </StCommon.FlexBetween>
                 </Link>
-              </St.MyPartnerPostCard>
+              </StCommon.MyCard>
             ))}
-          </St.MyPartnerPostCardList>
-          <Pagination current={currentPage} defaultPageSize={NUMBER_OF_ITEMS} total={myPartnerPosts?.count ? myPartnerPosts.count : 0} onChange={handlePageChange} />
+          </StCommon.MyCards>
+          <StCommon.PaginationBox>
+            <Pagination current={currentPage} defaultPageSize={NUMBER_OF_ITEMS} total={myPartnerPosts?.count ? myPartnerPosts.count : 0} onChange={handlePageChange} />
+          </StCommon.PaginationBox>
         </>
       ) : filterStatus === null ? (
-        <div>작성한 동행 찾기 글이 없습니다.</div>
+        <StCommon.MsgNoData>작성한 동행 찾기 글이 없습니다.</StCommon.MsgNoData>
       ) : filterStatus === true ? (
-        <div>모집중인 동행 찾기 작성글이 없습니다.</div>
+        <StCommon.MsgNoData>모집중인 동행 찾기 작성글이 없습니다.</StCommon.MsgNoData>
       ) : (
-        <div>모집 완료된 동행 찾기 작성글이 없습니다.</div>
+        <StCommon.MsgNoData>모집 완료된 동행 찾기 작성글이 없습니다.</StCommon.MsgNoData>
       )}
-    </St.MyPartnerPostsSection>
+    </>
   );
 }

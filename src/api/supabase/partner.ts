@@ -221,7 +221,7 @@ type AppliedPostProps = {
 export const getAppliedPosts = async ({ userId, filterIsAccepted, page }: AppliedPostProps) => {
   const { from, to } = getRangePagination(page, NUMBER_OF_ITEMS);
 
-  let appliedPosts = supabase.from('applicants').select('*, postId (*)', { count: 'exact' }).eq('applicantId', userId);
+  let appliedPosts = supabase.from('applicants').select('*, postId(*, writerId(*))', { count: 'exact' }).eq('applicantId', userId);
 
   if (filterIsAccepted === null) {
     appliedPosts = appliedPosts.is('isAccepted', null);
@@ -234,6 +234,19 @@ export const getAppliedPosts = async ({ userId, filterIsAccepted, page }: Applie
   }
 
   const { data, count } = await appliedPosts.order('postId(startDate)', { ascending: true }).range(from, to);
+  return { data, count };
+};
+
+// 북마크한 포스트들
+type BookmarkedPostProps = {
+  userId: string | undefined;
+  page: number;
+};
+export const getBookmarkedPosts = async ({ userId, page }: BookmarkedPostProps) => {
+  const { from, to } = getRangePagination(page, NUMBER_OF_ITEMS);
+
+  const { data, count } = await supabase.from('bookmarks').select('*, postId (*, writerId(*))', { count: 'exact' }).eq('userId', userId).order('postId(startDate)').range(from, to);
+
   return { data, count };
 };
 
