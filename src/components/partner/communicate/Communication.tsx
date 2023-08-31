@@ -23,7 +23,13 @@ const Communication = ({ postId, writerId, logInUserId }: CommunicationProps) =>
   const [isApply, setIsApply] = useState<boolean | null>(null);
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
   const [applicantList, setApplicantList] = useState<Tables<'applicants'>[]>([]);
+  const [hasApplicants, setHasApplicants] = useState<boolean>();
+  const [isThisPostOpen, setIsThisPostOpen] = useState<boolean>();
 
+  // 모집 완료 시 참여하기 버튼 보이지 않도록 조건 추가
+  const { data: isPartnerPostsOpen } = useQuery<{ data: { isOpen: boolean } | null }>(['postOpenStatus', postId], () => isPostOpen(postId!));
+
+  // 지원자의 참여 신청 여부 확인 및 작성자의 confirmed 여부 세팅
   useEffect(() => {
     const fetchData = async () => {
       if (postId && logInUserId) {
@@ -42,24 +48,21 @@ const Communication = ({ postId, writerId, logInUserId }: CommunicationProps) =>
   }, [postId, logInUserId]);
 
   // 신청자 목록에 수락/거절하지 않은 신청자가 존재하는지 확인
+  // 새롭게 신청한 지원자 있는 지 여부 설정 및 해당 포스트가 모집 중인지 여부 설정
   useEffect(() => {
     const fetchApplicant = async () => {
       if (!postId) return;
       const { data, error } = await getApplicantList(postId);
       if (error || !data) {
-        console.error('신청자 목록을 가져오는 과정에서 error 발생', error);
         setApplicantList([]);
       } else {
         setApplicantList(data);
       }
     };
     fetchApplicant();
-  }, [postId]);
-  const hasApplicants = applicantList && applicantList.length > 0;
-
-  // 모집 완료 시 참여하기 버튼 보이지 않도록 조건 추가
-  const { data: isPartnerPostsOpen } = useQuery<{ data: { isOpen: boolean } | null }>(['postOpenStatus', postId], () => isPostOpen(postId!));
-  const isThisPostOpen = isPartnerPostsOpen?.data?.isOpen;
+    setHasApplicants(applicantList && applicantList.length > 0);
+    setIsThisPostOpen(isPartnerPostsOpen?.data?.isOpen);
+  }, [postId, applicantList, isPartnerPostsOpen]);
 
   const handleApplyCancel = async () => {
     if (!postId || !logInUserId) {
