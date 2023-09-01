@@ -89,7 +89,7 @@ const UserFeedback = ({ id, createdAt, writerId, openChat }: Props) => {
       return;
     }
     try {
-      mutation.mutate({ postId: id });
+      await mutation.mutate({ postId: id });
       navigate('/partner');
     } catch (error) {}
   };
