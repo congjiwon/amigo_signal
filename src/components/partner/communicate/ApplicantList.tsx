@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { getApplicantList } from '../../../api/supabase/partner';
-import * as St from './style';
 import { Tables } from '../../../api/supabase/supabase';
 import ApplicantCard from './ApplicantCard';
+import * as St from './style';
 
 type ApplicantListProps = {
   postId: string | undefined;

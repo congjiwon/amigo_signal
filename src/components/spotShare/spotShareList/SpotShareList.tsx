@@ -3,6 +3,7 @@ import { getAllSpotSharePost, getFilteredSpotSharePost } from '../../../api/supa
 import { Tables } from '../../../api/supabase/supabase';
 import { supabase } from '../../../api/supabase/supabaseClient';
 import { FilterSpotCalendar } from '../../common/calendar/SpotCalendar';
+import { useLocation, useNavigate } from 'react-router';
 import { SortDropDown } from '../../common/dropDown/DropDown';
 import LocationDropDown from '../../common/dropDown/LocationDropDown';
 import TopButton from '../../common/topbutton/TopButton';
@@ -18,7 +19,8 @@ const SpotShareList = () => {
   const offset = (currentPage - 1) * limit;
   const [location, setLocation] = useState<string[]>([]);
   const [spotDate, setSpotDate] = useState<string[]>([]);
-
+  const pageLocation = useLocation();
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchPosts = async () => {
       const { data, error } = await getAllSpotSharePost();
@@ -38,7 +40,7 @@ const SpotShareList = () => {
     if (divRef.current) {
       observer.observe(divRef.current);
     }
-  }, []);
+  }, [pageLocation]);
 
   const defaultOption = {
     root: null,
@@ -102,11 +104,14 @@ const SpotShareList = () => {
 
   return (
     <>
-      <div>
-        <SortDropDown setSort={handleSortChange} />
-        <LocationDropDown setLocation={setLocation} />
-        <FilterSpotCalendar setSpotDate={setSpotDate} />
-      </div>
+      <St.filterBox>
+        <div>
+          <SortDropDown setSort={handleSortChange} />
+          <LocationDropDown setLocation={setLocation} />
+          <FilterSpotCalendar setSpotDate={setSpotDate} />
+        </div>
+        <button onClick={() => navigate('/spotshare/write')}>글쓰기</button>
+      </St.filterBox>
       <St.Grid>
         {postStorage
           .map((post) => {

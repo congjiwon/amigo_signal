@@ -1,8 +1,10 @@
+import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { updateStatus } from '../../../api/supabase/partner';
+import { getConfirmedApplicantList, getNumOfPeople, updatePostStatus, updateStatus } from '../../../api/supabase/partner';
 import { Tables } from '../../../api/supabase/supabase';
 import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import { useConfirmedListStore, useStateStore } from '../../../zustand/communicate';
+import { useModalStore } from '../../../zustand/store';
 import classifyingAge from '../../common/classifyingAge/classifyingAge';
 import { ConfirmCustom } from '../../common/modal/alert';
 import * as St from './style';
@@ -15,19 +17,21 @@ type ApplicantCardProps = {
 };
 
 const ApplicantCard = ({ data, onClick, isSelected, removeConfirmedApplicant }: ApplicantCardProps) => {
+  const { closeModal } = useModalStore();
+
   const [isAccepted, setIsAccepted] = useState<boolean | null>(null);
   const storagaUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
 
   const applicantId = data.applicantId;
 
-  const { setApplicantStatus } = useStateStore();
+  const { setApplicantStatus, setPartnerStatus } = useStateStore();
   const { addConfirmedApplicant } = useConfirmedListStore();
 
-  // const { data: confirmedApplicants } = useQuery(['confirmedApplicants', data.postId], () => getConfirmedApplicantList(data.postId!.id));
-  // const { data: getNumberOfPeople } = useQuery(['numOfPeople', data.postId], () => getNumOfPeople(data.postId.id));
+  const { data: confirmedApplicants } = useQuery(['confirmedApplicants', data.postId], () => getConfirmedApplicantList(data.postId!.id));
+  const { data: getNumberOfPeople } = useQuery(['numOfPeople', data.postId], () => getNumOfPeople(data.postId.id));
 
-  // const confirmedLength = confirmedApplicants?.data?.length || 0;
-  // const numOfPeople = getNumberOfPeople?.[0]?.numOfPeople || 0;
+  const confirmedLength = confirmedApplicants?.data?.length || 0;
+  const numOfPeople = getNumberOfPeople?.[0]?.numOfPeople || 0;
 
   // useEffect(() => {
   //   const fetchApplicantStatus = async () => {
@@ -57,8 +61,13 @@ const ApplicantCard = ({ data, onClick, isSelected, removeConfirmedApplicant }: 
     try {
       await updateStatus(applicantId, true);
       setApplicantStatus('참여 수락됨');
+      if (numOfPeople <= confirmedLength) {
+        setPartnerStatus('모집완료');
+        updatePostStatus(data.postId.id, false);
+      }
       addConfirmedApplicant(data);
       removeConfirmedApplicant(applicantId);
+      closeModal('applicantList');
     } catch (error) {
       console.error('수락 과정 중 error 발생', error);
     }
@@ -81,13 +90,14 @@ const ApplicantCard = ({ data, onClick, isSelected, removeConfirmedApplicant }: 
       await updateStatus(applicantId, false);
       setApplicantStatus('참여 거절됨');
       removeConfirmedApplicant(applicantId);
+      closeModal('applicantList');
     } catch (error) {
       console.error('거절 과정 중 error 발생', error);
     }
   };
 
   return (
-    <St.ApplicantCard onClick={() => onClick(data.id)} isClicked={isSelected}>
+    <St.ApplicantCard onClick={() => onClick(data.id)} $isClicked={isSelected}>
       <St.ApplicantProfile>
         <St.ApplicantInfo>
           {data.users?.profileImageUrl ? <St.ApplicantProfileImage src={`${storagaUrl}/${data.users?.profileImageUrl}`} alt="profile" /> : <St.ApplicantProfileImage src={defaultProfileImage} alt="profile" />}
@@ -97,10 +107,10 @@ const ApplicantCard = ({ data, onClick, isSelected, removeConfirmedApplicant }: 
           </St.ApplicantAgeGender>
         </St.ApplicantInfo>
         <St.ButtonDiv>
-          <St.AcceptButton onClick={handleAccept} isAccepted={isAccepted}>
+          <St.AcceptButton onClick={handleAccept} $isAccepted={isAccepted}>
             수락
           </St.AcceptButton>
-          <St.RejectButton onClick={handleReject} isAccepted={isAccepted}>
+          <St.RejectButton onClick={handleReject} $isAccepted={isAccepted}>
             거절
           </St.RejectButton>
         </St.ButtonDiv>
