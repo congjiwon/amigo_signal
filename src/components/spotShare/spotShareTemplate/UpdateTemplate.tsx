@@ -129,7 +129,7 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
             취소하기
           </Button>
           <Button type="submit" styleType={BtnStyleType.BTN_DARK}>
-            등록하기
+            수정하기
           </Button>
         </St.ButtonBox>
       </St.WriteForm>

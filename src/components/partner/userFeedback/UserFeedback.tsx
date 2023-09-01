@@ -113,15 +113,16 @@ const UserFeedback = ({ id, createdAt, writerId, openChat }: Props) => {
           <button onClick={() => handleDelBtn(id)}>삭제</button>
         </div>
       ) : (
-        <></>
-      )}
-      {logInUserId ? (
-        <div>
-          <div>{bookMark ? <RiBookmarkFill onClick={() => removeBookMarkHandle()} /> : <RiBookmarkLine onClick={() => addBookMarkHandle()} />}</div>
-          <div>{openChat.length > 1 && <FiMessageSquare onClick={() => handleCopyClipBoard(openChat)} />}</div>
-        </div>
-      ) : (
-        <></>
+        <>
+          {logInUserId ? (
+            <div>
+              <div>{bookMark ? <RiBookmarkFill onClick={() => removeBookMarkHandle()} /> : <RiBookmarkLine onClick={() => addBookMarkHandle()} />}</div>
+              <div>{openChat.length > 1 && <FiMessageSquare onClick={() => handleCopyClipBoard(openChat)} />}</div>
+            </div>
+          ) : (
+            <></>
+          )}
+        </>
       )}
     </St.UserFeedbackBox>
   );
