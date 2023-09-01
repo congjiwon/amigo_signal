@@ -177,3 +177,16 @@ export const getMySpotSharePosts = async ({ writerId, page }: mySpotSharePostsTy
   const { data, count } = await supabase.from('spotPosts').select('*', { count: 'exact' }).eq('writerId', writerId).order('visitDate', { ascending: false }).range(from, to);
   return { data, count };
 };
+
+// 좋아요한 포스트들
+type LikedSpotShareProps = {
+  userId: string | undefined;
+  page: number;
+};
+export const getLikedSpotShare = async ({ userId, page }: LikedSpotShareProps) => {
+  const { from, to } = getRangePagination(page, NUMBER_OF_ITEMS);
+
+  const { data, count } = await supabase.from('likes').select('*, postId (*)', { count: 'exact' }).eq('userId', userId).order('postId(visitDate)').range(from, to);
+
+  return { data, count };
+};
