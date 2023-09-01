@@ -153,22 +153,21 @@ export interface Database {
       likes: {
         Row: {
           id: string;
-          postId: string;
-          // postId: {
-          //   address: string | null;
-          //   content: string;
-          //   country: string;
-          //   createdAt: string;
-          //   id: string;
-          //   latitude: number | null;
-          //   longitude: number | null;
-          //   postImageUrl: string[] | null;
-          //   region: string;
-          //   starRate: number;
-          //   title: string;
-          //   visitDate: string;
-          //   writerId: string;
-          // };
+          postId: {
+            address: string | null;
+            content: string;
+            country: string;
+            createdAt: string;
+            id: string;
+            latitude: number | null;
+            longitude: number | null;
+            postImageUrl: string[] | null;
+            region: string;
+            starRate: number;
+            title: string;
+            visitDate: string;
+            writerId: string;
+          };
           userId: string;
         };
         Insert: {

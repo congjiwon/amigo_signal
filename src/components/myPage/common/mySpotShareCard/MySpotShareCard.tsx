@@ -5,7 +5,30 @@ import { useQuery } from '@tanstack/react-query';
 import { getSpotShareDefaultImg } from '../../../../api/supabase/partner';
 
 type SpotSharePorps = {
-  spotSharePost: Tables<'spotPosts'>;
+  spotSharePost: {
+    address: string | null;
+    content: string;
+    country: string;
+    createdAt: string;
+    id: string;
+    latitude: number | null;
+    longitude: number | null;
+    likeCount?: number;
+    postImageUrl: string[] | null;
+    region: string;
+    starRate: number;
+    title: string;
+    visitDate: string;
+    writerId: string;
+    users?: {
+      birthday: string;
+      email: string;
+      gender: string;
+      id: string;
+      nickName: string;
+      profileImageUrl: string | null;
+    };
+  };
 };
 
 export default function MySpotShareCard({ spotSharePost }: SpotSharePorps) {
