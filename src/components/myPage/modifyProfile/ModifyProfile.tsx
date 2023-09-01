@@ -1,15 +1,15 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useState } from 'react';
-import { supabase } from '../../../api/supabase/supabaseClient';
-import { duplicationCheckFromUserTable, getCurrentUser, updateUserNickname, updateUserProfileImgUrl } from '../../../api/supabase/users';
-import useSessionStore, { useModalStore } from '../../../zustand/store';
 import { v4 as uuidv4 } from 'uuid';
-import Button from '../../common/button/Button';
-import { BtnStyleType } from '../../../types/styleTypes';
-import { Alert } from '../../common/modal/alert';
+import { supabase } from '../../../api/supabase/supabaseClient';
+import { duplicationCheckFromUserTable, updateUserNickname, updateUserProfileImgUrl } from '../../../api/supabase/users';
 import defaultImg from '../../../assets/imgs/users/default_profile_img.png';
-import * as St from './style';
+import { BtnStyleType } from '../../../types/styleTypes';
 import useCurrentUserStore from '../../../zustand/currentUser';
+import useSessionStore, { useModalStore } from '../../../zustand/store';
+import Button from '../../common/button/Button';
+import { Alert } from '../../common/modal/alert';
+import * as St from './style';
 
 export default function ModifyProfile() {
   const queryClient = useQueryClient();

@@ -7,4 +7,4 @@ export const getRangePagination = (page: number, size: number) => {
 };
 
 // myPage
-export const NUMBER_OF_ITEMS = 9;
+export const NUMBER_OF_ITEMS = 12;

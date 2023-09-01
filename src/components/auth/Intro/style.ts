@@ -19,10 +19,8 @@ export const Container = styled.div`
 `;
 
 export const LogoDiv = styled.div`
-  width: 124px;
-  height: 124px;
-
-  background-color: grey;
+  width: 100px;
+  height: 100px;
 `;
 
 export const Logo = styled.p`
@@ -49,10 +47,9 @@ export const LinkIcon = styled.div`
   width: 80px;
   height: 80px;
   border-radius: 100px;
-
   margin-bottom: 18px;
-
   background-color: grey;
+  cursor: pointer;
 `;
 
 export const LinkContainer = styled.div`

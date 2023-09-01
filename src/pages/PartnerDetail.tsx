@@ -45,14 +45,17 @@ function PartnerDetail() {
     fetchData();
   }, [postid, logInUserId, setApplicantStatus]);
 
+  // 자동 모집완료 로직 (모집인원, 여행 기간 endDate)
   useEffect(() => {
     const currentDate = new Date();
-    if (partnerPost && confirmedApplicants) {
+    currentDate.setHours(0, 0, 0, 0);
+    if (partnerPost && confirmedApplicants?.data) {
       const endDate = new Date(partnerPost.endDate);
-      if (endDate < currentDate || (confirmedApplicants.data && confirmedApplicants.data.length >= partnerPost.numOfPeople)) {
+      endDate.setHours(0, 0, 0, 0);
+      if (endDate < currentDate || confirmedApplicants.data.length >= partnerPost.numOfPeople) {
         updatePostStatus(postid!, false);
         setPartnerStatus('모집완료');
-      } else if (endDate >= currentDate || (confirmedApplicants.data ? confirmedApplicants.data.length : 0) < partnerPost.numOfPeople) {
+      } else if (endDate >= currentDate || confirmedApplicants.data.length < partnerPost.numOfPeople) {
         updatePostStatus(postid!, true);
         setPartnerStatus('모집중');
       }
@@ -73,12 +76,12 @@ function PartnerDetail() {
         <PartnerDetailInfo partnerPostData={partnerPost!} />
         <St.CommunicateDiv>
           <ConfirmedPartnerList postId={postid} />
-          {logInUserId ? <Communication postId={postid} writerId={partnerPost?.writerId!} logInUserId={logInUserId} /> : <></>}
+          {logInUserId ? <Communication postId={postid} writerId={partnerPost?.writerId!} logInUserId={logInUserId} isApply={isApply} setIsApply={setIsApply} /> : <></>}
         </St.CommunicateDiv>
       </St.PartnerDetailMain>
       <St.Status>
         <St.PostStatus $partnerStatus={partnerStatus}>{partnerStatus === '모집중' ? '모집중' : '모집완료'}</St.PostStatus>
-        {isApply && <St.ApplyStatus>{applicantStatus}</St.ApplyStatus>}
+        {isApply && applicantStatus !== null ? <St.ApplyStatus>{applicantStatus}</St.ApplyStatus> : <></>}
       </St.Status>
       <PartnerCommentsList />
     </>

@@ -64,6 +64,7 @@ function SpotShareDetailContents() {
   const mutation = useMutation(deleteSpotSharePost, {
     onSuccess: async () => {
       await queryClient.invalidateQueries(['spotSharePost']);
+      navigate('/spotshare');
     },
   });
 
@@ -73,7 +74,6 @@ function SpotShareDetailContents() {
       return;
     }
     mutation.mutate(id);
-    navigate('/spotshare');
   };
 
   // 맵 불러오기

@@ -1,11 +1,11 @@
 import { styled } from 'styled-components';
 
 type ApplicantCardProps = {
-  isClicked: boolean;
+  $isClicked: boolean;
 };
 
 type CheckButtonProps = {
-  isAccepted: boolean | null;
+  $isAccepted: boolean | null;
 };
 
 type ConfirmedApplicantListProps = {
@@ -61,7 +61,7 @@ export const ApplicantList = styled.ul`
 export const ApplicantCard = styled.div<ApplicantCardProps>`
   margin-top: 15px;
   padding: 20px;
-  border: ${(props) => (props.isClicked ? '1.5px solid black' : '1px solid lightgray')};
+  border: ${(props) => (props.$isClicked ? '1.5px solid black' : '1px solid lightgray')};
   border-radius: 10px;
 `;
 
@@ -105,12 +105,12 @@ export const AcceptButton = styled.button<CheckButtonProps>`
   border-radius: 20px;
   cursor: pointer;
   background-color: ${(props) => {
-    if (props.isAccepted === null) return 'white';
-    return props.isAccepted ? 'black' : 'white';
+    if (props.$isAccepted === null) return 'white';
+    return props.$isAccepted ? 'black' : 'white';
   }};
   color: ${(props) => {
-    if (props.isAccepted === null) return 'black';
-    return props.isAccepted ? 'white' : 'black';
+    if (props.$isAccepted === null) return 'black';
+    return props.$isAccepted ? 'white' : 'black';
   }};
 `;
 
@@ -121,12 +121,12 @@ export const RejectButton = styled.button<CheckButtonProps>`
   border-radius: 20px;
   cursor: pointer;
   background-color: ${(props) => {
-    if (props.isAccepted === null) return 'white';
-    return props.isAccepted ? 'white' : 'black';
+    if (props.$isAccepted === null) return 'white';
+    return props.$isAccepted ? 'white' : 'black';
   }};
   color: ${(props) => {
-    if (props.isAccepted === null) return 'black';
-    return props.isAccepted ? 'black' : 'white';
+    if (props.$isAccepted === null) return 'black';
+    return props.$isAccepted ? 'black' : 'white';
   }};
 `;
 

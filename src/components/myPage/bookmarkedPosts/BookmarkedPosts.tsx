@@ -5,12 +5,8 @@ import useSessionStore from '../../../zustand/store';
 import useMyPageTabPanel from '../../../zustand/myPageTabPanel';
 import { Pagination, PaginationProps } from 'antd';
 import { NUMBER_OF_ITEMS } from '../../common/getRangePagination/getRangePagination';
-import classifyingAge from '../../common/classifyingAge/classifyingAge';
 import * as StCommon from './../common/style/style';
-import { Link } from 'react-router-dom';
-import defaultImg from '../../../assets/imgs/users/default_profile_img.png';
 import MyPartnerCard from '../common/myPartnerCard/MyPartnerCard';
-const storagaUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
 
 export default function BookmarkedPosts() {
   const session = useSessionStore((state) => state.session);
