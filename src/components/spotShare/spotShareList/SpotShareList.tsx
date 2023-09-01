@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router';
 import { getAllSpotSharePost, getFilteredSpotSharePost, getLikes } from '../../../api/supabase/spotshare';
 import { Tables } from '../../../api/supabase/supabase';
 import { supabase } from '../../../api/supabase/supabaseClient';
+import useSessionStore from '../../../zustand/store';
 import { FilterSpotCalendar } from '../../common/calendar/SpotCalendar';
 import { SortDropDown } from '../../common/dropDown/DropDown';
 import LocationDropDown from '../../common/dropDown/LocationDropDown';
@@ -20,6 +21,8 @@ const SpotShareList = () => {
   const offset = (currentPage - 1) * limit;
   const [location, setLocation] = useState<string[]>([]);
   const [spotDate, setSpotDate] = useState<string[]>([]);
+  const session = useSessionStore((state) => state.session);
+  const logInUserId = session?.user.id;
 
   const { data } = useQuery(['likes'], getLikes);
   const likeData = data?.data;
@@ -120,10 +123,10 @@ const SpotShareList = () => {
       <St.Grid>
         {postStorage
           .map((post) => {
-            const liked = likeData!.filter((like) => {
-              return like.postId.id === post.id!;
+            const likedPost = likeData!.filter((like) => {
+              return like.userId === logInUserId;
             });
-            return <SpotShareItem key={post.id} post={post} liked={liked} />;
+            return <SpotShareItem key={post.id} post={post} likedPost={likedPost} />;
           })
           .slice(0, offset + 10)}
         <div ref={divRef}></div>

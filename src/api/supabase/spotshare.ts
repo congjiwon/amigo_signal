@@ -149,13 +149,12 @@ export const countLikes = async (postId: string) => {
 // 스팟공유 게시글 좋아요 수 업데이트
 export const countLike = async (like: number, postId: string) => {
   const { data } = await supabase.from('spotPosts').update({ likeCount: like }).eq('id', postId);
-  console.log('data', like);
   return { data };
 };
 
 // 좋아요 가져오기
 export const getLikes = async () => {
-  const { data } = await supabase.from('likes').select('*');
+  const { data } = await supabase.from('likes').select('*, postId(*)');
   return { data };
 };
 
