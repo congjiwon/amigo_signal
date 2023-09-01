@@ -6,7 +6,9 @@ function IntroTemplate() {
   return (
     <St.IntroWrapper>
       <St.Container>
-        <St.LogoDiv>로고</St.LogoDiv>
+        <St.LogoDiv>
+          <img src={'./logo_bird.png'} alt="amigo-signal" style={{ width: '100%' }} />
+        </St.LogoDiv>
         <St.Logo>Amigo Signal</St.Logo>
         <St.ExplanationContainer>
           <St.Span>Amigo Signal과 함께 여행에 동행할 친구를 찾아보세요.</St.Span>
