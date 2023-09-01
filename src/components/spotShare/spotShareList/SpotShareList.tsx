@@ -1,5 +1,6 @@
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
-import { getAllSpotSharePost, getFilteredSpotSharePost } from '../../../api/supabase/spotshare';
+import { getAllSpotSharePost, getFilteredSpotSharePost, getLikes } from '../../../api/supabase/spotshare';
 import { Tables } from '../../../api/supabase/supabase';
 import { supabase } from '../../../api/supabase/supabaseClient';
 import { FilterSpotCalendar } from '../../common/calendar/SpotCalendar';
@@ -18,6 +19,9 @@ const SpotShareList = () => {
   const offset = (currentPage - 1) * limit;
   const [location, setLocation] = useState<string[]>([]);
   const [spotDate, setSpotDate] = useState<string[]>([]);
+
+  const { data } = useQuery(['likes'], getLikes);
+  const likeData = data?.data;
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -110,7 +114,10 @@ const SpotShareList = () => {
       <St.Grid>
         {postStorage
           .map((post) => {
-            return <SpotShareItem key={post.id} post={post} />;
+            const liked = likeData!.filter((like) => {
+              return like.postId === post.id;
+            });
+            return <SpotShareItem key={post.id} post={post} liked={liked} />;
           })
           .slice(0, offset + 10)}
         <div ref={divRef}></div>

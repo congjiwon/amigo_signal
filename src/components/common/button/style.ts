@@ -25,17 +25,24 @@ const btnCommentStyles = css`
   }
 `;
 
-export const CommentButton = styled.button<{ styleType: BtnStyleType; disabled: boolean | undefined }>`
+export const CommentButton = styled.button<{ $styleType: BtnStyleType; disabled: boolean | undefined }>`
   ${(props) => {
     if (props.disabled) {
       return css`
         ${btnCommentStyles}
         cursor: not-allowed;
       `;
-    } else if (props.styleType === 'BTN_ONLYFONT') {
-      return css`
-        ${btnCommentStyles}
-      `;
+    } else {
+      switch (props.$styleType) {
+        case BtnStyleType.BTN_ONLYFONT:
+          return css`
+            ${btnCommentStyles}
+          `;
+        case BtnStyleType.BTN_LIKE:
+          return css`
+            ${btnCommentStyles}
+          `;
+      }
     }
   }}
 `;
