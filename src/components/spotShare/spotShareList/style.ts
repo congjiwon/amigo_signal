@@ -6,6 +6,12 @@ export const MoveButtonArea = styled.div`
   bottom: 40px;
 `;
 
+export const filterBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
 export const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, minmax(200px, auto));
