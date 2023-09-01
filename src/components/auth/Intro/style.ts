@@ -19,10 +19,8 @@ export const Container = styled.div`
 `;
 
 export const LogoDiv = styled.div`
-  width: 124px;
-  height: 124px;
-
-  background-color: grey;
+  width: 100px;
+  height: 100px;
 `;
 
 export const Logo = styled.p`
