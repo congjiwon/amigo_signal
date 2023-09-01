@@ -1,7 +1,5 @@
-import React from 'react';
-import { styled } from 'styled-components';
-import * as St from './style';
 import { useNavigate } from 'react-router';
+import * as St from './style';
 
 function IntroTemplate() {
   const navigate = useNavigate();
