@@ -30,13 +30,16 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
     getFlagImgHandle();
   }, []);
 
+  // 자동 모집완료 로직 (모집인원, 여행 기간 endDate)
   useEffect(() => {
     const currentDate = new Date();
-    if (post && confirmedApplicants) {
+    currentDate.setHours(0, 0, 0, 0);
+    if (post && confirmedApplicants?.data) {
       const endDate = new Date(post.endDate);
-      if (endDate < currentDate || confirmedApplicants.data!.length >= post.numOfPeople) {
+      endDate.setHours(0, 0, 0, 0);
+      if (endDate < currentDate || confirmedApplicants.data.length >= post.numOfPeople) {
         updatePostStatus(post.id!, false);
-      } else if (endDate >= currentDate || confirmedApplicants.data!.length < post.numOfPeople) {
+      } else if (endDate >= currentDate || confirmedApplicants.data.length < post.numOfPeople) {
         updatePostStatus(post.id!, true);
       }
     }
