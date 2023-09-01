@@ -1,9 +1,11 @@
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
-import { getAllSpotSharePost, getFilteredSpotSharePost } from '../../../api/supabase/spotshare';
+import { useLocation, useNavigate } from 'react-router';
+import { getAllSpotSharePost, getFilteredSpotSharePost, getLikes } from '../../../api/supabase/spotshare';
 import { Tables } from '../../../api/supabase/supabase';
 import { supabase } from '../../../api/supabase/supabaseClient';
+import useSessionStore from '../../../zustand/store';
 import { FilterSpotCalendar } from '../../common/calendar/SpotCalendar';
-import { useLocation, useNavigate } from 'react-router';
 import { SortDropDown } from '../../common/dropDown/DropDown';
 import LocationDropDown from '../../common/dropDown/LocationDropDown';
 import TopButton from '../../common/topbutton/TopButton';
@@ -19,6 +21,12 @@ const SpotShareList = () => {
   const offset = (currentPage - 1) * limit;
   const [location, setLocation] = useState<string[]>([]);
   const [spotDate, setSpotDate] = useState<string[]>([]);
+  const session = useSessionStore((state) => state.session);
+  const logInUserId = session?.user.id;
+
+  const { data } = useQuery(['likes'], getLikes);
+  const likeData = data?.data;
+
   const pageLocation = useLocation();
   const navigate = useNavigate();
   useEffect(() => {
@@ -115,7 +123,10 @@ const SpotShareList = () => {
       <St.Grid>
         {postStorage
           .map((post) => {
-            return <SpotShareItem key={post.id} post={post} />;
+            const likedPost = likeData!.filter((like) => {
+              return like.userId === logInUserId;
+            });
+            return <SpotShareItem key={post.id} post={post} likedPost={likedPost} />;
           })
           .slice(0, offset + 10)}
         <div ref={divRef}></div>
