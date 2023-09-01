@@ -1,7 +1,15 @@
-import React from 'react';
+import SignUpForm from '../components/auth/signUpForm/SignUpForm';
+import Footer from '../components/common/footer/Footer';
+import Header from '../components/common/header/Header';
 
 function SignUp() {
-  return <div>SignUp</div>;
+  return (
+    <>
+      <Header />
+      <SignUpForm />
+      <Footer />
+    </>
+  );
 }
 
 export default SignUp;

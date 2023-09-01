@@ -1,7 +1,9 @@
-import React from 'react';
-
+import { useParams } from 'react-router';
+import PartnerWriteTemplate from '../components/partner/partnerWriteTemplate/PartnerWriteTemplate';
+import PartnerUpdateTemplate from '../components/partner/partnerUpdateTemplate/PartnerUpdateTemplate';
 function PartnerWrite() {
-  return <div>PartnerWrite</div>;
+  const { postid: postId } = useParams();
+  return <>{postId ? <PartnerUpdateTemplate postId={postId} /> : <PartnerWriteTemplate />}</>;
 }
 
 export default PartnerWrite;

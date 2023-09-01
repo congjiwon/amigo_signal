@@ -1,7 +1,12 @@
 import React from 'react';
+import IntroTemplate from '../components/auth/Intro/IntroTemplate';
 
 const Intro = () => {
-  return <div>Intro</div>;
+  return (
+    <>
+      <IntroTemplate />
+    </>
+  );
 };
 
 export default Intro;

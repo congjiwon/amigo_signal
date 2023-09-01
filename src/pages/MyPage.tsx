@@ -1,7 +1,13 @@
-import React from 'react';
+import MyAllContents from '../components/myPage/myAllContents/MyAllContents';
+import Profile from '../components/myPage/profile/Profile';
 
 function MyPage() {
-  return <div>MyPage</div>;
+  return (
+    <>
+      {/* <Profile /> */}
+      <MyAllContents />
+    </>
+  );
 }
 
 export default MyPage;
