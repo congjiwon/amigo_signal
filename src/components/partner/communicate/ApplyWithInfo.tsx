@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { insertApplicant } from '../../../api/supabase/partner';
 import { BtnStyleType } from '../../../types/styleTypes';
+import { useStateStore } from '../../../zustand/communicate';
 import { useModalStore } from '../../../zustand/store';
 import Button from '../../common/button/Button';
 import { Input } from '../../common/input/Input';
@@ -17,6 +18,8 @@ const ApplyWithInfo = ({ postId, applicantId, setIsApply }: ApplyWithInfoProps) 
   const { closeModal } = useModalStore();
 
   const [text, setText] = useState('');
+
+  const { setApplicantStatus } = useStateStore();
 
   const handleText = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newText = e.target.value;
@@ -47,6 +50,7 @@ const ApplyWithInfo = ({ postId, applicantId, setIsApply }: ApplyWithInfoProps) 
       });
       if (!isConfirmed) return;
       try {
+        setApplicantStatus('참여 신청 중');
         await insertApplicant(applicantData);
         setIsApply(true);
         closeModal('applyWithInfo');
@@ -55,6 +59,7 @@ const ApplyWithInfo = ({ postId, applicantId, setIsApply }: ApplyWithInfoProps) 
       }
     } else {
       try {
+        setApplicantStatus('참여 신청 중');
         await insertApplicant(applicantData);
         setIsApply(true);
         closeModal('applyWithInfo');
