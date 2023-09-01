@@ -121,7 +121,7 @@ const SpotShareList = () => {
         {postStorage
           .map((post) => {
             const liked = likeData!.filter((like) => {
-              return like.postId === post.id;
+              return like.postId.id === post.id!;
             });
             return <SpotShareItem key={post.id} post={post} liked={liked} />;
           })
