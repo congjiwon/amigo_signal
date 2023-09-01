@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
 import { getAllSpotSharePost, getFilteredSpotSharePost, getLikes } from '../../../api/supabase/spotshare';
 import { Tables } from '../../../api/supabase/supabase';
 import { supabase } from '../../../api/supabase/supabaseClient';
@@ -23,6 +24,8 @@ const SpotShareList = () => {
   const { data } = useQuery(['likes'], getLikes);
   const likeData = data?.data;
 
+  const pageLocation = useLocation();
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchPosts = async () => {
       const { data, error } = await getAllSpotSharePost();
@@ -42,7 +45,7 @@ const SpotShareList = () => {
     if (divRef.current) {
       observer.observe(divRef.current);
     }
-  }, []);
+  }, [pageLocation]);
 
   const defaultOption = {
     root: null,
@@ -106,11 +109,14 @@ const SpotShareList = () => {
 
   return (
     <>
-      <div>
-        <SortDropDown setSort={handleSortChange} />
-        <LocationDropDown setLocation={setLocation} />
-        <FilterSpotCalendar setSpotDate={setSpotDate} />
-      </div>
+      <St.filterBox>
+        <div>
+          <SortDropDown setSort={handleSortChange} />
+          <LocationDropDown setLocation={setLocation} />
+          <FilterSpotCalendar setSpotDate={setSpotDate} />
+        </div>
+        <button onClick={() => navigate('/spotshare/write')}>글쓰기</button>
+      </St.filterBox>
       <St.Grid>
         {postStorage
           .map((post) => {
