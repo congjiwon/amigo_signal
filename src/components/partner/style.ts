@@ -4,6 +4,12 @@ type StatusProps = {
   $isOpen: boolean;
 };
 
+export const filterWriteBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
 //탑버튼
 export const MoveButtonArea = styled.div`
   position: fixed;
