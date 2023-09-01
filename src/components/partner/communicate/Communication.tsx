@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { checkApply, deleteApplicant, getApplicantList, isPostOpen } from '../../../api/supabase/partner';
 import { Tables } from '../../../api/supabase/supabase';
 import { BtnStyleType } from '../../../types/styleTypes';
+import { useStateStore } from '../../../zustand/communicate';
 import { useModalStore } from '../../../zustand/store';
 import Button from '../../common/button/Button';
 import Modal from '../../common/modal/Modal';
@@ -14,12 +15,14 @@ type CommunicationProps = {
   postId: string | undefined;
   writerId: string | null | undefined;
   logInUserId: string;
+  isApply: boolean | null;
+  setIsApply: React.Dispatch<React.SetStateAction<boolean | null>>;
 };
 
-const Communication = ({ postId, writerId, logInUserId }: CommunicationProps) => {
+const Communication = ({ postId, writerId, logInUserId, isApply, setIsApply }: CommunicationProps) => {
   const { openedModals, openModal } = useModalStore();
+  const { setApplicantStatus } = useStateStore();
 
-  const [isApply, setIsApply] = useState<boolean | null>(null);
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
   const [applicantList, setApplicantList] = useState<Tables<'applicants'>[]>([]);
   const [hasApplicants, setHasApplicants] = useState<boolean>();
@@ -79,6 +82,7 @@ const Communication = ({ postId, writerId, logInUserId }: CommunicationProps) =>
     try {
       await deleteApplicant(postId, logInUserId);
       setIsApply(false);
+      setApplicantStatus(null);
     } catch (error) {
       console.error('참여 취소 과정에서 error 발생', error);
       Alert({ title: '참여 취소 중 문제가 발생했습니다.', position: 'top-end' });
