@@ -22,7 +22,7 @@ export default Button;
 
 export const CommentButton = ({ type, children, styleType, disabled, onClick }: ButtonProps) => {
   return (
-    <St.CommentButton type={type} styleType={styleType} disabled={disabled} onClick={onClick}>
+    <St.CommentButton type={type} $styleType={styleType} disabled={disabled} onClick={onClick}>
       {children}
     </St.CommentButton>
   );

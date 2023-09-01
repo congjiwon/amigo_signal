@@ -45,14 +45,17 @@ function PartnerDetail() {
     fetchData();
   }, [postid, logInUserId, setApplicantStatus]);
 
+  // 자동 모집완료 로직 (모집인원, 여행 기간 endDate)
   useEffect(() => {
     const currentDate = new Date();
-    if (partnerPost && confirmedApplicants) {
+    currentDate.setHours(0, 0, 0, 0);
+    if (partnerPost && confirmedApplicants?.data) {
       const endDate = new Date(partnerPost.endDate);
-      if (endDate < currentDate || (confirmedApplicants.data && confirmedApplicants.data.length >= partnerPost.numOfPeople)) {
+      endDate.setHours(0, 0, 0, 0);
+      if (endDate < currentDate || confirmedApplicants.data.length >= partnerPost.numOfPeople) {
         updatePostStatus(postid!, false);
         setPartnerStatus('모집완료');
-      } else if (endDate >= currentDate || (confirmedApplicants.data ? confirmedApplicants.data.length : 0) < partnerPost.numOfPeople) {
+      } else if (endDate >= currentDate || confirmedApplicants.data.length < partnerPost.numOfPeople) {
         updatePostStatus(postid!, true);
         setPartnerStatus('모집중');
       }

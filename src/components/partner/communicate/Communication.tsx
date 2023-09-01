@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { checkApply, deleteApplicant, getApplicantList, isPostOpen } from '../../../api/supabase/partner';
 import { Tables } from '../../../api/supabase/supabase';
@@ -23,7 +22,10 @@ const Communication = ({ postId, writerId, logInUserId }: CommunicationProps) =>
   const [isApply, setIsApply] = useState<boolean | null>(null);
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
   const [applicantList, setApplicantList] = useState<Tables<'applicants'>[]>([]);
+  const [hasApplicants, setHasApplicants] = useState<boolean>();
+  const [isThisPostOpen, setIsThisPostOpen] = useState<boolean>();
 
+  // 지원자의 참여 신청 여부 확인 및 작성자의 confirmed 여부 세팅
   useEffect(() => {
     const fetchData = async () => {
       if (postId && logInUserId) {
@@ -41,25 +43,28 @@ const Communication = ({ postId, writerId, logInUserId }: CommunicationProps) =>
     fetchData();
   }, [postId, logInUserId]);
 
-  // 신청자 목록에 수락/거절하지 않은 신청자가 존재하는지 확인
+  // 해당 post의 신청 대기 목록에 수락/거절하지 않은 신청자 리스트 뽑아오기 & 새롭게 신청한 지원자 있는 지 여부 설정
   useEffect(() => {
     const fetchApplicant = async () => {
-      if (!postId) return;
-      const { data, error } = await getApplicantList(postId);
+      const { data, error } = await getApplicantList(postId!);
       if (error || !data) {
-        console.error('신청자 목록을 가져오는 과정에서 error 발생', error);
         setApplicantList([]);
       } else {
         setApplicantList(data);
       }
     };
     fetchApplicant();
-  }, [postId]);
-  const hasApplicants = applicantList && applicantList.length > 0;
+    setHasApplicants(applicantList && applicantList.length > 0);
+  }, [postId, applicantList]);
 
-  // 모집 완료 시 참여하기 버튼 보이지 않도록 조건 추가
-  const { data: isPartnerPostsOpen } = useQuery<{ data: { isOpen: boolean } | null }>(['postOpenStatus', postId], () => isPostOpen(postId!));
-  const isThisPostOpen = isPartnerPostsOpen?.data?.isOpen;
+  // 해당 포스트가 모집 중인지 여부 설정 -> 모집 완료 시 참여하기/참여취소 버튼 및 동행 신청자 목록 보이지 않도록
+  useEffect(() => {
+    const getIsPostOpen = async () => {
+      const { data: isPartnerPostsOpen } = await isPostOpen(postId!);
+      setIsThisPostOpen(isPartnerPostsOpen?.isOpen);
+    };
+    getIsPostOpen();
+  }, [postId]);
 
   const handleApplyCancel = async () => {
     if (!postId || !logInUserId) {
