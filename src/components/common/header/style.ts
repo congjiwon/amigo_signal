@@ -9,6 +9,7 @@ export const Header = styled.header`
   min-width: 360px;
   max-width: 1200px;
   margin: 0 auto;
+  /* border: 2px solid #efefef; */
 
   /* box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); */
 

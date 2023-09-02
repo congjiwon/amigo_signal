@@ -54,6 +54,10 @@ export const LikeButton = styled.button`
   padding: 20px;
   background-color: transparent;
   border: none;
+  &:hover {
+    transform: scale(1.5);
+  }
+  cursor: pointer;
 `;
 
 export const DefaultImg = styled.img`
