@@ -9,6 +9,7 @@ import LocationDropDown from '../../common/dropDown/LocationDropDown';
 import TopButton from '../../common/topbutton/TopButton';
 import SpotShareItem from './SpotShareItem';
 import * as St from './style';
+import { Skeleton } from 'antd';
 
 const SpotShareList = () => {
   const [postStorage, setPostStorage] = useState<Tables<'spotPosts'>[]>([]);
@@ -16,23 +17,27 @@ const SpotShareList = () => {
   const divRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 10;
+  const [isLoading, setIsLoading] = useState(true);
   const offset = (currentPage - 1) * limit;
   const [location, setLocation] = useState<string[]>([]);
   const [spotDate, setSpotDate] = useState<string[]>([]);
   const pageLocation = useLocation();
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchPosts = async () => {
+      setIsLoading(true);
       const { data, error } = await getAllSpotSharePost();
       if (error || !data) {
         console.error('스팟공유 게시글 목록을 가져오는 과정에서 에러 발생', error);
         setPostStorage([]);
       } else {
-        data.sort((a, b) => {
-          return new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf();
-        });
+        // data.sort((a, b) => {
+        //   return new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf();
+        // });
         setPostStorage(data);
       }
+      setIsLoading(false);
     };
     fetchPosts();
 
@@ -112,17 +117,22 @@ const SpotShareList = () => {
         </div>
         <button onClick={() => navigate('/spotshare/write')}>글쓰기</button>
       </St.filterBox>
-      <St.Grid>
-        {postStorage
-          .map((post) => {
-            return <SpotShareItem key={post.id} post={post} />;
-          })
-          .slice(0, offset + 10)}
-        <div ref={divRef}></div>
-        <St.MoveButtonArea>
-          <TopButton />
-        </St.MoveButtonArea>
-      </St.Grid>
+      {isLoading ? ( // 로딩 중일 때 로딩 화면 표시
+        // <div>Loading...</div>
+        <Skeleton active />
+      ) : (
+        <St.Grid>
+          {postStorage
+            .map((post) => {
+              return <SpotShareItem key={post.id} post={post} />;
+            })
+            .slice(0, offset + 10)}
+          <div ref={divRef}></div>
+          <St.MoveButtonArea>
+            <TopButton />
+          </St.MoveButtonArea>
+        </St.Grid>
+      )}
     </>
   );
 };
