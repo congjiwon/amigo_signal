@@ -145,7 +145,7 @@ function SpotShareDetailContents() {
               <St.NickNameSpan style={{ paddingTop: '1px', paddingBottom: '5px' }}>{spotSharePost?.users?.nickName} </St.NickNameSpan>
               <St.InfoContainer>
                 <span>{spotSharePost?.createdAt.substring(0, 10) + ' ' + spotSharePost?.createdAt.substring(11, 16)} </span>
-                <span>조회: 100</span>
+                <span>조회 100</span>
                 <span>좋아요 {likeCount}</span>
               </St.InfoContainer>
             </St.InfoInnerBox>
@@ -185,9 +185,9 @@ function SpotShareDetailContents() {
       </St.SpotShareBox>
       <div style={{ marginTop: '50px', marginBottom: '50px' }}>
         {spotSharePost?.address ? (
-          <p style={{ marginBottom: '18px' }}>
-            <FiMapPin style={{ marginRight: '10px' }}></FiMapPin>
-            <St.LocationIngoSpan>{spotSharePost?.address}</St.LocationIngoSpan>
+          <p style={{ marginBottom: '10px' }}>
+            <FiMapPin style={{ marginRight: '10px' }} />
+            {spotSharePost?.address}
           </p>
         ) : (
           <></>
