@@ -24,6 +24,7 @@ export const Form = styled.form`
 `;
 
 export const CommentTextarea = styled.textarea`
+  align-items: center;
   resize: none;
   width: 1097px;
   height: 48px;

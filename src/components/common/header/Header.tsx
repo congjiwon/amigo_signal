@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../../../api/supabase/supabaseClient';
@@ -13,6 +13,7 @@ export default function Header() {
   const session = useSessionStore((state) => state.session);
   const setSession = useSessionStore((state) => state.setSession);
   const userId = session?.user.id;
+  const queryClient = useQueryClient();
 
   const currentUser = useCurrentUserStore((state) => state.currentUser);
   const setCurrentUser = useCurrentUserStore((state) => state.setCurrentUser);
@@ -36,8 +37,7 @@ export default function Header() {
     await supabase.auth.signOut();
     Alert({ title: '로그아웃 되었습니다.' });
     navigate('/login');
-    // 설빈 : 이거 넣으면 로그아웃했을 때 댓글작성X / 답댓글 수정삭제X
-    // window.location.reload();
+    queryClient.clear(); // 안되잖아ㅠ
   };
   return (
     <St.Header>

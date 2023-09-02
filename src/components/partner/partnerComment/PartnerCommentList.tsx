@@ -183,129 +183,131 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
     }
   };
 
-  return (
-    <St.PartnerCommentsContainerBox>
-      <St.MoveButtonArea>
-        <TopButton />
-      </St.MoveButtonArea>
-      <St.PartnerCommentsBox>
-        {/* users : 모든 유저 ID, 닉네임, 프로필사진 배열 */}
-        {users?.map((user) => {
-          if (user.id === comment?.writerId) {
-            const isPostWriter = comment.writerId === postWriterId;
-            return (
-              // 여기서 user ? 아래 넣고 : 아니면 넣고 이렇게 해야겠는데?
-              <St.CommentTopBox key={user.id}>
+  {
+    return (
+      <St.PartnerCommentsContainerBox>
+        <St.MoveButtonArea>
+          <TopButton />
+        </St.MoveButtonArea>
+        <St.PartnerCommentsBox>
+          {/* users : 모든 유저 ID, 닉네임, 프로필사진 배열 */}
+          {users?.map((user) => {
+            if (user.id === comment?.writerId) {
+              const isPostWriter = comment.writerId === postWriterId;
+              return (
+                // 여기서 user ? 아래 넣고 : 아니면 넣고 이렇게 해야겠는데?
+                <St.CommentTopBox key={user.id}>
+                  <div>
+                    <St.Img src={user! && user!.profileImageUrl! ? `${storageUrl}/${user!.profileImageUrl!}` : DefaultProfileImage} />
+                  </div>
+                  <St.WriterContainerBox>
+                    <St.WriterBox>
+                      <St.NickNameParagraph>{user.nickName}</St.NickNameParagraph>
+                      {isPostWriter && <St.WriterParagraph>작성자</St.WriterParagraph>}
+                    </St.WriterBox>
+                    <St.CommentBox>
+                      <St.CommentParagraph>{comment?.content}</St.CommentParagraph>
+                    </St.CommentBox>
+                  </St.WriterContainerBox>
+                </St.CommentTopBox>
+              );
+            }
+          })}
+          {currentUser && (
+            <St.CommentBottomBox>
+              <St.DateButtonBox>
+                {' '}
+                <St.DateBox>
+                  <St.DateParagraph>{comment?.date.substring(0, 10) + ' ' + comment?.date.substring(11, 16)}</St.DateParagraph>
+                </St.DateBox>
+                {/* 여기 작성자태그코드 넣어보기 */}
+                {isLoginUser && (
+                  <St.ButtonBox>
+                    <div>
+                      <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('updateComment', comment!.id, null)}>
+                        수정
+                      </CommentButton>
+                    </div>
+                    <St.Bar>|</St.Bar>
+                    <div>
+                      <CommentButton type="submit" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleDelBtn(comment!.id)}>
+                        삭제
+                      </CommentButton>
+                    </div>
+                  </St.ButtonBox>
+                )}
+                <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('postReComment', comment!.id, null)}>
+                  답글쓰기
+                </CommentButton>
+              </St.DateButtonBox>
+              {isUpdate && (
                 <div>
-                  <St.Img src={user! && user!.profileImageUrl! ? `${storageUrl}/${user!.profileImageUrl!}` : DefaultProfileImage} />
+                  <form onSubmit={handleSubmitBtn}>
+                    <St.InputBox>
+                      <St.Textarea placeholder="댓글을 남겨보세요" value={updateComment} onChange={(event) => setUpdateComment(event.target.value)} />
+                      <St.CancelSubmitButtonBox>
+                        <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleCancelBtn('updateCancel')}>
+                          취소
+                        </CommentButton>
+                        <CommentButton type="submit" disabled={updateComment.length < 1} styleType={BtnStyleType.BTN_ONLYFONT}>
+                          등록
+                        </CommentButton>
+                      </St.CancelSubmitButtonBox>
+                    </St.InputBox>
+                  </form>
                 </div>
-                <St.WriterContainerBox>
-                  <St.WriterBox>
-                    <St.NickNameParagraph>{user.nickName}</St.NickNameParagraph>
-                    {isPostWriter && <St.WriterParagraph>작성자</St.WriterParagraph>}
-                  </St.WriterBox>
-                  <St.CommentBox>
-                    <St.CommentParagraph>{comment?.content}</St.CommentParagraph>
-                  </St.CommentBox>
-                </St.WriterContainerBox>
-              </St.CommentTopBox>
-            );
-          }
-        })}
-        {currentUser && (
-          <St.CommentBottomBox>
-            <St.DateButtonBox>
-              {' '}
-              <St.DateBox>
-                <St.DateParagraph>{comment?.date.substring(0, 10) + ' ' + comment?.date.substring(11, 16)}</St.DateParagraph>
-              </St.DateBox>
-              {/* 여기 작성자태그코드 넣어보기 */}
-              {isLoginUser && (
-                <St.ButtonBox>
-                  <div>
-                    <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('updateComment', comment!.id, null)}>
-                      수정
-                    </CommentButton>
-                  </div>
-                  <St.Bar>|</St.Bar>
-                  <div>
-                    <CommentButton type="submit" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleDelBtn(comment!.id)}>
-                      삭제
-                    </CommentButton>
-                  </div>
-                </St.ButtonBox>
               )}
-              <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('postReComment', comment!.id, null)}>
-                답글쓰기
-              </CommentButton>
-            </St.DateButtonBox>
-            {isUpdate && (
-              <div>
-                <form onSubmit={handleSubmitBtn}>
-                  <St.InputBox>
-                    <St.Textarea placeholder="댓글을 남겨보세요" value={updateComment} onChange={(event) => setUpdateComment(event.target.value)} />
-                    <St.CancelSubmitButtonBox>
-                      <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleCancelBtn('updateCancel')}>
-                        취소
-                      </CommentButton>
-                      <CommentButton type="submit" disabled={updateComment.length < 1} styleType={BtnStyleType.BTN_ONLYFONT}>
-                        등록
-                      </CommentButton>
-                    </St.CancelSubmitButtonBox>
-                  </St.InputBox>
-                </form>
-              </div>
-            )}
-          </St.CommentBottomBox>
-        )}
-        {isReComment && (
-          <St.CommentBottomBox>
-            <form onSubmit={handleReCommentSubmit}>
-              <St.InputBox>
-                <St.Textarea placeholder="댓글을 입력하세요" value={reContent} onChange={(event) => setReContent(event?.target.value)} />
-                <St.CancelSubmitButtonBox>
-                  <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleCancelBtn('reCommentCancel')}>
-                    취소
-                  </CommentButton>
-                  {/* <St.Bar>|</St.Bar> */}
-                  <CommentButton type="submit" disabled={reContent.length < 1} styleType={BtnStyleType.BTN_ONLYFONT}>
-                    등록
-                  </CommentButton>
-                </St.CancelSubmitButtonBox>
-              </St.InputBox>
-            </form>
-          </St.CommentBottomBox>
-        )}
-      </St.PartnerCommentsBox>
-      <St.PartnerReCommentsBox>
-        {/* allReCommentsData : 모든 답댓글 정보(유저포함) */}
-        {allReCommentsData?.map((reComment) => {
-          if (reComment.commentId === comment?.id) {
-            const isPostWriter = reComment.writerId === postWriterId; // 작성자 태그 띄울 때 씀.
-            const isLoginCommentUser = authId === reComment.writerId; // 로그인한 댓글작성자
-            return (
-              <PartnerReComments
-                key={reComment.id}
-                comment={comment}
-                storageUrl={storageUrl}
-                reCommentId={reCommentId}
-                reComment={reComment}
-                handleCancelBtn={handleCancelBtn}
-                handleIsOpenBtn={handleIsOpenBtn}
-                handleReSubmitBtn={handleReSubmitBtn}
-                isPostWriter={isPostWriter}
-                isLoginCommentUser={isLoginCommentUser}
-                isUpdateReComment={isUpdateReComment}
-                updateReComment={updateReComment}
-                setUpdateReComment={setUpdateReComment}
-                setIsUpdateReComment={setIsUpdateReComment}
-              />
-            );
-          }
-        })}
-      </St.PartnerReCommentsBox>
-    </St.PartnerCommentsContainerBox>
-  );
+            </St.CommentBottomBox>
+          )}
+          {isReComment && (
+            <St.CommentBottomBox>
+              <form onSubmit={handleReCommentSubmit}>
+                <St.InputBox>
+                  <St.Textarea placeholder="댓글을 입력하세요" value={reContent} onChange={(event) => setReContent(event?.target.value)} />
+                  <St.CancelSubmitButtonBox>
+                    <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleCancelBtn('reCommentCancel')}>
+                      취소
+                    </CommentButton>
+                    {/* <St.Bar>|</St.Bar> */}
+                    <CommentButton type="submit" disabled={reContent.length < 1} styleType={BtnStyleType.BTN_ONLYFONT}>
+                      등록
+                    </CommentButton>
+                  </St.CancelSubmitButtonBox>
+                </St.InputBox>
+              </form>
+            </St.CommentBottomBox>
+          )}
+        </St.PartnerCommentsBox>
+        <St.PartnerReCommentsBox>
+          {/* allReCommentsData : 모든 답댓글 정보(유저포함) */}
+          {allReCommentsData?.map((reComment) => {
+            if (reComment.commentId === comment?.id) {
+              const isPostWriter = reComment.writerId === postWriterId; // 작성자 태그 띄울 때 씀.
+              const isLoginCommentUser = authId === reComment.writerId; // 로그인한 댓글작성자
+              return (
+                <PartnerReComments
+                  key={reComment.id}
+                  comment={comment}
+                  storageUrl={storageUrl}
+                  reCommentId={reCommentId}
+                  reComment={reComment}
+                  handleCancelBtn={handleCancelBtn}
+                  handleIsOpenBtn={handleIsOpenBtn}
+                  handleReSubmitBtn={handleReSubmitBtn}
+                  isPostWriter={isPostWriter}
+                  isLoginCommentUser={isLoginCommentUser}
+                  isUpdateReComment={isUpdateReComment}
+                  updateReComment={updateReComment}
+                  setUpdateReComment={setUpdateReComment}
+                  setIsUpdateReComment={setIsUpdateReComment}
+                />
+              );
+            }
+          })}
+        </St.PartnerReCommentsBox>
+      </St.PartnerCommentsContainerBox>
+    );
+  }
 }
 
 export default PartnerCommentList;

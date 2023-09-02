@@ -15,7 +15,7 @@ export const CommentLengthBox = styled.div`
 
 export const CommentLengthParagraph = styled.p`
   /* margin-top: 31px; */
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
   font-size: 14px;
 `;
 
@@ -23,19 +23,22 @@ export const CommentLengthParagraph = styled.p`
 export const Form = styled.form`
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
 `;
 
 export const CommentTextarea = styled.textarea`
   resize: none;
-  width: 1097px;
-  height: 48px;
+  width: 1057px;
+  height: 20px;
   padding: 14px 20px 14px 20px;
-  margin-bottom: 32px;
+  /* margin-bottom: 32px; */
   border-radius: 15px;
   border: 1px solid var(--light-gray, #e8ebee);
 `;
 
 export const CommentButton = styled.button`
+  align-items: center;
   width: 78px;
   height: 48px;
   background-color: black;
@@ -109,6 +112,7 @@ export const DateBox = styled.div`
 
 export const DateParagraph = styled.p`
   color: var(--gray, #adb1b8);
+  font-size: 12px;
 `;
 
 export const Bar = styled.p`
@@ -125,6 +129,7 @@ export const Textarea = styled.textarea`
   resize: none;
   width: 1097px;
   height: 100px;
+  margin-left: 52px;
   border-radius: 15px;
   border: 1px solid var(--light-gray, #e8ebee);
 `;

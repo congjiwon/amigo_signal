@@ -3,12 +3,14 @@ import { useState } from 'react';
 import { useParams } from 'react-router';
 import { getAuthId } from '../../../api/supabase/users';
 import { usePartnerComments } from '../../../hooks/usePartnerComment';
+import useCurrentUserStore from '../../../zustand/currentUser';
 import * as St from './style';
 
 function PartnerCommentsWrite() {
   const params = useParams();
   const [content, setContent] = useState('');
   const { isLoading, data: authId } = useQuery(['auth'], getAuthId);
+  const currentUser = useCurrentUserStore((state) => state.currentUser);
 
   const { postCommentMutation } = usePartnerComments();
 
@@ -47,12 +49,14 @@ function PartnerCommentsWrite() {
 
   return (
     <>
-      <St.Form onSubmit={handleSubmitBtnClick}>
-        <St.CommentTextarea name="content" placeholder="댓글을 남겨보세요" value={content} onChange={(e) => setContent(e.target.value)} />
-        <St.CommentButton type="submit" disabled={content.length < 1}>
-          등록
-        </St.CommentButton>
-      </St.Form>
+      {currentUser && (
+        <St.Form onSubmit={handleSubmitBtnClick}>
+          <St.CommentTextarea name="content" placeholder="댓글을 남겨보세요" value={content} onChange={(e) => setContent(e.target.value)} />
+          <St.CommentButton type="submit" disabled={content.length < 1}>
+            등록
+          </St.CommentButton>
+        </St.Form>
+      )}
     </>
   );
 }
