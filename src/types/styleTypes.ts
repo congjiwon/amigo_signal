@@ -5,4 +5,5 @@ export enum BtnStyleType {
   BTN_DARK = 'BTN_DARK',
   BTN_DISABLED = 'BTN_DISABLED',
   BTN_ONLYFONT = 'BTN_ONLYFONT',
+  BTN_LIKE = 'BTN_LIKE',
 }

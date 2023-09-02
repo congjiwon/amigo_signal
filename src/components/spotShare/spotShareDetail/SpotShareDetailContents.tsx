@@ -1,17 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
-import { FiEdit, FiTrash2 } from 'react-icons/fi';
+import { FiEdit, FiMapPin, FiTrash2 } from 'react-icons/fi';
 import { RiHeartFill, RiHeartLine } from 'react-icons/ri';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
 import { useNavigate, useParams } from 'react-router';
 import { countLike, countLikes, deleteLike, deleteSpotSharePost, getDetailSpotSharePost, postLike } from '../../../api/supabase/spotshare';
 import { supabase } from '../../../api/supabase/supabaseClient';
+import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import useSessionStore from '../../../zustand/store';
 import { ConfirmDelete } from '../../common/modal/alert';
-import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import * as St from './style';
-import { FiMapPin } from 'react-icons/fi';
 
 function SpotShareDetailContents() {
   const { postid } = useParams<string>();
@@ -55,7 +54,7 @@ function SpotShareDetailContents() {
   };
   useEffect(() => {
     LikeCheck(logInUserId!, postid!);
-  }, [logInUserId!, postid!]);
+  }, [likeCount]); // 여기도.. 수정?
 
   const mapRef = useRef<HTMLDivElement>(null);
 
@@ -151,11 +150,11 @@ function SpotShareDetailContents() {
             </St.InfoInnerBox>
           </St.PostInfoBox>
           <St.ButtonBox>
-            {logInUserId && <span>{like ? <RiHeartFill onClick={() => handleEmptyHeart()} style={{ height: '22px', width: '22px' }} /> : <RiHeartLine onClick={() => handleFillHeart()} style={{ height: '22px', width: '22px' }} />}</span>}
+            {logInUserId && <button>{like ? <RiHeartFill onClick={() => handleEmptyHeart()} style={{ height: '24px', width: '24px' }} /> : <RiHeartLine onClick={() => handleFillHeart()} style={{ height: '24px', width: '24px' }} />}</button>}
             {isPostWriter() ? (
               <>
-                <span>{<FiEdit onClick={() => navigate(`/spotshare/write/${spotSharePost?.id}`)} style={{ height: '22px', width: '22px' }} />}</span>
-                <span>{<FiTrash2 onClick={() => deletePostHandle(spotSharePost?.id)} style={{ height: '22px', width: '22px' }} />}</span>
+                <button>{<FiEdit onClick={() => navigate(`/spotshare/write/${spotSharePost?.id}`)} style={{ height: '24px', width: '24px' }} />}</button>
+                <button>{<FiTrash2 onClick={() => deletePostHandle(spotSharePost?.id)} style={{ height: '24px', width: '24px' }} />}</button>
               </>
             ) : (
               ''

@@ -169,21 +169,6 @@ export interface Database {
             writerId: string;
           };
           userId: string;
-          spotPosts: {
-            address: string | null;
-            content: string;
-            country: string;
-            createdAt: string;
-            id: string;
-            latitude: number | null;
-            longitude: number | null;
-            postImageUrl: string[] | null;
-            region: string;
-            starRate: number;
-            title: string;
-            visitDate: string;
-            writerId: string;
-          };
         };
         Insert: {
           id?: string;

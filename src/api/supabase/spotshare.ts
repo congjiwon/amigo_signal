@@ -131,8 +131,6 @@ export const insertSpotPost = async (spotPostData: Inserts<'spotPosts'>) => {
 
 type likes = { id?: string | undefined; postId: string; userId: string };
 
-//스팟공유 좋아요
-// 매개변수로 받은 postId랑 같으면 넣겠다? 뭔소리고;
 // 좋아요 추가
 export const postLike = async (likes: likes) => {
   return await supabase.from('likes').insert(likes);
@@ -148,21 +146,15 @@ export const countLikes = async (postId: string) => {
   return await supabase.from('likes').select('*', { count: 'exact' }).eq('postId', postId);
 };
 
-// 좋아요 조회
-export const getLikes = async () => {
-  return await supabase.from('likes').select('*');
-};
-
-// 스팟공유 인기순 정렬
-export const sortSpot = async () => {
-  const { data, count } = await supabase.from('likes').select('postId, COUNT(*) as like_count');
-  return { data };
-};
-
 // 스팟공유 게시글 좋아요 수 업데이트
 export const countLike = async (like: number, postId: string) => {
   const { data } = await supabase.from('spotPosts').update({ likeCount: like }).eq('id', postId);
-  console.log('data', like);
+  return { data };
+};
+
+// 좋아요 가져오기
+export const getLikes = async () => {
+  const { data } = await supabase.from('likes').select('*, postId(*)');
   return { data };
 };
 

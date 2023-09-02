@@ -58,8 +58,15 @@ export const ButtonBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  span {
-    margin-left: 11px;
+  gap: 20px;
+  /* width: 120%; */
+  button {
+    background-color: transparent;
+    border: none;
+    &:hover {
+      transform: scale(1.5);
+    }
+    cursor: pointer;
   }
 `;
 

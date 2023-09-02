@@ -1,15 +1,18 @@
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
-import { getAllSpotSharePost, getFilteredSpotSharePost } from '../../../api/supabase/spotshare';
+import { useLocation, useNavigate } from 'react-router';
+import { getAllSpotSharePost, getFilteredSpotSharePost, getLikes } from '../../../api/supabase/spotshare';
 import { Tables } from '../../../api/supabase/supabase';
 import { supabase } from '../../../api/supabase/supabaseClient';
+import useSessionStore from '../../../zustand/store';
 import { FilterSpotCalendar } from '../../common/calendar/SpotCalendar';
-import { useLocation, useNavigate } from 'react-router';
 import { SortDropDown } from '../../common/dropDown/DropDown';
 import LocationDropDown from '../../common/dropDown/LocationDropDown';
 import TopButton from '../../common/topbutton/TopButton';
 import SpotShareItem from './SpotShareItem';
 import * as St from './style';
 import { Skeleton } from 'antd';
+import SkeletonSpot from './SkeletonSpot';
 
 const SpotShareList = () => {
   const [postStorage, setPostStorage] = useState<Tables<'spotPosts'>[]>([]);
@@ -21,6 +24,12 @@ const SpotShareList = () => {
   const offset = (currentPage - 1) * limit;
   const [location, setLocation] = useState<string[]>([]);
   const [spotDate, setSpotDate] = useState<string[]>([]);
+  const session = useSessionStore((state) => state.session);
+  const logInUserId = session?.user.id;
+
+  const { data } = useQuery(['likes'], getLikes);
+  const likeData = data?.data;
+
   const pageLocation = useLocation();
   const navigate = useNavigate();
 
@@ -117,21 +126,25 @@ const SpotShareList = () => {
         </div>
         <button onClick={() => navigate('/spotshare/write')}>글쓰기</button>
       </St.filterBox>
-      {isLoading ? ( // 로딩 중일 때 로딩 화면 표시
-        // <div>Loading...</div>
-        <Skeleton active />
+      {isLoading ? (
+        <SkeletonSpot />
       ) : (
-        <St.Grid>
-          {postStorage
-            .map((post) => {
-              return <SpotShareItem key={post.id} post={post} />;
-            })
-            .slice(0, offset + 10)}
-          <div ref={divRef}></div>
-          <St.MoveButtonArea>
-            <TopButton />
-          </St.MoveButtonArea>
-        </St.Grid>
+        <>
+          <St.Grid>
+            {postStorage
+              .map((post) => {
+                const likedPost = likeData!.filter((like) => {
+                  return like.userId === logInUserId;
+                });
+                return <SpotShareItem key={post.id} post={post} likedPost={likedPost} />;
+              })
+              .slice(0, offset + 10)}
+            <div ref={divRef}></div>
+            <St.MoveButtonArea>
+              <TopButton />
+            </St.MoveButtonArea>
+          </St.Grid>
+        </>
       )}
     </>
   );
