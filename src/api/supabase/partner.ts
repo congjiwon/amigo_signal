@@ -162,16 +162,6 @@ export const updateStatus = async (applicantId: string, isAccepted: boolean) => 
   return { data, error };
 };
 
-// 신청자 state(수락 / 거절) 정보 가져오기
-export const getApplicantStatus = async (applicantId: string) => {
-  const { data, error } = await supabase.from('applicants').select('isAccepted').eq('applicantId', applicantId).single();
-  if (error) {
-    console.error('신청자 참여 정보를 불러오는 과정에서 error', error);
-    throw error;
-  }
-  return data;
-};
-
 // 참여 수락된 신청자 정보 가져오기
 export const getConfirmedApplicantList = async (postId: string) => {
   const { data, error } = await supabase.from('applicants').select('*, users!applicants_applicantId_fkey(*)').eq('postId', postId).eq('isAccepted', true);

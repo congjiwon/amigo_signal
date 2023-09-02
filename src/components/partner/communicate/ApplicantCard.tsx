@@ -33,18 +33,6 @@ const ApplicantCard = ({ data, onClick, isSelected, removeConfirmedApplicant }: 
   const confirmedLength = confirmedApplicants?.data?.length || 0;
   const numOfPeople = getNumberOfPeople?.[0]?.numOfPeople || 0;
 
-  // useEffect(() => {
-  //   const fetchApplicantStatus = async () => {
-  //     const response = await getApplicantStatus(applicantId);
-  //     if (response.isAccepted === null) {
-  //       setApplicantStatus('참여 신청 중');
-  //     } else if (response.isAccepted !== null) {
-  //       setApplicantStatus(response.isAccepted ? '참여 수락됨' : '참여 거절됨');
-  //     }
-  //   };
-  //   fetchApplicantStatus();
-  // }, [applicantId, setApplicantStatus]);
-
   const handleAccept = async () => {
     setIsAccepted(true);
     const isConfirmed = await ConfirmCustom({
