@@ -113,11 +113,15 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
               {visitDate[0]}년 {visitDate[1]}월 {visitDate[2]}일
             </p>
           </St.TravelDateBox>
-          <div>
-            <St.LikeButton>
-              {like ? <RiHeartFill onClick={(event) => handleEmptyHeart(event)} style={{ height: '22px', width: '22px' }} /> : <RiHeartLine onClick={(event) => handleFillHeart(event)} style={{ height: '22px', width: '22px' }} />}
-            </St.LikeButton>
-          </div>
+          {logInUserId ? (
+            <div>
+              <St.LikeButton>
+                {like ? <RiHeartFill onClick={(event) => handleEmptyHeart(event)} style={{ height: '24px', width: '24px' }} /> : <RiHeartLine onClick={(event) => handleFillHeart(event)} style={{ height: '24px', width: '22px' }} />}
+              </St.LikeButton>
+            </div>
+          ) : (
+            ''
+          )}
         </St.DateLikeBox>
         <St.TitleBox>
           <h1>{post.title}</h1>
