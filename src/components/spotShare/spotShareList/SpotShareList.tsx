@@ -11,8 +11,7 @@ import LocationDropDown from '../../common/dropDown/LocationDropDown';
 import TopButton from '../../common/topbutton/TopButton';
 import SpotShareItem from './SpotShareItem';
 import * as St from './style';
-import { Skeleton } from 'antd';
-import SkeletonSpot from './SkeletonSpot';
+import SkeletonList from '../../common/Skeleton/SkeletonList';
 
 const SpotShareList = () => {
   const [postStorage, setPostStorage] = useState<Tables<'spotPosts'>[]>([]);
@@ -127,7 +126,7 @@ const SpotShareList = () => {
         <button onClick={() => navigate('/spotshare/write')}>글쓰기</button>
       </St.filterBox>
       {isLoading ? (
-        <SkeletonSpot />
+        <SkeletonList />
       ) : (
         <>
           <St.Grid>
