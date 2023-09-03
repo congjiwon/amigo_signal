@@ -10,6 +10,7 @@ import useSessionStore, { useModalStore } from '../../../zustand/store';
 import Button from '../../common/button/Button';
 import { Alert } from '../../common/modal/alert';
 import * as St from './style';
+import { modifyProfileImg } from '../../../api/supabase/storage';
 
 export default function ModifyProfile() {
   const queryClient = useQueryClient();
@@ -40,10 +41,10 @@ export default function ModifyProfile() {
 
   const handleOnChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickName(e.target.value);
-    const regex = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]{2,10}$/.test(e.target.value);
+    const regex = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]{2,8}$/.test(e.target.value);
 
     if (regex) {
-      if (await duplicationCheckFromUserTable('nickName', e.target.value)) {
+      if (await duplicationCheckFromUserTable({ columnName: 'nickName', value: e.target.value })) {
         setNickNameValidationMsg('이미 사용중인 닉네임입니다.');
         setNickNameStatus(false);
       } else {
@@ -51,7 +52,7 @@ export default function ModifyProfile() {
         setNickNameStatus(true);
       }
     } else {
-      setNickNameValidationMsg('특수문자 제외, 2~10자리');
+      setNickNameValidationMsg('특수문자 제외, 2~8자리');
       setNickNameStatus(false);
     }
   };
@@ -70,15 +71,16 @@ export default function ModifyProfile() {
 
     let profileUrl = null;
     if (profileImgFile) {
-      const { error: storageError, data: storageData } = await supabase.storage.from('profileImgs').upload(`profile_imgs/${currentUser?.email}/${uuidv4()}`, profileImgFile, {
-        cacheControl: '3600',
-        upsert: true,
-      });
-
-      profileUrl = storageData?.path;
-      mutationImgUrl.mutate({ profileImageUrl: profileUrl, userId });
-
-      if (storageError) return Alert({ title: storageError.message });
+      const encodeEmail = currentUser?.email && btoa(currentUser?.email);
+      const fileNewName = uuidv4();
+      try {
+        const storageData = await modifyProfileImg({ userEmail: encodeEmail!, fileNewName, newFille: profileImgFile });
+        profileUrl = storageData?.path;
+        mutationImgUrl.mutate({ profileImageUrl: profileUrl, userId });
+      } catch (error) {
+        Alert({ title: '에러가 발생하여 정상적으로 수정하지 못하였습니다.' });
+        closeModal('modifyProfile');
+      }
     }
 
     Alert({ title: '수정이 완료되었습니다.' });

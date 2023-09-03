@@ -9,6 +9,7 @@ import { Input } from '../../common/input/Input';
 import { Alert } from '../../common/modal/alert';
 import * as St from './style';
 import { duplicationCheckFromUserTable } from '../../../api/supabase/users';
+import { useQuery } from '@tanstack/react-query';
 
 type newUserType = {
   email: string;
@@ -45,11 +46,13 @@ export default function SignUpForm() {
 
   const [btnSubmitStatus, setBtnSubmitStatus] = useState(false);
 
+  const { data: isDuplicatedNickname, isError, isLoading } = useQuery(['signUp', 'chkDuplicatedNickname', newUser.nickName], () => duplicationCheckFromUserTable({ columnName: 'nickName', value: newUser.nickName! }), { enabled: !!newUser.nickName });
+
   const onChangeInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
     let { name, value } = e.target;
 
     setNewUser((prev) => {
-      return { ...prev, [name]: value };
+      return { ...prev, [name]: value.trim() };
     });
 
     switch (name) {
@@ -61,7 +64,7 @@ export default function SignUpForm() {
             msg = '이메일 형식이 올바르지 않습니다.';
             currentStatus = false;
           } else {
-            if (await duplicationCheckFromUserTable(name, value)) {
+            if (await duplicationCheckFromUserTable({ columnName: name, value })) {
               msg = '이미 사용중인 이메일입니다.';
               currentStatus = false;
             } else {
@@ -84,10 +87,10 @@ export default function SignUpForm() {
           let msg = '';
           let currentStatus = false;
           if (!validateValue(name, value)) {
-            msg = '사용가능한 닉네임이 아닙니다.(특수문자 제외, 2~10자리)';
+            msg = '사용가능한 닉네임이 아닙니다.(특수문자 제외, 2~8자리)';
             currentStatus = false;
           } else {
-            if (await duplicationCheckFromUserTable(name, value)) {
+            if (await duplicationCheckFromUserTable({ columnName: name, value })) {
               msg = '이미 사용중인 닉네임입니다.';
               currentStatus = false;
             } else {
@@ -215,7 +218,7 @@ export default function SignUpForm() {
   const validateValue = (name: string, value: string) => {
     switch (name) {
       case 'nickName':
-        return /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]{2,10}$/.test(value);
+        return /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]{2,8}$/.test(value);
       case 'email':
         return /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/.test(value);
       case 'password':
