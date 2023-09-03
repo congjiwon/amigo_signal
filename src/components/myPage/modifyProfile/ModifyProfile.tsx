@@ -25,8 +25,6 @@ export default function ModifyProfile() {
   const [profileImgUrl, setProfileImgUrl] = useState<string | undefined>(currentUser?.profileImageUrl ? `${storagaUrl}/${currentUser?.profileImageUrl}` : defaultImg);
   const [profileImgFile, setProfileImgFile] = useState<File | null>(null);
 
-  const { closeModal } = useModalStore();
-
   const mutationNickName = useMutation(updateUserNickname, {
     onSuccess: () => {
       queryClient.invalidateQueries(['currentUser', userId]);
@@ -79,17 +77,14 @@ export default function ModifyProfile() {
         mutationImgUrl.mutate({ profileImageUrl: profileUrl, userId });
       } catch (error) {
         Alert({ title: '에러가 발생하여 정상적으로 수정하지 못하였습니다.' });
-        closeModal('modifyProfile');
       }
     }
 
     Alert({ title: '수정이 완료되었습니다.' });
-    closeModal('modifyProfile');
   };
 
   return (
     <St.ModifyProfileWrapper>
-      <h2>프로필 수정</h2>
       <form onSubmit={(e) => handleSubmitUpdateProfile(e)}>
         <St.ModifyProfileBox>
           <div>
