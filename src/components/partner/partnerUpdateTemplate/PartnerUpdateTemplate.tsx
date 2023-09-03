@@ -25,6 +25,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
   const [chatUrl, setChatUrl] = useState('');
   const [interestTagList, setInterestTagList] = useState<Tables<'interest'>[]>([]);
   const [interestUrl, setInterestUrl] = useState<string[]>([]);
+  const [interestDiscription, setInterestDiscription] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [writerId, setWriterId] = useState<string>('');
   const navigate = useNavigate();
@@ -91,16 +92,18 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
     }
   }, [navigate, authId]);
 
-  const handleInterestClick = (imageUrl: string) => {
+  const handleInterestClick = (imageUrl: string, discription: string) => {
     if (interestUrl.includes(imageUrl)) {
       // 이미 추가된 태그를 클릭한 경우 제거
-      setInterestUrl((prevInterestUrl) => prevInterestUrl.filter((url) => url !== imageUrl));
+      setInterestUrl((prevInterestUrl) => prevInterestUrl.filter((urlImage) => urlImage !== imageUrl));
+      setInterestDiscription((prevInterestDiscription) => prevInterestDiscription.filter((urlDiscription) => urlDiscription !== discription));
     } else if (interestUrl.length >= 3) {
       // 3개 이상의 태그를 추가하려는 경우 return
       return;
     } else {
       // 태그 추가
       setInterestUrl((prevInterestUrl) => [...prevInterestUrl, imageUrl]);
+      setInterestDiscription((prevInterestDiscription) => [...prevInterestDiscription, discription]);
     }
   };
 
@@ -179,19 +182,17 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
       <St.WriteForm>
         <St.SelectListBox>
           <St.ExplanationBox>
-            <p>국가 선택</p>
             <UpdateLocationDropDown location={[partnerPost?.region!, partnerPost?.country!]} setLocation={setLocation} />
           </St.ExplanationBox>
           <St.ExplanationBox>
-            <p>날짜 선택</p>
             <UpdatePartnerCalendar startDate={partnerPost?.startDate!} endDate={partnerPost?.endDate!} setPartnerDates={setPartnerDates} />
           </St.ExplanationBox>
           <St.ExplanationBox>
-            <p>모집인원 선택</p>
             <UpdatePartnerDropDown partner={partnerPost?.numOfPeople!} setPartner={setPartner} />
           </St.ExplanationBox>
         </St.SelectListBox>
         <St.WriteInput
+          maxLength={100}
           value={title}
           onChange={(event) => {
             setTitle(event.target.value);
@@ -224,7 +225,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
                   <St.TegButton
                     key={item.id}
                     type="button"
-                    onClick={() => handleInterestClick(item.imageUrl as string)}
+                    onClick={() => handleInterestClick(item.imageUrl as string, item.discription as string)}
                     style={{
                       backgroundColor: interestUrl.includes(item.imageUrl as string) ? 'lightblue' : 'white',
                     }}

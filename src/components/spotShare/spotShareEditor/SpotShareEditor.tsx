@@ -38,7 +38,7 @@ const modules = {
 const SoptShareEditor = ({ editorHtml, setEditorHtml }: editorHtmlProps) => {
   return (
     <St.EditorBox>
-      <ReactQuill className="ql-custom" theme="snow" modules={modules} formats={formats} value={editorHtml} onChange={setEditorHtml} />
+      <ReactQuill className="ql-custom" theme="snow" modules={modules} formats={formats} placeholder="멋진 스팟을 공유해 보세요." value={editorHtml} onChange={setEditorHtml} />
     </St.EditorBox>
   );
 };

@@ -135,20 +135,12 @@ function PartnerWriteTemplate() {
     <St.FormContainer>
       <St.WriteForm>
         <St.SelectListBox>
-          <St.ExplanationBox>
-            <p>국가 선택</p>
-            <LocationDropDown setLocation={setLocation} />
-          </St.ExplanationBox>
-          <St.ExplanationBox>
-            <p>날짜 선택</p>
-            <PartnerCalendar setPartnerDates={setPartnerDates} />
-          </St.ExplanationBox>
-          <St.ExplanationBox>
-            <p>모집인원 선택</p>
-            <PartnerDropDown setPartner={setPartner} />
-          </St.ExplanationBox>
+          <LocationDropDown setLocation={setLocation} />
+          <PartnerCalendar setPartnerDates={setPartnerDates} />
+          <PartnerDropDown setPartner={setPartner} />
         </St.SelectListBox>
         <St.WriteInput
+          maxLength={100}
           value={title}
           onChange={(event) => {
             setTitle(event.target.value);

@@ -33,6 +33,7 @@ export const ContentParagraph = styled.p`
 `;
 
 export const DetailInfoList = styled.div`
+  width: 100%;
   display: flex;
   flex-flow: row wrap;
   gap: 10px;
@@ -42,7 +43,7 @@ export const DetailInfoList = styled.div`
 
 export const DetailInfoBox = styled.div`
   display: inline-flex;
-  padding: 20px;
+  padding: 18px 20px;
   justify-content: center;
   align-items: center;
   gap: 10px;
@@ -50,9 +51,25 @@ export const DetailInfoBox = styled.div`
   border: 1px solid #eaeaea;
 `;
 
-export const InterestImage = styled.img`
-  position: absolute;
+export const DetailInfoTegBox = styled.div`
+  display: inline-flex;
+  height: 56px;
+  padding: 3px 16px 3px 6px;
+  justify-content: flex-end;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 10px;
+  border: 1px solid #eaeaea;
+`;
+
+export const TegImgBox = styled.div`
   width: 50px;
   height: 50px;
-  flex-shrink: 0;
+  overflow: hidden;
+`;
+
+export const TegImg = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 `;
