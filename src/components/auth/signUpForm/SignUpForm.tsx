@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { supabase } from '../../../api/supabase/supabaseClient';
-import { BtnStyleType } from '../../../types/styleTypes';
 import useBirthdayStore from '../../../zustand/birthdayData';
 import BirthdaySelect from '../../common/birthdaySelect/BirthdaySelect';
-import Button from '../../common/button/Button';
 import { Input } from '../../common/input/Input';
 import { Alert } from '../../common/modal/alert';
 import * as St from './style';
 import { duplicationCheckFromUserTable } from '../../../api/supabase/users';
 import { useQuery } from '@tanstack/react-query';
+import debounce from 'lodash/debounce';
 
 type newUserType = {
   email: string;
@@ -46,7 +45,20 @@ export default function SignUpForm() {
 
   const [btnSubmitStatus, setBtnSubmitStatus] = useState(false);
 
-  const { data: isDuplicatedNickname, isError, isLoading } = useQuery(['signUp', 'chkDuplicatedNickname', newUser.nickName], () => duplicationCheckFromUserTable({ columnName: 'nickName', value: newUser.nickName! }), { enabled: !!newUser.nickName });
+  const debouncedCheckDuplicate = debounce(async (value) => {
+    const duplicationCheck = await duplicationCheckFromUserTable({ columnName: 'nickName', value: value });
+
+    if (duplicationCheck) {
+      setValidationMsg((prev) => ({
+        ...prev,
+        nickNameMsg: '이미 사용중인 닉네임입니다.',
+      }));
+      setValidationStatus((prev) => ({
+        ...prev,
+        nickNameStatus: false,
+      }));
+    }
+  }, 100);
 
   const onChangeInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
     let { name, value } = e.target;
@@ -86,17 +98,13 @@ export default function SignUpForm() {
         {
           let msg = '';
           let currentStatus = false;
+          debouncedCheckDuplicate(value);
           if (!validateValue(name, value)) {
             msg = '사용가능한 닉네임이 아닙니다.(특수문자 제외, 2~8자리)';
             currentStatus = false;
           } else {
-            if (await duplicationCheckFromUserTable({ columnName: name, value })) {
-              msg = '이미 사용중인 닉네임입니다.';
-              currentStatus = false;
-            } else {
-              msg = '사용가능한 닉네임입니다.';
-              currentStatus = true;
-            }
+            msg = '사용가능한 닉네임입니다.';
+            currentStatus = true;
           }
           setValidationMsg((prev) => ({
             ...prev,
