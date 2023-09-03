@@ -232,7 +232,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
                     <St.TegImgBox>
                       <St.TegImg src={item.imageUrl!} />
                     </St.TegImgBox>
-                    <span>{item.content}</span>
+                    <span>{item.discription}</span>
                   </St.TegButton>
                 );
               })}
