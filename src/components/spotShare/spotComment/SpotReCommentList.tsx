@@ -101,7 +101,7 @@ function SpotReCommentList({
           {reCommentId === reComment?.id ? (
             <form onSubmit={handleReSubmitBtn}>
               <St.InputBox>
-                <St.Textarea placeholder="댓글을 남겨보세요" value={updateReComment} onChange={(event) => setUpdateReComment(event.target.value)} />
+                <St.RecommentTextarea placeholder="댓글을 남겨보세요" value={updateReComment} onChange={(event) => setUpdateReComment(event.target.value)} />
                 <St.CancelSubmitButtonBox>
                   <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => onCancelBtn('reCommentUpdateCancelBtn')}>
                     취소

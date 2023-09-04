@@ -76,7 +76,9 @@ function SpotShareItem({ post, likedPost, countryData }: SpotItemProps) {
       } else {
         // 로그인한 유저가 해당 게시물에 좋아요를 눌렀는지 확인
         const liked = likedPost?.some((like) => like.postId.id === post.id && like.userId === logInUserId);
-        setLike(liked!);
+        if (liked) {
+          setLike(liked);
+        }
       }
     } catch (error) {
       console.log('처참히 실패 개웃겨', error);

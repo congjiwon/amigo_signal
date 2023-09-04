@@ -164,7 +164,7 @@ const SpotShareList = () => {
       {/* <St.Grid>
         {postStorage
           .map((post) => {
-            const likedPost = likeData!.filter((like) => {
+            const likedPost = likeData?.filter((like) => {
               return like.userId === logInUserId;
             });
             return <SpotShareItem key={post.id} post={post} likedPost={likedPost} />;
