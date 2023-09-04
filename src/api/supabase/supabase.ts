@@ -131,19 +131,19 @@ export interface Database {
       };
       interest: {
         Row: {
-          content: string | null;
+          discription: string | null;
           id: number;
           imageUrl: string | null;
           name: string;
         };
         Insert: {
-          content?: string | null;
+          discription?: string | null;
           id?: number;
           imageUrl?: string | null;
           name: string;
         };
         Update: {
-          content?: string | null;
+          discription?: string | null;
           id?: number;
           imageUrl?: string | null;
           name?: string;
@@ -273,6 +273,7 @@ export interface Database {
           endDate: string;
           id: string;
           interestUrl: string[];
+          interestDiscription: string[];
           isOpen: boolean;
           numOfPeople: number;
           openChat: string;
@@ -294,6 +295,7 @@ export interface Database {
           endDate: string;
           id?: string;
           interestUrl: string[];
+          interestDiscription: string[];
           isOpen?: boolean;
           numOfPeople: number;
           openChat?: string;
@@ -309,6 +311,7 @@ export interface Database {
           endDate?: string;
           id?: string;
           interestUrl?: string[];
+          interestDiscription?: string[];
           isOpen?: boolean;
           numOfPeople?: number;
           openChat?: string;
