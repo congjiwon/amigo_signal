@@ -4,11 +4,11 @@ import { supabase } from './supabaseClient';
 
 // 깃발가져오기
 export const getFlag = async (country: string) => {
-  return await supabase.from('countyInfo').select('flagUrl').eq('country', country);
+  return await supabase.from('countryInfo').select('flagUrl').eq('country', country);
 };
 
 export const getSpotShareDefaultImg = async (country: string) => {
-  return await supabase.from('countyInfo').select('imageUrl').eq('country', country);
+  return await supabase.from('countryInfo').select('imageUrl').eq('country', country);
 };
 
 export const getPartnerPosts = async () => {
