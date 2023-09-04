@@ -36,7 +36,7 @@ export default function MySpotShareCard({ spotSharePost }: SpotSharePorps) {
 
   const { data: flagData, isLoading, isError } = useQuery(['flags', spotSharePost.id], () => getSpotShareDefaultImg(spotSharePost.country));
 
-  const countryImg = flagData?.data!.map((item) => item.imageUrl)[0];
+  const countryImg = flagData?.data?.map((item) => item.imageUrl)[0];
 
   return (
     <StCommon.MyCard className="spot-share">

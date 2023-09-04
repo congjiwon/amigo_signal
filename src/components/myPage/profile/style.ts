@@ -1,20 +1,9 @@
 import { styled } from 'styled-components';
 
 export const ProfileWrapper = styled.div`
-  position: relative;
   width: 100%;
   margin-bottom: 33px;
   padding: 0 8px;
-
-  & button {
-    position: absolute;
-    top: -30px;
-    right: 0;
-    background-color: transparent;
-    border: 0;
-    color: red;
-    cursor: pointer;
-  }
 
   @media screen and (max-width: 768px) {
     margin-bottom: 50px;

@@ -22,7 +22,6 @@ export default function LikedSpotShare() {
   });
 
   const likedPosts = likedSpotShare?.data?.map((item) => item.postId);
-  console.log(likedPosts);
 
   const handlePageChange: PaginationProps['onChange'] = (page) => {
     setCurrentPage(page);
