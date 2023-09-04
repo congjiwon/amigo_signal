@@ -11,7 +11,7 @@ import * as St from './style';
 
 type SpotItemProps = {
   post: Tables<'spotPosts'>;
-  likedPost: {
+  likedPost?: {
     id: string;
     postId: {
       address: string | null;
@@ -62,8 +62,10 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
         console.log('좋아요 가져오기 처참히 실패', error);
       } else {
         // 로그인한 유저가 해당 게시물에 좋아요를 눌렀는지 확인
-        const liked = likedPost.some((like) => like.postId.id === post.id && like.userId === logInUserId);
-        setLike(liked);
+        const liked = likedPost?.some((like) => like.postId.id === post.id && like.userId === logInUserId);
+        if (liked) {
+          setLike(liked);
+        }
       }
     } catch (error) {
       console.log('처참히 실패 개웃겨', error);
