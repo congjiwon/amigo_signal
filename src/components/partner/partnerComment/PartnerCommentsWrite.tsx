@@ -2,9 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import { getAuthId } from '../../../api/supabase/users';
-import { usePartnerComments } from '../../../hooks/usePartnerComment';
 import useCurrentUserStore from '../../../zustand/currentUser';
 import * as St from './style';
+import { usePartnerComments } from './usePartnerComment';
 
 function PartnerCommentsWrite() {
   const params = useParams();

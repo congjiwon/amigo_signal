@@ -1,9 +1,9 @@
 import DefaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
-import useSpotComment from '../../../hooks/useSpotComment';
 import { BtnStyleType } from '../../../types/styleTypes';
 import { CommentButton } from '../../common/button/Button';
 import { ConfirmDelete } from '../../common/modal/alert';
 import * as St from './style';
+import useSpotComment from './useSpotComment';
 
 type CommentProps = {
   content: string;
