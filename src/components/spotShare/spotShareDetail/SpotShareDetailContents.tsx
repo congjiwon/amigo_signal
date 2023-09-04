@@ -1,19 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
-import { FiEdit, FiTrash2 } from 'react-icons/fi';
+import { FiEdit, FiMapPin, FiTrash2 } from 'react-icons/fi';
 import { RiHeartFill, RiHeartLine } from 'react-icons/ri';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
 import { useNavigate, useParams } from 'react-router';
 import { countLike, countLikes, deleteLike, deleteSpotSharePost, getDetailSpotSharePost, postLike } from '../../../api/supabase/spotshare';
 import { supabase } from '../../../api/supabase/supabaseClient';
+import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import useSessionStore from '../../../zustand/store';
 import { ConfirmDelete } from '../../common/modal/alert';
 import * as St from './style';
-
-type postIdProps = {
-  postId: string | undefined;
-};
 
 function SpotShareDetailContents() {
   const { postid } = useParams<string>();
@@ -24,6 +21,7 @@ function SpotShareDetailContents() {
   const queryClient = useQueryClient();
   const [likeCount, setLikeCount] = useState(0); // 이 부분을 추가
   let updateLikeCount = likeCount;
+  const storagaUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
 
   // 디테일 포스트 불러오기
   const { data: spotSharePost, isLoading, isError } = useQuery(['spotSharePost', postid], () => getDetailSpotSharePost(postid));
@@ -56,7 +54,7 @@ function SpotShareDetailContents() {
   };
   useEffect(() => {
     LikeCheck(logInUserId!, postid!);
-  }, [logInUserId!, postid!]);
+  }, [likeCount]); // 여기도.. 수정?
 
   const mapRef = useRef<HTMLDivElement>(null);
 
@@ -135,35 +133,64 @@ function SpotShareDetailContents() {
   return (
     <>
       <St.TitleBox>
-        <p>제목: {spotSharePost?.title}</p>
+        <p>{spotSharePost?.title}</p>
       </St.TitleBox>
-      <St.InfoBox>
-        <span>{spotSharePost?.region}</span>
-        <span>{spotSharePost?.country}</span>
-        <span>방문날짜: {spotSharePost?.visitDate}</span>
-        <span>{spotSharePost?.starRate}</span>
-      </St.InfoBox>
+
+      <div>
+        <St.InfoOuterBox>
+          <St.PostInfoBox>
+            {spotSharePost?.users.profileImageUrl ? <St.ProfileImage src={`${storagaUrl}/${spotSharePost.users.profileImageUrl}`} alt="profile" /> : <St.ProfileImage src={defaultProfileImage} alt="profile" />}
+            <St.InfoInnerBox>
+              <St.NickNameSpan style={{ paddingTop: '1px', paddingBottom: '5px' }}>{spotSharePost?.users?.nickName} </St.NickNameSpan>
+              <St.InfoContainer>
+                <span>{spotSharePost?.createdAt.substring(0, 10) + ' ' + spotSharePost?.createdAt.substring(11, 16)} </span>
+                <span>조회 100</span>
+                <span>좋아요 {likeCount}</span>
+              </St.InfoContainer>
+            </St.InfoInnerBox>
+          </St.PostInfoBox>
+          <St.ButtonBox>
+            {logInUserId && <button>{like ? <RiHeartFill onClick={() => handleEmptyHeart()} style={{ height: '24px', width: '24px' }} /> : <RiHeartLine onClick={() => handleFillHeart()} style={{ height: '24px', width: '24px' }} />}</button>}
+            {isPostWriter() ? (
+              <>
+                <button>{<FiEdit onClick={() => navigate(`/spotshare/write/${spotSharePost?.id}`)} style={{ height: '24px', width: '24px' }} />}</button>
+                <button>{<FiTrash2 onClick={() => deletePostHandle(spotSharePost?.id)} style={{ height: '24px', width: '24px' }} />}</button>
+              </>
+            ) : (
+              ''
+            )}
+          </St.ButtonBox>
+        </St.InfoOuterBox>
+      </div>
+
       <St.SpotShareBox>
-        <St.ButtonBox>
-          {logInUserId && <span>{like ? <RiHeartFill onClick={() => handleEmptyHeart()} style={{ height: '22px', width: '22px' }} /> : <RiHeartLine onClick={() => handleFillHeart()} style={{ height: '22px', width: '22px' }} />}</span>}
-          {isPostWriter() ? (
-            <>
-              <span>{<FiEdit onClick={() => navigate(`/spotshare/write/${spotSharePost?.id}`)} style={{ height: '22px', width: '22px' }} />}</span>
-              <span>{<FiTrash2 onClick={() => deletePostHandle(spotSharePost?.id)} style={{ height: '22px', width: '22px' }} />}</span>
-            </>
-          ) : (
-            ''
-          )}
-        </St.ButtonBox>
+        <div>
+          <St.DetailInfoBox>
+            <St.GraySpan>나라 </St.GraySpan>
+            <St.BlackSpan>
+              {spotSharePost?.region} &gt; {spotSharePost?.country}
+            </St.BlackSpan>
+          </St.DetailInfoBox>
+          <St.DetailInfoBox>
+            <St.GraySpan>방문날짜</St.GraySpan>
+            <St.BlackSpan> {spotSharePost?.visitDate}</St.BlackSpan>
+          </St.DetailInfoBox>
+          <St.DetailInfoBox>
+            <span>{spotSharePost?.starRate}</span>
+          </St.DetailInfoBox>
+        </div>
+
         <ReactQuill readOnly={true} theme="bubble" value={spotSharePost?.content} />
-        <St.WriterInfoBox>
-          <span>작성자: {spotSharePost?.users?.nickName} </span>
-          <span>작성시간: {spotSharePost?.createdAt.substring(0, 10) + ' ' + spotSharePost?.createdAt.substring(11, 16)} </span>
-          <span>좋아요 수: {likeCount}</span>
-        </St.WriterInfoBox>
       </St.SpotShareBox>
       <div style={{ marginTop: '50px', marginBottom: '50px' }}>
-        {spotSharePost?.address ? <p style={{ marginBottom: '10px' }}>주소: {spotSharePost?.address}</p> : <></>}
+        {spotSharePost?.address ? (
+          <p style={{ marginBottom: '10px' }}>
+            <FiMapPin style={{ marginRight: '10px' }} />
+            {spotSharePost?.address}
+          </p>
+        ) : (
+          <></>
+        )}
         {spotSharePost?.latitude && spotSharePost.longitude ? <div ref={mapRef} style={{ width: '100%', height: '50vh' }} /> : <></>}
       </div>
     </>

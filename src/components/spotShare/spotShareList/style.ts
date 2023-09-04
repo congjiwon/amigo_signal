@@ -40,6 +40,34 @@ export const PostCard = styled.div`
   box-shadow: 5px 5px 10px 3px rgba(0, 0, 0, 0.2);
 `;
 
+export const DateLikeBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const CalendarImage = styled.img`
+  padding-left: 21px;
+`;
+
+export const LikeButton = styled.button`
+  padding: 20px;
+  background-color: transparent;
+  border: none;
+  &:hover {
+    transform: scale(1.5);
+  }
+  cursor: pointer;
+`;
+
+export const DefaultImg = styled.img`
+  width: 282px;
+  height: 143px;
+  object-fit: cover;
+
+  border-radius: 0px 0px 30px 30px;
+`;
+
 export const TravelDateBox = styled.div`
   display: flex;
   align-items: flex-start;
