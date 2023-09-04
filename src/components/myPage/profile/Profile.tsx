@@ -25,12 +25,6 @@ export default function Profile() {
           </p>
         </St.ProfileInfo>
       </St.ProfileBox>
-      <button onClick={() => openModal('modifyProfile')}>수정</button>
-      {openedModals.modifyProfile && (
-        <Modal id="modifyProfile" size="medium">
-          <ModifyProfile />
-        </Modal>
-      )}
     </St.ProfileWrapper>
   );
 }
