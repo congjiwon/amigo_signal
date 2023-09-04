@@ -5,9 +5,9 @@ import { BtnStyleType } from '../../../types/styleTypes';
 import useSessionStore from '../../../zustand/store';
 import Button from '../../common/button/Button';
 import { SpotCalendar } from '../../common/calendar/SpotCalendar';
-import { StarDropDown } from '../../common/dropDown/DropDown';
 import LocationDropDown from '../../common/dropDown/LocationDropDown';
 import { AlertError, AlertWarning } from '../../common/modal/alert';
+import StarRate from '../../common/starRate/StarRate';
 import SpotMap from '../map/SpotMap';
 import SpotShareEditor from '../spotShareEditor/SpotShareEditor';
 import * as St from './style';
@@ -20,7 +20,7 @@ export default function WriteTemplate() {
   const [editorHtml, setEditorHtml] = useState<string>('');
   const [location, setLocation] = useState<string[]>([]);
   const [spotDate, setSpotDate] = useState<string>('');
-  const [star, setStar] = useState<number>(5);
+  const [star, setStar] = useState<number>(0);
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
   const [address, setAddress] = useState<string | null>('');
@@ -95,15 +95,15 @@ export default function WriteTemplate() {
   };
 
   return (
-    <div>
+    <St.FormContainer>
       <St.WriteForm onSubmit={handleOnSumbit}>
-        <div>
+        <St.SelectListBox>
           <LocationDropDown setLocation={setLocation} />
           <SpotCalendar setSpotDate={setSpotDate} />
-          <StarDropDown setStar={setStar} />
-        </div>
+          <StarRate star={star} setStar={setStar} />
+        </St.SelectListBox>
         <div>
-          <St.SpotShareTitleInput type="text" placeholder="제목을 입력해주세요" value={title} onChange={(e) => setTitle(e.target.value)} />
+          <St.SpotShareTitleInput maxLength={100} type="text" placeholder="제목을 입력해주세요" value={title} onChange={(e) => setTitle(e.target.value)} />
         </div>
         <SpotShareEditor editorHtml={editorHtml} setEditorHtml={setEditorHtml} />
         <SpotMap setLatitude={setLatitude} setLongitude={setLongitude} address={address} setAddress={setAddress} />
@@ -116,6 +116,6 @@ export default function WriteTemplate() {
           </Button>
         </St.ButtonBox>
       </St.WriteForm>
-    </div>
+    </St.FormContainer>
   );
 }

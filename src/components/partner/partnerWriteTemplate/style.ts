@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 
 export const FormContainer = styled.div`
-  margin-top: 40px;
+  margin-top: 80px;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -26,9 +26,9 @@ export const ExplanationBox = styled.div`
 `;
 
 export const WriteInput = styled.input`
-  height: 48px;
-  padding-left: 16px;
-  border-radius: 10px;
+  width: 100%;
+  padding: 11px 16px;
+  border-radius: 6px;
   border: 1px solid var(--light-gray, #e8ebee);
   box-sizing: border-box;
 `;

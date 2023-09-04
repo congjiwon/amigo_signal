@@ -30,10 +30,15 @@ const PartnerDetailInfo = ({ partnerPostData }: { partnerPostData: Tables<'partn
             {partnerPostData.endDate}
           </St.BlackParagraph>
         </St.DetailInfoBox>
+      </St.DetailInfoList>
+      <St.DetailInfoList>
         {partnerPostData.interestUrl.map((url, index) => (
-          <St.DetailInfoBox key={index}>
-            <St.InterestImage src={url} alt={`interest-${index}`} />
-          </St.DetailInfoBox>
+          <St.DetailInfoTegBox key={index}>
+            <St.TegImgBox>
+              <St.TegImg src={url} alt={`interest-${index}`} />
+            </St.TegImgBox>
+            <St.BlackParagraph>{partnerPostData.interestDiscription[index]}</St.BlackParagraph>
+          </St.DetailInfoTegBox>
         ))}
       </St.DetailInfoList>
       <St.ContentParagraph>{partnerPostData.content}</St.ContentParagraph>
