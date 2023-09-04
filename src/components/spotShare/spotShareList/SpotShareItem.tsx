@@ -54,7 +54,7 @@ function SpotShareItem({ post, likedPost, countryData }: SpotItemProps) {
   const [likeCount, setLikeCount] = useState(0); // 이 부분을 추가
   let updateLikeCount = post.likeCount;
 
-  //국가 디폴트 이미지 넣기
+  // 국가 디폴트 이미지 넣기
   // useEffect(() => {
   //   const getDefaultImgHandler = async () => {
   //     const { data, error } = await getSpotShareDefaultImg(post.country.country);

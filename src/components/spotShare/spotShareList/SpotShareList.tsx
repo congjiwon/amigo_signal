@@ -19,7 +19,7 @@ const SpotShareList = () => {
   const [sort, setSort] = useState<string>('최신순');
   const divRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const limit = 20;
+  const limit = 10;
   const offset = (currentPage - 1) * limit;
   const [location, setLocation] = useState<string[]>([]);
   const [spotDate, setSpotDate] = useState<string[]>([]);
@@ -155,7 +155,7 @@ const SpotShareList = () => {
             });
             return <SpotShareItem key={post.id} post={post} likedPost={likedPost} countryData={post.country} />;
           })
-          .slice(0, offset + 20)}
+          .slice(0, offset + 10)}
         <div ref={divRef}></div>
         <St.MoveButtonArea>
           <TopButton />
