@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Rate } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { FiEdit, FiMapPin, FiTrash2 } from 'react-icons/fi';
 import { RiHeartFill, RiHeartLine } from 'react-icons/ri';
@@ -176,7 +177,7 @@ function SpotShareDetailContents() {
             <St.BlackSpan> {spotSharePost?.visitDate}</St.BlackSpan>
           </St.DetailInfoBox>
           <St.DetailInfoBox>
-            <span>{spotSharePost?.starRate}</span>
+            <Rate disabled defaultValue={spotSharePost?.starRate} />
           </St.DetailInfoBox>
         </div>
 
