@@ -1,9 +1,9 @@
 import DefaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
-import { usePartnerComments } from '../../../hooks/usePartnerComment';
 import { BtnStyleType } from '../../../types/styleTypes';
 import { CommentButton } from '../../common/button/Button';
 import { ConfirmDelete } from '../../common/modal/alert';
 import * as St from './style';
+import { usePartnerComments } from './usePartnerComment';
 
 type CommentProps = {
   content: string;

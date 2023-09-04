@@ -37,7 +37,6 @@ export default function Header() {
     await supabase.auth.signOut();
     Alert({ title: '로그아웃 되었습니다.' });
     navigate('/login');
-    queryClient.clear(); // 안되잖아ㅠ
   };
   return (
     <St.HeaderLayout>

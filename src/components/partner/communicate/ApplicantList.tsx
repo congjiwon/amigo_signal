@@ -1,5 +1,6 @@
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { getApplicantList } from '../../../api/supabase/partner';
+import { getApplicantList, getConfirmedApplicantList, getNumOfPeople } from '../../../api/supabase/partner';
 import { Tables } from '../../../api/supabase/supabase';
 import ApplicantCard from './ApplicantCard';
 import * as St from './style';
@@ -11,6 +12,12 @@ type ApplicantListProps = {
 const ApplicantList = ({ postId }: ApplicantListProps) => {
   const [applicantList, setApplicantList] = useState<Tables<'applicants'>[]>([]);
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
+
+  const { data: confirmedApplicants } = useQuery(['confirmedApplicants', postId], () => getConfirmedApplicantList(postId!));
+  const { data: getNumberOfPeople } = useQuery(['numOfPeople', postId], () => getNumOfPeople(postId!));
+
+  const confirmedLength = confirmedApplicants?.data?.length || 0;
+  const numOfPeople = getNumberOfPeople?.[0]?.numOfPeople || 0;
 
   const handleCardClick = (id: string) => {
     setSelectedCardId(id);
@@ -40,7 +47,7 @@ const ApplicantList = ({ postId }: ApplicantListProps) => {
       <St.ModalTitle>동행 신청 대기 목록</St.ModalTitle>
       <St.ApplicantList>
         {applicantList.map((data) => {
-          return <ApplicantCard key={data.id} data={data} onClick={handleCardClick} isSelected={selectedCardId === data.id} removeConfirmedApplicant={removeConfirmedApplicant} />;
+          return <ApplicantCard key={data.id} data={data} onClick={handleCardClick} isSelected={selectedCardId === data.id} removeConfirmedApplicant={removeConfirmedApplicant} confirmedLength={confirmedLength} numOfPeople={numOfPeople} />;
         })}
       </St.ApplicantList>
     </>

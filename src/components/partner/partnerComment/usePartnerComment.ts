@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deletePartnerComment, deletePartnerReComment, postPartnerComment, postPartnerRecomment, updatePartnerComment, updatePartnerReComment } from '../api/supabase/partner';
+import { deletePartnerComment, deletePartnerReComment, postPartnerComment, postPartnerRecomment, updatePartnerComment, updatePartnerReComment } from '../../../api/supabase/partner';
 
 export function usePartnerComments() {
   const queryClient = useQueryClient();
