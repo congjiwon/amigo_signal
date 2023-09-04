@@ -4,7 +4,7 @@ import React from 'react';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import * as St from './style';
-import './style.css';
+import './textEditor.css';
 
 type editorHtmlProps = {
   editorHtml: string;
@@ -22,10 +22,10 @@ const toolbarOptions = [
   ['blockquote'],
   [{ list: 'ordered' }, { list: 'bullet' }],
   [{ align: [] }],
-  ['link', 'image'],
+  ['link', 'image', 'video'],
 ];
 
-const formats = ['header', 'font', 'size', 'bold', 'italic', 'underline', 'strike', 'align', 'blockquote', 'list', 'bullet', 'background', 'color', 'link', 'image', 'height', 'width'];
+const formats = ['header', 'font', 'size', 'bold', 'italic', 'underline', 'strike', 'align', 'blockquote', 'list', 'bullet', 'background', 'color', 'link', 'image', 'video', 'height', 'width'];
 
 const modules = {
   toolbar: {
@@ -38,7 +38,7 @@ const modules = {
 const SoptShareEditor = ({ editorHtml, setEditorHtml }: editorHtmlProps) => {
   return (
     <St.EditorBox>
-      <ReactQuill className="ql-editor" theme="snow" modules={modules} formats={formats} value={editorHtml} onChange={setEditorHtml} />
+      <ReactQuill className="ql-custom" theme="snow" modules={modules} formats={formats} placeholder="멋진 스팟을 공유해 보세요." value={editorHtml} onChange={setEditorHtml} />
     </St.EditorBox>
   );
 };
