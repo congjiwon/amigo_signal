@@ -57,7 +57,7 @@ function SpotShareItem({ post, likedPost, countryData }: SpotItemProps) {
   //국가 디폴트 이미지 넣기
   // useEffect(() => {
   //   const getDefaultImgHandler = async () => {
-  //     const { data, error } = await getSpotShareDefaultImg(post.country);
+  //     const { data, error } = await getSpotShareDefaultImg(post.country.country);
   //     if (error || !data) {
   //       console.error('디폴트이미지 가져오는 과정에서 에러 발생', error);
   //     } else {
@@ -97,7 +97,7 @@ function SpotShareItem({ post, likedPost, countryData }: SpotItemProps) {
   if (visitDate[2][0] == '0') {
     visitDate[2] = visitDate[2].substring(1);
   }
-
+  console.log('countryImg', countryImg);
   const contentWithoutTags = post.content.replace(/<\/?[^>]+(>|$)/g, '');
 
   // 좋아요 클릭 시
@@ -144,7 +144,10 @@ function SpotShareItem({ post, likedPost, countryData }: SpotItemProps) {
         <St.ContentBox>
           <p>{contentWithoutTags}</p>
         </St.ContentBox>
-        <St.DefaultImg src={post.country.imageUrl}></St.DefaultImg>
+        {/* <St.DefaultImg src={post.country.imageUrl}></St.DefaultImg> */}
+        <St.DefaultImg $countryBg={post.country.imageUrl!}></St.DefaultImg>
+        {/* <St.DefaultImg $countryBg={countryImg}></St.DefaultImg> */}
+
         <St.Span>{countryData.country}</St.Span>
       </St.PostCard>
     </Link>

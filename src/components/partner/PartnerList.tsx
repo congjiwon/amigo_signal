@@ -99,21 +99,21 @@ const PartnerList = () => {
         </div>
         <button onClick={() => navigate('/partner/write')}>글쓰기</button>
       </St.filterWriteBox>
-      {isLoading ? (
+      {/* {isLoading ? (
         <SkeletonList />
-      ) : (
-        <St.Grid>
-          {postStorage
-            .map((post) => {
-              return <PartnerItem key={post.id} post={post} />;
-            })
-            .slice(0, offset + 10)}
-          <div ref={divRef}></div>
-          <St.MoveButtonArea>
-            <TopButton />
-          </St.MoveButtonArea>
-        </St.Grid>
-      )}
+      ) : ( */}
+      <St.Grid>
+        {postStorage
+          .map((post) => {
+            return <PartnerItem key={post.id} post={post} />;
+          })
+          .slice(0, offset + 10)}
+        <div ref={divRef}></div>
+        <St.MoveButtonArea>
+          <TopButton />
+        </St.MoveButtonArea>
+      </St.Grid>
+      {/* )} */}
     </>
   );
 };

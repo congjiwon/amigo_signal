@@ -127,9 +127,9 @@ const SpotShareList = () => {
     }
   };
 
-  // if (spotIsLoading) {
-  //   return <div>Loading...</div>;
-  // }
+  if (spotIsLoading) {
+    return <div>Loading...</div>;
+  }
 
   // if (!spotPostData) {
   //   return <NoResultData />;
