@@ -64,7 +64,6 @@ export const DefaultImg = styled.img`
   width: 282px;
   height: 143px;
   object-fit: cover;
-
   border-radius: 0px 0px 30px 30px;
 `;
 

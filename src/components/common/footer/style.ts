@@ -1,10 +1,10 @@
 import { styled } from 'styled-components';
 
 export const FooterLayout = styled.footer`
-  padding: 20px 0;
+  /* padding: 20px 0; */
   border-top: 1px solid #efefef;
-  height: 316px;
-  margin-top: 120px;
+  height: 266px;
+  /* margin-top: 120px; */
 `;
 
 export const FooterContainer = styled.div`

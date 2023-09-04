@@ -40,7 +40,7 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
   useEffect(() => {
     const fetchPostData = async () => {
       if (spotSharePost) {
-        setLocation([spotSharePost.region, spotSharePost.country]);
+        setLocation([spotSharePost.region, spotSharePost.country.country]);
         setSpotDate(spotSharePost.visitDate);
         setStar(spotSharePost.starRate);
         setTitle(spotSharePost.title);
@@ -115,7 +115,7 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
     <div>
       <St.WriteForm onSubmit={handleOnSumbit}>
         <div>
-          <UpdateLocationDropDown location={[spotSharePost?.region!, spotSharePost?.country!]} setLocation={setLocation} />
+          <UpdateLocationDropDown location={[spotSharePost?.region!, spotSharePost?.country.country!]} setLocation={setLocation} />
           <UpdateSpotCalendar spotDate={spotSharePost?.visitDate!} setSpotDate={setSpotDate} />
           <UpdateStarDropDown star={spotSharePost?.starRate!} setStar={setStar} />
         </div>
