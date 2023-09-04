@@ -105,7 +105,7 @@ export const getAllSpotSharePost = async () => {
 };
 //스팟공유 리스트 디폴트 이미지 가져오기
 export const getSpotShareDefaultImg = async (country: string) => {
-  return await supabase.from('countyInfo').select('imageUrl').eq('country', country);
+  return await supabase.from('countryInfo').select('imageUrl').eq('country', country);
 };
 
 //스팟공유 특정 글 가져오기

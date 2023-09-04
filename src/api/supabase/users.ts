@@ -31,12 +31,16 @@ export const getCurrentUser = async (userId: string) => {
   return data;
 };
 
-export const duplicationCheckFromUserTable = async (columnName: string, value: string) => {
+type duplicationCheckProps = {
+  columnName: string;
+  value: string;
+};
+export const duplicationCheckFromUserTable = async ({ columnName, value }: duplicationCheckProps) => {
   let { data, error } = await supabase.from('users').select(columnName).eq(columnName, value);
   if (data?.length !== undefined && data.length > 0) {
     return true;
   }
-  return;
+  return false;
 };
 
 type userNickNameProps = {
