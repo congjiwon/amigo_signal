@@ -6,9 +6,11 @@ import icon_tab_02 from '../../../assets/imgs/myPage/icon_tab02.png';
 import icon_tab_03 from '../../../assets/imgs/myPage/icon_tab03.png';
 import icon_tab_04 from '../../../assets/imgs/myPage/icon_tab04.png';
 import icon_tab_05 from '../../../assets/imgs/myPage/icon_tab05.png';
+import icon_tab_06 from '../../../assets/imgs/myPage/icon_tab06.png';
 import BookmarkedPosts from '../bookmarkedPosts/BookmarkedPosts';
 import MySpotShare from '../mySpotShare/MySpotShare';
 import LikedSpotShare from '../likedSpotShare/LikedSpotShare';
+import ModifyProfile from '../modifyProfile/ModifyProfile';
 
 export default function () {
   const tabs = [
@@ -17,6 +19,7 @@ export default function () {
     { label: '동행 찾기 북마크', content: <BookmarkedPosts />, iconUrl: icon_tab_03 },
     { label: '스팟 공유 작성글', content: <MySpotShare />, iconUrl: icon_tab_04 },
     { label: '스팟 공유 좋아요', content: <LikedSpotShare />, iconUrl: icon_tab_05 },
+    { label: '프로필 수정', content: <ModifyProfile />, iconUrl: icon_tab_06 },
   ];
 
   return (

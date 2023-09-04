@@ -62,7 +62,7 @@ export default function MyPartnerCard({ partnerPost, postUserInfo }: PartnerItem
   }
   const { data: flagData, isLoading, isError } = useQuery(['flags', partnerPost.id], () => getFlag(partnerPost.country));
 
-  const flagUrl = flagData?.data!.map((item) => item.flagUrl)[0];
+  const flagUrl = flagData?.data?.map((item) => item.flagUrl)[0];
 
   return (
     <StCommon.MyCard>

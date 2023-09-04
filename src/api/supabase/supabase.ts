@@ -108,7 +108,7 @@ export interface Database {
           },
         ];
       };
-      countyInfo: {
+      countryInfo: {
         Row: {
           country: string;
           flagUrl: string;
