@@ -113,21 +113,18 @@ export interface Database {
           country: string;
           countryId: string;
           flagUrl: string;
-          id: number;
           imageUrl: string;
         };
         Insert: {
           country: string;
           countryId?: string;
           flagUrl: string;
-          id?: number;
           imageUrl: string;
         };
         Update: {
           country?: string;
           countryId?: string;
           flagUrl?: string;
-          id?: number;
           imageUrl?: string;
         };
         Relationships: [];

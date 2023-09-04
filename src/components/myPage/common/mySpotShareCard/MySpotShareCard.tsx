@@ -1,8 +1,5 @@
 import { Link } from 'react-router-dom';
 import * as StCommon from '../style/style';
-import { Tables } from '../../../../api/supabase/supabase';
-import { useQuery } from '@tanstack/react-query';
-import { getSpotShareDefaultImg } from '../../../../api/supabase/partner';
 
 type SpotSharePorps = {
   spotSharePost: {
@@ -40,9 +37,9 @@ type SpotSharePorps = {
 export default function MySpotShareCard({ spotSharePost }: SpotSharePorps) {
   const textContent = spotSharePost.content.replace(/<\/?[^>]+(>|$)/g, '');
 
-  const { data: flagData, isLoading, isError } = useQuery(['flags', spotSharePost.id], () => getSpotShareDefaultImg(spotSharePost.country.country));
+  // const { data: flagData, isLoading, isError } = useQuery(['flags', spotSharePost.id], () => getSpotShareDefaultImg(spotSharePost.country.country));
 
-  const countryImg = flagData?.data?.map((item) => item.imageUrl)[0];
+  // const countryImg = flagData?.data?.map((item) => item.imageUrl)[0];
 
   return (
     <StCommon.MyCard className="spot-share">

@@ -4,7 +4,6 @@ import { useParams } from 'react-router';
 import { getPartnerPost, getReCommentData } from '../../../api/supabase/partner';
 import { getAuthId, getUsers } from '../../../api/supabase/users';
 import DefaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
-import { usePartnerComments } from '../../../hooks/usePartnerComment';
 import { BtnStyleType } from '../../../types/styleTypes';
 import useCurrentUserStore from '../../../zustand/currentUser';
 import useSessionStore from '../../../zustand/store';
@@ -13,6 +12,7 @@ import { ConfirmDelete } from '../../common/modal/alert';
 import TopButton from '../../common/topbutton/TopButton';
 import PartnerReComments from './PartnerReComments';
 import * as St from './style';
+import { usePartnerComments } from './usePartnerComment';
 
 type allCommentsProps =
   | {

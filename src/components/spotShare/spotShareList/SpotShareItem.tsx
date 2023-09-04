@@ -2,9 +2,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { RiHeartFill, RiHeartLine } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
-import { countLike, deleteLike, getSpotShareDefaultImg, postLike } from '../../../api/supabase/spotshare';
+import { countLike, deleteLike, postLike } from '../../../api/supabase/spotshare';
 import { Tables } from '../../../api/supabase/supabase';
-import { supabase } from '../../../api/supabase/supabaseClient';
 import Calendar from '../../../assets/imgs/partner/Calendar.svg';
 import useSessionStore from '../../../zustand/store';
 import * as St from './style';
@@ -54,7 +53,7 @@ function SpotShareItem({ post, likedPost, countryData }: SpotItemProps) {
   const [likeCount, setLikeCount] = useState(0); // 이 부분을 추가
   let updateLikeCount = post.likeCount;
 
-  //국가 디폴트 이미지 넣기
+  // // 국가 디폴트 이미지 넣기
   // useEffect(() => {
   //   const getDefaultImgHandler = async () => {
   //     const { data, error } = await getSpotShareDefaultImg(post.country.country);
@@ -69,25 +68,16 @@ function SpotShareItem({ post, likedPost, countryData }: SpotItemProps) {
 
   // 좋아요
   const LikeCheck = async (logInUserId: string) => {
-    try {
-      let { data: likeData, error } = await supabase.from('likes').select('*').eq('userId', logInUserId);
-      if (error) {
-        // console.log('좋아요 가져오기 처참히 실패', error);
-      } else {
-        // 로그인한 유저가 해당 게시물에 좋아요를 눌렀는지 확인
-        const liked = likedPost?.some((like) => like.postId.id === post.id && like.userId === logInUserId);
-        if (liked) {
-          setLike(liked);
-        }
-      }
-    } catch (error) {
-      console.log('처참히 실패 개웃겨', error);
-    }
+    const liked = likedPost?.some((like) => like.postId.id === post.id && like.userId === logInUserId);
+    console.log('이게뭐야', liked);
+    // if (liked) {
+    setLike(liked!);
+    // }
   };
   useEffect(() => {
     LikeCheck(logInUserId!);
     // }, [likedPost]);
-  }, [logInUserId!, post.id!]);
+  }, [logInUserId!, post.id!, like]);
 
   //방문날짜 2023-05-05 => 2023년 5월 5일 바꾸는 로직
   const visitDate = post.visitDate.split('-');
