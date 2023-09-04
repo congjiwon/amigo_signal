@@ -8,7 +8,13 @@ type SpotSharePorps = {
   spotSharePost: {
     address: string | null;
     content: string;
-    country: string;
+    country: {
+      country: string;
+      countryId: string;
+      flagUrl: string;
+      id: number;
+      imageUrl: string;
+    };
     createdAt: string;
     id: string;
     latitude: number | null;
@@ -34,7 +40,7 @@ type SpotSharePorps = {
 export default function MySpotShareCard({ spotSharePost }: SpotSharePorps) {
   const textContent = spotSharePost.content.replace(/<\/?[^>]+(>|$)/g, '');
 
-  const { data: flagData, isLoading, isError } = useQuery(['flags', spotSharePost.id], () => getSpotShareDefaultImg(spotSharePost.country));
+  const { data: flagData, isLoading, isError } = useQuery(['flags', spotSharePost.id], () => getSpotShareDefaultImg(spotSharePost.country.country));
 
   const countryImg = flagData?.data?.map((item) => item.imageUrl)[0];
 
@@ -47,8 +53,8 @@ export default function MySpotShareCard({ spotSharePost }: SpotSharePorps) {
           <StCommon.ContentEllipsis>{textContent}</StCommon.ContentEllipsis>
         </StCommon.PaddingBox>
 
-        <StCommon.BgCountryBox $countryBg={countryImg!}>
-          <StCommon.BadgeCountry>{spotSharePost.country}</StCommon.BadgeCountry>
+        <StCommon.BgCountryBox $countryBg={spotSharePost.country.imageUrl}>
+          <StCommon.BadgeCountry>{spotSharePost.country.country}</StCommon.BadgeCountry>
         </StCommon.BgCountryBox>
       </Link>
     </StCommon.MyCard>

@@ -11,12 +11,25 @@ import * as St from './style';
 
 type SpotItemProps = {
   post: Tables<'spotPosts'>;
+  countryData: {
+    country: string;
+    countryId: string;
+    flagUrl: string;
+    id: number;
+    imageUrl: string;
+  };
   likedPost?: {
     id: string;
     postId: {
       address: string | null;
       content: string;
-      country: string;
+      country: {
+        country: string;
+        countryId: string;
+        flagUrl: string;
+        id: number;
+        imageUrl: string;
+      };
       createdAt: string;
       id: string;
       latitude: number | null;
@@ -32,7 +45,7 @@ type SpotItemProps = {
   }[];
 };
 
-function SpotShareItem({ post, likedPost }: SpotItemProps) {
+function SpotShareItem({ post, likedPost, countryData }: SpotItemProps) {
   const [countryImg, setCountryImg] = useState<string>('');
   const [like, setLike] = useState(false);
   const session = useSessionStore((state) => state.session);
@@ -42,24 +55,24 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
   let updateLikeCount = post.likeCount;
 
   //국가 디폴트 이미지 넣기
-  useEffect(() => {
-    const getDefaultImgHandler = async () => {
-      const { data, error } = await getSpotShareDefaultImg(post.country);
-      if (error || !data) {
-        console.error('디폴트이미지 가져오는 과정에서 에러 발생', error);
-      } else {
-        setCountryImg(data[0].imageUrl);
-      }
-    };
-    getDefaultImgHandler();
-  }, []);
+  // useEffect(() => {
+  //   const getDefaultImgHandler = async () => {
+  //     const { data, error } = await getSpotShareDefaultImg(post.country.country);
+  //     if (error || !data) {
+  //       console.error('디폴트이미지 가져오는 과정에서 에러 발생', error);
+  //     } else {
+  //       setCountryImg(data[0].imageUrl);
+  //     }
+  //   };
+  //   getDefaultImgHandler();
+  // }, []);
 
   // 좋아요
   const LikeCheck = async (logInUserId: string) => {
     try {
       let { data: likeData, error } = await supabase.from('likes').select('*').eq('userId', logInUserId);
       if (error) {
-        console.log('좋아요 가져오기 처참히 실패', error);
+        // console.log('좋아요 가져오기 처참히 실패', error);
       } else {
         // 로그인한 유저가 해당 게시물에 좋아요를 눌렀는지 확인
         const liked = likedPost?.some((like) => like.postId.id === post.id && like.userId === logInUserId);
@@ -84,7 +97,7 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
   if (visitDate[2][0] == '0') {
     visitDate[2] = visitDate[2].substring(1);
   }
-
+  console.log('countryImg', countryImg);
   const contentWithoutTags = post.content.replace(/<\/?[^>]+(>|$)/g, '');
 
   // 좋아요 클릭 시
@@ -131,8 +144,11 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
         <St.ContentBox>
           <p>{contentWithoutTags}</p>
         </St.ContentBox>
-        <St.DefaultImg src={countryImg}></St.DefaultImg>
-        <St.Span>{post.country}</St.Span>
+        {/* <St.DefaultImg src={post.country.imageUrl}></St.DefaultImg> */}
+        <St.DefaultImg $countryBg={post.country.imageUrl!}></St.DefaultImg>
+        {/* <St.DefaultImg $countryBg={countryImg}></St.DefaultImg> */}
+
+        <St.Span>{countryData.country}</St.Span>
       </St.PostCard>
     </Link>
   );

@@ -4,13 +4,13 @@ import { supabase } from './supabaseClient';
 
 //스팟 필터링
 type filteredPostProps = {
-  country?: string;
+  country: string;
   startDate?: string;
   endDate?: string;
 };
 
 export const getFilteredSpotSharePost = async ({ country, startDate, endDate }: filteredPostProps) => {
-  let sharePosts = supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*)').order('createdAt', { ascending: false });
+  let sharePosts = supabase.from('spotPosts').select('*, writerId(*), country(*)').order('createdAt', { ascending: false });
   if (country !== undefined) {
     sharePosts = sharePosts.eq('country', country);
   }
@@ -101,7 +101,8 @@ export const getReCommentWriterIds = async () => {
 
 // 스팟공유 모든 글 가져오기
 export const getAllSpotSharePost = async () => {
-  return await supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*)');
+  const { data } = await supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*),countryInfo!spotPosts_country_fkey(*)').order('createdAt', { ascending: false });
+  return { data };
 };
 //스팟공유 리스트 디폴트 이미지 가져오기
 export const getSpotShareDefaultImg = async (country: string) => {
@@ -110,7 +111,7 @@ export const getSpotShareDefaultImg = async (country: string) => {
 
 //스팟공유 특정 글 가져오기
 export const getDetailSpotSharePost = async (postId: string | undefined) => {
-  const { data } = await supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*)').eq('id', postId).single();
+  const { data } = await supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*),countryInfo!spotPosts_country_fkey(*)').eq('id', postId).single();
   return data;
 };
 
@@ -166,7 +167,7 @@ type mySpotSharePostsType = {
 export const getMySpotSharePosts = async ({ writerId, page }: mySpotSharePostsType) => {
   const { from, to } = getRangePagination(page, NUMBER_OF_ITEMS);
 
-  const { data, count } = await supabase.from('spotPosts').select('*', { count: 'exact' }).eq('writerId', writerId).order('visitDate', { ascending: false }).range(from, to);
+  const { data, count } = await supabase.from('spotPosts').select('*,country(*)', { count: 'exact' }).eq('writerId', writerId).order('visitDate', { ascending: false }).range(from, to);
   return { data, count };
 };
 
@@ -178,7 +179,7 @@ type LikedSpotShareProps = {
 export const getLikedSpotShare = async ({ userId, page }: LikedSpotShareProps) => {
   const { from, to } = getRangePagination(page, NUMBER_OF_ITEMS);
 
-  const { data, count } = await supabase.from('likes').select('*, postId (*)', { count: 'exact' }).eq('userId', userId).order('postId(visitDate)').range(from, to);
+  const { data, count } = await supabase.from('likes').select('*, postId (*,country(*))', { count: 'exact' }).eq('userId', userId).order('postId(visitDate)').range(from, to);
 
   return { data, count };
 };

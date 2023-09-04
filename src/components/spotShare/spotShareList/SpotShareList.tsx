@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { getAllSpotSharePost, getFilteredSpotSharePost, getLikes } from '../../../api/supabase/spotshare';
@@ -11,44 +11,58 @@ import LocationDropDown from '../../common/dropDown/LocationDropDown';
 import TopButton from '../../common/topbutton/TopButton';
 import SpotShareItem from './SpotShareItem';
 import * as St from './style';
+import SkeletonList from '../../common/Skeleton/SkeletonList';
+import NoResultData from '../../common/noResultData/NoResultData';
 
 const SpotShareList = () => {
   const [postStorage, setPostStorage] = useState<Tables<'spotPosts'>[]>([]);
   const [sort, setSort] = useState<string>('최신순');
   const divRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const limit = 10;
+  const limit = 20;
   const offset = (currentPage - 1) * limit;
   const [location, setLocation] = useState<string[]>([]);
   const [spotDate, setSpotDate] = useState<string[]>([]);
   const session = useSessionStore((state) => state.session);
   const logInUserId = session?.user.id;
+  const queryClient = useQueryClient();
+  const pageLocation = useLocation();
+
+  const { data: spotPostData, isLoading: spotIsLoading, isError: spotIsError } = useQuery(['spotSharePost'], getAllSpotSharePost);
+
+  useEffect(() => {
+    if (typeof spotPostData?.data !== null) {
+      setPostStorage(spotPostData?.data!);
+    }
+    if (divRef.current) {
+      observer.observe(divRef.current);
+    }
+  }, [spotPostData, pageLocation]);
+
+  console.log('data', spotPostData);
 
   const { data } = useQuery(['likes'], getLikes);
   const likeData = data?.data;
 
-  const pageLocation = useLocation();
   const navigate = useNavigate();
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const { data, error } = await getAllSpotSharePost();
-      if (error || !data) {
-        console.error('스팟공유 게시글 목록을 가져오는 과정에서 에러 발생', error);
-        setPostStorage([]);
-      } else {
-        data.sort((a, b) => {
-          return new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf();
-        });
-        setPostStorage(data);
-      }
-    };
-    fetchPosts();
 
-    //무한스크롤 옵저버 인식
-    if (divRef.current) {
-      observer.observe(divRef.current);
-    }
-  }, [pageLocation]);
+  // useEffect(() => {
+  //   const fetchPosts = async () => {
+  //     const { data } = await getAllSpotSharePost();
+  //     if (!data) {
+  //       // console.error('스팟공유 게시글 목록을 가져오는 과정에서 에러 발생', error);
+  //       setPostStorage([]);
+  //     } else {
+  //       setPostStorage(data);
+  //     }
+  //   };
+  //   fetchPosts();
+
+  //   // 무한스크롤 옵저버 인식
+  //   if (divRef.current) {
+  //     observer.observe(divRef.current);
+  //   }
+  // }, [pageLocation]);
 
   const defaultOption = {
     root: null,
@@ -70,6 +84,8 @@ const SpotShareList = () => {
   );
 
   // 필터링
+  // const { data: spotFilteredPostData, isLoading: spotFilterIsLoading, isError: spotFilterIsError } = useQuery(['spotSharePost'], getFilteredSpotSharePost({ countryName: location[1], startDate: spotDate[0], endDate: spotDate[1] }));
+
   useEffect(() => {
     const getfilteredPost = async () => {
       const filteredPost = await getFilteredSpotSharePost({ country: location[1], startDate: spotDate[0], endDate: spotDate[1] });
@@ -80,6 +96,7 @@ const SpotShareList = () => {
       }
     };
     getfilteredPost();
+    console.log('필터링 안되니');
   }, [location, spotDate]);
 
   const handleSortChange = async (value: string) => {
@@ -87,22 +104,22 @@ const SpotShareList = () => {
 
     if (value === '최신순') {
       try {
-        const { data: sharePosts, error } = await supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*)').order('createdAt', { ascending: false });
+        const { data: sharePosts, error } = await supabase.from('spotPosts').select('*, writerId(*), country(*)').order('createdAt', { ascending: false });
         if (error) {
           console.log('스팟 최신순 정렬 실패', error);
         } else {
-          setPostStorage(sharePosts);
+          setPostStorage(sharePosts!);
         }
       } catch (error) {
         console.log('이 에러는 또 뭐지', error);
       }
     } else {
       try {
-        const { data: sharePosts, error } = await supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*)').order('likeCount', { ascending: false });
+        const { data: sharePosts, error } = await supabase.from('spotPosts').select('*, writerId(*), country(*)').order('likeCount', { ascending: false });
         if (error) {
           console.log('스팟 인기순 정렬 실패', error);
         } else {
-          setPostStorage(sharePosts);
+          setPostStorage(sharePosts!);
         }
       } catch (error) {
         console.log('이 에러는 또 뭐지', error);
@@ -110,8 +127,17 @@ const SpotShareList = () => {
     }
   };
 
+  if (spotIsLoading) {
+    return <div>Loading...</div>;
+  }
+
+  // if (!spotPostData) {
+  //   return <NoResultData />;
+  // }
+
   return (
     <>
+      {/* <NoResultData /> */}
       <St.filterBox>
         <div>
           <SortDropDown setSort={handleSortChange} />
@@ -120,7 +146,22 @@ const SpotShareList = () => {
         </div>
         <button onClick={() => navigate('/spotshare/write')}>글쓰기</button>
       </St.filterBox>
+      {/* <SkeletonList /> */}
       <St.Grid>
+        {postStorage
+          ?.map((post) => {
+            const likedPost = likeData?.filter((like) => {
+              return like.userId === logInUserId;
+            });
+            return <SpotShareItem key={post.id} post={post} likedPost={likedPost} countryData={post.country} />;
+          })
+          .slice(0, offset + 20)}
+        <div ref={divRef}></div>
+        <St.MoveButtonArea>
+          <TopButton />
+        </St.MoveButtonArea>
+      </St.Grid>
+      {/* <St.Grid>
         {postStorage
           .map((post) => {
             const likedPost = likeData?.filter((like) => {
@@ -133,7 +174,7 @@ const SpotShareList = () => {
         <St.MoveButtonArea>
           <TopButton />
         </St.MoveButtonArea>
-      </St.Grid>
+      </St.Grid> */}
     </>
   );
 };

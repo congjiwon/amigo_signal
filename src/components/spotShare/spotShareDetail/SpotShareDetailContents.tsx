@@ -131,6 +131,8 @@ function SpotShareDetailContents() {
     await queryClient.invalidateQueries(['likes', postid]);
   };
 
+  console.log('ㅋㅋㅋㅋ', spotSharePost?.country);
+
   return (
     <>
       <St.TitleBox>
@@ -169,7 +171,7 @@ function SpotShareDetailContents() {
           <St.DetailInfoBox>
             <St.GraySpan>나라 </St.GraySpan>
             <St.BlackSpan>
-              {spotSharePost?.region} &gt; {spotSharePost?.country}
+              {spotSharePost?.region} &gt; {spotSharePost?.countryInfo?.country}
             </St.BlackSpan>
           </St.DetailInfoBox>
           <St.DetailInfoBox>

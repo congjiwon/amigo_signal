@@ -111,18 +111,21 @@ export interface Database {
       countryInfo: {
         Row: {
           country: string;
+          countryId: string;
           flagUrl: string;
           id: number;
           imageUrl: string;
         };
         Insert: {
           country: string;
+          countryId?: string;
           flagUrl: string;
           id?: number;
           imageUrl: string;
         };
         Update: {
           country?: string;
+          countryId?: string;
           flagUrl?: string;
           id?: number;
           imageUrl?: string;
@@ -156,7 +159,13 @@ export interface Database {
           postId: {
             address: string | null;
             content: string;
-            country: string;
+            country: {
+              country: string;
+              countryId: string;
+              flagUrl: string;
+              id: number;
+              imageUrl: string;
+            };
             createdAt: string;
             id: string;
             latitude: number | null;
@@ -398,7 +407,13 @@ export interface Database {
         Row: {
           address: string | null;
           content: string;
-          country: string;
+          country: {
+            country: string;
+            countryId: string;
+            flagUrl: string;
+            id: number;
+            imageUrl: string;
+          };
           createdAt: string;
           id: string;
           latitude: number | null;
@@ -452,6 +467,12 @@ export interface Database {
           writerId?: string;
         };
         Relationships: [
+          {
+            foreignKeyName: 'spotPosts_country_fkey';
+            columns: ['country'];
+            referencedRelation: 'countryInfo';
+            referencedColumns: ['country'];
+          },
           {
             foreignKeyName: 'spotPosts_writerId_fkey';
             columns: ['writerId'];
