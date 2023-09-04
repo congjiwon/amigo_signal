@@ -127,8 +127,19 @@ export const InputBox = styled.div`
 
 export const Textarea = styled.textarea`
   resize: none;
-  width: 1097px;
-  height: 100px;
+  width: 1005px;
+  height: 43px;
+  padding: 14px 20px 43px 20px;
+  margin-left: 52px;
+  border-radius: 15px;
+  border: 1px solid var(--light-gray, #e8ebee);
+`;
+
+export const RecommentTextarea = styled.textarea`
+  resize: none;
+  width: 953px;
+  height: 43px;
+  padding: 14px 20px 43px 20px;
   margin-left: 52px;
   border-radius: 15px;
   border: 1px solid var(--light-gray, #e8ebee);
@@ -137,7 +148,7 @@ export const Textarea = styled.textarea`
 export const CancelSubmitButtonBox = styled.div`
   position: absolute;
   top: 65px;
-  right: 109px;
+  right: 120px;
   display: flex;
   align-items: center;
 `;

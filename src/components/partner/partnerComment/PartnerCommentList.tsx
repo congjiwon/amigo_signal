@@ -7,6 +7,7 @@ import DefaultProfileImage from '../../../assets/imgs/users/default_profile_img.
 import { usePartnerComments } from '../../../hooks/usePartnerComment';
 import { BtnStyleType } from '../../../types/styleTypes';
 import useCurrentUserStore from '../../../zustand/currentUser';
+import useSessionStore from '../../../zustand/store';
 import { CommentButton } from '../../common/button/Button';
 import { ConfirmDelete } from '../../common/modal/alert';
 import TopButton from '../../common/topbutton/TopButton';
@@ -41,6 +42,8 @@ export type PartnerCommentListProps = {
 function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommentListProps) {
   const storageUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
   const { postid } = useParams<string>();
+  const session = useSessionStore((state) => state.session);
+  const logInUserId = session?.user.id;
   const [isUpdate, setIsUpdate] = useState('');
   const [updateComment, setUpdateComment] = useState('');
   const [isReComment, setIsReComment] = useState('');
@@ -213,7 +216,7 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
               );
             }
           })}
-          {currentUser && (
+          {logInUserId && (
             <St.CommentBottomBox>
               <St.DateButtonBox>
                 {' '}

@@ -21,15 +21,17 @@ export const CommentLengthParagraph = styled.p`
 export const Form = styled.form`
   display: flex;
   justify-content: space-between;
+
+  align-items: center;
+  margin-bottom: 32px;
 `;
 
 export const CommentTextarea = styled.textarea`
-  align-items: center;
   resize: none;
-  width: 1097px;
-  height: 48px;
+  width: 1057px;
+  height: 20px;
   padding: 14px 20px 14px 20px;
-  margin-bottom: 32px;
+  /* margin-bottom: 32px; */
   border-radius: 15px;
   border: 1px solid var(--light-gray, #e8ebee);
 `;
@@ -99,6 +101,7 @@ export const DateButtonBox = styled.div`
 
 export const ButtonBox = styled.div`
   display: flex;
+  /* gap: 8px; */
   align-items: center;
 `;
 
@@ -122,8 +125,20 @@ export const InputBox = styled.div`
 
 export const Textarea = styled.textarea`
   resize: none;
-  width: 1097px;
-  height: 100px;
+  width: 1005px;
+  height: 43px;
+  padding: 14px 20px 43px 20px;
+  margin-left: 52px;
+  border-radius: 15px;
+  border: 1px solid var(--light-gray, #e8ebee);
+`;
+
+export const RecommentTextarea = styled.textarea`
+  resize: none;
+  width: 953px;
+  height: 43px;
+  padding: 14px 20px 43px 20px;
+  margin-left: 52px;
   border-radius: 15px;
   border: 1px solid var(--light-gray, #e8ebee);
 `;
