@@ -1,8 +1,8 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import React, { useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { supabase } from '../../../api/supabase/supabaseClient';
-import { duplicationCheckFromUserTable, updateUserNickname, updateUserProfileImgUrl } from '../../../api/supabase/users';
+import { duplicationCheckFromUserTable, getUser, updateUserNickname, updateUserProfileImgUrl } from '../../../api/supabase/users';
 import defaultImg from '../../../assets/imgs/users/default_profile_img.png';
 import { BtnStyleType } from '../../../types/styleTypes';
 import useCurrentUserStore from '../../../zustand/currentUser';
@@ -10,6 +10,8 @@ import useSessionStore, { useModalStore } from '../../../zustand/store';
 import Button from '../../common/button/Button';
 import { Alert } from '../../common/modal/alert';
 import * as St from './style';
+import { modifyProfileImg } from '../../../api/supabase/storage';
+import debounce from 'lodash/debounce';
 
 export default function ModifyProfile() {
   const queryClient = useQueryClient();
@@ -24,8 +26,6 @@ export default function ModifyProfile() {
   const [profileImgUrl, setProfileImgUrl] = useState<string | undefined>(currentUser?.profileImageUrl ? `${storagaUrl}/${currentUser?.profileImageUrl}` : defaultImg);
   const [profileImgFile, setProfileImgFile] = useState<File | null>(null);
 
-  const { closeModal } = useModalStore();
-
   const mutationNickName = useMutation(updateUserNickname, {
     onSuccess: () => {
       queryClient.invalidateQueries(['currentUser', userId]);
@@ -38,20 +38,26 @@ export default function ModifyProfile() {
     },
   });
 
-  const handleOnChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNickName(e.target.value);
-    const regex = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]{2,10}$/.test(e.target.value);
+  const debouncedCheckDuplicate = debounce(async (value) => {
+    const duplicationCheck = await duplicationCheckFromUserTable({ columnName: 'nickName', value: value });
 
+    if (duplicationCheck) {
+      setNickNameValidationMsg('이미 사용중인 닉네임입니다.');
+      setNickNameStatus(false);
+    }
+  }, 100);
+
+  const handleOnChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const typedNickname = e.target.value.trim();
+    setNickName(typedNickname);
+    debouncedCheckDuplicate(typedNickname);
+
+    const regex = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]{2,8}$/.test(typedNickname);
     if (regex) {
-      if (await duplicationCheckFromUserTable('nickName', e.target.value)) {
-        setNickNameValidationMsg('이미 사용중인 닉네임입니다.');
-        setNickNameStatus(false);
-      } else {
-        setNickNameValidationMsg('사용가능한 닉네임입니다.');
-        setNickNameStatus(true);
-      }
+      setNickNameValidationMsg('사용가능한 닉네임입니다.');
+      setNickNameStatus(true);
     } else {
-      setNickNameValidationMsg('특수문자 제외, 2~10자리');
+      setNickNameValidationMsg('특수문자 제외, 2~8자리');
       setNickNameStatus(false);
     }
   };
@@ -70,24 +76,22 @@ export default function ModifyProfile() {
 
     let profileUrl = null;
     if (profileImgFile) {
-      const { error: storageError, data: storageData } = await supabase.storage.from('profileImgs').upload(`profile_imgs/${currentUser?.email}/${uuidv4()}`, profileImgFile, {
-        cacheControl: '3600',
-        upsert: true,
-      });
-
-      profileUrl = storageData?.path;
-      mutationImgUrl.mutate({ profileImageUrl: profileUrl, userId });
-
-      if (storageError) return Alert({ title: storageError.message });
+      const encodeEmail = currentUser?.email && btoa(currentUser?.email);
+      const fileNewName = uuidv4();
+      try {
+        const storageData = await modifyProfileImg({ userEmail: encodeEmail!, fileNewName, newFille: profileImgFile });
+        profileUrl = storageData?.path;
+        mutationImgUrl.mutate({ profileImageUrl: profileUrl, userId });
+      } catch (error) {
+        Alert({ title: '에러가 발생하여 정상적으로 수정하지 못하였습니다.' });
+      }
     }
 
     Alert({ title: '수정이 완료되었습니다.' });
-    closeModal('modifyProfile');
   };
 
   return (
     <St.ModifyProfileWrapper>
-      <h2>프로필 수정</h2>
       <form onSubmit={(e) => handleSubmitUpdateProfile(e)}>
         <St.ModifyProfileBox>
           <div>
@@ -106,7 +110,7 @@ export default function ModifyProfile() {
         </St.ModifyProfileBox>
         <St.BtnBox>
           <Button styleType={BtnStyleType.BTN_DARK}>취소</Button>
-          <Button styleType={BtnStyleType.BTN_SUBMIT} type="submit">
+          <Button styleType={BtnStyleType.BTN_SUBMIT} type="submit" disabled={!nickNameStatus}>
             수정
           </Button>
         </St.BtnBox>

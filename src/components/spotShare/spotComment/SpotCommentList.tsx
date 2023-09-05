@@ -4,13 +4,13 @@ import { useParams } from 'react-router';
 import { getReCommentData, getSpotPost } from '../../../api/supabase/spotshare';
 import { getAuthId, getUsers } from '../../../api/supabase/users';
 import DefaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
-import useSpotComment from '../../../hooks/useSpotComment';
 import { BtnStyleType } from '../../../types/styleTypes';
 import useCurrentUserStore from '../../../zustand/currentUser';
 import { CommentButton } from '../../common/button/Button';
 import { ConfirmDelete } from '../../common/modal/alert';
 import SpotReCommentList from './SpotReCommentList';
 import * as St from './style';
+import useSpotComment from './useSpotComment';
 
 type allCommentsProps =
   | {

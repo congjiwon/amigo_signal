@@ -5,11 +5,10 @@ import { getSpotPost, updateSpotPost } from '../../../api/supabase/spotshare';
 import { BtnStyleType } from '../../../types/styleTypes';
 import useSessionStore from '../../../zustand/store';
 import Button from '../../common/button/Button';
-// import SpotCalendar from '../../common/calendar/SpotCalendar';
 import { UpdateSpotCalendar } from '../../common/calendar/SpotCalendar';
-import { UpdateStarDropDown } from '../../common/dropDown/DropDown';
 import { UpdateLocationDropDown } from '../../common/dropDown/LocationDropDown';
 import { AlertWarning } from '../../common/modal/alert';
+import { UpdateStarRate } from '../../common/starRate/StarRate';
 import SpotMap from '../map/SpotMap';
 import SpotShareEditor from '../spotShareEditor/SpotShareEditor';
 import * as St from './style';
@@ -40,7 +39,7 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
   useEffect(() => {
     const fetchPostData = async () => {
       if (spotSharePost) {
-        setLocation([spotSharePost.region, spotSharePost.country]);
+        setLocation([spotSharePost.region, spotSharePost.country.country]);
         setSpotDate(spotSharePost.visitDate);
         setStar(spotSharePost.starRate);
         setTitle(spotSharePost.title);
@@ -112,15 +111,15 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
   };
 
   return (
-    <div>
+    <St.FormContainer>
       <St.WriteForm onSubmit={handleOnSumbit}>
-        <div>
-          <UpdateLocationDropDown location={[spotSharePost?.region!, spotSharePost?.country!]} setLocation={setLocation} />
+        <St.SelectListBox>
+          <UpdateLocationDropDown location={[spotSharePost?.region!, spotSharePost?.country.country!]} setLocation={setLocation} />
           <UpdateSpotCalendar spotDate={spotSharePost?.visitDate!} setSpotDate={setSpotDate} />
-          <UpdateStarDropDown star={spotSharePost?.starRate!} setStar={setStar} />
-        </div>
+          <UpdateStarRate star={spotSharePost?.starRate!} setStar={setStar} />
+        </St.SelectListBox>
         <div>
-          <St.SpotShareTitleInput type="text" placeholder="제목을 입력해주세요" value={title || ''} onChange={(e) => setTitle(e.target.value)} />
+          <St.SpotShareTitleInput maxLength={100} type="text" placeholder="제목을 입력해주세요" value={title || ''} onChange={(e) => setTitle(e.target.value)} />
         </div>
         <SpotShareEditor editorHtml={editorHtml} setEditorHtml={setEditorHtml} />
         <SpotMap setLatitude={setLatitude} setLongitude={setLongitude} address={address} setAddress={setAddress} />
@@ -129,10 +128,10 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
             취소하기
           </Button>
           <Button type="submit" styleType={BtnStyleType.BTN_DARK}>
-            등록하기
+            수정하기
           </Button>
         </St.ButtonBox>
       </St.WriteForm>
-    </div>
+    </St.FormContainer>
   );
 }

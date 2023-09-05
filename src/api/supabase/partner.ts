@@ -4,11 +4,11 @@ import { supabase } from './supabaseClient';
 
 // 깃발가져오기
 export const getFlag = async (country: string) => {
-  return await supabase.from('countyInfo').select('flagUrl').eq('country', country);
+  return await supabase.from('countryInfo').select('flagUrl').eq('country', country);
 };
 
 export const getSpotShareDefaultImg = async (country: string) => {
-  return await supabase.from('countyInfo').select('imageUrl').eq('country', country);
+  return await supabase.from('countryInfo').select('imageUrl').eq('country', country);
 };
 
 export const getPartnerPosts = async () => {
@@ -160,16 +160,6 @@ export const updateStatus = async (applicantId: string, isAccepted: boolean) => 
   const { data, error } = await supabase.from('applicants').update({ isAccepted, isConfirmed: true }).eq('applicantId', applicantId);
 
   return { data, error };
-};
-
-// 신청자 state(수락 / 거절) 정보 가져오기
-export const getApplicantStatus = async (applicantId: string) => {
-  const { data, error } = await supabase.from('applicants').select('isAccepted').eq('applicantId', applicantId).single();
-  if (error) {
-    console.error('신청자 참여 정보를 불러오는 과정에서 error', error);
-    throw error;
-  }
-  return data;
 };
 
 // 참여 수락된 신청자 정보 가져오기

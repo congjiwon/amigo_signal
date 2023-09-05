@@ -4,13 +4,13 @@ import { supabase } from './supabaseClient';
 
 //스팟 필터링
 type filteredPostProps = {
-  country?: string;
+  country: string;
   startDate?: string;
   endDate?: string;
 };
 
 export const getFilteredSpotSharePost = async ({ country, startDate, endDate }: filteredPostProps) => {
-  let sharePosts = supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*)').order('createdAt', { ascending: false });
+  let sharePosts = supabase.from('spotPosts').select('*, writerId(*), country(*)').order('createdAt', { ascending: false });
   if (country !== undefined) {
     sharePosts = sharePosts.eq('country', country);
   }
@@ -101,16 +101,17 @@ export const getReCommentWriterIds = async () => {
 
 // 스팟공유 모든 글 가져오기
 export const getAllSpotSharePost = async () => {
-  return await supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*)');
+  const { data } = await supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*),countryInfo!spotPosts_country_fkey(*)').order('createdAt', { ascending: false });
+  return { data };
 };
 //스팟공유 리스트 디폴트 이미지 가져오기
 export const getSpotShareDefaultImg = async (country: string) => {
-  return await supabase.from('countyInfo').select('imageUrl').eq('country', country);
+  return await supabase.from('countryInfo').select('imageUrl').eq('country', country);
 };
 
 //스팟공유 특정 글 가져오기
 export const getDetailSpotSharePost = async (postId: string | undefined) => {
-  const { data } = await supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*)').eq('id', postId).single();
+  const { data } = await supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*),countryInfo!spotPosts_country_fkey(*)').eq('id', postId).single();
   return data;
 };
 
@@ -131,8 +132,6 @@ export const insertSpotPost = async (spotPostData: Inserts<'spotPosts'>) => {
 
 type likes = { id?: string | undefined; postId: string; userId: string };
 
-//스팟공유 좋아요
-// 매개변수로 받은 postId랑 같으면 넣겠다? 뭔소리고;
 // 좋아요 추가
 export const postLike = async (likes: likes) => {
   return await supabase.from('likes').insert(likes);
@@ -148,21 +147,15 @@ export const countLikes = async (postId: string) => {
   return await supabase.from('likes').select('*', { count: 'exact' }).eq('postId', postId);
 };
 
-// 좋아요 조회
-export const getLikes = async () => {
-  return await supabase.from('likes').select('*');
-};
-
-// 스팟공유 인기순 정렬
-export const sortSpot = async () => {
-  const { data, count } = await supabase.from('likes').select('postId, COUNT(*) as like_count');
-  return { data };
-};
-
 // 스팟공유 게시글 좋아요 수 업데이트
 export const countLike = async (like: number, postId: string) => {
   const { data } = await supabase.from('spotPosts').update({ likeCount: like }).eq('id', postId);
-  console.log('data', like);
+  return { data };
+};
+
+// 좋아요 가져오기
+export const getLikes = async () => {
+  const { data } = await supabase.from('likes').select('*, postId(*)');
   return { data };
 };
 
@@ -174,7 +167,7 @@ type mySpotSharePostsType = {
 export const getMySpotSharePosts = async ({ writerId, page }: mySpotSharePostsType) => {
   const { from, to } = getRangePagination(page, NUMBER_OF_ITEMS);
 
-  const { data, count } = await supabase.from('spotPosts').select('*', { count: 'exact' }).eq('writerId', writerId).order('visitDate', { ascending: false }).range(from, to);
+  const { data, count } = await supabase.from('spotPosts').select('*,country(*)', { count: 'exact' }).eq('writerId', writerId).order('visitDate', { ascending: false }).range(from, to);
   return { data, count };
 };
 
@@ -186,7 +179,7 @@ type LikedSpotShareProps = {
 export const getLikedSpotShare = async ({ userId, page }: LikedSpotShareProps) => {
   const { from, to } = getRangePagination(page, NUMBER_OF_ITEMS);
 
-  const { data, count } = await supabase.from('likes').select('*, postId (*)', { count: 'exact' }).eq('userId', userId).order('postId(visitDate)').range(from, to);
+  const { data, count } = await supabase.from('likes').select('*, postId (*,country(*))', { count: 'exact' }).eq('userId', userId).order('postId(visitDate)').range(from, to);
 
   return { data, count };
 };

@@ -1,6 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { getConfirmedApplicantList, getNumOfPeople, updatePostStatus, updateStatus } from '../../../api/supabase/partner';
+import { updatePostStatus, updateStatus } from '../../../api/supabase/partner';
 import { Tables } from '../../../api/supabase/supabase';
 import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import { useConfirmedListStore, useStateStore } from '../../../zustand/communicate';
@@ -14,9 +13,11 @@ type ApplicantCardProps = {
   onClick: (id: string) => void;
   isSelected: boolean;
   removeConfirmedApplicant: (id: string) => void;
+  confirmedLength: number;
+  numOfPeople: number;
 };
 
-const ApplicantCard = ({ data, onClick, isSelected, removeConfirmedApplicant }: ApplicantCardProps) => {
+const ApplicantCard = ({ data, onClick, isSelected, removeConfirmedApplicant, confirmedLength, numOfPeople }: ApplicantCardProps) => {
   const { closeModal } = useModalStore();
 
   const [isAccepted, setIsAccepted] = useState<boolean | null>(null);
@@ -27,23 +28,11 @@ const ApplicantCard = ({ data, onClick, isSelected, removeConfirmedApplicant }: 
   const { setApplicantStatus, setPartnerStatus } = useStateStore();
   const { addConfirmedApplicant } = useConfirmedListStore();
 
-  const { data: confirmedApplicants } = useQuery(['confirmedApplicants', data.postId], () => getConfirmedApplicantList(data.postId!.id));
-  const { data: getNumberOfPeople } = useQuery(['numOfPeople', data.postId], () => getNumOfPeople(data.postId.id));
+  // const { data: confirmedApplicants } = useQuery(['confirmedApplicants', data.postId], () => getConfirmedApplicantList(data.postId!.id));
+  // const { data: getNumberOfPeople } = useQuery(['numOfPeople', data.postId], () => getNumOfPeople(data.postId.id));
 
-  const confirmedLength = confirmedApplicants?.data?.length || 0;
-  const numOfPeople = getNumberOfPeople?.[0]?.numOfPeople || 0;
-
-  // useEffect(() => {
-  //   const fetchApplicantStatus = async () => {
-  //     const response = await getApplicantStatus(applicantId);
-  //     if (response.isAccepted === null) {
-  //       setApplicantStatus('참여 신청 중');
-  //     } else if (response.isAccepted !== null) {
-  //       setApplicantStatus(response.isAccepted ? '참여 수락됨' : '참여 거절됨');
-  //     }
-  //   };
-  //   fetchApplicantStatus();
-  // }, [applicantId, setApplicantStatus]);
+  // const confirmedLength = confirmedApplicants?.data?.length || 0;
+  // const numOfPeople = getNumberOfPeople?.[0]?.numOfPeople || 0;
 
   const handleAccept = async () => {
     setIsAccepted(true);

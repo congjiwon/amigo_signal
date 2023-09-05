@@ -108,42 +108,42 @@ export interface Database {
           },
         ];
       };
-      countyInfo: {
+      countryInfo: {
         Row: {
           country: string;
+          countryId: string;
           flagUrl: string;
-          id: number;
           imageUrl: string;
         };
         Insert: {
           country: string;
+          countryId?: string;
           flagUrl: string;
-          id?: number;
           imageUrl: string;
         };
         Update: {
           country?: string;
+          countryId?: string;
           flagUrl?: string;
-          id?: number;
           imageUrl?: string;
         };
         Relationships: [];
       };
       interest: {
         Row: {
-          content: string | null;
+          discription: string | null;
           id: number;
           imageUrl: string | null;
           name: string;
         };
         Insert: {
-          content?: string | null;
+          discription?: string | null;
           id?: number;
           imageUrl?: string | null;
           name: string;
         };
         Update: {
-          content?: string | null;
+          discription?: string | null;
           id?: number;
           imageUrl?: string | null;
           name?: string;
@@ -156,7 +156,13 @@ export interface Database {
           postId: {
             address: string | null;
             content: string;
-            country: string;
+            country: {
+              country: string;
+              countryId: string;
+              flagUrl: string;
+              id: number;
+              imageUrl: string;
+            };
             createdAt: string;
             id: string;
             latitude: number | null;
@@ -169,21 +175,6 @@ export interface Database {
             writerId: string;
           };
           userId: string;
-          spotPosts: {
-            address: string | null;
-            content: string;
-            country: string;
-            createdAt: string;
-            id: string;
-            latitude: number | null;
-            longitude: number | null;
-            postImageUrl: string[] | null;
-            region: string;
-            starRate: number;
-            title: string;
-            visitDate: string;
-            writerId: string;
-          };
         };
         Insert: {
           id?: string;
@@ -273,6 +264,7 @@ export interface Database {
           endDate: string;
           id: string;
           interestUrl: string[];
+          interestDiscription: string[];
           isOpen: boolean;
           numOfPeople: number;
           openChat: string;
@@ -294,6 +286,7 @@ export interface Database {
           endDate: string;
           id?: string;
           interestUrl: string[];
+          interestDiscription: string[];
           isOpen?: boolean;
           numOfPeople: number;
           openChat?: string;
@@ -309,6 +302,7 @@ export interface Database {
           endDate?: string;
           id?: string;
           interestUrl?: string[];
+          interestDiscription?: string[];
           isOpen?: boolean;
           numOfPeople?: number;
           openChat?: string;
@@ -410,7 +404,13 @@ export interface Database {
         Row: {
           address: string | null;
           content: string;
-          country: string;
+          country: {
+            country: string;
+            countryId: string;
+            flagUrl: string;
+            id: number;
+            imageUrl: string;
+          };
           createdAt: string;
           id: string;
           latitude: number | null;
@@ -464,6 +464,12 @@ export interface Database {
           writerId?: string;
         };
         Relationships: [
+          {
+            foreignKeyName: 'spotPosts_country_fkey';
+            columns: ['country'];
+            referencedRelation: 'countryInfo';
+            referencedColumns: ['country'];
+          },
           {
             foreignKeyName: 'spotPosts_writerId_fkey';
             columns: ['writerId'];

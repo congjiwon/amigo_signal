@@ -1,7 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getConfirmedApplicantList, getFlag, updatePostStatus } from '../../api/supabase/partner';
+import { updatePostStatus } from '../../api/supabase/partner';
 import { Tables } from '../../api/supabase/supabase';
 import Calender from '../../assets/imgs/partner/Calendar.svg';
 import defaultProfileImage from '../../assets/imgs/users/default_profile_img.png';
@@ -16,40 +15,40 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
   const storagaUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
   const [flagImg, setFlagImg] = useState<string>('');
 
-  const { data: confirmedApplicants } = useQuery(['confirmedApplicants', post.id], () => getConfirmedApplicantList(post.id!));
+  // const { data: confirmedApplicants } = useQuery(['confirmedApplicants', post.id], () => getConfirmedApplicantList(post.id!));
 
-  useEffect(() => {
-    const getFlagImgHandle = async () => {
-      const { data, error } = await getFlag(post.country);
-      if (error || !data) {
-        console.error('깃발 가져오는 과정에서 에러 발생', error);
-      } else {
-        setFlagImg(data[0].flagUrl);
-      }
-    };
-    getFlagImgHandle();
-  }, []);
+  // useEffect(() => {
+  //   const getFlagImgHandle = async () => {
+  //     const { data, error } = await getFlag(post.country);
+  //     if (error || !data) {
+  //       console.error('깃발 가져오는 과정에서 에러 발생', error);
+  //     } else {
+  //       setFlagImg(data[0].flagUrl);
+  //     }
+  //   };
+  //   getFlagImgHandle();
+  // }, []);
 
-  // 자동 모집완료 로직 (모집인원, 여행 기간 endDate)
+  // 자동 모집완료 로직 (여행 기간 endDate)
   useEffect(() => {
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
-    if (post && confirmedApplicants?.data) {
+    if (post) {
       const endDate = new Date(post.endDate);
       endDate.setHours(0, 0, 0, 0);
-      if (endDate < currentDate || confirmedApplicants.data.length >= post.numOfPeople) {
+      if (endDate < currentDate) {
         updatePostStatus(post.id!, false);
-      } else if (endDate >= currentDate || confirmedApplicants.data.length < post.numOfPeople) {
+      } else if (endDate >= currentDate) {
         updatePostStatus(post.id!, true);
       }
     }
-  }, [post, confirmedApplicants]);
+  }, [post]);
 
   return (
     <Link to={`detail/${post.id}`}>
       <St.PostCard>
         <St.Location>
-          <St.FlagBox>{flagImg && <St.FlagImage src={flagImg} alt="Image" />}</St.FlagBox>
+          {/* <St.FlagBox>{flagImg && <St.FlagImage src={flagImg} alt="Image" />}</St.FlagBox> */}
           <h1>{post.country}</h1>
         </St.Location>
         <St.Main>

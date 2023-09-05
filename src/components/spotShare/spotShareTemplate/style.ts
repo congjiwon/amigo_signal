@@ -1,8 +1,17 @@
 import { styled } from 'styled-components';
 
+export const FormContainer = styled.div`
+  margin-top: 80px;
+`;
+
 export const WriteForm = styled.form`
   display: flex;
   flex-direction: column;
+  gap: 24px;
+`;
+
+export const SelectListBox = styled.div`
+  display: flex;
   gap: 24px;
 `;
 

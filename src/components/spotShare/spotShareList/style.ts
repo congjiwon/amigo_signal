@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { styled, css } from 'styled-components';
 
 export const MoveButtonArea = styled.div`
   position: fixed;
@@ -38,6 +38,38 @@ export const PostCard = styled.div`
   position: relative;
   border-radius: 30px;
   box-shadow: 5px 5px 10px 3px rgba(0, 0, 0, 0.2);
+`;
+
+export const DateLikeBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const CalendarImage = styled.img`
+  padding-left: 21px;
+`;
+
+export const LikeButton = styled.button`
+  padding: 20px;
+  background-color: transparent;
+  border: none;
+  &:hover {
+    transform: scale(1.5);
+  }
+  cursor: pointer;
+`;
+
+export const DefaultImg = styled.div<{ $countryBg?: string }>`
+  ${(props) => {
+    return css`
+      width: 282px;
+      height: 143px;
+      object-fit: cover;
+      border-radius: 0px 0px 30px 30px;
+      background: center / cover url(${props.$countryBg}) #ddd;
+    `;
+  }}
 `;
 
 export const TravelDateBox = styled.div`

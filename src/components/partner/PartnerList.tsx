@@ -9,6 +9,7 @@ import LocationDropDown from '../common/dropDown/LocationDropDown';
 import TopButton from '../common/topbutton/TopButton';
 import PartnerItem from './PartnerItem';
 import * as St from './style';
+import SkeletonList from '../common/Skeleton/SkeletonList';
 
 interface passType {
   country?: string;
@@ -21,7 +22,7 @@ const PartnerList = () => {
   const [location, setLocation] = useState<string[]>([]);
   const [date, setDate] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>();
-
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const divRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -32,12 +33,14 @@ const PartnerList = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       const { data, error } = await getPartnerPosts();
+      setIsLoading(true);
       if (error || !data) {
         console.error('동행자 게시글 목록을 가져오는 과정에서 에러 발생', error);
         setPostStorage([]);
       } else {
         setPostStorage(data);
       }
+      setIsLoading(false);
     };
     fetchPosts();
 
@@ -96,6 +99,9 @@ const PartnerList = () => {
         </div>
         <button onClick={() => navigate('/partner/write')}>글쓰기</button>
       </St.filterWriteBox>
+      {/* {isLoading ? (
+        <SkeletonList />
+      ) : ( */}
       <St.Grid>
         {postStorage
           .map((post) => {
@@ -107,6 +113,7 @@ const PartnerList = () => {
           <TopButton />
         </St.MoveButtonArea>
       </St.Grid>
+      {/* )} */}
     </>
   );
 };

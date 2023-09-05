@@ -1,9 +1,7 @@
 import { Link } from 'react-router-dom';
-import * as StCommon from '../style/style';
-import classifyingAge from '../../../common/classifyingAge/classifyingAge';
 import defaultImg from '../../../../assets/imgs/users/default_profile_img.png';
-import { useQuery } from '@tanstack/react-query';
-import { getFlag } from '../../../../api/supabase/partner';
+import classifyingAge from '../../../common/classifyingAge/classifyingAge';
+import * as StCommon from '../style/style';
 
 type PartnerItemProps = {
   partnerPost: {
@@ -60,9 +58,9 @@ export default function MyPartnerCard({ partnerPost, postUserInfo }: PartnerItem
     writerInfo.nickName = partnerPost.writerId?.nickName;
     writerInfo.profileImageUrl = partnerPost.writerId?.profileImageUrl ? `${storagaUrl}/${partnerPost.writerId.profileImageUrl}` : defaultImg;
   }
-  const { data: flagData, isLoading, isError } = useQuery(['flags', partnerPost.id], () => getFlag(partnerPost.country));
+  // const { data: flagData, isLoading, isError } = useQuery(['flags', partnerPost.id], () => getFlag(partnerPost.country));
 
-  const flagUrl = flagData?.data!.map((item) => item.flagUrl)[0];
+  // const flagUrl = flagData?.data?.map((item) => item.flagUrl)[0];
 
   return (
     <StCommon.MyCard>
@@ -71,7 +69,7 @@ export default function MyPartnerCard({ partnerPost, postUserInfo }: PartnerItem
           <StCommon.FlexBetween className="partner-top">
             <StCommon.CountryInfo>
               <div>
-                <img src={flagUrl} alt={`${partnerPost.country} 국기`} />
+                <img src="" alt={`${partnerPost.country} 국기`} />
               </div>
               <p>{partnerPost.country}</p>
             </StCommon.CountryInfo>

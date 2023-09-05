@@ -7,13 +7,9 @@ type ValidationStatusProps = {
 export const ModifyProfileWrapper = styled.div`
   padding: 32px;
   box-sizing: border-box;
-  border: 1px solid red;
-
-  & h2 {
-    margin-bottom: 16px;
-    font-weight: 700;
-    text-align: center;
-  }
+  border-radius: 30px;
+  background: #fff;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
 `;
 
 export const ModifyProfileBox = styled.div`
@@ -50,6 +46,8 @@ export const MofifyNickNameMsg = styled.p<ValidationStatusProps>`
 
 export const BtnBox = styled.div`
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 16px;
+  margin-top: 30px;
 `;

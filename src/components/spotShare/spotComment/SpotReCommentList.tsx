@@ -1,9 +1,9 @@
 import DefaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
-import useSpotComment from '../../../hooks/useSpotComment';
 import { BtnStyleType } from '../../../types/styleTypes';
 import { CommentButton } from '../../common/button/Button';
 import { ConfirmDelete } from '../../common/modal/alert';
 import * as St from './style';
+import useSpotComment from './useSpotComment';
 
 type CommentProps = {
   content: string;
@@ -101,7 +101,7 @@ function SpotReCommentList({
           {reCommentId === reComment?.id ? (
             <form onSubmit={handleReSubmitBtn}>
               <St.InputBox>
-                <St.Textarea placeholder="댓글을 남겨보세요" value={updateReComment} onChange={(event) => setUpdateReComment(event.target.value)} />
+                <St.RecommentTextarea placeholder="댓글을 남겨보세요" value={updateReComment} onChange={(event) => setUpdateReComment(event.target.value)} />
                 <St.CancelSubmitButtonBox>
                   <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => onCancelBtn('reCommentUpdateCancelBtn')}>
                     취소

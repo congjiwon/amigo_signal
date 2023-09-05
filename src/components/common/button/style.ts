@@ -17,6 +17,7 @@ const btnCommonStyles = css`
 const btnCommentStyles = css`
   background-color: transparent;
   border: none;
+  font-size: 12px;
   text-decoration: none; // 이걸 disabled만 안주기
   color: var(--gray, #adb1b8);
   cursor: pointer;
@@ -32,10 +33,17 @@ export const CommentButton = styled.button<{ $styleType: BtnStyleType; disabled:
         ${btnCommentStyles}
         cursor: not-allowed;
       `;
-    } else if (props.$styleType === 'BTN_ONLYFONT') {
-      return css`
-        ${btnCommentStyles}
-      `;
+    } else {
+      switch (props.$styleType) {
+        case BtnStyleType.BTN_ONLYFONT:
+          return css`
+            ${btnCommentStyles}
+          `;
+        case BtnStyleType.BTN_LIKE:
+          return css`
+            ${btnCommentStyles}
+          `;
+      }
     }
   }}
 `;
