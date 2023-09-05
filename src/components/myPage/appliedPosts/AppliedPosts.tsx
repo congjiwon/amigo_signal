@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import { getAppliedPosts } from '../../../api/supabase/partner';
-import useSessionStore from '../../../zustand/store';
-import { useState } from 'react';
-import * as StCommon from '../common/style/style';
 import { Pagination, PaginationProps } from 'antd';
-import { NUMBER_OF_ITEMS } from '../../common/getRangePagination/getRangePagination';
+import { useState } from 'react';
+import { getAppliedPosts } from '../../../api/supabase/partner';
 import useMyPageTabPanel from '../../../zustand/myPageTabPanel';
+import useSessionStore from '../../../zustand/store';
+import { NUMBER_OF_ITEMS } from '../../common/getRangePagination/getRangePagination';
 import MyPartnerCard from '../common/myPartnerCard/MyPartnerCard';
+import * as StCommon from '../common/style/style';
 
 export default function AppliedPosts() {
   const session = useSessionStore((state) => state.session);
@@ -32,6 +32,7 @@ export default function AppliedPosts() {
   const handlePageChange: PaginationProps['onChange'] = (page) => {
     setCurrentPage(page);
   };
+  console.log(appliedPostsData);
 
   return (
     <>
