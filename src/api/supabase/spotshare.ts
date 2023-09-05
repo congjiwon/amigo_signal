@@ -167,7 +167,7 @@ type mySpotSharePostsType = {
 export const getMySpotSharePosts = async ({ writerId, page }: mySpotSharePostsType) => {
   const { from, to } = getRangePagination(page, NUMBER_OF_ITEMS);
 
-  const { data, count } = await supabase.from('spotPosts').select('*,country(*)', { count: 'exact' }).eq('writerId', writerId).order('visitDate', { ascending: false }).range(from, to);
+  const { data, count } = await supabase.from('spotPosts').select('*, country(*)', { count: 'exact' }).eq('writerId', writerId).order('visitDate', { ascending: false }).range(from, to);
   return { data, count };
 };
 
@@ -179,7 +179,7 @@ type LikedSpotShareProps = {
 export const getLikedSpotShare = async ({ userId, page }: LikedSpotShareProps) => {
   const { from, to } = getRangePagination(page, NUMBER_OF_ITEMS);
 
-  const { data, count } = await supabase.from('likes').select('*, postId (*,country(*))', { count: 'exact' }).eq('userId', userId).order('postId(visitDate)').range(from, to);
+  const { data, count } = await supabase.from('likes').select('*, postId (*, country(country, imageUrl))', { count: 'exact' }).eq('userId', userId).order('postId(visitDate)').range(from, to);
 
   return { data, count };
 };

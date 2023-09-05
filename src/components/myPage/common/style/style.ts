@@ -1,4 +1,4 @@
-import { css, styled } from 'styled-components';
+import { styled } from 'styled-components';
 import iconCalendar from '../../../../assets/imgs/partner/Calendar.svg';
 
 export const MyFilterBtns = styled.div`
@@ -240,16 +240,21 @@ export const ContentEllipsis = styled.div`
   line-height: 1.5;
 `;
 
-export const BgCountryBox = styled.div<{ $countryBg?: string }>`
-  ${(props) => {
-    return css`
-      position: relative;
-      height: 140px;
-      border-bottom-right-radius: 30px;
-      border-bottom-left-radius: 30px;
-      background: center / cover url(${props.$countryBg}) no-repeat;
-    `;
-  }}
+export const BgCountryBox = styled.div`
+  position: relative;
+  height: 140px;
+  border-bottom-right-radius: 30px;
+  border-bottom-left-radius: 30px;
+  background-color: #eee;
+  overflow: hidden;
+`;
+
+export const BgCountryImg = styled.img`
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 export const BadgeCountry = styled.div`
