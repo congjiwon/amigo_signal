@@ -9,7 +9,6 @@ import LocationDropDown from '../common/dropDown/LocationDropDown';
 import TopButton from '../common/topbutton/TopButton';
 import PartnerItem from './PartnerItem';
 import * as St from './style';
-import SkeletonList from '../common/Skeleton/SkeletonList';
 
 interface passType {
   country?: string;

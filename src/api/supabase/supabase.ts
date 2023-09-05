@@ -313,6 +313,12 @@ export interface Database {
         };
         Relationships: [
           {
+            foreignKeyName: 'partnerPosts_country_fkey';
+            columns: ['country'];
+            referencedRelation: 'countryInfo';
+            referencedColumns: ['country'];
+          },
+          {
             foreignKeyName: 'partnerPosts_writerId_fkey';
             columns: ['writerId'];
             referencedRelation: 'users';
