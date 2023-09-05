@@ -4,7 +4,7 @@ type StatusProps = {
   $isOpen: boolean;
 };
 
-export const filterWriteBox = styled.div`
+export const FilterWriteBox = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -25,7 +25,7 @@ export const ImageWrapper = styled.div`
   position: relative;
   width: 100%;
   min-width: 360px;
-  max-width: 1200px;
+  max-width: 100%;
   height: 400px;
   overflow: hidden;
 `;
