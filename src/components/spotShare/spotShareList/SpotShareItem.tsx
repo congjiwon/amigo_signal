@@ -70,9 +70,9 @@ function SpotShareItem({ post, likedPost, countryData }: SpotItemProps) {
   const LikeCheck = async (logInUserId: string) => {
     const liked = likedPost?.some((like) => like.postId.id === post.id && like.userId === logInUserId);
     console.log('이게뭐야', liked);
-    // if (liked) {
-    setLike(liked!);
-    // }
+    if (liked) {
+      setLike(liked!);
+    }
   };
   useEffect(() => {
     LikeCheck(logInUserId!);
@@ -108,6 +108,8 @@ function SpotShareItem({ post, likedPost, countryData }: SpotItemProps) {
     await queryClient.invalidateQueries(['likes', post.id]);
   };
 
+  console.log('zzz', post.country.imageUrl);
+
   return (
     <Link to={`detail/${post.id}`}>
       <St.PostCard>
@@ -134,10 +136,7 @@ function SpotShareItem({ post, likedPost, countryData }: SpotItemProps) {
         <St.ContentBox>
           <p>{contentWithoutTags}</p>
         </St.ContentBox>
-        {/* <St.DefaultImg src={post.country.imageUrl}></St.DefaultImg> */}
-        <St.DefaultImg $countryBg={post.country.imageUrl!}></St.DefaultImg>
-        {/* <St.DefaultImg $countryBg={countryImg}></St.DefaultImg> */}
-
+        <St.DefaultImg src={countryData.imageUrl}></St.DefaultImg>
         <St.Span>{countryData.country}</St.Span>
       </St.PostCard>
     </Link>

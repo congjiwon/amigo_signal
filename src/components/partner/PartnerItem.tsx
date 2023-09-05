@@ -19,7 +19,7 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
 
   // useEffect(() => {
   //   const getFlagImgHandle = async () => {
-  //     const { data, error } = await getFlag(post.country);
+  // const { data, error } = await getFlag(post.country);
   //     if (error || !data) {
   //       console.error('깃발 가져오는 과정에서 에러 발생', error);
   //     } else {
@@ -48,7 +48,7 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
     <Link to={`detail/${post.id}`}>
       <St.PostCard>
         <St.Location>
-          {/* <St.FlagBox>{flagImg && <St.FlagImage src={flagImg} alt="Image" />}</St.FlagBox> */}
+          <St.FlagBox>{flagImg && <St.FlagImage src={flagImg} alt="Image" />}</St.FlagBox>
           <h1>{post.country}</h1>
         </St.Location>
         <St.Main>

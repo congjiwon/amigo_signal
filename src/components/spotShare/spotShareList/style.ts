@@ -1,4 +1,4 @@
-import { styled, css } from 'styled-components';
+import { styled } from 'styled-components';
 
 export const MoveButtonArea = styled.div`
   position: fixed;
@@ -60,16 +60,11 @@ export const LikeButton = styled.button`
   cursor: pointer;
 `;
 
-export const DefaultImg = styled.div<{ $countryBg?: string }>`
-  ${(props) => {
-    return css`
-      width: 282px;
-      height: 143px;
-      object-fit: cover;
-      border-radius: 0px 0px 30px 30px;
-      background: center / cover url(${props.$countryBg}) #ddd;
-    `;
-  }}
+export const DefaultImg = styled.img`
+  width: 282px;
+  height: 143px;
+  object-fit: cover;
+  border-radius: 0px 0px 30px 30px;
 `;
 
 export const TravelDateBox = styled.div`
