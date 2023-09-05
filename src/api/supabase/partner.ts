@@ -12,12 +12,12 @@ export const getSpotShareDefaultImg = async (country: string) => {
 };
 
 export const getPartnerPosts = async () => {
-  let { data, error } = await supabase.from('partnerPosts').select('*, users!partnerPosts_writerId_fkey(*)').order('createdAt', { ascending: false });
+  const { data, error } = await supabase.from('partnerPosts').select('*, users!partnerPosts_writerId_fkey(*)', { count: 'exact' }).order('createdAt', { ascending: false }).limit(10);
   return { data, error };
 };
 
 export const getPartnerPost = async ({ postId }: { postId: string }) => {
-  let { data } = await supabase.from('partnerPosts').select('*').eq('id', postId).single();
+  const { data } = await supabase.from('partnerPosts').select('*').eq('id', postId).single();
   return data;
 };
 
@@ -33,14 +33,14 @@ export const updatePartnerPost = async (updatePost: any) => {
 
 // 동행 댓글 가져오기(정렬)
 export const getPartnerComments = async () => {
-  let { data, error } = await supabase.from('partnerComments').select('*').order('date', { ascending: false });
+  const { data, error } = await supabase.from('partnerComments').select('*').order('date', { ascending: false });
   // console.log('getPartnerComments');
   return data;
 };
 
 // 동행 댓글(댓글 작성한 모든 유저도 같이) 안씀.
 export const getPostData = async () => {
-  let { data, error } = await supabase.from('partnerComments').select('*, users!comments_writerId_fkey(*)');
+  const { data, error } = await supabase.from('partnerComments').select('*, users!comments_writerId_fkey(*)');
   return data;
 };
 
@@ -66,7 +66,7 @@ export const updatePartnerComment = async (updateComment: TPartnerUpdate) => {
 
 // 동행 답댓글 가져오기(답글 작성한 모든 유저도 같이)
 export const getReCommentData = async () => {
-  let { data, error } = await supabase.from('reComments').select('*, users!reComments_writerId_fkey(*)').order('date', { ascending: true });
+  const { data, error } = await supabase.from('reComments').select('*, users!reComments_writerId_fkey(*)').order('date', { ascending: true });
   return data;
 };
 
@@ -88,19 +88,19 @@ export const updatePartnerReComment = async (updateReComment: TPartnerReComments
 
 // 포스트 작성자 ID
 export const getPartnerPostId = async () => {
-  let { data, error } = await supabase.from('partnerPosts').select('id');
+  const { data, error } = await supabase.from('partnerPosts').select('id');
   return data;
 };
 
 // 코멘트 작성자 ID 배열
 export const getWriterIds = async () => {
-  let { data, error } = await supabase.from('partnerComments').select('writerId');
+  const { data, error } = await supabase.from('partnerComments').select('writerId');
   return data;
 };
 
 // 답댓글 작성자 ID 배열
 export const getReCommentWriterIds = async () => {
-  let { data, error } = await supabase.from('reComments').select('writerId');
+  const { data, error } = await supabase.from('reComments').select('writerId');
   return data;
 };
 
@@ -286,6 +286,6 @@ export const getNumOfPeople = async (postId: string) => {
 
 // 해당 동행 모집글의 모집 상태 여부만 가져오기
 export const isPostOpen = async (postId: string): Promise<{ data: { isOpen: boolean } | null }> => {
-  let { data } = await supabase.from('partnerPosts').select('isOpen').eq('id', postId).single();
+  const { data } = await supabase.from('partnerPosts').select('isOpen').eq('id', postId).single();
   return { data };
 };
