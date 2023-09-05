@@ -38,7 +38,7 @@ export const updateSpotPost = async (updateData: Update<'spotPosts'>) => {
 
 // 스팟 댓글 가져오기(댓글 작성한 모든 유저 정보도 함께)
 export const getSpotComments = async () => {
-  let { data, error } = await supabase.from('spotComments').select('*, users!spotComments_writerId_fkey(*)').order('date', { ascending: false });
+  const { data, error } = await supabase.from('spotComments').select('*, users!spotComments_writerId_fkey(*)').order('date', { ascending: false });
   return data;
 };
 getSpotComments();
@@ -60,19 +60,19 @@ export const updateSpotComment = async (updateComment: Update<'spotComments'>) =
 
 // 스팟글 작성자 ID 배열인데 이것도 포스트작성자 찾는게 있었떤거같기도
 export const getPostWriterId = async () => {
-  let { data } = await supabase.from('spotPosts').select('id');
+  const { data } = await supabase.from('spotPosts').select('id');
   return data;
 };
 
 // 스팟 댓글 작성자 ID 배열 이긴한데 그냥 스팟 댓글 가져오기에서는 filter 돌려서 찾아야되네. 걍 쓰자.
 export const getCommentWriterIds = async () => {
-  let { data } = await supabase.from('spotComments').select('writerId');
+  const { data } = await supabase.from('spotComments').select('writerId');
   return data;
 };
 
 // 스팟 답댓글 가져오기(답글 작성한 모든 유저도 같이)
 export const getReCommentData = async () => {
-  let { data } = await supabase.from('spotReComments').select('*, users!spotReComments_writerId_fkey(*)').order('date', { ascending: true });
+  const { data } = await supabase.from('spotReComments').select('*, users!spotReComments_writerId_fkey(*)').order('date', { ascending: true });
   return data;
 };
 
@@ -93,7 +93,7 @@ export const updateSpotReComment = async (updateReComment: Update<'spotReComment
 
 // 스팟 답댓글 작성자 ID 배열
 export const getReCommentWriterIds = async () => {
-  let { data } = await supabase.from('spotReComments').select('writerId');
+  const { data } = await supabase.from('spotReComments').select('writerId');
   return data;
 };
 

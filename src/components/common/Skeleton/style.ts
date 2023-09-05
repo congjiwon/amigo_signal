@@ -19,3 +19,11 @@ export const Grid = styled.div`
     grid-template-columns: repeat(1, minmax(200px, auto));
   }
 `;
+
+export const PostCard = styled.div`
+  width: 282px;
+  height: 250px;
+  position: relative;
+  border-radius: 30px;
+  box-shadow: 5px 5px 10px 3px rgba(0, 0, 0, 0.2);
+`;
