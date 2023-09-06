@@ -1,7 +1,7 @@
-import * as St from './style';
 import TravelWith from '../../../assets/imgs/partner/TravelWith.jpg';
+import * as St from './style';
 
-function PartnerBanner() {
+function SpotShareBanner() {
   return (
     <St.ImageWrapper>
       <St.MainImage src={TravelWith} alt="mainImage" />
@@ -15,4 +15,4 @@ function PartnerBanner() {
   );
 }
 
-export default PartnerBanner;
+export default SpotShareBanner;

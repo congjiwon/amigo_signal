@@ -96,7 +96,7 @@ const SpotShareList = () => {
   );
 
   return (
-    <>
+    <St.SpotShareLayout>
       <St.filterBox>
         <div>
           <SortDropDown setSort={handleSortChange} />
@@ -119,7 +119,7 @@ const SpotShareList = () => {
           <TopButton />
         </St.MoveButtonArea>
       </St.Grid>
-    </>
+    </St.SpotShareLayout>
   );
 };
 
