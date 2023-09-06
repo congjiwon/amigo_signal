@@ -15,8 +15,6 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
   const storagaUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
   const [flagImg, setFlagImg] = useState<string>('');
 
-  // const { data: confirmedApplicants } = useQuery(['confirmedApplicants', post.id], () => getConfirmedApplicantList(post.id!));
-
   // useEffect(() => {
   //   const getFlagImgHandle = async () => {
   // const { data, error } = await getFlag(post.country);
@@ -38,8 +36,6 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
       endDate.setHours(0, 0, 0, 0);
       if (endDate < currentDate) {
         updatePostStatus(post.id!, false);
-      } else if (endDate >= currentDate) {
-        updatePostStatus(post.id!, true);
       }
     }
   }, [post]);

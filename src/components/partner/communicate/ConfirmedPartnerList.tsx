@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { getConfirmedApplicantList } from '../../../api/supabase/partner';
 import { useConfirmedListStore } from '../../../zustand/communicate';
 import ConfirmedPartnerItem from './ConfirmedPartnerItem';
@@ -10,18 +10,14 @@ type ConfirmedPartnerListProps = {
 const ConfirmedPartnerList = ({ postId }: ConfirmedPartnerListProps) => {
   const { confirmedList, updatedConfirmedList } = useConfirmedListStore();
 
-  useEffect(() => {
-    const fetchConfirmedPartnerList = async () => {
-      if (postId) {
-        const response = await getConfirmedApplicantList(postId!);
-        if (response.data !== null) {
-          updatedConfirmedList(response.data);
-        }
-        console.log('response', response.data);
+  useQuery(['confirmedApplicantList', postId], () => getConfirmedApplicantList(postId!), {
+    enabled: !!postId,
+    onSuccess: (data) => {
+      if (data && data.data) {
+        updatedConfirmedList(data.data);
       }
-    };
-    fetchConfirmedPartnerList();
-  }, [postId, updatedConfirmedList]);
+    },
+  });
 
   return (
     <St.ConfirmedApplicantList $isExist={confirmedList.length !== 0}>
