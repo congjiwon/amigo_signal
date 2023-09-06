@@ -13,12 +13,6 @@ export const Country = styled.p`
   margin-top: 23px;
 `;
 
-export const FilterWriteBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
 //탑버튼
 export const MoveButtonArea = styled.div`
   position: fixed;
@@ -35,15 +29,17 @@ export const ImageWrapper = styled.div`
   width: 100%;
   min-width: 360px;
   max-width: 100%;
-  height: 400px;
+  /* height: 400px; */
   overflow: hidden;
 `;
 
 export const MainImage = styled.img`
-  position: absolute;
+  /* position: absolute; */
   width: 100%;
+  height: 100%;
   /* width: 1920px; */
   transform: translate(0%, -20%);
+  background: #e8ebee;
 `;
 
 export const ImageMainText = styled.span`
@@ -61,6 +57,12 @@ export const ImageSubText = styled.span`
   left: 5%;
   color: black;
   font-size: 0.8rem;
+`;
+
+export const FilterWriteBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 export const Grid = styled.div`
