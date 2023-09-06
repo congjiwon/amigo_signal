@@ -12,7 +12,7 @@ export const getSpotShareDefaultImg = async (country: string) => {
 };
 
 export const getPartnerPosts = async () => {
-  const { data, error } = await supabase.from('partnerPosts').select('*, users!partnerPosts_writerId_fkey(*)', { count: 'exact' }).order('createdAt', { ascending: false }).limit(10);
+  const { data, error } = await supabase.from('partnerPosts').select('*, users!partnerPosts_writerId_fkey(*, country(*))', { count: 'exact' }).order('createdAt', { ascending: false }).limit(10);
   return { data, error };
 };
 
@@ -178,7 +178,7 @@ type MyPartnerPostProps = {
 export const getMyPartnerPosts = async ({ userId, filterIsOpen, page }: MyPartnerPostProps) => {
   const { from, to } = getRangePagination(page, NUMBER_OF_ITEMS);
 
-  let partnerPosts = supabase.from('partnerPosts').select('*', { count: 'exact' }).eq('writerId', userId);
+  let partnerPosts = supabase.from('partnerPosts').select('*, country(country, flagUrl)', { count: 'exact' }).eq('writerId', userId);
 
   if (filterIsOpen === null) {
     partnerPosts = partnerPosts;
@@ -211,7 +211,7 @@ type AppliedPostProps = {
 export const getAppliedPosts = async ({ userId, filterIsAccepted, page }: AppliedPostProps) => {
   const { from, to } = getRangePagination(page, NUMBER_OF_ITEMS);
 
-  let appliedPosts = supabase.from('applicants').select('*, postId(*, writerId(*))', { count: 'exact' }).eq('applicantId', userId);
+  let appliedPosts = supabase.from('applicants').select('*, postId(*, writerId(*), country(country, flagUrl))', { count: 'exact' }).eq('applicantId', userId);
 
   if (filterIsAccepted === null) {
     appliedPosts = appliedPosts.is('isAccepted', null);
@@ -235,7 +235,7 @@ type BookmarkedPostProps = {
 export const getBookmarkedPosts = async ({ userId, page }: BookmarkedPostProps) => {
   const { from, to } = getRangePagination(page, NUMBER_OF_ITEMS);
 
-  const { data, count } = await supabase.from('bookmarks').select('*, postId (*, writerId(*))', { count: 'exact' }).eq('userId', userId).order('postId(startDate)').range(from, to);
+  const { data, count } = await supabase.from('bookmarks').select('*, postId (*, country(country, flagUrl), writerId(*))', { count: 'exact' }).eq('userId', userId).order('postId(startDate)').range(from, to);
 
   return { data, count };
 };

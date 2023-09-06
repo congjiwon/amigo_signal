@@ -1,17 +1,16 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import debounce from 'lodash/debounce';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { supabase } from '../../../api/supabase/supabaseClient';
-import { duplicationCheckFromUserTable, getUser, updateUserNickname, updateUserProfileImgUrl } from '../../../api/supabase/users';
+import { modifyProfileImg } from '../../../api/supabase/storage';
+import { duplicationCheckFromUserTable, updateUserNickname, updateUserProfileImgUrl } from '../../../api/supabase/users';
 import defaultImg from '../../../assets/imgs/users/default_profile_img.png';
 import { BtnStyleType } from '../../../types/styleTypes';
 import useCurrentUserStore from '../../../zustand/currentUser';
-import useSessionStore, { useModalStore } from '../../../zustand/store';
+import useSessionStore from '../../../zustand/store';
 import Button from '../../common/button/Button';
 import { Alert } from '../../common/modal/alert';
 import * as St from './style';
-import { modifyProfileImg } from '../../../api/supabase/storage';
-import debounce from 'lodash/debounce';
 
 export default function ModifyProfile() {
   const queryClient = useQueryClient();
@@ -25,6 +24,11 @@ export default function ModifyProfile() {
   const [nickNameStatus, setNickNameStatus] = useState<boolean>(true);
   const [profileImgUrl, setProfileImgUrl] = useState<string | undefined>(currentUser?.profileImageUrl ? `${storagaUrl}/${currentUser?.profileImageUrl}` : defaultImg);
   const [profileImgFile, setProfileImgFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    setNickName(currentUser?.nickName);
+    setProfileImgUrl(currentUser?.profileImageUrl ? `${storagaUrl}/${currentUser?.profileImageUrl}` : defaultImg);
+  }, [currentUser]);
 
   const mutationNickName = useMutation(updateUserNickname, {
     onSuccess: () => {
