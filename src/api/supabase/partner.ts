@@ -12,7 +12,7 @@ export const getSpotShareDefaultImg = async (country: string) => {
 };
 
 export const getPartnerPost = async ({ postId }: { postId: string }) => {
-  const { data } = await supabase.from('partnerPosts').select('*, country(country)').eq('id', postId).single();
+  const { data } = await supabase.from('partnerPosts').select('*, country(country), users(nickName, profileImageUrl)').eq('id', postId).single();
   return data;
 };
 

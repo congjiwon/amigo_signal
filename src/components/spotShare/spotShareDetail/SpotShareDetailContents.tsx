@@ -10,6 +10,7 @@ import { countLike, countLikes, deleteLike, deleteSpotSharePost, getDetailSpotSh
 import { supabase } from '../../../api/supabase/supabaseClient';
 import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import useSessionStore from '../../../zustand/store';
+import LoadingSpinner from '../../common/loadingSpinner/LoadingSpinner';
 import { ConfirmDelete } from '../../common/modal/alert';
 import * as St from './style';
 
@@ -107,7 +108,7 @@ function SpotShareDetailContents() {
   }, [spotSharePost]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
   if (isError) {
     return <div>Error loading data</div>;

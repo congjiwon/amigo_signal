@@ -18,3 +18,7 @@ export const SpinnerBox = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
 `;
+
+export const LoadingParagraph = styled.p`
+  text-align: center;
+`;
