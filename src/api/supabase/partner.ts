@@ -11,6 +11,32 @@ export const getSpotShareDefaultImg = async (country: string) => {
   return await supabase.from('countryInfo').select('imageUrl').eq('country', country);
 };
 
+// ********************
+type PartnerFilterType = {
+  isOpen?: boolean;
+  country?: string;
+  startDate?: string;
+  endDate?: string;
+};
+export const getPartnerPosts = async ({ isOpen, country, startDate, endDate }: PartnerFilterType) => {
+  let PartnerPosts = supabase.from('partnerPosts').select('*, users(*), country(*)', { count: 'exact' }).order('createdAt', { ascending: false });
+
+  if (isOpen !== undefined) {
+    PartnerPosts = PartnerPosts.eq('isOpen', isOpen);
+  }
+
+  if (country !== undefined) {
+    PartnerPosts = PartnerPosts.eq('country', country);
+  }
+
+  if (startDate !== undefined && endDate !== undefined) {
+    PartnerPosts = PartnerPosts.gte('startDate', startDate).lte('endDate', endDate);
+  }
+
+  const { data, error } = await PartnerPosts;
+  return { data, error };
+};
+
 export const getPartnerPost = async ({ postId }: { postId: string }) => {
   const { data } = await supabase.from('partnerPosts').select('*').eq('id', postId).single();
   return data;
@@ -226,35 +252,6 @@ export const getBookmarkedPosts = async ({ userId, page }: BookmarkedPostProps) 
   const { data, count } = await supabase.from('bookmarks').select('*, postId (*, country(country, flagUrl), writerId(*))', { count: 'exact' }).eq('userId', userId).order('postId(startDate)').range(from, to);
 
   return { data, count };
-};
-
-// 동행 메인 리스트 국가 + 기간별 + 모집여부 필터
-type filteredPostProps = {
-  country?: string;
-  startDate?: string;
-  endDate?: string;
-  isOpen?: boolean;
-};
-
-export const getFilteredPartnerPost = async ({ country, startDate, endDate, isOpen }: filteredPostProps) => {
-  let partnerPosts = supabase.from('partnerPosts').select('*, users(*), country(country, flagUrl)').order('createdAt', { ascending: false });
-  if (isOpen !== undefined) {
-    partnerPosts = partnerPosts.eq('isOpen', isOpen);
-  }
-
-  if (country !== undefined) {
-    partnerPosts = partnerPosts.eq('country', country);
-  }
-
-  if (startDate !== undefined && endDate !== undefined) {
-    partnerPosts = partnerPosts.gte('startDate', startDate).lte('endDate', endDate);
-  }
-
-  const { data, error } = await partnerPosts;
-  if (error) {
-    return null;
-  }
-  return data;
 };
 
 // 모집중 <-> 모집완료 바꾸는 로직

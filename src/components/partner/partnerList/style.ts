@@ -22,12 +22,6 @@ export const Country = styled.p`
   margin-top: 23px;
 `;
 
-export const FilterWriteBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
 //탑버튼
 export const MoveButtonArea = styled.div`
   position: fixed;
@@ -38,6 +32,12 @@ export const WriterInfoBox = styled.div`
   p {
     color: var(--dark-gray, #81858a);
   }
+`;
+
+export const FilterWriteBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 export const Grid = styled.div`
