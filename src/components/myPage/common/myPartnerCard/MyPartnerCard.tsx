@@ -6,7 +6,12 @@ import * as StCommon from '../style/style';
 type PartnerItemProps = {
   partnerPost: {
     content: string;
-    country: string;
+    country: {
+      country: string;
+      countryId: string;
+      flagUrl: string;
+      imageUrl: string;
+    };
     createdAt: string;
     endDate: string;
     id: string;
@@ -71,7 +76,7 @@ export default function MyPartnerCard({ partnerPost, postUserInfo }: PartnerItem
               <div>
                 <img src="" alt={`${partnerPost.country} 국기`} />
               </div>
-              <p>{partnerPost.country}</p>
+              <p>{partnerPost.country.country}</p>
             </StCommon.CountryInfo>
             <StCommon.OpenStatus>{partnerPost.isOpen ? `모집중` : `모집완료`}</StCommon.OpenStatus>
           </StCommon.FlexBetween>

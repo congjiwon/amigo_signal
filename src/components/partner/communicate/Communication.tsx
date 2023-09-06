@@ -58,7 +58,7 @@ const Communication = ({ postId, writerId, logInUserId, isApply, setIsApply }: C
     };
     fetchApplicant();
     setHasApplicants(applicantList && applicantList.length > 0);
-  }, [postId, applicantList]);
+  }, [postId]);
 
   // 해당 포스트가 모집 중인지 여부 설정 -> 모집 완료 시 참여하기/참여취소 버튼 및 동행 신청자 목록 보이지 않도록
   useEffect(() => {

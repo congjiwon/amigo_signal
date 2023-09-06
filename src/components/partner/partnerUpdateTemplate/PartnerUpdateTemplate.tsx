@@ -73,7 +73,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
   useEffect(() => {
     const fetchPostData = async () => {
       if (partnerPost) {
-        setLocation([partnerPost.region, partnerPost.country]);
+        setLocation([partnerPost.region, partnerPost?.country.country!]);
         setPartnerDates([partnerPost.startDate, partnerPost.endDate]);
         setPartner(partnerPost.numOfPeople);
         setTitle(partnerPost.title);
@@ -182,7 +182,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
       <St.WriteForm>
         <St.SelectListBox>
           <St.ExplanationBox>
-            <UpdateLocationDropDown location={[partnerPost?.region!, partnerPost?.country!]} setLocation={setLocation} />
+            <UpdateLocationDropDown location={[partnerPost?.region!, partnerPost?.country.country!]} setLocation={setLocation} />
           </St.ExplanationBox>
           <St.ExplanationBox>
             <UpdatePartnerCalendar startDate={partnerPost?.startDate!} endDate={partnerPost?.endDate!} setPartnerDates={setPartnerDates} />

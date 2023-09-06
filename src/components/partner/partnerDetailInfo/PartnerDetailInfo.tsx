@@ -15,7 +15,7 @@ const PartnerDetailInfo = ({ partnerPostData }: { partnerPostData: Tables<'partn
           <St.BlackParagraph>
             {partnerPostData.region}
             &gt;
-            {partnerPostData.country}
+            {partnerPostData.country.country}
           </St.BlackParagraph>
         </St.DetailInfoBox>
         <St.DetailInfoBox>

@@ -53,23 +53,9 @@ function SpotShareItem({ post, likedPost, countryData }: SpotItemProps) {
   const [likeCount, setLikeCount] = useState(0); // 이 부분을 추가
   let updateLikeCount = post.likeCount;
 
-  // // 국가 디폴트 이미지 넣기
-  // useEffect(() => {
-  //   const getDefaultImgHandler = async () => {
-  //     const { data, error } = await getSpotShareDefaultImg(post.country.country);
-  //     if (error || !data) {
-  //       console.error('디폴트이미지 가져오는 과정에서 에러 발생', error);
-  //     } else {
-  //       setCountryImg(data[0].imageUrl);
-  //     }
-  //   };
-  //   getDefaultImgHandler();
-  // }, []);
-
   // 좋아요
   const LikeCheck = async (logInUserId: string) => {
     const liked = likedPost?.some((like) => like.postId.id === post.id && like.userId === logInUserId);
-    console.log('이게뭐야', liked);
     if (liked) {
       setLike(liked!);
     }
@@ -87,7 +73,6 @@ function SpotShareItem({ post, likedPost, countryData }: SpotItemProps) {
   if (visitDate[2][0] == '0') {
     visitDate[2] = visitDate[2].substring(1);
   }
-  console.log('countryImg', countryImg);
   const contentWithoutTags = post.content.replace(/<\/?[^>]+(>|$)/g, '');
 
   // 좋아요 클릭 시
@@ -107,8 +92,6 @@ function SpotShareItem({ post, likedPost, countryData }: SpotItemProps) {
     await countLike(--post.likeCount, post.id!);
     await queryClient.invalidateQueries(['likes', post.id]);
   };
-
-  console.log('zzz', post.country.imageUrl);
 
   return (
     <Link to={`detail/${post.id}`}>
@@ -131,12 +114,12 @@ function SpotShareItem({ post, likedPost, countryData }: SpotItemProps) {
           )}
         </St.DateLikeBox>
         <St.TitleBox>
-          <h1>{post.title}</h1>
+          <p>{post.title}</p>
         </St.TitleBox>
         <St.ContentBox>
           <p>{contentWithoutTags}</p>
         </St.ContentBox>
-        <St.DefaultImg src={countryData.imageUrl}></St.DefaultImg>
+        <St.DefaultImg src={post.country.imageUrl}></St.DefaultImg>
         <St.Span>{countryData.country}</St.Span>
       </St.PostCard>
     </Link>
