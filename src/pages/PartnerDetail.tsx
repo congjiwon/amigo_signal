@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { checkApply, getConfirmedApplicantList, getPartnerPost, updatePostStatus } from '../api/supabase/partner';
 import LoadingSpinner from '../components/common/loadingSpinner/LoadingSpinner';
 import Communication from '../components/partner/communicate/Communication';
@@ -12,7 +12,6 @@ import useSessionStore from '../zustand/store';
 import * as St from './style';
 
 function PartnerDetail() {
-  const navigate = useNavigate();
   const { postid } = useParams<string>();
   const { session } = useSessionStore();
   const logInUserId = session?.user.id;
@@ -69,7 +68,7 @@ function PartnerDetail() {
   }
 
   if (isError) {
-    navigate('/partner');
+    <div>error data</div>;
   }
 
   return (

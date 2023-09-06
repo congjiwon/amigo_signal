@@ -27,7 +27,6 @@ function SpotShareDetailContents() {
 
   // 디테일 포스트 불러오기
   const { data: spotSharePost, isLoading, isError } = useQuery(['spotSharePost', postid], () => getDetailSpotSharePost(postid));
-  console.log('엥', spotSharePost);
 
   // 좋아요 수 가져오기
   const { data: likeCountData } = useQuery(['likes', postid], () => countLikes(postid!));
