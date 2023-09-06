@@ -3,14 +3,12 @@ import { Pagination, PaginationProps } from 'antd';
 import { useState } from 'react';
 import { getAppliedPosts } from '../../../api/supabase/partner';
 import useMyPageTabPanel from '../../../zustand/myPageTabPanel';
-import useSessionStore from '../../../zustand/store';
 import { NUMBER_OF_ITEMS } from '../../common/getRangePagination/getRangePagination';
 import MyPartnerCard from '../common/myPartnerCard/MyPartnerCard';
 import * as StCommon from '../common/style/style';
 
 export default function AppliedPosts() {
-  const session = useSessionStore((state) => state.session);
-  const userId = session?.user.id;
+  const userId = localStorage.getItem('authId') as string;
   const [filterStatus, setFilterStatus] = useState<boolean | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const isTabActive = useMyPageTabPanel((state) => state.active)[1];

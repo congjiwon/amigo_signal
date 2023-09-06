@@ -10,6 +10,7 @@ import * as St from './style';
 
 type ApplicantCardProps = {
   data: Tables<'applicants'>;
+  postId: string;
   onClick: (id: string) => void;
   isSelected: boolean;
   removeConfirmedApplicant: (id: string) => void;
@@ -17,7 +18,7 @@ type ApplicantCardProps = {
   numOfPeople: number;
 };
 
-const ApplicantCard = ({ data, onClick, isSelected, removeConfirmedApplicant, confirmedLength, numOfPeople }: ApplicantCardProps) => {
+const ApplicantCard = ({ data, postId, onClick, isSelected, removeConfirmedApplicant, confirmedLength, numOfPeople }: ApplicantCardProps) => {
   const { closeModal } = useModalStore();
 
   const [isAccepted, setIsAccepted] = useState<boolean | null>(null);
@@ -27,12 +28,6 @@ const ApplicantCard = ({ data, onClick, isSelected, removeConfirmedApplicant, co
 
   const { setApplicantStatus, setPartnerStatus } = useStateStore();
   const { addConfirmedApplicant } = useConfirmedListStore();
-
-  // const { data: confirmedApplicants } = useQuery(['confirmedApplicants', data.postId], () => getConfirmedApplicantList(data.postId!.id));
-  // const { data: getNumberOfPeople } = useQuery(['numOfPeople', data.postId], () => getNumOfPeople(data.postId.id));
-
-  // const confirmedLength = confirmedApplicants?.data?.length || 0;
-  // const numOfPeople = getNumberOfPeople?.[0]?.numOfPeople || 0;
 
   const handleAccept = async () => {
     setIsAccepted(true);
@@ -48,11 +43,12 @@ const ApplicantCard = ({ data, onClick, isSelected, removeConfirmedApplicant, co
       return;
     }
     try {
-      await updateStatus(applicantId, true);
+      await updateStatus(applicantId, postId, true);
       setApplicantStatus('참여 수락됨');
-      if (numOfPeople <= confirmedLength) {
+      const updatedConfirmedLength = confirmedLength + 1;
+      if (numOfPeople <= updatedConfirmedLength) {
         setPartnerStatus('모집완료');
-        updatePostStatus(data.postId.id, false);
+        updatePostStatus(postId, false);
       }
       addConfirmedApplicant(data);
       removeConfirmedApplicant(applicantId);
@@ -76,7 +72,7 @@ const ApplicantCard = ({ data, onClick, isSelected, removeConfirmedApplicant, co
       return;
     }
     try {
-      await updateStatus(applicantId, false);
+      await updateStatus(applicantId, postId, false);
       setApplicantStatus('참여 거절됨');
       removeConfirmedApplicant(applicantId);
       closeModal('applicantList');

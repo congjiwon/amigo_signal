@@ -153,9 +153,8 @@ export const getApplicantList = async (postId: string) => {
 };
 
 // 신청자 목록 -> 수락 / 거절
-export const updateStatus = async (applicantId: string, isAccepted: boolean) => {
-  const { data, error } = await supabase.from('applicants').update({ isAccepted, isConfirmed: true }).eq('applicantId', applicantId);
-
+export const updateStatus = async (applicantId: string, postId: string, isAccepted: boolean) => {
+  const { data, error } = await supabase.from('applicants').update({ isAccepted, isConfirmed: true }).eq('applicantId', applicantId).eq('postId', postId);
   return { data, error };
 };
 

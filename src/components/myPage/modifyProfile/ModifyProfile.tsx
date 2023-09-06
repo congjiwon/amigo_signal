@@ -4,10 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { modifyProfileImg } from '../../../api/supabase/storage';
 import { duplicationCheckFromUserTable, updateUserNickname, updateUserProfileImgUrl } from '../../../api/supabase/users';
+import iconProfileImgBtn from '../../../assets/imgs/myPage/icon_profile_img_btn.png';
 import defaultImg from '../../../assets/imgs/users/default_profile_img.png';
 import { BtnStyleType } from '../../../types/styleTypes';
 import useCurrentUserStore from '../../../zustand/currentUser';
-import useSessionStore from '../../../zustand/store';
 import Button from '../../common/button/Button';
 import { Alert } from '../../common/modal/alert';
 import * as St from './style';
@@ -15,8 +15,7 @@ import * as St from './style';
 export default function ModifyProfile() {
   const queryClient = useQueryClient();
   const storagaUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
-  const session = useSessionStore((state) => state.session);
-  const userId = session?.user.id;
+  const userId = localStorage.getItem('authId') as string;
   const currentUser = useCurrentUserStore((state) => state.currentUser);
 
   const [nickName, setNickName] = useState<string | undefined>(currentUser?.nickName);
@@ -98,24 +97,27 @@ export default function ModifyProfile() {
     <St.ModifyProfileWrapper>
       <form onSubmit={(e) => handleSubmitUpdateProfile(e)}>
         <St.ModifyProfileBox>
-          <div>
-            <div>
-              <label htmlFor="">닉네임: </label>
-              <input type="text" value={nickName} onChange={handleOnChange} />
-            </div>
-            <St.MofifyNickNameMsg $validationStatus={nickNameStatus}>{nickNameValidationMsg}</St.MofifyNickNameMsg>
-          </div>
-          <div>
-            <St.ProfileImgBox>
-              <img src={profileImgUrl} />
-            </St.ProfileImgBox>
-            <input type="file" name="" id="" onChange={handleFileChange} />
+          <St.ProfileImgBox>
+            <St.PreviewProfileImg src={profileImgUrl} />
+
+            <St.ProfileImgLabel className="btn-profile-label" htmlFor="profileImg">
+              <img src={iconProfileImgBtn} alt="이미지 선택 아이콘" />
+            </St.ProfileImgLabel>
+
+            <input type="file" name="" id="profileImg" onChange={handleFileChange} />
+          </St.ProfileImgBox>
+
+          <div style={{ width: '100%' }}>
+            <St.ProfileNicknameLabelBox>
+              <label htmlFor="">닉네임</label>
+              <St.MofifyNickNameMsg $validationStatus={nickNameStatus}>{nickNameValidationMsg}</St.MofifyNickNameMsg>
+            </St.ProfileNicknameLabelBox>
+            <St.ProfileNicknameInput type="text" value={nickName} onChange={handleOnChange} />
           </div>
         </St.ModifyProfileBox>
         <St.BtnBox>
-          <Button styleType={BtnStyleType.BTN_DARK}>취소</Button>
-          <Button styleType={BtnStyleType.BTN_SUBMIT} type="submit" disabled={!nickNameStatus}>
-            수정
+          <Button styleType={BtnStyleType.BTN_DARK} type="submit" fullWidth={true} disabled={!nickNameStatus}>
+            수정 완료
           </Button>
         </St.BtnBox>
       </form>

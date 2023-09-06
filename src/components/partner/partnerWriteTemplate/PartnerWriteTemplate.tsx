@@ -154,7 +154,7 @@ function PartnerWriteTemplate() {
           onChange={(event) => {
             setContent(event.target.value);
           }}
-          placeholder="1. 현제 동행이 있나요? &#13;&#10;2. 어떤 동행을 찾고 있나요? &#13;&#10;3. 원하는 여행 코스가 있다면 적어주세요  "
+          placeholder="1. 현재 동행이 있나요? &#13;&#10;2. 어떤 동행을 찾고 있나요? &#13;&#10;3. 원하는 여행 코스가 있다면 적어주세요  "
         ></St.TextArea>
         <St.ExplanationBox>
           <p>오픈채팅 주소</p>

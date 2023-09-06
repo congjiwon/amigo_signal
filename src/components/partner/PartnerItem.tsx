@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { updatePostStatus } from '../../api/supabase/partner';
 import { Tables } from '../../api/supabase/supabase';
 import Calender from '../../assets/imgs/partner/Calendar.svg';
 import defaultProfileImage from '../../assets/imgs/users/default_profile_img.png';
@@ -14,6 +16,19 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
 
   const { country } = post;
   const { users } = post;
+
+  // 자동 모집완료 로직 (여행 기간 endDate)
+  useEffect(() => {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    if (post) {
+      const endDate = new Date(post.endDate);
+      endDate.setHours(0, 0, 0, 0);
+      if (endDate < currentDate) {
+        updatePostStatus(post.id!, false);
+      }
+    }
+  }, [post]);
 
   return (
     <Link to={`detail/${post.id}`}>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useMyPageTabPanel from '../../../zustand/myPageTabPanel';
 import Profile from '../profile/Profile';
 import * as St from './style';
@@ -16,12 +16,15 @@ interface TabsProps {
 const MyContentsTabs: React.FC<TabsProps> = ({ tabs }) => {
   const [activeTab, setActiveTab] = useState(0);
   const setMyPageTabPanel = useMyPageTabPanel((state) => state.setActive);
-  const checkActive = useMyPageTabPanel((state) => state.active);
 
   const handleClickTab = (index: number, status: boolean) => {
     setActiveTab(index);
     setMyPageTabPanel(index, status);
   };
+
+  useEffect(() => {
+    setMyPageTabPanel(0, true);
+  }, []);
 
   return (
     <St.MyPageLayout>
@@ -43,7 +46,7 @@ const MyContentsTabs: React.FC<TabsProps> = ({ tabs }) => {
         <Profile />
         <St.MyPageTabs>
           {tabs.map((tab, index) => (
-            <St.MyPageTab key={index} className={index === activeTab ? 'active' : ''} onClick={() => handleClickTab(index, index === activeTab)}>
+            <St.MyPageTab key={index} className={index === activeTab ? 'active' : ''} onClick={() => handleClickTab(index, index === activeTab ? true : false)}>
               <img src={tab.iconUrl} alt={`${tab.label} 메뉴 아이콘`} />
               <span>{tab.label}</span>
             </St.MyPageTab>
