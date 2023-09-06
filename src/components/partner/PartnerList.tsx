@@ -1,8 +1,8 @@
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { getFilteredPartnerPost } from '../../api/supabase/partner';
 import { Tables } from '../../api/supabase/supabase';
-import TravelWith from '../../assets/imgs/partner/TravelWith.jpg';
 import PartnerCalendar from '../common/calendar/PartnerCalendar';
 import { RecruitmentDropDown } from '../common/dropDown/DropDown';
 import LocationDropDown from '../common/dropDown/LocationDropDown';
@@ -22,19 +22,17 @@ const PartnerList = () => {
   const offset = (currentPage - 1) * limit;
   const pageLocation = useLocation();
 
+  const { data: filteredPost, isLoading } = useQuery(['filteredData'], () => getFilteredPartnerPost({ country: location[1], startDate: date[0], endDate: date[1], isOpen }));
+
   // 3중 필터 (나라, 기간, 모집여부)
   useEffect(() => {
-    const getFilteredPost = async () => {
-      const filteredPost = await getFilteredPartnerPost({ country: location[1], startDate: date[0], endDate: date[1], isOpen });
-      if (filteredPost) {
-        setPostStorage(filteredPost);
-      }
-    };
+    if (filteredPost) {
+      setPostStorage(filteredPost);
+    }
     //무한스크롤 옵저버 인식
     if (divRef.current) {
       observer.observe(divRef.current);
     }
-    getFilteredPost();
   }, [location, date, isOpen, pageLocation]);
 
   const defaultOption = {
@@ -57,16 +55,7 @@ const PartnerList = () => {
   );
 
   return (
-    <>
-      <St.ImageWrapper>
-        <St.MainImage src={TravelWith} alt="mainImage" />
-        <St.ImageMainText>친구와 함께라면 더 즐겁지 않을까요?</St.ImageMainText>
-        <St.ImageSubText>
-          Amigo Signal과 함께 여행에 동행할 친구를 찾아보세요.
-          <br />
-          여행이 더 즐거워질 거에요.
-        </St.ImageSubText>
-      </St.ImageWrapper>
+    <St.PartnerListLayout>
       <St.FilterWriteBox>
         <div>
           <RecruitmentDropDown setIsOpen={setIsOpen} />
@@ -75,7 +64,6 @@ const PartnerList = () => {
         </div>
         <button onClick={() => navigate('/partner/write')}>글쓰기</button>
       </St.FilterWriteBox>
-
       <St.Grid>
         {postStorage
           .map((post) => {
@@ -87,7 +75,7 @@ const PartnerList = () => {
           <TopButton />
         </St.MoveButtonArea>
       </St.Grid>
-    </>
+    </St.PartnerListLayout>
   );
 };
 

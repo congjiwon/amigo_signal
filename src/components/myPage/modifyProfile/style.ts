@@ -5,11 +5,8 @@ type ValidationStatusProps = {
 };
 
 export const ModifyProfileWrapper = styled.div`
-  padding: 32px;
-  box-sizing: border-box;
-  border-radius: 30px;
-  background: #fff;
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+  width: 304px;
+  margin: 72px auto;
 `;
 
 export const ModifyProfileBox = styled.div`
@@ -21,25 +18,35 @@ export const ModifyProfileBox = styled.div`
 
 export const ProfileImgBox = styled.div`
   position: relative;
-  width: 150px;
-  height: 150px;
-  flex-shrink: 0;
-  overflow: hidden;
-  border-radius: 50%;
+  width: 120px;
+  height: 120px;
 
-  & img {
-    position: absolute;
-    top: 50%;
-    left: 50%;
+  & #profileImg {
+    display: none;
+  }
+`;
+
+export const PreviewProfileImg = styled.img`
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+`;
+
+export const ProfileImgLabel = styled.label`
+  position: absolute;
+  width: 46px;
+  bottom: -10px;
+  right: -3px;
+
+  cursor: pointer;
+
+  & > img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transform: translate(-50%, -50%);
   }
 `;
 
 export const MofifyNickNameMsg = styled.p<ValidationStatusProps>`
-  margin-top: 8px;
   color: ${(props) => (props.$validationStatus ? 'green' : 'red')};
   font-size: 14px;
 `;
@@ -49,5 +56,30 @@ export const BtnBox = styled.div`
   justify-content: center;
   align-items: center;
   gap: 16px;
-  margin-top: 30px;
+  margin-top: 14px;
+`;
+
+export const ProfileNicknameLabelBox = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+
+  & label {
+    font-size: 14px;
+    font-weight: 400;
+  }
+`;
+
+export const ProfileNicknameInput = styled.input`
+  width: 100%;
+  margin-top: 8px;
+  padding: 16px 20px;
+  border: 1px solid #e8ebee;
+  border-radius: 10px;
+  box-sizing: border-box;
+  font-size: 15px;
+  font-weight: 500;
+  color: #81858a;
 `;
