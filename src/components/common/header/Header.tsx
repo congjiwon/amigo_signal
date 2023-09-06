@@ -57,10 +57,7 @@ export default function Header() {
         <St.Utils>
           {session ? (
             <>
-              <Link to="/mypage">
-                {/* {currentUser?.profileImageUrl && <img style={{ width: '20px', height: '20px' }} src={currentUser.profileImageUrl} />} */}
-                {currentUser?.nickName}&nbsp;님
-              </Link>
+              <Link to="/mypage">{currentUser?.nickName}&nbsp;님</Link>
               <Link to="/login" style={{ marginLeft: '20px' }} onClick={handleSignout}>
                 로그아웃
               </Link>

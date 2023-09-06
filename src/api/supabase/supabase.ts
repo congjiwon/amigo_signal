@@ -11,7 +11,12 @@ export interface Database {
           isConfirmed: boolean;
           postId: {
             content: string;
-            country: string;
+            country: {
+              country: string;
+              countryId: string;
+              flagUrl: string;
+              imageUrl: string;
+            };
             createdAt: string;
             endDate: string;
             id: string;
@@ -68,7 +73,12 @@ export interface Database {
           id: string;
           postId: {
             content: string;
-            country: string;
+            country: {
+              country: string;
+              countryId: string;
+              flagUrl: string;
+              imageUrl: string;
+            };
             createdAt: string;
             endDate: string;
             id: string;
@@ -259,7 +269,12 @@ export interface Database {
       partnerPosts: {
         Row: {
           content: string;
-          country: string;
+          country: {
+            country: string;
+            countryId: string;
+            flagUrl: string;
+            imageUrl: string;
+          };
           createdAt: string;
           endDate: string;
           id: string;

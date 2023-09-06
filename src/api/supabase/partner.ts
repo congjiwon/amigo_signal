@@ -11,11 +11,6 @@ export const getSpotShareDefaultImg = async (country: string) => {
   return await supabase.from('countryInfo').select('imageUrl').eq('country', country);
 };
 
-export const getPartnerPosts = async () => {
-  const { data, error } = await supabase.from('partnerPosts').select('*, users!partnerPosts_writerId_fkey(*, country(*))', { count: 'exact' }).order('createdAt', { ascending: false }).limit(10);
-  return { data, error };
-};
-
 export const getPartnerPost = async ({ postId }: { postId: string }) => {
   const { data } = await supabase.from('partnerPosts').select('*').eq('id', postId).single();
   return data;
@@ -195,12 +190,6 @@ export const getMyPartnerPosts = async ({ userId, filterIsOpen, page }: MyPartne
   return { data, count };
 };
 
-// export const getSpotLikes = async () => {
-//   let data = supabase.from('spotPosts').select('*', { count: 'exact' });
-//   console.log(data);
-// };
-// getSpotLikes();
-
 // 내가 지원한 동행 포스트들
 type AppliedPostProps = {
   userId: string | undefined;
@@ -249,8 +238,7 @@ type filteredPostProps = {
 };
 
 export const getFilteredPartnerPost = async ({ country, startDate, endDate, isOpen }: filteredPostProps) => {
-  let partnerPosts = supabase.from('partnerPosts').select('*, users!partnerPosts_writerId_fkey(*)').order('createdAt', { ascending: false });
-
+  let partnerPosts = supabase.from('partnerPosts').select('*, users(*), country(country, flagUrl)').order('createdAt', { ascending: false });
   if (isOpen !== undefined) {
     partnerPosts = partnerPosts.eq('isOpen', isOpen);
   }

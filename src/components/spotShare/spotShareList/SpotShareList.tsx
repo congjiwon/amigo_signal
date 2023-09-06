@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { getAllSpotSharePost, getFilteredSpotSharePost, getLikes } from '../../../api/supabase/spotshare';
+import { getFilteredSpotSharePost, getLikes } from '../../../api/supabase/spotshare';
 import { Tables } from '../../../api/supabase/supabase';
 import { supabase } from '../../../api/supabase/supabaseClient';
 import useSessionStore from '../../../zustand/store';
@@ -11,8 +11,6 @@ import LocationDropDown from '../../common/dropDown/LocationDropDown';
 import TopButton from '../../common/topbutton/TopButton';
 import SpotShareItem from './SpotShareItem';
 import * as St from './style';
-import SkeletonList from '../../common/Skeleton/SkeletonList';
-import NoResultData from '../../common/noResultData/NoResultData';
 
 const SpotShareList = () => {
   const [postStorage, setPostStorage] = useState<Tables<'spotPosts'>[]>([]);
@@ -27,65 +25,13 @@ const SpotShareList = () => {
   const logInUserId = session?.user.id;
   const queryClient = useQueryClient();
   const pageLocation = useLocation();
-
-  const { data: spotPostData, isLoading: spotIsLoading, isError: spotIsError } = useQuery(['spotSharePost'], getAllSpotSharePost);
-
-  useEffect(() => {
-    if (typeof spotPostData?.data !== null) {
-      setPostStorage(spotPostData?.data!);
-    }
-    if (divRef.current) {
-      observer.observe(divRef.current);
-    }
-  }, [spotPostData, pageLocation]);
-
-  console.log('data', spotPostData);
+  const navigate = useNavigate();
 
   const { data } = useQuery(['likes'], getLikes);
   const likeData = data?.data;
 
-  const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   const fetchPosts = async () => {
-  //     const { data } = await getAllSpotSharePost();
-  //     if (!data) {
-  //       // console.error('스팟공유 게시글 목록을 가져오는 과정에서 에러 발생', error);
-  //       setPostStorage([]);
-  //     } else {
-  //       setPostStorage(data);
-  //     }
-  //   };
-  //   fetchPosts();
-
-  //   // 무한스크롤 옵저버 인식
-  //   if (divRef.current) {
-  //     observer.observe(divRef.current);
-  //   }
-  // }, [pageLocation]);
-
-  const defaultOption = {
-    root: null,
-    threshold: 0.5,
-    rootMargin: '0px',
-  };
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      if (entries[0].isIntersecting) {
-        setTimeout(() => {
-          setCurrentPage((prevPage) => prevPage + 1);
-        }, 500);
-      }
-    },
-    {
-      ...defaultOption,
-    },
-  );
-
-  // 필터링
+  // 처음 데이터 불러오기 + 필터링
   // const { data: spotFilteredPostData, isLoading: spotFilterIsLoading, isError: spotFilterIsError } = useQuery(['spotSharePost'], getFilteredSpotSharePost({ countryName: location[1], startDate: spotDate[0], endDate: spotDate[1] }));
-
   useEffect(() => {
     const getfilteredPost = async () => {
       const filteredPost = await getFilteredSpotSharePost({ country: location[1], startDate: spotDate[0], endDate: spotDate[1] });
@@ -96,8 +42,11 @@ const SpotShareList = () => {
       }
     };
     getfilteredPost();
-    console.log('필터링 안되니');
-  }, [location, spotDate]);
+
+    if (divRef.current) {
+      observer.observe(divRef.current);
+    }
+  }, [location, spotDate, pageLocation]);
 
   const handleSortChange = async (value: string) => {
     setSort(value);
@@ -127,17 +76,27 @@ const SpotShareList = () => {
     }
   };
 
-  if (spotIsLoading) {
-    return <div>Loading...</div>;
-  }
+  const defaultOption = {
+    root: null,
+    threshold: 0.5,
+    rootMargin: '0px',
+  };
 
-  // if (!spotPostData) {
-  //   return <NoResultData />;
-  // }
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting) {
+        setTimeout(() => {
+          setCurrentPage((prevPage) => prevPage + 1);
+        }, 500);
+      }
+    },
+    {
+      ...defaultOption,
+    },
+  );
 
   return (
     <>
-      {/* <NoResultData /> */}
       <St.filterBox>
         <div>
           <SortDropDown setSort={handleSortChange} />
@@ -146,7 +105,6 @@ const SpotShareList = () => {
         </div>
         <button onClick={() => navigate('/spotshare/write')}>글쓰기</button>
       </St.filterBox>
-      {/* <SkeletonList /> */}
       <St.Grid>
         {postStorage
           ?.map((post) => {
@@ -161,20 +119,6 @@ const SpotShareList = () => {
           <TopButton />
         </St.MoveButtonArea>
       </St.Grid>
-      {/* <St.Grid>
-        {postStorage
-          .map((post) => {
-            const likedPost = likeData?.filter((like) => {
-              return like.userId === logInUserId;
-            });
-            return <SpotShareItem key={post.id} post={post} likedPost={likedPost} />;
-          })
-          .slice(0, offset + 10)}
-        <div ref={divRef}></div>
-        <St.MoveButtonArea>
-          <TopButton />
-        </St.MoveButtonArea>
-      </St.Grid> */}
     </>
   );
 };

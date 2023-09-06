@@ -37,7 +37,7 @@ export const PostCard = styled.div`
   height: 282px;
   position: relative;
   border-radius: 30px;
-  box-shadow: 5px 5px 10px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 5px 5px 10px 3px rgba(0, 0, 0, 0.1);
 `;
 
 export const DateLikeBox = styled.div`
@@ -81,7 +81,7 @@ export const TravelDateBox = styled.div`
 export const TitleBox = styled.div`
   width: 200px;
   margin-bottom: 10px;
-  h1 {
+  p {
     padding-left: 20px;
     font-weight: 700;
     white-space: nowrap;
@@ -122,6 +122,6 @@ export const Span = styled.span`
   font-size: 12px;
   background: rgba(255, 255, 255, 0.8);
   position: absolute;
-  bottom: 110px;
+  bottom: 100px;
   left: 20px;
 `;

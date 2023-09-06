@@ -26,6 +26,7 @@ function SpotShareDetailContents() {
 
   // 디테일 포스트 불러오기
   const { data: spotSharePost, isLoading, isError } = useQuery(['spotSharePost', postid], () => getDetailSpotSharePost(postid));
+  console.log('엥', spotSharePost);
 
   // 좋아요 수 가져오기
   const { data: likeCountData } = useQuery(['likes', postid], () => countLikes(postid!));
@@ -131,8 +132,6 @@ function SpotShareDetailContents() {
     await queryClient.invalidateQueries(['likes', postid]);
   };
 
-  console.log('ㅋㅋㅋㅋ', spotSharePost?.country);
-
   return (
     <>
       <St.TitleBox>
@@ -171,7 +170,7 @@ function SpotShareDetailContents() {
           <St.DetailInfoBox>
             <St.GraySpan>나라 </St.GraySpan>
             <St.BlackSpan>
-              {spotSharePost?.region} &gt; {spotSharePost?.countryInfo?.country}
+              {spotSharePost?.region} &gt; {spotSharePost?.country.country}
             </St.BlackSpan>
           </St.DetailInfoBox>
           <St.DetailInfoBox>
