@@ -17,7 +17,6 @@ const MyContentsTabs: React.FC<TabsProps> = ({ tabs }) => {
   const [activeTab, setActiveTab] = useState(0);
   const setMyPageTabPanel = useMyPageTabPanel((state) => state.setActive);
   const checkActive = useMyPageTabPanel((state) => state.active);
-  console.log(checkActive);
 
   const handleClickTab = (index: number, status: boolean) => {
     setActiveTab(index);

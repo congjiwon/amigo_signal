@@ -12,7 +12,7 @@ export const getSpotShareDefaultImg = async (country: string) => {
 };
 
 export const getPartnerPosts = async () => {
-  const { data, error } = await supabase.from('partnerPosts').select('*, users!partnerPosts_writerId_fkey(*)', { count: 'exact' }).order('createdAt', { ascending: false }).limit(10);
+  const { data, error } = await supabase.from('partnerPosts').select('*, users!partnerPosts_writerId_fkey(*, country(*))', { count: 'exact' }).order('createdAt', { ascending: false }).limit(10);
   return { data, error };
 };
 

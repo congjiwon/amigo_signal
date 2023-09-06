@@ -32,7 +32,6 @@ export default function AppliedPosts() {
   const handlePageChange: PaginationProps['onChange'] = (page) => {
     setCurrentPage(page);
   };
-  console.log(appliedPostsData);
 
   return (
     <>

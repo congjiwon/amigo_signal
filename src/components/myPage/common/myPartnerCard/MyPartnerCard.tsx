@@ -6,7 +6,7 @@ import * as StCommon from '../style/style';
 type PartnerItemProps = {
   partnerPost: {
     content: string;
-    country:
+    country?:
       | string
       | {
           country: string;
@@ -69,13 +69,13 @@ export default function MyPartnerCard({ partnerPost, postUserInfo }: PartnerItem
     writerInfo.profileImageUrl = partnerPost.writerId?.profileImageUrl ? `${storagaUrl}/${partnerPost.writerId.profileImageUrl}` : defaultImg;
   }
 
-  const countryInfo: CountryInfoType = {
+  const countryData: CountryInfoType = {
     name: '',
     flagUrl: '',
   };
   if (partnerPost && typeof partnerPost.country === 'object') {
-    countryInfo.name = partnerPost.country.country;
-    countryInfo.flagUrl = partnerPost.country.flagUrl;
+    countryData.name = partnerPost.country.country;
+    countryData.flagUrl = partnerPost.country.flagUrl;
   }
   return (
     <StCommon.MyCard>
@@ -84,9 +84,9 @@ export default function MyPartnerCard({ partnerPost, postUserInfo }: PartnerItem
           <StCommon.FlexBetween className="partner-top">
             <StCommon.CountryInfo>
               <div>
-                <img src={`${countryInfo.flagUrl}`} alt={`${countryInfo.name} 국기`} />
+                <img src={`${countryData.flagUrl}`} alt={`${countryData.name} 국기`} />
               </div>
-              <p>{countryInfo.name}</p>
+              <p>{countryData.name}</p>
             </StCommon.CountryInfo>
             <StCommon.OpenStatus>{partnerPost.isOpen ? `모집중` : `모집완료`}</StCommon.OpenStatus>
           </StCommon.FlexBetween>
