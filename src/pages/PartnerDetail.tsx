@@ -63,7 +63,7 @@ function PartnerDetail() {
   }, [partnerPost, postid, confirmedApplicants, setPartnerStatus]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>loading data</div>;
   }
 
   if (isError) {

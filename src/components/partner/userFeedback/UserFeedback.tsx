@@ -7,6 +7,7 @@ import { styled } from 'styled-components';
 import { deletePartnerPost } from '../../../api/supabase/partner';
 import { supabase } from '../../../api/supabase/supabaseClient';
 import { addBookmark, getUser, removeBookMark } from '../../../api/supabase/users';
+import defaultImg from '../../../assets/imgs/users/default_profile_img.png';
 import useCopyClipBoard from '../../../hooks/useCopyClipBoard';
 import useSessionStore from '../../../zustand/store';
 import { Alert, ConfirmDelete } from '../../common/modal/alert';
@@ -99,7 +100,7 @@ const UserFeedback = ({ id, createdAt, writerId, openChat }: Props) => {
     <St.UserFeedbackBox>
       <St.UserProfileBox>
         <St.UserProfileImgBox>
-          <St.UserProfileImg src={`${storagaUrl}/${profileImageUrl!}`} alt="Image" />
+          <St.UserProfileImg src={profileImageUrl ? `${storagaUrl}/${profileImageUrl}` : defaultImg} alt="Image" />
         </St.UserProfileImgBox>
         <div>
           <St.BlackParagraph>{nickName}</St.BlackParagraph>
