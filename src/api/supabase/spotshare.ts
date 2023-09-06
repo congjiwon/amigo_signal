@@ -10,7 +10,7 @@ type filteredPostProps = {
 };
 
 export const getFilteredSpotSharePost = async ({ country, startDate, endDate }: filteredPostProps) => {
-  let sharePosts = supabase.from('spotPosts').select('*, writerId(*), country(*)').order('createdAt', { ascending: false });
+  let sharePosts = supabase.from('spotPosts').select('*, users(*), country(imageUrl, country)').order('createdAt', { ascending: false });
   if (country !== undefined) {
     sharePosts = sharePosts.eq('country', country);
   }
@@ -111,7 +111,7 @@ export const getSpotShareDefaultImg = async (country: string) => {
 
 //스팟공유 특정 글 가져오기
 export const getDetailSpotSharePost = async (postId: string | undefined) => {
-  const { data } = await supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*),countryInfo!spotPosts_country_fkey(*)').eq('id', postId).single();
+  const { data } = await supabase.from('spotPosts').select('*, users(*), country(country)').eq('id', postId).single();
   return data;
 };
 
@@ -144,7 +144,7 @@ export const deleteLike = async (postId: string, userId: string) => {
 
 // 좋아요 카운트
 export const countLikes = async (postId: string) => {
-  return await supabase.from('likes').select('*', { count: 'exact' }).eq('postId', postId);
+  return await supabase.from('likes').select('postId', { count: 'exact' }).eq('postId', postId);
 };
 
 // 스팟공유 게시글 좋아요 수 업데이트
@@ -167,7 +167,7 @@ type mySpotSharePostsType = {
 export const getMySpotSharePosts = async ({ writerId, page }: mySpotSharePostsType) => {
   const { from, to } = getRangePagination(page, NUMBER_OF_ITEMS);
 
-  const { data, count } = await supabase.from('spotPosts').select('*,country(*)', { count: 'exact' }).eq('writerId', writerId).order('visitDate', { ascending: false }).range(from, to);
+  const { data, count } = await supabase.from('spotPosts').select('*, country(*)', { count: 'exact' }).eq('writerId', writerId).order('visitDate', { ascending: false }).range(from, to);
   return { data, count };
 };
 
@@ -179,7 +179,7 @@ type LikedSpotShareProps = {
 export const getLikedSpotShare = async ({ userId, page }: LikedSpotShareProps) => {
   const { from, to } = getRangePagination(page, NUMBER_OF_ITEMS);
 
-  const { data, count } = await supabase.from('likes').select('*, postId (*,country(*))', { count: 'exact' }).eq('userId', userId).order('postId(visitDate)').range(from, to);
+  const { data, count } = await supabase.from('likes').select('*, postId (*, country(country, imageUrl))', { count: 'exact' }).eq('userId', userId).order('postId(visitDate)').range(from, to);
 
   return { data, count };
 };

@@ -43,6 +43,8 @@ export const ProfileImgBox = styled.div`
 `;
 
 export const ProfileInfo = styled.div`
+  flex-grow: 1;
+
   & p {
     font-size: 14px;
     font-weight: 600;
@@ -53,5 +55,9 @@ export const ProfileInfo = styled.div`
   & p:nth-child(2) {
     margin-top: 4px;
     color: #81858a;
+  }
+
+  & :where(.css-dev-only-do-not-override-byeoj0).ant-skeleton .ant-skeleton-content .ant-skeleton-title + .ant-skeleton-paragraph {
+    margin-block-start: 14px;
   }
 `;

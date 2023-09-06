@@ -25,7 +25,7 @@ function PartnerCalendar({ setPartnerDates }: CalendarProps) {
 
   return (
     <ConfigProvider locale={koKR}>
-      <Space direction="vertical" size={12}>
+      <Space direction="vertical" size={12} style={{ marginLeft: '24px' }}>
         <RangePicker allowClear disabledDate={disabledDate} onChange={getDateHandle} />
       </Space>
     </ConfigProvider>

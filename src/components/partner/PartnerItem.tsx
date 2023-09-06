@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { updatePostStatus } from '../../api/supabase/partner';
 import { Tables } from '../../api/supabase/supabase';
@@ -13,19 +13,9 @@ type PartnerItemProps = {
 
 const PartnerItem = ({ post }: PartnerItemProps) => {
   const storagaUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
-  const [flagImg, setFlagImg] = useState<string>('');
 
-  // useEffect(() => {
-  //   const getFlagImgHandle = async () => {
-  // const { data, error } = await getFlag(post.country);
-  //     if (error || !data) {
-  //       console.error('깃발 가져오는 과정에서 에러 발생', error);
-  //     } else {
-  //       setFlagImg(data[0].flagUrl);
-  //     }
-  //   };
-  //   getFlagImgHandle();
-  // }, []);
+  const { country } = post;
+  const { users } = post;
 
   // 자동 모집완료 로직 (여행 기간 endDate)
   useEffect(() => {
@@ -44,8 +34,8 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
     <Link to={`detail/${post.id}`}>
       <St.PostCard>
         <St.Location>
-          <St.FlagBox>{flagImg && <St.FlagImage src={flagImg} alt="Image" />}</St.FlagBox>
-          <h1>{post.country}</h1>
+          <St.FlagBox>{country.flagUrl && <St.FlagImage src={country.flagUrl} alt="Image" />}</St.FlagBox>
+          <St.Country>{post?.country.country!}</St.Country>
         </St.Location>
         <St.Main>
           <St.TravelDate>
@@ -55,7 +45,7 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
             </p>
           </St.TravelDate>
           <St.TitleBox>
-            <h1>{post.title}</h1>
+            <p>{post.title}</p>
           </St.TitleBox>
         </St.Main>
         <St.Body>
@@ -64,7 +54,7 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
         </St.Body>
         <St.Footer>
           <St.UserProfile>
-            {post.users.profileImageUrl ? <St.ProfileImage src={`${storagaUrl}/${post.users.profileImageUrl}`} alt="profile" /> : <St.ProfileImage src={defaultProfileImage} alt="profile" />}
+            {users.profileImageUrl ? <St.ProfileImage src={`${storagaUrl}/${users.profileImageUrl}`} alt="profile" /> : <St.ProfileImage src={defaultProfileImage} alt="profile" />}
             <p>{post.users?.nickName!}</p>
           </St.UserProfile>
           <St.WriterInfoBox>

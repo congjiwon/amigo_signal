@@ -6,7 +6,12 @@ import * as StCommon from '../style/style';
 type PartnerItemProps = {
   partnerPost: {
     content: string;
-    country: string;
+    country: {
+      country: string;
+      countryId: string;
+      flagUrl: string;
+      imageUrl: string;
+    };
     createdAt: string;
     endDate: string;
     id: string;
@@ -43,6 +48,11 @@ type WriterInfoType = {
   profileImageUrl?: string;
 };
 
+type CountryInfoType = {
+  name: string | null;
+  flagUrl: string | null;
+};
+
 export default function MyPartnerCard({ partnerPost, postUserInfo }: PartnerItemProps) {
   const storagaUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
 
@@ -58,10 +68,15 @@ export default function MyPartnerCard({ partnerPost, postUserInfo }: PartnerItem
     writerInfo.nickName = partnerPost.writerId?.nickName;
     writerInfo.profileImageUrl = partnerPost.writerId?.profileImageUrl ? `${storagaUrl}/${partnerPost.writerId.profileImageUrl}` : defaultImg;
   }
-  // const { data: flagData, isLoading, isError } = useQuery(['flags', partnerPost.id], () => getFlag(partnerPost.country));
 
-  // const flagUrl = flagData?.data?.map((item) => item.flagUrl)[0];
-
+  const countryData: CountryInfoType = {
+    name: '',
+    flagUrl: '',
+  };
+  if (partnerPost && typeof partnerPost.country === 'object') {
+    countryData.name = partnerPost.country.country;
+    countryData.flagUrl = partnerPost.country.flagUrl;
+  }
   return (
     <StCommon.MyCard>
       <Link to={`/partner/detail/${partnerPost.id}`}>
@@ -69,9 +84,9 @@ export default function MyPartnerCard({ partnerPost, postUserInfo }: PartnerItem
           <StCommon.FlexBetween className="partner-top">
             <StCommon.CountryInfo>
               <div>
-                <img src="" alt={`${partnerPost.country} 국기`} />
+                <img src={`${countryData.flagUrl}`} alt={`${countryData.name} 국기`} />
               </div>
-              <p>{partnerPost.country}</p>
+              <p>{partnerPost.country.country}</p>
             </StCommon.CountryInfo>
             <StCommon.OpenStatus>{partnerPost.isOpen ? `모집중` : `모집완료`}</StCommon.OpenStatus>
           </StCommon.FlexBetween>

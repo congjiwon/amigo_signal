@@ -45,7 +45,7 @@ export const duplicationCheckFromUserTable = async ({ columnName, value }: dupli
 
 type userNickNameProps = {
   nickName: string | undefined;
-  userId: string | undefined;
+  userId?: string | null;
 };
 
 export const updateUserNickname = async ({ nickName, userId }: userNickNameProps) => {

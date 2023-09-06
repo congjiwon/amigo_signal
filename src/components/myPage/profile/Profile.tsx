@@ -1,17 +1,14 @@
-import { useModalStore } from '../../../zustand/store';
-import ModifyProfile from '../modifyProfile/ModifyProfile';
-import Modal from '../../common/modal/Modal';
-import classifyingAge from '../../common/classifyingAge/classifyingAge';
+import { Skeleton } from 'antd';
 import defaultImg from '../../../assets/imgs/users/default_profile_img.png';
-import * as St from './style';
 import useCurrentUserStore from '../../../zustand/currentUser';
+import classifyingAge from '../../common/classifyingAge/classifyingAge';
+import * as St from './style';
 
 export default function Profile() {
-  const { openedModals, openModal } = useModalStore();
   const storagaUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
   const currentUser = useCurrentUserStore((state) => state.currentUser);
 
-  const ageRange = classifyingAge(currentUser?.birthday as string);
+  const ageRange = currentUser?.birthday && classifyingAge(currentUser?.birthday as string);
   return (
     <St.ProfileWrapper>
       <St.ProfileBox>
@@ -19,10 +16,19 @@ export default function Profile() {
           <img src={currentUser?.profileImageUrl ? `${storagaUrl}/${currentUser?.profileImageUrl}` : defaultImg} />
         </St.ProfileImgBox>
         <St.ProfileInfo>
-          <p>{currentUser?.nickName}</p>
-          <p>
-            {ageRange} | {currentUser?.gender}
-          </p>
+          {currentUser?.birthday === undefined && (
+            <div className="skeleton-box">
+              <Skeleton paragraph={{ rows: 1 }} active />
+            </div>
+          )}
+          {currentUser?.birthday !== undefined && (
+            <>
+              <p>{currentUser ? currentUser?.nickName : <Skeleton />}</p>{' '}
+              <p>
+                {ageRange} | {currentUser?.gender}
+              </p>
+            </>
+          )}
         </St.ProfileInfo>
       </St.ProfileBox>
     </St.ProfileWrapper>
