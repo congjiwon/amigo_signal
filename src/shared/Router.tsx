@@ -18,13 +18,13 @@ const Router: React.FC = () => {
         <Route path="/" element={<Intro />} />
         <Route path="/login" element={<LogIn />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/partner" element={<Partner />} />
+        <Route path="/spotshare" element={<SpotShare />} />
         <Route element={<Layout />}>
           <Route path="/mypage" element={<MyPage />} />
-          <Route path="/partner" element={<Partner />} />
           <Route path="/partner/detail/:postid" element={<PartnerDetail />} />
           <Route path="/partner/write" element={<PartnerWrite />} />
           <Route path="/partner/write/:postid" element={<PartnerWrite />} />
-          <Route path="/spotshare" element={<SpotShare />} />
           <Route path="/spotshare/detail/:postid" element={<SpotShareDetail />} />
           <Route path="/spotshare/write" element={<SpotShareWrite />} />
           <Route path="/spotshare/write/:postid" element={<SpotShareWrite />} />
@@ -33,5 +33,4 @@ const Router: React.FC = () => {
     </BrowserRouter>
   );
 };
-
 export default Router;

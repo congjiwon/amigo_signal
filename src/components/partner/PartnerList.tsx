@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import PartnerBanner from './partnerList/PartnerBanner';
+import * as St from '../partner/partnerList/style';
 import PartnerItems from './partnerList/PartnerItems';
 import PartnerSelect from './partnerList/PartnerSelect';
 
@@ -53,9 +53,10 @@ const PartnerList = () => {
 
   return (
     <>
-      <PartnerBanner />
-      <PartnerSelect setIsOpen={setIsOpen} setLocation={setLocation} setDate={setDate} />
-      <PartnerItems isOpen={isOpen} country={country} startDate={startDate} endDate={endDate} />
+      <St.PartnerListLayout>
+        <PartnerSelect setIsOpen={setIsOpen} setLocation={setLocation} setDate={setDate} />
+        <PartnerItems isOpen={isOpen} country={country} startDate={startDate} endDate={endDate} />
+      </St.PartnerListLayout>
     </>
   );
 };
