@@ -99,11 +99,17 @@ export default function MyPartnerCard({ partnerPost, postUserInfo }: PartnerItem
 
           <StCommon.FlexBetween>
             <StCommon.InterestList>
-              {partnerPost.interestUrl.map((url, i) => (
-                <li key={i}>
-                  <img src={url} />
-                </li>
-              ))}
+              {partnerPost.interestUrl.map((url, i) => {
+                if (!!url) {
+                  return (
+                    <li key={i}>
+                      <img src={url} />
+                    </li>
+                  );
+                } else {
+                  return <li key={i} style={{ background: '#81858a' }}></li>;
+                }
+              })}
             </StCommon.InterestList>
             <StCommon.numOfPeople>
               모집인원 <span>{partnerPost.numOfPeople}</span>

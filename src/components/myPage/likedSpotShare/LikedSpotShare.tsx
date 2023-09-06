@@ -1,16 +1,14 @@
-import { useState } from 'react';
-import useSessionStore from '../../../zustand/store';
-import useMyPageTabPanel from '../../../zustand/myPageTabPanel';
 import { useQuery } from '@tanstack/react-query';
-import { getLikedSpotShare } from '../../../api/supabase/spotshare';
 import { Pagination, PaginationProps } from 'antd';
-import * as StCommon from '../common/style/style';
+import { useState } from 'react';
+import { getLikedSpotShare } from '../../../api/supabase/spotshare';
+import useMyPageTabPanel from '../../../zustand/myPageTabPanel';
 import { NUMBER_OF_ITEMS } from '../../common/getRangePagination/getRangePagination';
 import MySpotShareCard from '../common/mySpotShareCard/MySpotShareCard';
+import * as StCommon from '../common/style/style';
 
 export default function LikedSpotShare() {
-  const session = useSessionStore((state) => state.session);
-  const userId = session?.user.id;
+  const userId = localStorage.getItem('authId') as string;
   const [currentPage, setCurrentPage] = useState(1);
   const isTabActive = useMyPageTabPanel((state) => state.active)[4];
 
