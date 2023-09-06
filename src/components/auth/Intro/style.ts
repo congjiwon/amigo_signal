@@ -71,15 +71,27 @@ export const LinkIcon = styled.div`
   margin-bottom: 18px;
   background-color: rgba(0, 0, 0, 0.4);
   cursor: pointer;
+
+  &:hover {
+    transform: scale(1.2);
+    transition: transform 0.3s ease;
+  }
+  &:not(:hover) {
+    transition: 0.3s ease-out;
+  }
 `;
 
 export const LinkContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   gap: 80px;
   width: 250px;
   height: 120px;
+  @media (max-width: 850px) {
+    justify-content: center;
+    gap: 35px;
+  }
 `;
 
 export const LinkBox = styled.button`

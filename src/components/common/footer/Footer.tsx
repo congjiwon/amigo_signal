@@ -1,11 +1,13 @@
 import * as St from './style';
-
+import logo from '../../../assets/imgs/Logo/logo.png';
 const Footer = () => {
   return (
     <St.FooterLayout>
       <St.FooterContainer>
         <div>
-          <St.FootLogo>로고</St.FootLogo>
+          <St.FootLogo>
+            <img src={logo} style={{ width: '40px' }} />
+          </St.FootLogo>
         </div>
         <St.FootTitle>Amigo Signal</St.FootTitle>
         <St.FootText>내일배움캠프 React 6 </St.FootText>

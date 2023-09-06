@@ -19,9 +19,7 @@ export const FooterContainer = styled.div`
 export const FootLogo = styled.div`
   width: 100px;
   height: 40px;
-  margin: 40px 0 36px 0;
-
-  background-color: grey;
+  margin: 40px 0 20px 0;
 `;
 
 export const FootTitle = styled.h5`
