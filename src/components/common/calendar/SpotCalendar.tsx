@@ -1,8 +1,8 @@
 import type { DatePickerProps } from 'antd';
-import type { RangePickerProps } from 'antd/es/date-picker';
 import { ConfigProvider, DatePicker, Space } from 'antd';
-import dayjs from 'dayjs';
+import type { RangePickerProps } from 'antd/es/date-picker';
 import koKR from 'antd/es/locale/ko_KR';
+import dayjs from 'dayjs';
 
 interface CalendarProps {
   setSpotDate: React.Dispatch<React.SetStateAction<string>>;
@@ -51,7 +51,7 @@ export function FilterSpotCalendar({ setSpotDate }: FilterCalendarProps) {
 
   return (
     <ConfigProvider locale={koKR}>
-      <Space direction="vertical" size={12}>
+      <Space direction="vertical" size={12} style={{ marginLeft: '24px' }}>
         <RangePicker allowClear disabledDate={disabledDate} onChange={getDateHandle} />
       </Space>
     </ConfigProvider>

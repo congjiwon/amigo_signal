@@ -149,7 +149,7 @@ export function SortDropDown({ setSort }: SortProps) {
   };
   return (
     <Space wrap>
-      <Select defaultValue="최신순" allowClear style={{ width: 140 }} onChange={handleChange} options={[{ value: '최신순' }, { value: '인기순' }]} />
+      <Select defaultValue="최신순" allowClear style={{ width: '90px', marginRight: '24px' }} onChange={handleChange} options={[{ value: '최신순' }, { value: '인기순' }]} />
     </Space>
   );
 }
@@ -162,7 +162,7 @@ export function RecruitmentDropDown({ setIsOpen }: RecruitmentProps) {
     <Space wrap>
       <Select
         placeholder="모집중"
-        style={{ width: '140px' }}
+        style={{ width: '90px', marginRight: '24px' }}
         onChange={handleChange}
         allowClear
         options={[

@@ -4,6 +4,15 @@ type StatusProps = {
   $isOpen: boolean;
 };
 
+export const Country = styled.p`
+  color: var(--black, #000);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%; /* 21px */
+  margin-top: 23px;
+`;
+
 export const FilterWriteBox = styled.div`
   display: flex;
   flex-direction: row;
@@ -79,7 +88,7 @@ export const PostCard = styled.div`
   height: 282px;
   position: relative;
   border-radius: 30px;
-  box-shadow: 5px 5px 10px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 5px 5px 10px 3px rgba(0, 0, 0, 0.1);
 `;
 
 export const Location = styled.div`
@@ -132,7 +141,7 @@ export const TravelDate = styled.div`
 export const TitleBox = styled.div`
   width: 200px;
   margin-bottom: 10px;
-  h1 {
+  p {
     font-weight: 600;
     font-size: 16px;
     white-space: nowrap;

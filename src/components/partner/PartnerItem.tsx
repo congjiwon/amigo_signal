@@ -1,6 +1,4 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { updatePostStatus } from '../../api/supabase/partner';
 import { Tables } from '../../api/supabase/supabase';
 import Calender from '../../assets/imgs/partner/Calendar.svg';
 import defaultProfileImage from '../../assets/imgs/users/default_profile_img.png';
@@ -13,43 +11,16 @@ type PartnerItemProps = {
 
 const PartnerItem = ({ post }: PartnerItemProps) => {
   const storagaUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
-  const [flagImg, setFlagImg] = useState<string>('');
 
-  // const { data: confirmedApplicants } = useQuery(['confirmedApplicants', post.id], () => getConfirmedApplicantList(post.id!));
-
-  // useEffect(() => {
-  //   const getFlagImgHandle = async () => {
-  // const { data, error } = await getFlag(post.country);
-  //     if (error || !data) {
-  //       console.error('깃발 가져오는 과정에서 에러 발생', error);
-  //     } else {
-  //       setFlagImg(data[0].flagUrl);
-  //     }
-  //   };
-  //   getFlagImgHandle();
-  // }, []);
-
-  // 자동 모집완료 로직 (여행 기간 endDate)
-  useEffect(() => {
-    const currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0);
-    if (post) {
-      const endDate = new Date(post.endDate);
-      endDate.setHours(0, 0, 0, 0);
-      if (endDate < currentDate) {
-        updatePostStatus(post.id!, false);
-      } else if (endDate >= currentDate) {
-        updatePostStatus(post.id!, true);
-      }
-    }
-  }, [post]);
+  const { country } = post;
+  const { users } = post;
 
   return (
     <Link to={`detail/${post.id}`}>
       <St.PostCard>
         <St.Location>
-          <St.FlagBox>{flagImg && <St.FlagImage src={flagImg} alt="Image" />}</St.FlagBox>
-          <h1>{post.country}</h1>
+          <St.FlagBox>{country.flagUrl && <St.FlagImage src={country.flagUrl} alt="Image" />}</St.FlagBox>
+          <St.Country>{post?.country.country!}</St.Country>
         </St.Location>
         <St.Main>
           <St.TravelDate>
@@ -59,7 +30,7 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
             </p>
           </St.TravelDate>
           <St.TitleBox>
-            <h1>{post.title}</h1>
+            <p>{post.title}</p>
           </St.TitleBox>
         </St.Main>
         <St.Body>
@@ -68,7 +39,7 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
         </St.Body>
         <St.Footer>
           <St.UserProfile>
-            {post.users.profileImageUrl ? <St.ProfileImage src={`${storagaUrl}/${post.users.profileImageUrl}`} alt="profile" /> : <St.ProfileImage src={defaultProfileImage} alt="profile" />}
+            {users.profileImageUrl ? <St.ProfileImage src={`${storagaUrl}/${users.profileImageUrl}`} alt="profile" /> : <St.ProfileImage src={defaultProfileImage} alt="profile" />}
             <p>{post.users?.nickName!}</p>
           </St.UserProfile>
           <St.WriterInfoBox>
