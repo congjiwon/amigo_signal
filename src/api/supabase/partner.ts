@@ -11,14 +11,15 @@ export const getSpotShareDefaultImg = async (country: string) => {
   return await supabase.from('countryInfo').select('imageUrl').eq('country', country);
 };
 
-// ********************
+// 동행 목록: 3중 필터 (모집 여부 + 국가 + 여행 기간)
 type PartnerFilterType = {
   isOpen?: boolean;
   country?: string;
   startDate?: string;
   endDate?: string;
 };
-export const getPartnerPosts = async ({ isOpen, country, startDate, endDate }: PartnerFilterType) => {
+
+export const getPartnerPosts = async ({ isOpen, country, startDate, endDate, page = 0, limit = 8 }: PartnerFilterType & { page?: number; limit?: number }) => {
   let PartnerPosts = supabase.from('partnerPosts').select('*, users(*), country(*)', { count: 'exact' }).order('createdAt', { ascending: false });
 
   if (isOpen !== undefined) {
@@ -33,8 +34,8 @@ export const getPartnerPosts = async ({ isOpen, country, startDate, endDate }: P
     PartnerPosts = PartnerPosts.gte('startDate', startDate).lte('endDate', endDate);
   }
 
-  const { data, error } = await PartnerPosts;
-  return { data, error };
+  const { data, error, count } = await PartnerPosts.range(page * limit, (page + 1) * limit - 1);
+  return { data, error, count, page };
 };
 
 export const getPartnerPost = async ({ postId }: { postId: string }) => {
