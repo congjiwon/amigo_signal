@@ -28,7 +28,6 @@ export const PostStatus = styled.span<StatusProps>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 2.8rem;
   padding: 5px;
   background-color: ${(props) => (props.$partnerStatus === '모집중' ? '#FF7000' : '#994504')};
   border-radius: 30px;
