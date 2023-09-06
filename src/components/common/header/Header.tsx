@@ -41,31 +41,44 @@ export default function Header() {
     <St.HeaderLayout>
       <St.Header>
         <St.H1>
-          <Link to="/">Amigo Signal</Link>
+          <Link to="/">
+            <St.Span>Amigo Signal</St.Span>
+          </Link>
         </St.H1>
         <St.Gnb>
           <ul>
             <li>
-              <Link to="/partner">동행 찾기</Link>
+              <Link to="/partner">
+                <St.Span>동행 찾기</St.Span>
+              </Link>
             </li>
             <li>
-              <Link to="/spotshare">스팟 공유</Link>
+              <Link to="/spotshare">
+                <St.Span>스팟 공유</St.Span>
+              </Link>
             </li>
           </ul>
         </St.Gnb>
         <St.Utils>
           {session ? (
             <>
-              <Link to="/mypage">{currentUser?.nickName}&nbsp;님</Link>
+              <Link to="/mypage">
+                <St.Span>
+                  {currentUser?.nickName}
+                  &nbsp;님
+                </St.Span>
+              </Link>
               <Link to="/login" style={{ marginLeft: '20px' }} onClick={handleSignout}>
-                로그아웃
+                <St.Span>로그아웃</St.Span>
               </Link>
             </>
           ) : (
             <>
-              <Link to="/login">로그인</Link>
+              <Link to="/login">
+                <St.Span>로그인</St.Span>
+              </Link>
               <Link to="/signup" style={{ marginLeft: '20px' }}>
-                회원가입
+                <St.Span>회원가입</St.Span>
               </Link>
             </>
           )}

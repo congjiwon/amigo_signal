@@ -6,6 +6,20 @@ export const HeaderLayout = styled.div`
   width: 100%;
 `;
 
+export const Span = styled.span`
+  color: var(--black, #000);
+  text-align: center;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  text-transform: uppercase;
+  @media (max-width: 600px) {
+    justify-content: space-around;
+    font-size: 13px;
+    font-weight: 400;
+  }
+`;
 export const Header = styled.header`
   display: flex;
   justify-content: space-between;
@@ -22,6 +36,9 @@ export const Header = styled.header`
     &:hover {
       text-decoration: underline;
     }
+  }
+  @media (max-width: 1200px) {
+    justify-content: space-around;
   }
 `;
 

@@ -1,19 +1,20 @@
 import { styled } from 'styled-components';
 
-export const FooterLayout = styled.footer`
-  /* padding: 20px 0; */
+export const Layout = styled.div`
   border-top: 1px solid #efefef;
-  height: 266px;
-  /* margin-top: 120px; */
 `;
-
 export const FooterContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 266px;
+
   min-width: 360px;
   max-width: 1200px;
   margin: 0 auto;
+  @media (max-width: 1200px) {
+    margin-left: 100px;
+  }
 `;
 
 export const FootLogo = styled.div`
