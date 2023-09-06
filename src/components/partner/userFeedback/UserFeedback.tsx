@@ -11,7 +11,7 @@ import { addBookmark, removeBookMark } from '../../../api/supabase/users';
 import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import useCopyClipBoard from '../../../hooks/useCopyClipBoard';
 import useSessionStore from '../../../zustand/store';
-import { Alert, ConfirmDelete } from '../../common/modal/alert';
+import { Alert, AlertError, ConfirmDelete } from '../../common/modal/alert';
 import * as St from './style';
 
 interface Props {
@@ -72,6 +72,12 @@ const UserFeedback = ({ partnerPostData }: Props) => {
     onSuccess: async () => {
       await queryClient.invalidateQueries(['partnerPost']);
     },
+    onError: () => {
+      AlertError({ title: '삭제오류' });
+    },
+    onSettled: () => {
+      navigate('/partner');
+    },
   });
 
   const isPostUser = () => logInUserId === writerId;
@@ -82,10 +88,7 @@ const UserFeedback = ({ partnerPostData }: Props) => {
     if (!isConfirmed) {
       return;
     }
-    try {
-      await mutation.mutate({ postId: id });
-      navigate('/partner');
-    } catch (error) {}
+    mutation.mutate({ postId: id });
   };
 
   return (

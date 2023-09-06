@@ -11,7 +11,7 @@ import { supabase } from '../../../api/supabase/supabaseClient';
 import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import useSessionStore from '../../../zustand/store';
 import LoadingSpinner from '../../common/loadingSpinner/LoadingSpinner';
-import { ConfirmDelete } from '../../common/modal/alert';
+import { AlertError, ConfirmDelete } from '../../common/modal/alert';
 import * as St from './style';
 
 function SpotShareDetailContents() {
@@ -64,6 +64,11 @@ function SpotShareDetailContents() {
   const mutation = useMutation(deleteSpotSharePost, {
     onSuccess: async () => {
       await queryClient.invalidateQueries(['spotSharePost']);
+    },
+    onError: () => {
+      AlertError({ title: '삭제오류' });
+    },
+    onSettled: () => {
       navigate('/spotshare');
     },
   });
