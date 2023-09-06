@@ -73,6 +73,7 @@ export const CountryInfo = styled.div`
     height: 40px;
     border-radius: 50%;
     overflow: hidden;
+    background-color: #e8ebee;
 
     & img {
       position: absolute;

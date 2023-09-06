@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { getFilteredPartnerPost } from '../../api/supabase/partner';
@@ -22,19 +23,17 @@ const PartnerList = () => {
   const offset = (currentPage - 1) * limit;
   const pageLocation = useLocation();
 
+  const { data: filteredPost, isLoading } = useQuery(['filteredData'], () => getFilteredPartnerPost({ country: location[1], startDate: date[0], endDate: date[1], isOpen }));
+
   // 3중 필터 (나라, 기간, 모집여부)
   useEffect(() => {
-    const getFilteredPost = async () => {
-      const filteredPost = await getFilteredPartnerPost({ country: location[1], startDate: date[0], endDate: date[1], isOpen });
-      if (filteredPost) {
-        setPostStorage(filteredPost);
-      }
-    };
+    if (filteredPost) {
+      setPostStorage(filteredPost);
+    }
     //무한스크롤 옵저버 인식
     if (divRef.current) {
       observer.observe(divRef.current);
     }
-    getFilteredPost();
   }, [location, date, isOpen, pageLocation]);
 
   const defaultOption = {
