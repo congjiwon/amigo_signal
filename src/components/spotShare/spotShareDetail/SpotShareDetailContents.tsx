@@ -10,6 +10,7 @@ import { countLike, countLikes, deleteLike, deleteSpotSharePost, getDetailSpotSh
 import { supabase } from '../../../api/supabase/supabaseClient';
 import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import useSessionStore from '../../../zustand/store';
+import LoadingSpinner from '../../common/loadingSpinner/LoadingSpinner';
 import { ConfirmDelete } from '../../common/modal/alert';
 import * as St from './style';
 
@@ -26,7 +27,6 @@ function SpotShareDetailContents() {
 
   // 디테일 포스트 불러오기
   const { data: spotSharePost, isLoading, isError } = useQuery(['spotSharePost', postid], () => getDetailSpotSharePost(postid));
-  console.log('엥', spotSharePost);
 
   // 좋아요 수 가져오기
   const { data: likeCountData } = useQuery(['likes', postid], () => countLikes(postid!));
@@ -107,7 +107,7 @@ function SpotShareDetailContents() {
   }, [spotSharePost]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
   if (isError) {
     return <div>Error loading data</div>;
