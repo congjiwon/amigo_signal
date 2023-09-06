@@ -40,7 +40,7 @@ type PartnerReCommentsProps = {
   setUpdateReComment: React.Dispatch<React.SetStateAction<string>>;
   handleCancelBtn: (name: string) => void;
   handleIsOpenBtn: (name: string, commentId: string, reCommentId: string | null) => void;
-  handleReSubmitBtn: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
+  handleReSubmitBtn: (event: React.FormEvent<HTMLFormElement>) => void;
   setIsUpdateReComment: React.Dispatch<React.SetStateAction<boolean>>;
 };
 

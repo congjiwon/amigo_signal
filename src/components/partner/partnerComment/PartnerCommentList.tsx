@@ -1,11 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { useParams } from 'react-router';
 import { getPartnerPost, getReCommentData } from '../../../api/supabase/partner';
-import { getAuthId, getUsers } from '../../../api/supabase/users';
 import DefaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import { BtnStyleType } from '../../../types/styleTypes';
-import useCurrentUserStore from '../../../zustand/currentUser';
 import useSessionStore from '../../../zustand/store';
 import { CommentButton } from '../../common/button/Button';
 import { ConfirmDelete } from '../../common/modal/alert';
@@ -13,6 +10,15 @@ import TopButton from '../../common/topbutton/TopButton';
 import PartnerReComments from './PartnerReComments';
 import * as St from './style';
 import { usePartnerComments } from './usePartnerComment';
+
+type UsersProps =
+  | {
+      id: string;
+      nickName: string;
+      profileImageUrl: string | null;
+    }[]
+  | null
+  | undefined;
 
 type allCommentsProps =
   | {
@@ -34,14 +40,14 @@ type CommentProps = {
 };
 
 export type PartnerCommentListProps = {
+  users: UsersProps;
   allComments: allCommentsProps;
   comment: CommentProps | undefined;
   isLoginUser: boolean;
 };
 
-function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommentListProps) {
+function PartnerCommentList({ allComments, comment, isLoginUser, users }: PartnerCommentListProps) {
   const storageUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
-  const { postid } = useParams<string>();
   const session = useSessionStore((state) => state.session);
   const logInUserId = session?.user.id;
   const [isUpdate, setIsUpdate] = useState('');
@@ -52,23 +58,13 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
   const [updateReComment, setUpdateReComment] = useState('');
   const [reCommentId, setReCommentId] = useState('');
 
-  // 유저 ID, 닉네임, 프로필사진 배열
-  const { data: users } = useQuery(['userData'], getUsers);
-
   const { updateCommentMutation, deleteCommentMutation, postReCommentMutation, updateReCommentMutation } = usePartnerComments();
-
-  const currentUser = useCurrentUserStore((state) => state.currentUser);
-
-  const { isLoading, data: authId } = useQuery(['auth'], getAuthId);
-  const { data: partnerPost } = useQuery(['partnerPost', postid], () => getPartnerPost({ postId: postid as string }));
+  // const { data: users } = useQuery(['userData'], getUsers);
+  const { data: partnerPost } = useQuery(['partnerPost', comment?.postId], () => getPartnerPost({ postId: comment?.postId! }));
   // 게시글 작성자 찾기
   const postWriterId = partnerPost?.writerId;
 
   const { data: allReCommentsData } = useQuery(['partnerReComments'], getReCommentData);
-  // 답댓글 작성한 모든 유저 정보
-  const reCommentUsers = allReCommentsData?.map((user) => {
-    return user.users;
-  });
 
   // 지원님 시간 가져옴.
   const currentTime = function () {
@@ -84,7 +80,7 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
   };
 
   // 댓글 수정 submit
-  const handleSubmitBtn = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitBtn = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const newComment = {
@@ -94,19 +90,19 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
       id: comment?.id,
     };
 
-    await updateCommentMutation.mutateAsync(newComment);
+    updateCommentMutation.mutate(newComment);
 
     setUpdateComment('');
     setIsUpdate('');
   };
 
   // 답댓글 수정 submit
-  const handleReSubmitBtn = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleReSubmitBtn = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const newReComment = {
       reContent: updateReComment,
-      writerId: authId,
+      writerId: logInUserId,
       commentId: comment?.id,
       id: reCommentId,
     };
@@ -125,11 +121,11 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
     const reComment = {
       reContent: reContent,
       date: currentTime(),
-      writerId: authId,
+      writerId: logInUserId,
       commentId: comment!.id,
     };
 
-    postReCommentMutation.mutateAsync(reComment);
+    postReCommentMutation.mutate(reComment);
 
     setReContent('');
     setIsReComment('');
@@ -140,7 +136,7 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
     const isConfirmed = await ConfirmDelete('');
 
     if (isConfirmed) {
-      await deleteCommentMutation.mutateAsync(id);
+      deleteCommentMutation.mutate(id);
     }
   };
 
@@ -286,7 +282,7 @@ function PartnerCommentList({ allComments, comment, isLoginUser }: PartnerCommen
           {allReCommentsData?.map((reComment) => {
             if (reComment.commentId === comment?.id) {
               const isPostWriter = reComment.writerId === postWriterId; // 작성자 태그 띄울 때 씀.
-              const isLoginCommentUser = authId === reComment.writerId; // 로그인한 댓글작성자
+              const isLoginCommentUser = logInUserId === reComment.writerId; // 로그인한 댓글작성자
               return (
                 <PartnerReComments
                   key={reComment.id}
