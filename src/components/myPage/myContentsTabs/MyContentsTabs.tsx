@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import * as St from './style';
-import Profile from '../profile/Profile';
 import useMyPageTabPanel from '../../../zustand/myPageTabPanel';
+import Profile from '../profile/Profile';
+import * as St from './style';
 
 interface Tab {
   label: string;
@@ -16,6 +16,7 @@ interface TabsProps {
 const MyContentsTabs: React.FC<TabsProps> = ({ tabs }) => {
   const [activeTab, setActiveTab] = useState(0);
   const setMyPageTabPanel = useMyPageTabPanel((state) => state.setActive);
+  const checkActive = useMyPageTabPanel((state) => state.active);
 
   const handleClickTab = (index: number, status: boolean) => {
     setActiveTab(index);
