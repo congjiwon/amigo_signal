@@ -8,4 +8,5 @@ export const LayoutContainer = styled.div`
   min-width: 360px;
   max-width: 1200px;
   margin: 0 auto;
+  min-height: calc(100vh - 285px);
 `;
