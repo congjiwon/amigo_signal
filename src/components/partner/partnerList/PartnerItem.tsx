@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { updatePostStatus } from '../../api/supabase/partner';
-import { Tables } from '../../api/supabase/supabase';
-import Calender from '../../assets/imgs/partner/Calendar.svg';
-import defaultProfileImage from '../../assets/imgs/users/default_profile_img.png';
-import classifyingAge from '../common/classifyingAge/classifyingAge';
+import { updatePostStatus } from '../../../api/supabase/partner';
+import { Tables } from '../../../api/supabase/supabase';
+import Calender from '../../../assets/imgs/partner/Calendar.svg';
+import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
+import classifyingAge from '../../common/classifyingAge/classifyingAge';
 import * as St from './style';
 
 type PartnerItemProps = {
@@ -54,12 +54,12 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
         </St.Body>
         <St.Footer>
           <St.UserProfile>
-            {users.profileImageUrl ? <St.ProfileImage src={`${storagaUrl}/${users.profileImageUrl}`} alt="profile" /> : <St.ProfileImage src={defaultProfileImage} alt="profile" />}
-            <p>{post.users?.nickName!}</p>
+            {users.profileImageUrl ? <St.ProfileImage src={`${storagaUrl}/${users?.profileImageUrl}`} alt="profile" /> : <St.ProfileImage src={defaultProfileImage} alt="profile" />}
+            <p>{users?.nickName!}</p>
           </St.UserProfile>
           <St.WriterInfoBox>
             <p>
-              {classifyingAge(post.users?.birthday)} | {post.users?.gender}
+              {classifyingAge(users?.birthday)} | {users?.gender}
             </p>
           </St.WriterInfoBox>
         </St.Footer>
