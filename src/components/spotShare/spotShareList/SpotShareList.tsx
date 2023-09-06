@@ -31,7 +31,6 @@ const SpotShareList = () => {
   const likeData = data?.data;
 
   // 처음 데이터 불러오기 + 필터링
-  // const { data: spotFilteredPostData, isLoading: spotFilterIsLoading, isError: spotFilterIsError } = useQuery(['spotSharePost'], getFilteredSpotSharePost({ countryName: location[1], startDate: spotDate[0], endDate: spotDate[1] }));
   useEffect(() => {
     const getfilteredPost = async () => {
       const filteredPost = await getFilteredSpotSharePost({ country: location[1], startDate: spotDate[0], endDate: spotDate[1] });
@@ -53,7 +52,7 @@ const SpotShareList = () => {
 
     if (value === '최신순') {
       try {
-        const { data: sharePosts, error } = await supabase.from('spotPosts').select('*, writerId(*), country(*)').order('createdAt', { ascending: false });
+        const { data: sharePosts, error } = await supabase.from('spotPosts').select('*, country(imageUrl, country)').order('createdAt', { ascending: false });
         if (error) {
           console.log('스팟 최신순 정렬 실패', error);
         } else {
@@ -64,7 +63,7 @@ const SpotShareList = () => {
       }
     } else {
       try {
-        const { data: sharePosts, error } = await supabase.from('spotPosts').select('*, writerId(*), country(*)').order('likeCount', { ascending: false });
+        const { data: sharePosts, error } = await supabase.from('spotPosts').select('*, country(imageUrl, country)').order('likeCount', { ascending: false });
         if (error) {
           console.log('스팟 인기순 정렬 실패', error);
         } else {
@@ -111,7 +110,7 @@ const SpotShareList = () => {
             const likedPost = likeData?.filter((like) => {
               return like.userId === logInUserId;
             });
-            return <SpotShareItem key={post.id} post={post} likedPost={likedPost} countryData={post.country} />;
+            return <SpotShareItem key={post.id} post={post} likedPost={likedPost} />;
           })
           .slice(0, offset + 20)}
         <div ref={divRef}></div>

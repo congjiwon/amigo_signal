@@ -10,13 +10,6 @@ import * as St from './style';
 
 type SpotItemProps = {
   post: Tables<'spotPosts'>;
-  countryData: {
-    country: string;
-    countryId: string;
-    flagUrl: string;
-    id: number;
-    imageUrl: string;
-  };
   likedPost?: {
     id: string;
     postId: {
@@ -44,26 +37,25 @@ type SpotItemProps = {
   }[];
 };
 
-function SpotShareItem({ post, likedPost, countryData }: SpotItemProps) {
-  const [countryImg, setCountryImg] = useState<string>('');
+function SpotShareItem({ post, likedPost }: SpotItemProps) {
   const [like, setLike] = useState(false);
   const session = useSessionStore((state) => state.session);
   const logInUserId = session?.user.id;
   const queryClient = useQueryClient();
-  const [likeCount, setLikeCount] = useState(0); // 이 부분을 추가
-  let updateLikeCount = post.likeCount;
 
   // 좋아요
   const LikeCheck = async (logInUserId: string) => {
     const liked = likedPost?.some((like) => like.postId.id === post.id && like.userId === logInUserId);
+
     if (liked) {
       setLike(liked!);
+    } else if (liked === false) {
+      setLike(false);
     }
   };
   useEffect(() => {
     LikeCheck(logInUserId!);
-    // }, [likedPost]);
-  }, [logInUserId!, post.id!, like]);
+  }, []);
 
   //방문날짜 2023-05-05 => 2023년 5월 5일 바꾸는 로직
   const visitDate = post.visitDate.split('-');
@@ -87,10 +79,10 @@ function SpotShareItem({ post, likedPost, countryData }: SpotItemProps) {
 
   const handleEmptyHeart = async (event: React.MouseEvent<SVGElement, MouseEvent>) => {
     event.preventDefault();
+    await queryClient.invalidateQueries(['likes', post.id]);
     setLike(!like);
     await deleteLike(post.id!, logInUserId!);
     await countLike(--post.likeCount, post.id!);
-    await queryClient.invalidateQueries(['likes', post.id]);
   };
 
   return (
@@ -120,7 +112,7 @@ function SpotShareItem({ post, likedPost, countryData }: SpotItemProps) {
           <p>{contentWithoutTags}</p>
         </St.ContentBox>
         <St.DefaultImg src={post.country.imageUrl}></St.DefaultImg>
-        <St.Span>{countryData.country}</St.Span>
+        <St.Span>{post.country.country}</St.Span>
       </St.PostCard>
     </Link>
   );

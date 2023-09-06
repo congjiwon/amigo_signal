@@ -10,7 +10,7 @@ type filteredPostProps = {
 };
 
 export const getFilteredSpotSharePost = async ({ country, startDate, endDate }: filteredPostProps) => {
-  let sharePosts = supabase.from('spotPosts').select('*, users(*), country(imageUrl, country)').order('createdAt', { ascending: false });
+  let sharePosts = supabase.from('spotPosts').select('*, users(*), country(imageUrl, country), likes(postId)').order('createdAt', { ascending: false });
   if (country !== undefined) {
     sharePosts = sharePosts.eq('country', country);
   }
@@ -38,10 +38,9 @@ export const updateSpotPost = async (updateData: Update<'spotPosts'>) => {
 
 // 스팟 댓글 가져오기(댓글 작성한 모든 유저 정보도 함께)
 export const getSpotComments = async () => {
-  const { data, error } = await supabase.from('spotComments').select('*, users!spotComments_writerId_fkey(*)').order('date', { ascending: false });
+  const { data, error } = await supabase.from('spotComments').select('*, users(*)').order('date', { ascending: false });
   return data;
 };
-getSpotComments();
 
 // 스팟 댓글 작성
 export const postSpotComment = async (newSpotComment: Inserts<'spotComments'>) => {
@@ -72,7 +71,7 @@ export const getCommentWriterIds = async () => {
 
 // 스팟 답댓글 가져오기(답글 작성한 모든 유저도 같이)
 export const getReCommentData = async () => {
-  const { data } = await supabase.from('spotReComments').select('*, users!spotReComments_writerId_fkey(*)').order('date', { ascending: true });
+  const { data } = await supabase.from('spotReComments').select('*, users(*)').order('date', { ascending: true });
   return data;
 };
 
@@ -155,7 +154,7 @@ export const countLike = async (like: number, postId: string) => {
 
 // 좋아요 가져오기
 export const getLikes = async () => {
-  const { data } = await supabase.from('likes').select('*, postId(*)');
+  const { data } = await supabase.from('likes').select('*, spotPosts(*)');
   return { data };
 };
 

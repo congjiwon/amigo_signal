@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { getPostWriterId, getReCommentData, getSpotComments } from '../../../api/supabase/spotshare';
@@ -9,7 +9,6 @@ import * as St from './style';
 
 function SpotComments() {
   const { postid } = useParams<string>();
-  const queryClient = useQueryClient();
 
   // 모든 댓글(유저정보 포함)
   const { data: allComments } = useQuery(['spotComments'], getSpotComments);
@@ -50,7 +49,6 @@ function SpotComments() {
       <SpotWrite />
       {filteredComments &&
         // filteredIds : 현재 로그인한 유저의 댓글 목록
-        // filteredIds &&
         filteredComments.map((comment) => {
           const isLoginUser = localStorage.getItem('authId') === comment.writerId;
           return <SpotCommentList key={comment.id} allComments={allComments} comment={comment} isLoginUser={isLoginUser!} />;

@@ -2,10 +2,10 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import { getReCommentData, getSpotPost } from '../../../api/supabase/spotshare';
-import { getAuthId, getUsers } from '../../../api/supabase/users';
+import { getUsers } from '../../../api/supabase/users';
 import DefaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import { BtnStyleType } from '../../../types/styleTypes';
-import useCurrentUserStore from '../../../zustand/currentUser';
+import useSessionStore from '../../../zustand/store';
 import { CommentButton } from '../../common/button/Button';
 import { ConfirmDelete } from '../../common/modal/alert';
 import SpotReCommentList from './SpotReCommentList';
@@ -15,18 +15,7 @@ import useSpotComment from './useSpotComment';
 type allCommentsProps =
   | {
       content: string;
-      date: string | null;
       id: string;
-      postId: string | null;
-      writerId: string;
-      users: {
-        birthday: string;
-        email: string;
-        gender: string;
-        id: string;
-        nickName: string;
-        profileImageUrl: string | null;
-      } | null;
     }[]
   | null
   | undefined;
@@ -37,51 +26,32 @@ type CommentProps = {
   id: string;
   postId: string | null;
   writerId: string;
-  users: {
-    birthday: string;
-    email: string;
-    gender: string;
-    id: string;
-    nickName: string;
-    profileImageUrl: string | null;
-  } | null;
 };
 
 export type PartnerCommentListProps = {
   allComments: allCommentsProps;
-  comment: CommentProps | undefined;
+  comment?: CommentProps;
   isLoginUser: boolean;
 };
 
 function SpotCommentList({ allComments, comment, isLoginUser }: PartnerCommentListProps) {
   const { postid } = useParams<string>();
+  const storageUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
+  const session = useSessionStore((state) => state.session);
+  const logInUserId = session?.user.id;
   const [isUpdate, setIsUpdate] = useState(false);
   const [updateComment, setUpdateComment] = useState('');
   const [isReComment, setIsReComment] = useState(false);
   const [reContent, setReContent] = useState('');
-  const [isUpdateReComment, setIsUpdateReComment] = useState(false); // true여도 안되네
+  const [isUpdateReComment, setIsUpdateReComment] = useState(false);
   const [updateReComment, setUpdateReComment] = useState('');
   const [reCommentId, setReCommentId] = useState('');
 
-  // 유저 ID, 닉네임, 프로필사진 배열
+  const { updateCommentMutation, deleteCommentMutation, postReCommentMutation, updateReCommentMutation } = useSpotComment();
   const { data: users } = useQuery(['userData'], getUsers);
-
-  const { updateCommentMutation, deleteCommentMutation, postReCommentMutation, updateReCommentMutation, deleteReCommentMutation } = useSpotComment();
-  // 로그인 한 유저
-  const currentUser = useCurrentUserStore((state) => state.currentUser);
-  // 이것도 로그인 한 유저?
-  const { isLoading, data: authId } = useQuery(['auth'], getAuthId);
-  // 게시글 ID params로 보내서 찾기??
-  const { data: spotPost } = useQuery(['spotPost', postid], () => getSpotPost({ postId: postid as string }));
-  // 게시글 작성자 찾기
-  const postWriterId = spotPost?.writerId; // 동행63 이랑 다름
-
-  // 나중에. 답댓글
   const { data: allReCommentsData } = useQuery(['spotReComments'], getReCommentData);
-  // 답댓글 작성한 모든 유저 정보
-  const reCommentUsers = allReCommentsData?.map((user) => {
-    return user.users;
-  });
+  const { data: spotPost } = useQuery(['spotPost', comment?.postId], () => getSpotPost({ postId: comment?.postId! }));
+  const postWriterId = spotPost?.writerId;
 
   // 지원님 시간 가져옴.
   const currentTime = function () {
@@ -97,7 +67,7 @@ function SpotCommentList({ allComments, comment, isLoginUser }: PartnerCommentLi
   };
 
   // 댓글 수정 submit
-  const handleSubmitBtn = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitBtn = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const newComment = {
@@ -107,39 +77,38 @@ function SpotCommentList({ allComments, comment, isLoginUser }: PartnerCommentLi
       id: comment?.id,
     };
 
-    await updateCommentMutation.mutateAsync(newComment);
+    updateCommentMutation.mutate(newComment);
 
     setUpdateComment('');
     setIsUpdate(false);
   };
 
-  // 나중에. 답댓글 submit
+  // 답댓글 submit
   const handleReCommentSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const reComment = {
       reContent: reContent,
       date: currentTime(),
-      writerId: authId,
+      writerId: logInUserId,
       commentId: comment!.id,
     };
 
-    postReCommentMutation.mutateAsync(reComment);
+    postReCommentMutation.mutate(reComment);
 
     setReContent('');
     setIsReComment(false);
   };
 
-  // 나중에. 답댓글 수정 submit
+  // 답댓글 수정 submit
   const handleReSubmitBtn = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const newReComment = {
       reContent: updateReComment,
-      writerId: authId,
+      writerId: logInUserId,
       commentId: comment?.id,
       id: reCommentId,
-      // date: comment?.date!,
     };
 
     updateReCommentMutation.mutate(newReComment);
@@ -149,12 +118,12 @@ function SpotCommentList({ allComments, comment, isLoginUser }: PartnerCommentLi
     setReCommentId('');
   };
 
-  /// 댓글 삭제 버튼
+  // 댓글 삭제 버튼
   const handleDelBtn = async (id: string) => {
     const isConfirmed = await ConfirmDelete('');
 
     if (isConfirmed) {
-      await deleteCommentMutation.mutateAsync(id);
+      deleteCommentMutation.mutate(id);
     }
   };
 
@@ -175,8 +144,7 @@ function SpotCommentList({ allComments, comment, isLoginUser }: PartnerCommentLi
         setUpdateComment(commentToEdit.content);
       }
       // 답댓글 수정 버튼
-    } // 나중에
-    else if (name === 'updateReComment') {
+    } else if (name === 'updateReComment') {
       const reCommentToEdit = allReCommentsData!.find((reComment) => reComment.id === id);
 
       if (reCommentToEdit) {
@@ -200,13 +168,12 @@ function SpotCommentList({ allComments, comment, isLoginUser }: PartnerCommentLi
     }
   };
 
-  const storageUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
-
   return (
     <St.PartnerCommentsContainerBox>
       <St.PartnerCommentsBox>
         {/* users : 모든 유저 ID, 닉네임, 프로필사진 배열 */}
         {users?.map((user) => {
+          console.log('user', user);
           if (user.id === comment?.writerId) {
             const isPostWriter = comment.writerId === postWriterId;
             return (
@@ -228,7 +195,7 @@ function SpotCommentList({ allComments, comment, isLoginUser }: PartnerCommentLi
             );
           }
         })}
-        {currentUser && (
+        {logInUserId && (
           <St.CommentBottomBox>
             <St.DateButtonBox>
               {' '}
@@ -297,11 +264,10 @@ function SpotCommentList({ allComments, comment, isLoginUser }: PartnerCommentLi
         {allReCommentsData?.map((reComment) => {
           if (reComment.commentId === comment?.id) {
             const isPostWriter = reComment.writerId === postWriterId; // 작성자 태그 띄울 때 씀.
-            const isLoginCommentUser = authId === reComment.writerId; // 로그인한 댓글작성자
+            const isLoginCommentUser = logInUserId === reComment.writerId; // 로그인한 댓글작성자
             return (
               <SpotReCommentList
                 key={reComment.id}
-                // comment={comment}
                 storageUrl={storageUrl}
                 reCommentId={reCommentId}
                 reComment={reComment}
@@ -312,7 +278,6 @@ function SpotCommentList({ allComments, comment, isLoginUser }: PartnerCommentLi
                 isLoginCommentUser={isLoginCommentUser}
                 updateReComment={updateReComment}
                 setUpdateReComment={setUpdateReComment}
-                setIsUpdateReComment={setIsUpdateReComment}
               />
             );
           }
