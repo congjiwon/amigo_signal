@@ -101,7 +101,7 @@ export const getReCommentWriterIds = async () => {
 
 // 스팟공유 모든 글 가져오기
 export const getAllSpotSharePost = async () => {
-  const { data } = await supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*),countryInfo!spotPosts_country_fkey(*)').order('createdAt', { ascending: false });
+  const { data } = await supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*),countryInfo!spotPosts_country_fkey(*)').order('createdAt', { ascending: false }).limit(10);
   return { data };
 };
 //스팟공유 리스트 디폴트 이미지 가져오기
