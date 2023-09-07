@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { getPostWriterId, getReCommentData, getSpotComments } from '../../../api/supabase/spotshare';
+import { getUsers } from '../../../api/supabase/users';
 import TopButton from '../../common/topbutton/TopButton';
 import SpotCommentList from './SpotCommentList';
 import SpotWrite from './SpotCommentWrite';
@@ -12,9 +13,12 @@ function SpotComments() {
 
   // 모든 댓글(유저정보 포함)
   const { data: allComments } = useQuery(['spotComments'], getSpotComments);
+  const { data: users } = useQuery(['userData'], getUsers);
 
   // 모든 스팟 게시글 작성자 ID
   const { data: spotPostWriterId } = useQuery(['spotPostId'], getPostWriterId);
+  console.log('1', allComments);
+  console.log('2', spotPostWriterId);
   // 작성자가 작성한 댓글 찾기(배열의 0번째.id)
   const findCommentId = spotPostWriterId?.filter((comment) => {
     return comment.id === postid;
@@ -48,10 +52,9 @@ function SpotComments() {
       </St.CommentLengthBox>
       <SpotWrite />
       {filteredComments &&
-        // filteredIds : 현재 로그인한 유저의 댓글 목록
         filteredComments.map((comment) => {
           const isLoginUser = localStorage.getItem('authId') === comment.writerId;
-          return <SpotCommentList key={comment.id} allComments={allComments} comment={comment} isLoginUser={isLoginUser!} />;
+          return <SpotCommentList key={comment.id} users={users} allComments={allComments} comment={comment} isLoginUser={isLoginUser!} allReCommentsData={reCommentsData} />;
         })}
       <St.MoveButtonArea>
         <TopButton />

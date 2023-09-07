@@ -7,7 +7,7 @@ import PartnerCommentList from './PartnerCommentList';
 import PartnerCommentsWrite from './PartnerCommentsWrite';
 import * as St from './style';
 
-const PartnerCommentsList = () => {
+const PartnerComments = () => {
   const params = useParams();
   const { data: users } = useQuery(['userData'], getUsers);
   const { data: allComments } = useQuery(['partnerComments'], getPartnerComments);
@@ -53,11 +53,11 @@ const PartnerCommentsList = () => {
         // filteredIds : 현재 로그인한 유저의 댓글 목록
         filteredComments?.map((comment) => {
           const isLoginUser = localStorage.getItem('authId') === comment.writerId;
-          return <PartnerCommentList key={comment.id} allComments={allComments} comment={comment} isLoginUser={isLoginUser!} users={users} />;
+          return <PartnerCommentList key={comment.id} allComments={allComments} comment={comment} isLoginUser={isLoginUser!} users={users} allReCommentsData={reCommentsData} />;
         })
       }
     </div>
   );
 };
 
-export default PartnerCommentsList;
+export default PartnerComments;

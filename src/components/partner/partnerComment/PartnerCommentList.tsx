@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { getPartnerPost, getReCommentData } from '../../../api/supabase/partner';
+import { getPartnerPost } from '../../../api/supabase/partner';
 import DefaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import { BtnStyleType } from '../../../types/styleTypes';
 import useSessionStore from '../../../zustand/store';
@@ -10,6 +10,21 @@ import TopButton from '../../common/topbutton/TopButton';
 import PartnerReComments from './PartnerReComments';
 import * as St from './style';
 import { usePartnerComments } from './usePartnerComment';
+
+type allReCommentsData =
+  | {
+      commentId: string;
+      date: string;
+      id: string;
+      reContent: string;
+      writerId: string;
+      users: {
+        nickName: string;
+        profileImageUrl: string | null;
+      };
+    }[]
+  | null
+  | undefined;
 
 type UsersProps =
   | {
@@ -23,10 +38,7 @@ type UsersProps =
 type allCommentsProps =
   | {
       content: string;
-      date: string;
       id: string;
-      postId: string;
-      writerId: string;
     }[]
   | null
   | undefined;
@@ -42,11 +54,12 @@ type CommentProps = {
 export type PartnerCommentListProps = {
   users: UsersProps;
   allComments: allCommentsProps;
+  allReCommentsData: allReCommentsData;
   comment: CommentProps | undefined;
   isLoginUser: boolean;
 };
 
-function PartnerCommentList({ allComments, comment, isLoginUser, users }: PartnerCommentListProps) {
+function PartnerCommentList({ allComments, allReCommentsData, comment, isLoginUser, users }: PartnerCommentListProps) {
   const storageUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
   const session = useSessionStore((state) => state.session);
   const logInUserId = session?.user.id;
@@ -54,17 +67,13 @@ function PartnerCommentList({ allComments, comment, isLoginUser, users }: Partne
   const [updateComment, setUpdateComment] = useState('');
   const [isReComment, setIsReComment] = useState('');
   const [reContent, setReContent] = useState('');
-  const [isUpdateReComment, setIsUpdateReComment] = useState(false); // true여도 안되네
+  const [isUpdateReComment, setIsUpdateReComment] = useState(false);
   const [updateReComment, setUpdateReComment] = useState('');
   const [reCommentId, setReCommentId] = useState('');
 
   const { updateCommentMutation, deleteCommentMutation, postReCommentMutation, updateReCommentMutation } = usePartnerComments();
-  // const { data: users } = useQuery(['userData'], getUsers);
   const { data: partnerPost } = useQuery(['partnerPost', comment?.postId], () => getPartnerPost({ postId: comment?.postId! }));
-  // 게시글 작성자 찾기
   const postWriterId = partnerPost?.writerId;
-
-  const { data: allReCommentsData } = useQuery(['partnerReComments'], getReCommentData);
 
   // 지원님 시간 가져옴.
   const currentTime = function () {
@@ -79,7 +88,6 @@ function PartnerCommentList({ allComments, comment, isLoginUser, users }: Partne
     return now;
   };
 
-  // 댓글 수정 submit
   const handleSubmitBtn = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -96,7 +104,6 @@ function PartnerCommentList({ allComments, comment, isLoginUser, users }: Partne
     setIsUpdate('');
   };
 
-  // 답댓글 수정 submit
   const handleReSubmitBtn = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -114,7 +121,6 @@ function PartnerCommentList({ allComments, comment, isLoginUser, users }: Partne
     setReCommentId('');
   };
 
-  // 답댓글 submit
   const handleReCommentSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -131,7 +137,6 @@ function PartnerCommentList({ allComments, comment, isLoginUser, users }: Partne
     setIsReComment('');
   };
 
-  /// 댓글 삭제 버튼
   const handleDelBtn = async (id: string) => {
     const isConfirmed = await ConfirmDelete('');
 
@@ -141,13 +146,10 @@ function PartnerCommentList({ allComments, comment, isLoginUser, users }: Partne
   };
 
   const handleIsOpenBtn = (name: string, commentId: string, reCommentId: string | null) => {
-    // 답글쓰기 버튼
     if (name === 'postReComment') {
       setIsReComment(commentId);
       setIsUpdate('');
       setReCommentId('');
-
-      // 댓글 수정 버튼
     } else if (name === 'updateComment') {
       setIsUpdate(commentId);
       setIsReComment('');
@@ -158,7 +160,6 @@ function PartnerCommentList({ allComments, comment, isLoginUser, users }: Partne
       if (commentToEdit) {
         setUpdateComment(commentToEdit.content);
       }
-      // 답댓글 수정 버튼
     } else if (name === 'updateReComment') {
       const reCommentToEdit = allReCommentsData!.find((reComment) => reComment.id === reCommentId);
       if (reCommentToEdit) {
@@ -170,7 +171,6 @@ function PartnerCommentList({ allComments, comment, isLoginUser, users }: Partne
     }
   };
 
-  // 취소버튼
   const handleCancelBtn = (name: string) => {
     if (name === 'reCommentUpdateCancelBtn') {
       setReCommentId('');
@@ -189,12 +189,10 @@ function PartnerCommentList({ allComments, comment, isLoginUser, users }: Partne
           <TopButton />
         </St.MoveButtonArea>
         <St.PartnerCommentsBox>
-          {/* users : 모든 유저 ID, 닉네임, 프로필사진 배열 */}
           {users?.map((user) => {
             if (user.id === comment?.writerId) {
               const isPostWriter = comment.writerId === postWriterId;
               return (
-                // 여기서 user ? 아래 넣고 : 아니면 넣고 이렇게 해야겠는데?
                 <St.CommentTopBox key={user.id}>
                   <div>
                     <St.Img src={user! && user!.profileImageUrl! ? `${storageUrl}/${user!.profileImageUrl!}` : DefaultProfileImage} />
@@ -267,7 +265,6 @@ function PartnerCommentList({ allComments, comment, isLoginUser, users }: Partne
                     <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleCancelBtn('reCommentCancel')}>
                       취소
                     </CommentButton>
-                    {/* <St.Bar>|</St.Bar> */}
                     <CommentButton type="submit" disabled={reContent.length < 1} styleType={BtnStyleType.BTN_ONLYFONT}>
                       등록
                     </CommentButton>
@@ -278,11 +275,10 @@ function PartnerCommentList({ allComments, comment, isLoginUser, users }: Partne
           )}
         </St.PartnerCommentsBox>
         <St.PartnerReCommentsBox>
-          {/* allReCommentsData : 모든 답댓글 정보(유저포함) */}
           {allReCommentsData?.map((reComment) => {
             if (reComment.commentId === comment?.id) {
-              const isPostWriter = reComment.writerId === postWriterId; // 작성자 태그 띄울 때 씀.
-              const isLoginCommentUser = logInUserId === reComment.writerId; // 로그인한 댓글작성자
+              const isPostWriter = reComment.writerId === postWriterId;
+              const isLoginCommentUser = logInUserId === reComment.writerId;
               return (
                 <PartnerReComments
                   key={reComment.id}
@@ -295,10 +291,8 @@ function PartnerCommentList({ allComments, comment, isLoginUser, users }: Partne
                   handleReSubmitBtn={handleReSubmitBtn}
                   isPostWriter={isPostWriter}
                   isLoginCommentUser={isLoginCommentUser}
-                  isUpdateReComment={isUpdateReComment}
                   updateReComment={updateReComment}
                   setUpdateReComment={setUpdateReComment}
-                  setIsUpdateReComment={setIsUpdateReComment}
                 />
               );
             }

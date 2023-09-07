@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { checkApply, getConfirmedApplicantList, getPartnerPost, updatePostStatus } from '../api/supabase/partner';
 import Communication from '../components/partner/communicate/Communication';
 import ConfirmedPartnerList from '../components/partner/communicate/ConfirmedPartnerList';
-import PartnerCommentsList from '../components/partner/partnerComment/PartnerComments';
+import PartnerComments from '../components/partner/partnerComment/PartnerComments';
 import PartnerDetailInfo from '../components/partner/partnerDetailInfo/PartnerDetailInfo';
 import { useStateStore } from '../zustand/communicate';
 import useSessionStore from '../zustand/store';
@@ -83,7 +83,7 @@ function PartnerDetail() {
         <St.PostStatus $partnerStatus={partnerStatus}>{partnerStatus === '모집중' ? '모집중' : '모집완료'}</St.PostStatus>
         {isApply && applicantStatus !== null ? <St.ApplyStatus>{applicantStatus}</St.ApplyStatus> : <></>}
       </St.Status>
-      <PartnerCommentsList />
+      <PartnerComments />
     </>
   );
 }
