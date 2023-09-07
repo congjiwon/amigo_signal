@@ -25,13 +25,13 @@ export const MainImage = styled.img`
 export const PartnerImageMainText = styled.span`
   position: absolute;
   bottom: 55%;
-  left: 5%;
+  left: 19%;
   color: black;
   font-size: 1.4rem;
   font-weight: bold;
   @media (max-width: 850px) {
     bottom: 55%;
-    left: 2%;
+    left: 12%;
     font-size: 0.7rem;
   }
 `;
@@ -39,12 +39,12 @@ export const PartnerImageMainText = styled.span`
 export const PartnerImageSubText = styled.span`
   position: absolute;
   bottom: 45%;
-  left: 5%;
+  left: 19%;
   color: black;
   font-size: 0.8rem;
   @media (max-width: 850px) {
     bottom: 45%;
-    left: 2%;
+    left: 12%;
     font-size: 0.5rem;
   }
 `;
