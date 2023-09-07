@@ -1,11 +1,12 @@
 import { styled } from 'styled-components';
 
-export const TilteP = styled.p`
+export const Title = styled.p`
   color: #000;
   font-size: 24px;
   font-style: normal;
   font-weight: 600;
   line-height: 150%;
+  /* max-width: 791px; */
 `;
 
 export const GrayParagraph = styled.p`
