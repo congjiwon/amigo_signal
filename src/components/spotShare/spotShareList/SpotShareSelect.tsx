@@ -18,11 +18,11 @@ const SpotShareSelect = ({ setLocation, setSpotDate, setSort }: SpotShareSelectP
   return (
     <div>
       <St.filterBox>
-        <div>
+        <St.SelectsBox>
           <SortDropDown setSort={setSort} />
           <LocationDropDown setLocation={setLocation} />
           <FilterSpotCalendar setSpotDate={setSpotDate} />
-        </div>
+        </St.SelectsBox>
         <Button styleType={BtnStyleType.BTN_DARK} onClick={() => navigate('/spotshare/write')}>
           글쓰기
         </Button>

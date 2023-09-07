@@ -55,7 +55,7 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
   };
   useEffect(() => {
     LikeCheck(logInUserId!);
-  }, []);
+  }, [likedPost]);
 
   //방문날짜 2023-05-05 => 2023년 5월 5일 바꾸는 로직
   const visitDate = post.visitDate.split('-');
