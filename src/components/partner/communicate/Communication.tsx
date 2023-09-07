@@ -22,13 +22,12 @@ type CommunicationProps = {
 
 const Communication = ({ postId, writerId, logInUserId, isApply, setIsApply }: CommunicationProps) => {
   const { openedModals, openModal } = useModalStore();
-  const { setApplicantStatus } = useStateStore();
+  const { partnerStatus, setPartnerStatus, setApplicantStatus } = useStateStore();
   const { hasApplicant, setHasApplicant } = useApplicantStore();
 
   const [applicantList, setApplicantList] = useState<Tables<'applicants'>[]>([]);
 
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
-  const [isThisPostOpen, setIsThisPostOpen] = useState<boolean>();
 
   // 지원자의 참여 신청 여부 확인 및 작성자의 confirmed 여부 세팅
   useQuery(['checkApply', postId, logInUserId], () => checkApply(postId!, logInUserId), {
@@ -63,7 +62,7 @@ const Communication = ({ postId, writerId, logInUserId, isApply, setIsApply }: C
   useQuery(['isPostOpen', postId], () => isPostOpen(postId!), {
     enabled: !!postId,
     onSuccess: (data) => {
-      setIsThisPostOpen(data.data?.isOpen);
+      setPartnerStatus(data.data?.isOpen ? '모집중' : '모집완료');
     },
   });
 
@@ -95,7 +94,7 @@ const Communication = ({ postId, writerId, logInUserId, isApply, setIsApply }: C
     <St.CommunicationDiv>
       {writerId !== logInUserId ? (
         <St.ApplyDiv>
-          {isConfirmed || !isThisPostOpen ? (
+          {isConfirmed || partnerStatus === '모집완료' ? (
             <></>
           ) : (
             <Button styleType={BtnStyleType.BTN_DARK} onClick={isApply ? handleApplyCancel : handleApply} fullWidth>
@@ -105,13 +104,13 @@ const Communication = ({ postId, writerId, logInUserId, isApply, setIsApply }: C
         </St.ApplyDiv>
       ) : (
         <>
-          {isThisPostOpen && (
+          {partnerStatus === '모집중' && (
             <Button styleType={BtnStyleType.BTN_DARK} onClick={() => openModal('applicantList')} fullWidth>
               동행 신청자 목록
             </Button>
           )}
 
-          {hasApplicant && isThisPostOpen ? <St.NewApplicantAlert>새로운 동행 신청이 있습니다.</St.NewApplicantAlert> : <></>}
+          {hasApplicant && partnerStatus === '모집중' ? <St.NewApplicantAlert>새로운 동행 신청이 있습니다.</St.NewApplicantAlert> : <></>}
         </>
       )}
 
