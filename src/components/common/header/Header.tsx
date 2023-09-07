@@ -1,8 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
+import { Popover } from 'antd';
 import { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { supabase } from '../../../api/supabase/supabaseClient';
 import { getCurrentUser } from '../../../api/supabase/users';
+import logo from '../../../assets/imgs/Logo/logo.png';
 import useCurrentUserStore from '../../../zustand/currentUser';
 import useSessionStore from '../../../zustand/store';
 import { Alert } from '../modal/alert';
@@ -37,49 +39,60 @@ export default function Header() {
     Alert({ title: '로그아웃 되었습니다.' });
     navigate('/login');
   };
+
+  const myPagePopover = (
+    <St.MyPagePopover>
+      <NavLink to="/mypage" className={({ isActive }) => (isActive ? 'active' : '')}>
+        마이페이지
+      </NavLink>
+      <Link to="/login" onClick={handleSignout}>
+        로그아웃
+      </Link>
+    </St.MyPagePopover>
+  );
+
   return (
     <St.HeaderLayout>
       <St.Header>
         <St.H1>
           <Link to="/">
-            <St.Span>Amigo Signal</St.Span>
+            <img src={logo} style={{ width: '40px' }} />
+            <span>Amigo Signal</span>
           </Link>
         </St.H1>
         <St.Gnb>
           <ul>
             <li>
-              <Link to="/partner">
-                <St.Span>동행 찾기</St.Span>
-              </Link>
+              <NavLink to="/partner" className={({ isActive }) => (isActive ? 'active' : '')}>
+                동행 찾기
+              </NavLink>
             </li>
             <li>
-              <Link to="/spotshare">
-                <St.Span>스팟 공유</St.Span>
-              </Link>
+              <NavLink to="/spotshare" className={({ isActive }) => (isActive ? 'active' : '')}>
+                스팟 공유
+              </NavLink>
             </li>
           </ul>
         </St.Gnb>
         <St.Utils>
           {session ? (
             <>
-              <Link to="/mypage">
-                <St.Span>
-                  {currentUser?.nickName}
-                  &nbsp;님
-                </St.Span>
-              </Link>
-              <Link to="/login" style={{ marginLeft: '20px' }} onClick={handleSignout}>
-                <St.Span>로그아웃</St.Span>
-              </Link>
+              <Popover content={myPagePopover} trigger="hover" placement="topRight">
+                <St.PopOverButton>{currentUser?.nickName}님</St.PopOverButton>
+              </Popover>
+
+              {/* <NavLink to="/mypage" className={({ isActive }) => (isActive ? 'active' : '')}>
+                {currentUser?.nickName}
+                &nbsp;님
+              </NavLink> */}
+              {/* <Link to="/login" onClick={handleSignout}>
+                로그아웃
+              </Link> */}
             </>
           ) : (
             <>
-              <Link to="/login">
-                <St.Span>로그인</St.Span>
-              </Link>
-              <Link to="/signup" style={{ marginLeft: '20px' }}>
-                <St.Span>회원가입</St.Span>
-              </Link>
+              <Link to="/login">로그인</Link>
+              <Link to="/signup">회원가입</Link>
             </>
           )}
         </St.Utils>

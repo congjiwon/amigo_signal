@@ -34,7 +34,7 @@ export const Inner = styled.div<InnerProps>`
         height: 70%;
         border-radius: 30px;
 
-        @media screen and (max-width: 600px) {
+        @media screen and (max-width: 800px) {
           width: 80%;
         }
         `;
@@ -44,7 +44,11 @@ export const Inner = styled.div<InnerProps>`
         height: 55%;
         border-radius: 30px;
 
-        @media screen and (max-width: 600px) {
+        @media screen and (max-width: 1100px) {
+          width: 60%;
+        }
+
+        @media screen and (max-width: 700px) {
           width: 80%;
         }
         

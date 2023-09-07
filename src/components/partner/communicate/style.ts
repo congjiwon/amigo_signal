@@ -73,6 +73,7 @@ export const ApplicantProfile = styled.div`
 
 export const ApplicantInfo = styled.div`
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 7px;
 `;
@@ -97,6 +98,7 @@ export const ApplicantAgeGender = styled.p`
 export const ButtonDiv = styled.div`
   display: flex;
   gap: 5px;
+  flex: 0 0 auto;
 `;
 
 export const AcceptButton = styled.button<CheckButtonProps>`
@@ -113,6 +115,11 @@ export const AcceptButton = styled.button<CheckButtonProps>`
     if (props.$isAccepted === null) return 'black';
     return props.$isAccepted ? 'white' : 'black';
   }};
+
+  @media (max-width: 550px) {
+    height: 30px;
+    border-radius: 15px;
+  }
 `;
 
 export const RejectButton = styled.button<CheckButtonProps>`
@@ -129,6 +136,10 @@ export const RejectButton = styled.button<CheckButtonProps>`
     if (props.$isAccepted === null) return 'black';
     return props.$isAccepted ? 'black' : 'white';
   }};
+  @media (max-width: 550px) {
+    height: 30px;
+    border-radius: 15px;
+  }
 `;
 
 export const ApplicantContent = styled.p`
