@@ -42,7 +42,7 @@ function PartnerCommentsWrite() {
       postId: params.postid,
     };
 
-    postCommentMutation.mutateAsync(newComment);
+    postCommentMutation.mutate(newComment);
 
     setContent('');
   };

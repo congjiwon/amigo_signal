@@ -10,7 +10,7 @@ type filteredPostProps = {
 };
 
 export const getFilteredSpotSharePost = async ({ country, startDate, endDate }: filteredPostProps) => {
-  let sharePosts = supabase.from('spotPosts').select('*, users(*), country(imageUrl, country)').order('createdAt', { ascending: false });
+  let sharePosts = supabase.from('spotPosts').select('*, users(*), country(imageUrl, country), likes(postId)').order('createdAt', { ascending: false });
   if (country !== undefined) {
     sharePosts = sharePosts.eq('country', country);
   }
@@ -38,10 +38,9 @@ export const updateSpotPost = async (updateData: Update<'spotPosts'>) => {
 
 // 스팟 댓글 가져오기(댓글 작성한 모든 유저 정보도 함께)
 export const getSpotComments = async () => {
-  const { data, error } = await supabase.from('spotComments').select('*, users!spotComments_writerId_fkey(*)').order('date', { ascending: false });
+  const { data, error } = await supabase.from('spotComments').select('*, users(*), spotPosts(*)').order('date', { ascending: false });
   return data;
 };
-getSpotComments();
 
 // 스팟 댓글 작성
 export const postSpotComment = async (newSpotComment: Inserts<'spotComments'>) => {
@@ -64,15 +63,9 @@ export const getPostWriterId = async () => {
   return data;
 };
 
-// 스팟 댓글 작성자 ID 배열 이긴한데 그냥 스팟 댓글 가져오기에서는 filter 돌려서 찾아야되네. 걍 쓰자.
-export const getCommentWriterIds = async () => {
-  const { data } = await supabase.from('spotComments').select('writerId');
-  return data;
-};
-
 // 스팟 답댓글 가져오기(답글 작성한 모든 유저도 같이)
 export const getReCommentData = async () => {
-  const { data } = await supabase.from('spotReComments').select('*, users!spotReComments_writerId_fkey(*)').order('date', { ascending: true });
+  const { data } = await supabase.from('spotReComments').select('*, users(*)').order('date', { ascending: true });
   return data;
 };
 
@@ -89,24 +82,6 @@ export const deleteSpotReComment = async (reCommentId: string) => {
 // 스팟 답댓글 수정
 export const updateSpotReComment = async (updateReComment: Update<'spotReComments'>) => {
   const { error } = await supabase.from('spotReComments').update(updateReComment).eq('id', updateReComment.id);
-};
-
-// 스팟 답댓글 작성자 ID 배열
-export const getReCommentWriterIds = async () => {
-  const { data } = await supabase.from('spotReComments').select('writerId');
-  return data;
-};
-
-// let { data: count } = await supabase.from('spotReComments').select('id');
-
-// 스팟공유 모든 글 가져오기
-export const getAllSpotSharePost = async () => {
-  const { data } = await supabase.from('spotPosts').select('*, users!spotPosts_writerId_fkey(*),countryInfo!spotPosts_country_fkey(*)').order('createdAt', { ascending: false }).limit(10);
-  return { data };
-};
-//스팟공유 리스트 디폴트 이미지 가져오기
-export const getSpotShareDefaultImg = async (country: string) => {
-  return await supabase.from('countryInfo').select('imageUrl').eq('country', country);
 };
 
 //스팟공유 특정 글 가져오기

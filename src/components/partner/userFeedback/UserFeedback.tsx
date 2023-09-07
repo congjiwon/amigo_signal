@@ -105,8 +105,8 @@ const UserFeedback = ({ partnerPostData }: Props) => {
       <ButtonBox>
         {logInUserId ? (
           <>
-            <button>{bookMark ? <RiBookmarkFill onClick={() => removeBookMarkHandle()} style={{ height: '24px', width: '24px' }} /> : <RiBookmarkLine onClick={() => addBookMarkHandle()} style={{ height: '24px', width: '24px' }} />}</button>
             <button>{openChat.length > 1 && <FiMessageSquare onClick={() => handleCopyClipBoard(openChat)} style={{ height: '24px', width: '24px' }} />}</button>
+            <button>{bookMark ? <RiBookmarkFill onClick={() => removeBookMarkHandle()} style={{ height: '24px', width: '24px' }} /> : <RiBookmarkLine onClick={() => addBookMarkHandle()} style={{ height: '24px', width: '24px' }} />}</button>
           </>
         ) : (
           <></>

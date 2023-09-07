@@ -56,7 +56,7 @@ function SpotShareDetailContents() {
   };
   useEffect(() => {
     LikeCheck(logInUserId!, postid!);
-  }, [likeCount]); // 여기도.. 수정?
+  }, [likeCount]);
 
   const mapRef = useRef<HTMLDivElement>(null);
 

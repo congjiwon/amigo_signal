@@ -88,7 +88,7 @@ export const updatePartnerComment = async (updateComment: TPartnerUpdate) => {
 
 // 동행 답댓글 가져오기(답글 작성한 모든 유저도 같이)
 export const getReCommentData = async () => {
-  const { data, error } = await supabase.from('reComments').select('*, users!reComments_writerId_fkey(*)').order('date', { ascending: true });
+  const { data, error } = await supabase.from('reComments').select('*, users(*)').order('date', { ascending: true });
   return data;
 };
 

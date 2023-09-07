@@ -6,11 +6,7 @@ import * as St from './style';
 import { usePartnerComments } from './usePartnerComment';
 
 type CommentProps = {
-  content: string;
-  date: string;
   id: string;
-  postId: string | null;
-  writerId: string;
 };
 
 type PartnerReCommentsProps = {
@@ -19,14 +15,10 @@ type PartnerReCommentsProps = {
   reCommentId: string;
   reComment:
     | {
-        commentId: string;
         date: string;
         id: string;
         reContent: string;
-        writerId: string;
         users: {
-          birthday: string;
-          gender: string;
           nickName: string;
           profileImageUrl: string | null;
         };
@@ -35,24 +27,21 @@ type PartnerReCommentsProps = {
     | undefined;
   isPostWriter: boolean;
   isLoginCommentUser: boolean;
-  isUpdateReComment: boolean;
   updateReComment: string;
   setUpdateReComment: React.Dispatch<React.SetStateAction<string>>;
   handleCancelBtn: (name: string) => void;
   handleIsOpenBtn: (name: string, commentId: string, reCommentId: string | null) => void;
-  handleReSubmitBtn: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
-  setIsUpdateReComment: React.Dispatch<React.SetStateAction<boolean>>;
+  handleReSubmitBtn: (event: React.FormEvent<HTMLFormElement>) => void;
 };
 
 function PartnerReComments({ comment, storageUrl, reCommentId, reComment, isPostWriter, isLoginCommentUser, updateReComment, setUpdateReComment, handleCancelBtn, handleIsOpenBtn, handleReSubmitBtn }: PartnerReCommentsProps) {
   const { deleteReCommentMutation } = usePartnerComments();
 
-  // 답댓글 삭제 버튼 클릭
   const handleReDelBtn = async (id: string) => {
     const isConfirmed = await ConfirmDelete('');
 
     if (isConfirmed) {
-      await deleteReCommentMutation.mutateAsync(id);
+      deleteReCommentMutation.mutate(id);
     }
   };
 
