@@ -150,7 +150,7 @@ const SpotMap = ({ setLatitude, setLongitude, address, setAddress }: SpotMapProp
           검색
         </button>
         <button onClick={handleClearAddress}>지도 초기화</button>
-        <St.Address>{`장소를 검색 or 클릭하시면, 해당 위치가 등록됩니다 -> ${address}`}</St.Address>
+        <St.Address>{address ? address : `검색한 주소가 표시됩니다`}</St.Address>
       </St.SearchAddress>
       <div ref={mapRef} style={{ width: '100%', height: '50vh', marginTop: '20px' }} />
     </div>

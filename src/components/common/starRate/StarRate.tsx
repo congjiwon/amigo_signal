@@ -2,7 +2,6 @@ import { Rate } from 'antd';
 import React from 'react';
 
 interface StarProps {
-  star: number;
   setStar: React.Dispatch<React.SetStateAction<number>>;
 }
 interface UpdateStarProps {
@@ -10,8 +9,8 @@ interface UpdateStarProps {
   setStar: React.Dispatch<React.SetStateAction<number>>;
 }
 
-function StarRate({ star, setStar }: StarProps) {
-  return <Rate value={star} onChange={setStar} />;
+function StarRate({ setStar }: StarProps) {
+  return <Rate defaultValue={5} onChange={setStar} />;
 }
 
 export function UpdateStarRate({ star, setStar }: UpdateStarProps) {

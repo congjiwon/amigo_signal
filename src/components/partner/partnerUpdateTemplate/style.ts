@@ -18,6 +18,16 @@ export const WriteForm = styled.form`
 export const SelectListBox = styled.div`
   display: flex;
   gap: 24px;
+
+  @media screen and (max-width: 650px) {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+
+    & :where(.css-dev-only-do-not-override-byeoj0).ant-space-vertical {
+      margin-left: 0 !important;
+    }
+  }
 `;
 
 export const ExplanationBox = styled.div`
