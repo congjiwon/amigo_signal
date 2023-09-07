@@ -22,10 +22,10 @@ const toolbarOptions = [
   ['blockquote'],
   [{ list: 'ordered' }, { list: 'bullet' }],
   [{ align: [] }],
-  ['link', 'image', 'video'],
+  ['link', 'image'],
 ];
 
-const formats = ['header', 'font', 'size', 'bold', 'italic', 'underline', 'strike', 'align', 'blockquote', 'list', 'bullet', 'background', 'color', 'link', 'image', 'video', 'height', 'width'];
+const formats = ['header', 'font', 'size', 'bold', 'italic', 'underline', 'strike', 'align', 'blockquote', 'list', 'bullet', 'background', 'color', 'link', 'image', 'height', 'width'];
 
 const modules = {
   toolbar: {

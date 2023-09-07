@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
 
-export const H2 = styled.h2`
+export const TilteP = styled.p`
   color: #000;
   font-size: 24px;
   font-style: normal;

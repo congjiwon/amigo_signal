@@ -3,6 +3,8 @@ import { ConfigProvider, DatePicker, Space } from 'antd';
 import type { RangePickerProps } from 'antd/es/date-picker';
 import koKR from 'antd/es/locale/ko_KR';
 import dayjs from 'dayjs';
+import { useEffect, useState } from 'react';
+import { createGlobalStyle } from 'styled-components';
 
 interface CalendarProps {
   setSpotDate: React.Dispatch<React.SetStateAction<string>>;
@@ -21,10 +23,16 @@ export function SpotCalendar({ setSpotDate }: CalendarProps) {
   const getDateHandle: DatePickerProps['onChange'] = (date, dateString) => {
     setSpotDate(dateString);
   };
+  const disabledDate: DatePickerProps['disabledDate'] = (current) => {
+    if (current && current < dayjs().endOf('day')) {
+      return false;
+    }
+    return true;
+  };
 
   return (
     <Space direction="vertical">
-      <DatePicker onChange={getDateHandle} inputReadOnly />
+      <DatePicker disabledDate={disabledDate} onChange={getDateHandle} inputReadOnly />
     </Space>
   );
 }
@@ -33,15 +41,34 @@ export function UpdateSpotCalendar({ spotDate, setSpotDate }: UpdateCalendarProp
   const getDateHandle: DatePickerProps['onChange'] = (date, dateString) => {
     setSpotDate(dateString);
   };
+  const disabledDate: DatePickerProps['disabledDate'] = (current) => {
+    if (current && current < dayjs().endOf('day')) {
+      return false;
+    }
+    return true;
+  };
   const dateFormat = 'YYYY/MM/DD';
   return (
     <Space direction="vertical">
-      <DatePicker defaultValue={dayjs(spotDate, dateFormat)} onChange={getDateHandle} inputReadOnly />
+      <DatePicker disabledDate={disabledDate} defaultValue={dayjs(spotDate, dateFormat)} onChange={getDateHandle} inputReadOnly />
     </Space>
   );
 }
 
 export function FilterSpotCalendar({ setSpotDate }: FilterCalendarProps) {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   const getDateHandle = (dates: any, dateString: any) => {
     setSpotDate(dateString);
   };
@@ -50,10 +77,22 @@ export function FilterSpotCalendar({ setSpotDate }: FilterCalendarProps) {
   };
 
   return (
-    <ConfigProvider locale={koKR}>
-      <Space direction="vertical" size={12}>
-        <RangePicker allowClear disabledDate={disabledDate} onChange={getDateHandle} inputReadOnly />
-      </Space>
-    </ConfigProvider>
+    <>
+      <GlobalStyle />
+      <ConfigProvider locale={koKR}>
+        <Space direction="vertical" size={12}>
+          <RangePicker className={isMobile ? 'mobile-range-picker' : ''} allowClear disabledDate={disabledDate} onChange={getDateHandle} inputReadOnly />
+        </Space>
+      </ConfigProvider>
+    </>
   );
 }
+
+const GlobalStyle = createGlobalStyle`
+  @media (max-width: 768px) {
+    .ant-picker-panels {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+`;

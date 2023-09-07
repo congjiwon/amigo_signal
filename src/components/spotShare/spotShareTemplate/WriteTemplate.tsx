@@ -20,7 +20,7 @@ export default function WriteTemplate() {
   const [editorHtml, setEditorHtml] = useState<string>('');
   const [location, setLocation] = useState<string[]>([]);
   const [spotDate, setSpotDate] = useState<string>('');
-  const [star, setStar] = useState<number>(0);
+  const [star, setStar] = useState<number>(5);
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
   const [address, setAddress] = useState<string | null>('');
@@ -100,7 +100,7 @@ export default function WriteTemplate() {
         <St.SelectListBox>
           <LocationDropDown setLocation={setLocation} />
           <SpotCalendar setSpotDate={setSpotDate} />
-          <StarRate star={star} setStar={setStar} />
+          <StarRate setStar={setStar} />
         </St.SelectListBox>
         <div>
           <St.SpotShareTitleInput maxLength={100} type="text" placeholder="제목을 입력해주세요" value={title} onChange={(e) => setTitle(e.target.value)} />
