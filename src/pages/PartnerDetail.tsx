@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { checkApply, getConfirmedApplicantList, getPartnerPost, updatePostStatus } from '../api/supabase/partner';
+import LoadingSpinner from '../components/common/loadingSpinner/LoadingSpinner';
 import Communication from '../components/partner/communicate/Communication';
 import ConfirmedPartnerList from '../components/partner/communicate/ConfirmedPartnerList';
 import PartnerComments from '../components/partner/partnerComment/PartnerComments';
@@ -19,9 +20,9 @@ function PartnerDetail() {
 
   const [isApply, setIsApply] = useState<boolean | null>(null);
 
-  const { data: partnerPost, isLoading, isError } = useQuery(['partnerPost', postid], () => getPartnerPost({ postId: postid as string }));
+  const { data: partnerPost, isLoading: isLoadingPost, isError } = useQuery(['partnerPost', postid], () => getPartnerPost({ postId: postid as string }));
 
-  const { data: confirmedApplicants } = useQuery(['confirmedApplicants', postid], () => getConfirmedApplicantList(postid!));
+  const { data: confirmedApplicants, isLoading: isLoadingApplicants } = useQuery(['confirmedApplicants', postid], () => getConfirmedApplicantList(postid!));
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,12 +63,12 @@ function PartnerDetail() {
     }
   }, [partnerPost, postid, confirmedApplicants, setPartnerStatus]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (isLoadingPost || isLoadingApplicants) {
+    return <LoadingSpinner />;
   }
 
   if (isError) {
-    return <div>Error loading data</div>;
+    <div>error data</div>;
   }
 
   return (

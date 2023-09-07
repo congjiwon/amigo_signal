@@ -10,11 +10,12 @@ import Button from '../../common/button/Button';
 import { UpdatePartnerCalendar } from '../../common/calendar/PartnerCalendar';
 import { UpdatePartnerDropDown } from '../../common/dropDown/DropDown';
 import { UpdateLocationDropDown } from '../../common/dropDown/LocationDropDown';
+import LoadingSpinner from '../../common/loadingSpinner/LoadingSpinner';
 import { AlertError, AlertWarning } from '../../common/modal/alert';
 import * as St from './style';
 
 function PartnerUpdateTemplate({ postId }: { postId: string }) {
-  const { data: partnerPost } = useQuery(['partnerPost', postId], () => getPartnerPost({ postId }));
+  const { data: partnerPost, isLoading, isError } = useQuery(['partnerPost', postId], () => getPartnerPost({ postId }));
   const [applicantList, setApplicantList] = useState<Tables<'applicants'>[]>([]);
   const [confirmedApplicantList, setConfirmedApplicantList] = useState<Tables<'applicants'>[]>([]);
   const [location, setLocation] = useState<string[]>([]);
@@ -152,6 +153,13 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
     }
     return true;
   };
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+  if (isError) {
+    return <div>Error loading data</div>;
+  }
 
   // 글 작성 버튼 클릭 핸들러
   const handleUpdateClick = async () => {

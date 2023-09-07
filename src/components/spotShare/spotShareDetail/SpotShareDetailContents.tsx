@@ -10,7 +10,8 @@ import { countLike, countLikes, deleteLike, deleteSpotSharePost, getDetailSpotSh
 import { supabase } from '../../../api/supabase/supabaseClient';
 import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import useSessionStore from '../../../zustand/store';
-import { ConfirmDelete } from '../../common/modal/alert';
+import LoadingSpinner from '../../common/loadingSpinner/LoadingSpinner';
+import { AlertError, ConfirmDelete } from '../../common/modal/alert';
 import * as St from './style';
 
 function SpotShareDetailContents() {
@@ -63,6 +64,11 @@ function SpotShareDetailContents() {
   const mutation = useMutation(deleteSpotSharePost, {
     onSuccess: async () => {
       await queryClient.invalidateQueries(['spotSharePost']);
+    },
+    onError: () => {
+      AlertError({ title: '삭제오류' });
+    },
+    onSettled: () => {
       navigate('/spotshare');
     },
   });
@@ -106,7 +112,7 @@ function SpotShareDetailContents() {
   }, [spotSharePost]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
   if (isError) {
     return <div>Error loading data</div>;
@@ -140,7 +146,7 @@ function SpotShareDetailContents() {
       <div>
         <St.InfoOuterBox>
           <St.PostInfoBox>
-            {spotSharePost?.users.profileImageUrl ? <St.ProfileImage src={`${storagaUrl}/${spotSharePost.users.profileImageUrl}`} alt="profile" /> : <St.ProfileImage src={defaultProfileImage} alt="profile" />}
+            {spotSharePost?.users?.profileImageUrl ? <St.ProfileImage src={`${storagaUrl}/${spotSharePost.users.profileImageUrl}`} alt="profile" /> : <St.ProfileImage src={defaultProfileImage} alt="profile" />}
             <St.InfoInnerBox>
               <St.NickNameSpan style={{ paddingTop: '1px', paddingBottom: '5px' }}>{spotSharePost?.users?.nickName} </St.NickNameSpan>
               <St.InfoContainer>

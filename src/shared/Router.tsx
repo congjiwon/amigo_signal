@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Layout from '../components/common/layout/Layout';
+import ErrorPage from '../pages/ErrorPage';
 import Intro from '../pages/Intro';
 import LogIn from '../pages/LogIn';
 import MyPage from '../pages/MyPage';
@@ -28,6 +29,7 @@ const Router: React.FC = () => {
           <Route path="/spotshare/detail/:postid" element={<SpotShareDetail />} />
           <Route path="/spotshare/write" element={<SpotShareWrite />} />
           <Route path="/spotshare/write/:postid" element={<SpotShareWrite />} />
+          <Route path="*" element={<ErrorPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
