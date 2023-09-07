@@ -35,7 +35,7 @@ function SpotWrite() {
       postId: postid,
     };
 
-    postCommentMutation.mutateAsync(newComment);
+    postCommentMutation.mutate(newComment);
 
     setContent('');
   };

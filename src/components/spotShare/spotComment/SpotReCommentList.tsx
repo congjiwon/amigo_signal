@@ -5,29 +5,14 @@ import { ConfirmDelete } from '../../common/modal/alert';
 import * as St from './style';
 import useSpotComment from './useSpotComment';
 
-type CommentProps = {
-  content: string;
-  date: string;
-  id: string;
-  postId: string | null;
-  writerId: string;
-};
-
 type PartnerReCommentsProps = {
-  // comment: CommentProps;
-  storageUrl: string | undefined;
+  storageUrl?: string;
   reCommentId: string;
   reComment: {
-    commentId: string;
     date: string;
     id: string;
     reContent: string;
-    writerId: string;
     users: {
-      birthday: string;
-      email: string;
-      gender: string;
-      id: string;
       nickName: string;
       profileImageUrl: string | null;
     } | null;
@@ -39,31 +24,16 @@ type PartnerReCommentsProps = {
   onCancelBtn: (name: string) => void;
   handleIsOpenBtn: (name: string, id: string | null) => void;
   handleReSubmitBtn: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
-  setIsUpdateReComment: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function SpotReCommentList({
-  // comment,
-  storageUrl,
-  reCommentId,
-  reComment,
-  isPostWriter,
-  isLoginCommentUser,
-  updateReComment,
-  setUpdateReComment,
-  onCancelBtn,
-  handleIsOpenBtn,
-  handleReSubmitBtn,
-  setIsUpdateReComment,
-}: PartnerReCommentsProps) {
-  const { deleteReCommentMutation, updateReCommentMutation } = useSpotComment();
+function SpotReCommentList({ storageUrl, reCommentId, reComment, isPostWriter, isLoginCommentUser, updateReComment, setUpdateReComment, onCancelBtn, handleIsOpenBtn, handleReSubmitBtn }: PartnerReCommentsProps) {
+  const { deleteReCommentMutation } = useSpotComment();
 
-  // 답댓글 삭제 버튼 클릭 >> 잘됨
   const handleReDelBtn = async (id: string) => {
     const isConfirmed = await ConfirmDelete('');
 
     if (isConfirmed) {
-      await deleteReCommentMutation.mutateAsync(id);
+      deleteReCommentMutation.mutate(id);
     }
   };
 
@@ -97,7 +67,6 @@ function SpotReCommentList({
               삭제
             </CommentButton>
           </St.DateButtonBox>
-          {/* 의미가 있을려면 isUpdateReComment */}
           {reCommentId === reComment?.id ? (
             <form onSubmit={handleReSubmitBtn}>
               <St.InputBox>
