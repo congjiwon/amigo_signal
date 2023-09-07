@@ -97,9 +97,7 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
           </St.TravelDateBox>
           {logInUserId ? (
             <div>
-              <St.LikeButton>
-                {like ? <RiHeartFill onClick={(event) => handleEmptyHeart(event)} style={{ height: '24px', width: '24px' }} /> : <RiHeartLine onClick={(event) => handleFillHeart(event)} style={{ height: '24px', width: '22px' }} />}
-              </St.LikeButton>
+              <St.LikeButton>{like ? <RiHeartFill onClick={(event) => handleEmptyHeart(event)} style={St.Heart} /> : <RiHeartLine onClick={(event) => handleFillHeart(event)} style={St.Heart} />}</St.LikeButton>
             </div>
           ) : (
             ''
