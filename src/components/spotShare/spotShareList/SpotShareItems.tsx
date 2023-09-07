@@ -6,6 +6,7 @@ import SkeletonList from '../../common/Skeleton/SkeletonList';
 import TopButton from '../../common/topbutton/TopButton';
 import SpotShareItem from './SpotShareItem';
 import * as St from './style';
+import icon_nodata from '../../../assets/imgs/NoData/icon_nodata.png';
 
 type SpotShareProps = {
   sort?: string;
@@ -62,6 +63,15 @@ export default function SpotShareItems({ sort, country, startDate, endDate }: Sp
 
   if (spotShareLoading) {
     return <SkeletonList />;
+  }
+
+  if (spotShareItems?.pages[0].data?.length === 0) {
+    return (
+      <St.NoDataImgBox>
+        <img src={icon_nodata} style={{ width: '60px' }}></img>
+        <p>검색결과가 없습니다!</p>
+      </St.NoDataImgBox>
+    );
   }
 
   return (
