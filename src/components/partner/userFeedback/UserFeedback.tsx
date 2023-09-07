@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { FiEdit, FiMessageSquare, FiTrash2 } from 'react-icons/fi';
 import { RiBookmarkFill, RiBookmarkLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router';
-import { styled } from 'styled-components';
 import { deletePartnerPost } from '../../../api/supabase/partner';
 import { Tables } from '../../../api/supabase/supabase';
 import { supabase } from '../../../api/supabase/supabaseClient';
@@ -102,10 +101,10 @@ const UserFeedback = ({ partnerPostData }: Props) => {
           </St.GrayParagraph>
         </div>
       </St.UserProfileBox>
-      <ButtonBox>
+      <St.ButtonBox>
         {logInUserId ? (
           <>
-            <button>{openChat.length > 1 && <FiMessageSquare onClick={() => handleCopyClipBoard(openChat)} style={{ height: '24px', width: '24px' }} />}</button>
+            <button>{openChat.length > 1 && <FiMessageSquare onClick={() => handleCopyClipBoard(openChat)} style={St.Icons} />}</button>
             <button>{bookMark ? <RiBookmarkFill onClick={() => removeBookMarkHandle()} style={{ height: '24px', width: '24px' }} /> : <RiBookmarkLine onClick={() => addBookMarkHandle()} style={{ height: '24px', width: '24px' }} />}</button>
           </>
         ) : (
@@ -119,23 +118,9 @@ const UserFeedback = ({ partnerPostData }: Props) => {
         ) : (
           <></>
         )}
-      </ButtonBox>
+      </St.ButtonBox>
     </St.UserFeedbackBox>
   );
 };
 
 export default UserFeedback;
-
-const ButtonBox = styled.div`
-  display: flex;
-  gap: 20px;
-  button {
-    padding: 0;
-    border: none;
-    background-color: transparent;
-    &:hover {
-      transform: scale(1.5);
-      cursor: pointer;
-    }
-  }
-`;

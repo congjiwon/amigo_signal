@@ -157,7 +157,7 @@ function SpotShareDetailContents() {
             </St.InfoInnerBox>
           </St.PostInfoBox>
           <St.ButtonBox>
-            {logInUserId && <button>{like ? <RiHeartFill onClick={() => handleEmptyHeart()} style={{ height: '24px', width: '24px' }} /> : <RiHeartLine onClick={() => handleFillHeart()} style={{ height: '24px', width: '24px' }} />}</button>}
+            {logInUserId && <button>{like ? <RiHeartFill onClick={() => handleEmptyHeart()} style={St.Heart} /> : <RiHeartLine onClick={() => handleFillHeart()} style={St.Heart} />}</button>}
             {isPostWriter() ? (
               <>
                 <button>{<FiEdit onClick={() => navigate(`/spotshare/write/${spotSharePost?.id}`)} style={{ height: '24px', width: '24px' }} />}</button>

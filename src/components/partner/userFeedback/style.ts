@@ -45,3 +45,26 @@ export const BlackParagraph = styled.p`
   font-weight: 600;
   line-height: 150%; /* 21px */
 `;
+
+export const ButtonBox = styled.div`
+  display: flex;
+  gap: 20px;
+  button {
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    &:hover {
+      color: #670fdf;
+      transform: scale(1.2);
+      transition: transform 0.3s ease;
+    }
+    &:not(:hover) {
+      transition: 0.3s ease-out;
+    }
+  }
+`;
+
+export const Icons = {
+  height: '24px',
+  width: '24px',
+};
