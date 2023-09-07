@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import { getAuthId } from '../../../api/supabase/users';
-import useCurrentUserStore from '../../../zustand/currentUser';
+import useSessionStore from '../../../zustand/store';
 import * as St from './style';
 import { usePartnerComments } from './usePartnerComment';
 
@@ -10,15 +10,13 @@ function PartnerCommentsWrite() {
   const params = useParams();
   const [content, setContent] = useState('');
   const { isLoading, data: authId } = useQuery(['auth'], getAuthId);
-  const currentUser = useCurrentUserStore((state) => state.currentUser);
-
+  const session = useSessionStore((state) => state.session);
+  const logInUserId = session?.user.id;
   const { postCommentMutation } = usePartnerComments();
-
   // 항상 뜸
   if (isLoading) {
     // console.log('로딩중');
   }
-
   // 지원님 시간 가져옴.
   const currentTime = function () {
     const today = new Date();
@@ -31,25 +29,20 @@ function PartnerCommentsWrite() {
     const now = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
     return now;
   };
-
   const handleSubmitBtnClick = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     const newComment = {
       content: content,
       date: currentTime(),
       writerId: authId,
       postId: params.postid,
     };
-
     postCommentMutation.mutate(newComment);
-
     setContent('');
   };
-
   return (
     <>
-      {currentUser && (
+      {logInUserId && (
         <St.Form onSubmit={handleSubmitBtnClick}>
           <St.CommentTextarea name="content" placeholder="댓글을 남겨보세요" value={content} onChange={(e) => setContent(e.target.value)} />
           <St.CommentButton type="submit" disabled={content.length < 1}>
@@ -60,5 +53,4 @@ function PartnerCommentsWrite() {
     </>
   );
 }
-
 export default PartnerCommentsWrite;

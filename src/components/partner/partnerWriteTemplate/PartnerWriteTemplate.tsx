@@ -23,6 +23,7 @@ function PartnerWriteTemplate() {
   const [interestDiscription, setInterestDiscription] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [writerId, setWriterId] = useState<string>('');
+  const [disable, setDisable] = useState(false);
   const navigate = useNavigate();
   const authId = window.localStorage.getItem('authId');
 
@@ -122,6 +123,7 @@ function PartnerWriteTemplate() {
       writerId,
     };
     if (validation()) {
+      setDisable(true);
       try {
         setLoading(true);
         await insertPost(dataToInsert);
@@ -193,7 +195,7 @@ function PartnerWriteTemplate() {
           <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={() => navigate('/partner')}>
             취소하기
           </Button>
-          <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={handleWriteClick}>
+          <Button type="button" disabled={disable} styleType={BtnStyleType.BTN_DARK} onClick={handleWriteClick}>
             작성하기
           </Button>
         </St.ButtonBox>
