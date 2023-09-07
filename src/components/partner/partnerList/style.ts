@@ -4,6 +4,24 @@ type StatusProps = {
   $isOpen: boolean;
 };
 
+export const NoDataImgBox = styled.div`
+  height: 588px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  p {
+    margin-top: 24px;
+    color: var(--black, #121621);
+    text-align: center;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 150%; /* 24px */
+  }
+`;
+
 export const PartnerListLayout = styled.div`
   display: flex;
   flex-direction: column;
@@ -202,6 +220,7 @@ export const UserProfile = styled.div`
   display: flex;
   align-items: center;
   gap: 7px;
+  /* marg */
   margin-left: 20px;
   p {
     margin-left: 2px;
