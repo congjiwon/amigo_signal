@@ -7,6 +7,7 @@ import useSessionStore from '../../../zustand/store';
 import Button from '../../common/button/Button';
 import { UpdateSpotCalendar } from '../../common/calendar/SpotCalendar';
 import { UpdateLocationDropDown } from '../../common/dropDown/LocationDropDown';
+import LoadingSpinner from '../../common/loadingSpinner/LoadingSpinner';
 import { AlertWarning } from '../../common/modal/alert';
 import { UpdateStarRate } from '../../common/starRate/StarRate';
 import SpotMap from '../map/SpotMap';
@@ -81,7 +82,7 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
   if (isError) {
     return <div>Error loading data</div>;

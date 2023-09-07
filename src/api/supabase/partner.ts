@@ -39,7 +39,7 @@ export const getPartnerPosts = async ({ isOpen, country, startDate, endDate, pag
 };
 
 export const getPartnerPost = async ({ postId }: { postId: string }) => {
-  const { data } = await supabase.from('partnerPosts').select('*').eq('id', postId).single();
+  const { data } = await supabase.from('partnerPosts').select('*, country(country), users(nickName, profileImageUrl)').eq('id', postId).single();
   return data;
 };
 
@@ -127,12 +127,14 @@ export const getReCommentWriterIds = async () => {
 };
 
 //동행 글 추가
-export const insertPost = async (dataToInsert: any) => {
-  const { data, error } = await supabase.from('partnerPosts').insert(dataToInsert);
+// export const insertPost = async (dataToInsert: any) => {
+export const insertPost = async (dataToInsert: Inserts<'partnerPosts'>) => {
+  const { data, error } = await supabase.from('partnerPosts').insert(dataToInsert).select();
   if (error) {
     console.error('Insert error:', error);
   } else {
     console.log('Inserted data:', data);
+    return data;
   }
 };
 
