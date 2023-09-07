@@ -139,6 +139,7 @@ export const ApplicantContent = styled.p`
 
 export const ConfirmedApplicantList = styled.div<ConfirmedApplicantListProps>`
   width: 282px;
+  margin-bottom: 20px;
   padding-bottom: ${(props) => (props.$isExist ? '40px' : '0px')};
   border: 1px solid lightgray;
   border-radius: 10px;
