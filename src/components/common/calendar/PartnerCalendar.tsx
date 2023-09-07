@@ -26,7 +26,7 @@ function PartnerCalendar({ setPartnerDates }: CalendarProps) {
   return (
     <ConfigProvider locale={koKR}>
       <Space direction="vertical" size={12} style={{ marginLeft: '24px' }}>
-        <RangePicker allowClear disabledDate={disabledDate} onChange={getDateHandle} />
+        <RangePicker allowClear disabledDate={disabledDate} onChange={getDateHandle} inputReadOnly />
       </Space>
     </ConfigProvider>
   );
@@ -45,7 +45,7 @@ export function UpdatePartnerCalendar({ startDate, endDate, setPartnerDates }: U
   return (
     <ConfigProvider locale={koKR}>
       <Space direction="vertical" size={12}>
-        <RangePicker defaultValue={[dayjs(startDate, dateFormat), dayjs(endDate, dateFormat)]} disabledDate={disabledDate} onChange={getDateHandle} />
+        <RangePicker defaultValue={[dayjs(startDate, dateFormat), dayjs(endDate, dateFormat)]} disabledDate={disabledDate} onChange={getDateHandle} inputReadOnly />
       </Space>
     </ConfigProvider>
   );

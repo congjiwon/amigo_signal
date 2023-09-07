@@ -12,8 +12,14 @@ export const FooterContainer = styled.div`
   min-width: 360px;
   max-width: 1200px;
   margin: 0 auto;
+
   @media (max-width: 1200px) {
-    margin-left: 100px;
+    padding-left: 100px;
+    box-sizing: border-box;
+  }
+
+  @media (max-width: 600px) {
+    padding-left: 20px;
   }
 `;
 

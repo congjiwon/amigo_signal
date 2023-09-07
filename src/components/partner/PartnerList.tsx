@@ -9,8 +9,8 @@ const PartnerList = () => {
   const [date, setDate] = useState<string[]>([]);
 
   const country = location[1];
-  const startDate = date[0];
-  const endDate = date[1];
+  const startDate = date[0] === '' ? undefined : date[0];
+  const endDate = date[1] === '' ? undefined : date[1];
 
   return (
     <>

@@ -1,4 +1,3 @@
-import React from 'react';
 import IntroTemplate from '../components/common/Intro/IntroTemplate';
 
 const Intro = () => {

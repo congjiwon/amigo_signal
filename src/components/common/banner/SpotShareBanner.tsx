@@ -1,7 +1,5 @@
-import TravelWith from '../../../assets/imgs/partner/TravelWith.jpg';
-import * as St from './style';
 import SpotBanner1 from '../../../assets/imgs/Spot/SpotBanner1.jpg';
-import SpotBanner2 from '../../../assets/imgs/Spot/SpotBanner2.jpg';
+import * as St from './style';
 
 function SpotShareBanner() {
   return (

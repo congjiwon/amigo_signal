@@ -56,6 +56,7 @@ export const ApplicantList = styled.ul`
   width: 90%;
   margin: 0px auto;
   margin-top: 30px;
+  overflow-y: auto;
 `;
 
 export const ApplicantCard = styled.div<ApplicantCardProps>`
@@ -133,6 +134,7 @@ export const RejectButton = styled.button<CheckButtonProps>`
 export const ApplicantContent = styled.p`
   margin-top: 20px;
   margin-left: 40px;
+  overflow-wrap: anywhere;
 `;
 
 export const ConfirmedApplicantList = styled.div<ConfirmedApplicantListProps>`

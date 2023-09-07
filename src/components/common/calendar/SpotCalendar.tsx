@@ -24,7 +24,7 @@ export function SpotCalendar({ setSpotDate }: CalendarProps) {
 
   return (
     <Space direction="vertical">
-      <DatePicker onChange={getDateHandle} />
+      <DatePicker onChange={getDateHandle} inputReadOnly />
     </Space>
   );
 }
@@ -36,7 +36,7 @@ export function UpdateSpotCalendar({ spotDate, setSpotDate }: UpdateCalendarProp
   const dateFormat = 'YYYY/MM/DD';
   return (
     <Space direction="vertical">
-      <DatePicker defaultValue={dayjs(spotDate, dateFormat)} onChange={getDateHandle} />
+      <DatePicker defaultValue={dayjs(spotDate, dateFormat)} onChange={getDateHandle} inputReadOnly />
     </Space>
   );
 }
@@ -52,7 +52,7 @@ export function FilterSpotCalendar({ setSpotDate }: FilterCalendarProps) {
   return (
     <ConfigProvider locale={koKR}>
       <Space direction="vertical" size={12} style={{ marginLeft: '24px' }}>
-        <RangePicker allowClear disabledDate={disabledDate} onChange={getDateHandle} />
+        <RangePicker allowClear disabledDate={disabledDate} onChange={getDateHandle} inputReadOnly />
       </Space>
     </ConfigProvider>
   );

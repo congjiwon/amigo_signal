@@ -21,6 +21,7 @@ export const Inner = styled.div<InnerProps>`
   flex-direction: column;
   position: relative;
   margin: auto;
+  padding-bottom: 20px;
   background-color: #ffffff;
   border-radius: 15px;
   box-shadow: 5px 5px 12px rgba(23, 23, 23, 0.3);
@@ -32,12 +33,21 @@ export const Inner = styled.div<InnerProps>`
         width: 60%;
         height: 70%;
         border-radius: 30px;
+
+        @media screen and (max-width: 600px) {
+          width: 80%;
+        }
         `;
       case 'medium':
         return `
         width: 45%;
         height: 55%;
         border-radius: 30px;
+
+        @media screen and (max-width: 600px) {
+          width: 80%;
+        }
+        
         `;
       case 'small':
         return `

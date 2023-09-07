@@ -140,7 +140,7 @@ export const Body = styled.div`
   border-bottom: 1px solid #d9d9d9;
   p {
     padding: 7px;
-    background-color: lightgray;
+    background-color: #ede2ad;
     border-radius: 30px;
     font-size: 0.7rem;
   }
@@ -150,7 +150,7 @@ export const Status = styled.div<StatusProps>`
   display: flex;
   align-items: center;
   padding: 5px;
-  background-color: ${(props) => (props.$isOpen ? '#FF7000' : '#994504')};
+  background-color: ${(props) => (props.$isOpen ? '#9cbdf7' : '#233f70')};
   border-radius: 30px;
   font-size: 0.7rem;
   color: ${(props) => (props.$isOpen ? '#000000' : '#ffffff')};
