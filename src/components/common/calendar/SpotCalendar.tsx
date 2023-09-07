@@ -51,7 +51,7 @@ export function FilterSpotCalendar({ setSpotDate }: FilterCalendarProps) {
 
   return (
     <ConfigProvider locale={koKR}>
-      <Space direction="vertical" size={12} style={{ marginLeft: '24px' }}>
+      <Space direction="vertical" size={12}>
         <RangePicker allowClear disabledDate={disabledDate} onChange={getDateHandle} inputReadOnly />
       </Space>
     </ConfigProvider>

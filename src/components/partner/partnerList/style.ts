@@ -39,6 +39,35 @@ export const FilterWriteBox = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+
+  @media screen and (max-width: 1200px) {
+    padding: 0 16px;
+  }
+
+  @media screen and (max-width: 650px) {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 20px;
+    gap: 12px;
+
+    & button:last-of-type {
+      align-self: flex-end;
+    }
+  }
+`;
+
+export const SelectsBox = styled.div`
+  display: flex;
+
+  @media screen and (max-width: 650px) {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+
+    & :where(.css-dev-only-do-not-override-byeoj0).ant-space-vertical {
+      margin-left: 0 !important;
+    }
+  }
 `;
 
 export const Grid = styled.div`

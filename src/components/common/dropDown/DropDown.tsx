@@ -153,7 +153,7 @@ export function SortDropDown({ setSort }: SortProps) {
         placeholder="최신순"
         defaultValue="최신순"
         allowClear
-        style={{ width: '90px', marginRight: '24px' }}
+        style={{ width: '90px' }}
         onChange={handleChange}
         options={[
           { value: 'createdAt', label: '최신순' },
