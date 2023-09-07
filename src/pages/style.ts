@@ -8,8 +8,14 @@ export const PartnerDetailMain = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  @media (max-width: 768px) {
-    flex-direction: column;
+`;
+
+export const PartnerDetailInfoSection = styled.section`
+  margin-top: 30px;
+  flex-basis: 791px;
+  flex-shrink: 1;
+  @media (max-width: 1090px) {
+    flex-grow: 1;
   }
 `;
 

@@ -4,7 +4,7 @@ import * as St from './style';
 
 const PartnerDetailInfo = ({ partnerPostData }: { partnerPostData: Tables<'partnerPosts'> }) => {
   return (
-    <section>
+    <>
       <St.H2>{partnerPostData?.title}</St.H2>
       {partnerPostData && <UserFeedback partnerPostData={partnerPostData} />}
       <St.DetailInfoList>
@@ -40,7 +40,7 @@ const PartnerDetailInfo = ({ partnerPostData }: { partnerPostData: Tables<'partn
         ))}
       </St.DetailInfoList>
       <St.ContentParagraph>{partnerPostData?.content}</St.ContentParagraph>
-    </section>
+    </>
   );
 };
 
