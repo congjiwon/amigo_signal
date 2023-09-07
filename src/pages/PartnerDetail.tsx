@@ -84,7 +84,7 @@ function PartnerDetail() {
       </St.PartnerDetailMain>
       <St.Status>
         <St.PostStatus $partnerStatus={partnerStatus}>{partnerStatus === '모집중' ? '모집중' : '모집완료'}</St.PostStatus>
-        {isApply && applicantStatus !== null ? <St.ApplyStatus>{applicantStatus}</St.ApplyStatus> : <></>}
+        {partnerStatus === '모집중' && isApply && applicantStatus !== null ? <St.ApplyStatus>{applicantStatus}</St.ApplyStatus> : <></>}
       </St.Status>
       <PartnerComments />
     </>
