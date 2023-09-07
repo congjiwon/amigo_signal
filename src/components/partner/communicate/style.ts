@@ -56,6 +56,7 @@ export const ApplicantList = styled.ul`
   width: 90%;
   margin: 0px auto;
   margin-top: 30px;
+  overflow-y: auto;
 `;
 
 export const ApplicantCard = styled.div<ApplicantCardProps>`
@@ -72,6 +73,7 @@ export const ApplicantProfile = styled.div`
 
 export const ApplicantInfo = styled.div`
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 7px;
 `;
@@ -96,6 +98,7 @@ export const ApplicantAgeGender = styled.p`
 export const ButtonDiv = styled.div`
   display: flex;
   gap: 5px;
+  flex: 0 0 auto;
 `;
 
 export const AcceptButton = styled.button<CheckButtonProps>`
@@ -112,6 +115,11 @@ export const AcceptButton = styled.button<CheckButtonProps>`
     if (props.$isAccepted === null) return 'black';
     return props.$isAccepted ? 'white' : 'black';
   }};
+
+  @media (max-width: 550px) {
+    height: 30px;
+    border-radius: 15px;
+  }
 `;
 
 export const RejectButton = styled.button<CheckButtonProps>`
@@ -128,15 +136,21 @@ export const RejectButton = styled.button<CheckButtonProps>`
     if (props.$isAccepted === null) return 'black';
     return props.$isAccepted ? 'black' : 'white';
   }};
+  @media (max-width: 550px) {
+    height: 30px;
+    border-radius: 15px;
+  }
 `;
 
 export const ApplicantContent = styled.p`
   margin-top: 20px;
   margin-left: 40px;
+  overflow-wrap: anywhere;
 `;
 
 export const ConfirmedApplicantList = styled.div<ConfirmedApplicantListProps>`
   width: 282px;
+  margin-bottom: 20px;
   padding-bottom: ${(props) => (props.$isExist ? '40px' : '0px')};
   border: 1px solid lightgray;
   border-radius: 10px;

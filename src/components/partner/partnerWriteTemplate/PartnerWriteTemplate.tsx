@@ -8,7 +8,7 @@ import Button from '../../common/button/Button';
 import PartnerCalendar from '../../common/calendar/PartnerCalendar';
 import { PartnerDropDown } from '../../common/dropDown/DropDown';
 import LocationDropDown from '../../common/dropDown/LocationDropDown';
-import { AlertWarning } from '../../common/modal/alert';
+import { AlertError, AlertWarning } from '../../common/modal/alert';
 import * as St from './style';
 
 function PartnerWriteTemplate() {
@@ -105,27 +105,29 @@ function PartnerWriteTemplate() {
   };
   // 글 작성 버튼 클릭 핸들러
   const handleWriteClick = async () => {
+    const time = currentTime();
+    const dataToInsert = {
+      title,
+      content,
+      isOpen: true,
+      startDate: partnerDates[0],
+      endDate: partnerDates[1],
+      openChat: chatUrl,
+      createdAt: time,
+      interestUrl,
+      interestDiscription,
+      region: location[0],
+      country: location[1],
+      numOfPeople: partner,
+      writerId,
+    };
     if (validation()) {
-      const time = currentTime();
-      const dataToInsert = [
-        {
-          title,
-          content,
-          isOpen: true,
-          startDate: partnerDates[0],
-          endDate: partnerDates[1],
-          openChat: chatUrl,
-          createdAt: time,
-          interestUrl,
-          interestDiscription,
-          region: location[0],
-          country: location[1],
-          numOfPeople: partner,
-          writerId,
-        },
-      ];
-      setLoading(true);
-      await insertPost(dataToInsert);
+      try {
+        setLoading(true);
+        await insertPost(dataToInsert);
+      } catch (err) {
+        AlertError({ title: '동행 찾기 게시물을 업로드하지 못했습니다.' });
+      }
       setLoading(false);
       navigate('/partner');
     }
@@ -140,7 +142,7 @@ function PartnerWriteTemplate() {
           <PartnerDropDown setPartner={setPartner} />
         </St.SelectListBox>
         <St.WriteInput
-          maxLength={100}
+          maxLength={50}
           value={title}
           onChange={(event) => {
             setTitle(event.target.value);
@@ -152,7 +154,7 @@ function PartnerWriteTemplate() {
           onChange={(event) => {
             setContent(event.target.value);
           }}
-          placeholder="1. 현제 동행이 있나요? &#13;&#10;2. 어떤 동행을 찾고 있나요? &#13;&#10;3. 원하는 여행 코스가 있다면 적어주세요  "
+          placeholder="1. 현재 동행이 있나요? &#13;&#10;2. 어떤 동행을 찾고 있나요? &#13;&#10;3. 원하는 여행 코스가 있다면 적어주세요  "
         ></St.TextArea>
         <St.ExplanationBox>
           <p>오픈채팅 주소</p>

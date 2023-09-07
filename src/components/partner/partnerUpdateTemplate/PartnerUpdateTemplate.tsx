@@ -10,11 +10,12 @@ import Button from '../../common/button/Button';
 import { UpdatePartnerCalendar } from '../../common/calendar/PartnerCalendar';
 import { UpdatePartnerDropDown } from '../../common/dropDown/DropDown';
 import { UpdateLocationDropDown } from '../../common/dropDown/LocationDropDown';
+import LoadingSpinner from '../../common/loadingSpinner/LoadingSpinner';
 import { AlertError, AlertWarning } from '../../common/modal/alert';
 import * as St from './style';
 
 function PartnerUpdateTemplate({ postId }: { postId: string }) {
-  const { data: partnerPost } = useQuery(['partnerPost', postId], () => getPartnerPost({ postId }));
+  const { data: partnerPost, isLoading, isError } = useQuery(['partnerPost', postId], () => getPartnerPost({ postId }));
   const [applicantList, setApplicantList] = useState<Tables<'applicants'>[]>([]);
   const [confirmedApplicantList, setConfirmedApplicantList] = useState<Tables<'applicants'>[]>([]);
   const [location, setLocation] = useState<string[]>([]);
@@ -73,7 +74,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
   useEffect(() => {
     const fetchPostData = async () => {
       if (partnerPost) {
-        setLocation([partnerPost.region, partnerPost.country]);
+        setLocation([partnerPost.region, partnerPost?.country.country!]);
         setPartnerDates([partnerPost.startDate, partnerPost.endDate]);
         setPartner(partnerPost.numOfPeople);
         setTitle(partnerPost.title);
@@ -153,6 +154,13 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
     return true;
   };
 
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+  if (isError) {
+    return <div>Error loading data</div>;
+  }
+
   // 글 작성 버튼 클릭 핸들러
   const handleUpdateClick = async () => {
     if (validation()) {
@@ -182,7 +190,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
       <St.WriteForm>
         <St.SelectListBox>
           <St.ExplanationBox>
-            <UpdateLocationDropDown location={[partnerPost?.region!, partnerPost?.country!]} setLocation={setLocation} />
+            <UpdateLocationDropDown location={[partnerPost?.region!, partnerPost?.country.country!]} setLocation={setLocation} />
           </St.ExplanationBox>
           <St.ExplanationBox>
             <UpdatePartnerCalendar startDate={partnerPost?.startDate!} endDate={partnerPost?.endDate!} setPartnerDates={setPartnerDates} />
@@ -192,7 +200,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
           </St.ExplanationBox>
         </St.SelectListBox>
         <St.WriteInput
-          maxLength={100}
+          maxLength={50}
           value={title}
           onChange={(event) => {
             setTitle(event.target.value);
@@ -204,7 +212,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
           onChange={(event) => {
             setContent(event.target.value);
           }}
-          placeholder="1. 현제 동행이 있나요? &#13;&#10;2. 어떤 동행을 찾고 있나요? &#13;&#10;3. 원하는 여행 코스가 있다면 적어주세요  "
+          placeholder="1. 현재 동행이 있나요? &#13;&#10;2. 어떤 동행을 찾고 있나요? &#13;&#10;3. 원하는 여행 코스가 있다면 적어주세요  "
         ></St.TextArea>
         <St.ExplanationBox>
           <p>오픈채팅 주소</p>

@@ -64,7 +64,12 @@ export const ButtonBox = styled.div`
     background-color: transparent;
     border: none;
     &:hover {
-      transform: scale(1.5);
+      color: #670fdf;
+      transform: scale(1.2);
+      transition: transform 0.3s ease;
+    }
+    &:not(:hover) {
+      transition: 0.3s ease-out;
     }
     cursor: pointer;
   }
@@ -139,3 +144,8 @@ export const SpotShareBox = styled.div`
   padding-bottom: 130px;
   position: relative;
 `;
+
+export const Heart = {
+  height: '24px',
+  width: '24px',
+};

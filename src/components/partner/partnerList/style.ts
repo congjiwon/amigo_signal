@@ -4,10 +4,22 @@ type StatusProps = {
   $isOpen: boolean;
 };
 
-export const filterWriteBox = styled.div`
+export const PartnerListLayout = styled.div`
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
+  width: 100%;
+  min-width: 360px;
+  max-width: 1200px;
+  margin: 0 auto;
+`;
+
+export const Country = styled.p`
+  color: var(--black, #000);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%; /* 21px */
+  margin-top: 23px;
 `;
 
 //탑버튼
@@ -21,37 +33,41 @@ export const WriterInfoBox = styled.div`
     color: var(--dark-gray, #81858a);
   }
 `;
-export const ImageWrapper = styled.div`
-  position: relative;
-  width: 100%;
-  min-width: 360px;
-  max-width: 1200px;
-  height: 400px;
-  overflow: hidden;
+
+export const FilterWriteBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  @media screen and (max-width: 1200px) {
+    padding: 0 16px;
+  }
+
+  @media screen and (max-width: 650px) {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 20px;
+    gap: 12px;
+
+    & button:last-of-type {
+      align-self: flex-end;
+    }
+  }
 `;
 
-export const MainImage = styled.img`
-  position: absolute;
-  width: 100%;
-  /* width: 1920px; */
-  transform: translate(0%, -20%);
-`;
+export const SelectsBox = styled.div`
+  display: flex;
 
-export const ImageMainText = styled.span`
-  position: absolute;
-  bottom: 55%;
-  left: 5%;
-  color: black;
-  font-size: 1.4rem;
-  font-weight: bold;
-`;
+  @media screen and (max-width: 650px) {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
 
-export const ImageSubText = styled.span`
-  position: absolute;
-  bottom: 45%;
-  left: 5%;
-  color: black;
-  font-size: 0.8rem;
+    & :where(.css-dev-only-do-not-override-byeoj0).ant-space-vertical {
+      margin-left: 0 !important;
+    }
+  }
 `;
 
 export const Grid = styled.div`
@@ -79,7 +95,7 @@ export const PostCard = styled.div`
   height: 282px;
   position: relative;
   border-radius: 30px;
-  box-shadow: 5px 5px 10px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 5px 5px 10px 3px rgba(0, 0, 0, 0.1);
 `;
 
 export const Location = styled.div`
@@ -132,7 +148,7 @@ export const TravelDate = styled.div`
 export const TitleBox = styled.div`
   width: 200px;
   margin-bottom: 10px;
-  h1 {
+  p {
     font-weight: 600;
     font-size: 16px;
     white-space: nowrap;
@@ -153,7 +169,7 @@ export const Body = styled.div`
   border-bottom: 1px solid #d9d9d9;
   p {
     padding: 7px;
-    background-color: lightgray;
+    background-color: #ede2ad;
     border-radius: 30px;
     font-size: 0.7rem;
   }
@@ -163,7 +179,7 @@ export const Status = styled.div<StatusProps>`
   display: flex;
   align-items: center;
   padding: 5px;
-  background-color: ${(props) => (props.$isOpen ? '#FF7000' : '#994504')};
+  background-color: ${(props) => (props.$isOpen ? '#9cbdf7' : '#233f70')};
   border-radius: 30px;
   font-size: 0.7rem;
   color: ${(props) => (props.$isOpen ? '#000000' : '#ffffff')};

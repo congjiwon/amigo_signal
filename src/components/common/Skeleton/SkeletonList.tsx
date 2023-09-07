@@ -1,45 +1,15 @@
-import { Skeleton, Space } from 'antd';
+import { Skeleton } from 'antd';
 import * as St from './style';
 
-const SkeletonList: React.FC = () => {
+const SkeletonList = () => {
   const skeletonCount = 8;
   const skeletonItems = new Array(skeletonCount).fill('').map((_, index) => (
-    <Space key={index}>
-      <Skeleton.Image active={true} style={{ width: '282px', height: '282px' }} />
-    </Space>
+    <St.PostCard key={index}>
+      <Skeleton avatar active={true} paragraph={{ rows: 4 }} style={{ padding: '20px' }} />
+    </St.PostCard>
   ));
 
-  // return <St.Grid>{skeletonItems}</St.Grid>;
-
-  return (
-    <>
-      <St.Grid>
-        <Space>
-          <Skeleton.Image active={true} style={{ width: '282px', height: '282px' }} />
-        </Space>
-        <Space>
-          <Skeleton.Image active={true} style={{ width: '282px', height: '282px' }} />
-        </Space>
-        <Space>
-          <Skeleton.Image active={true} style={{ width: '282px', height: '282px' }} />
-        </Space>
-        <Space>
-          <Skeleton.Image active={true} style={{ width: '282px', height: '282px' }} />
-        </Space>
-        <Space>
-          <Skeleton.Image active={true} style={{ width: '282px', height: '282px' }} />
-        </Space>
-        <Space>
-          <Skeleton.Image active={true} style={{ width: '282px', height: '282px' }} />
-        </Space>
-        <Space>
-          <Skeleton.Image active={true} style={{ width: '282px', height: '282px' }} />
-        </Space>
-        <Space>
-          <Skeleton.Image active={true} style={{ width: '282px', height: '282px' }} />
-        </Space>
-      </St.Grid>
-    </>
-  );
+  return <St.Grid>{skeletonItems}</St.Grid>;
 };
+
 export default SkeletonList;

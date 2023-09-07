@@ -2,7 +2,7 @@ import { css, styled } from 'styled-components';
 import { BtnStyleType } from '../../../types/styleTypes';
 
 const btnCommonStyles = css`
-  margin-top: 20px;
+  /* margin-top: 20px; */
   padding: 10px 30px;
   border: none;
   border-radius: 4px;

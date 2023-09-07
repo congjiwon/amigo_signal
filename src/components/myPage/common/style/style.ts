@@ -1,4 +1,4 @@
-import { css, styled } from 'styled-components';
+import { styled } from 'styled-components';
 import iconCalendar from '../../../../assets/imgs/partner/Calendar.svg';
 
 export const MyFilterBtns = styled.div`
@@ -73,6 +73,7 @@ export const CountryInfo = styled.div`
     height: 40px;
     border-radius: 50%;
     overflow: hidden;
+    background-color: #e8ebee;
 
     & img {
       position: absolute;
@@ -186,6 +187,7 @@ export const UserInfoMain = styled.div`
       left: 50%;
       top: 50%;
       width: 100%;
+      height: 100%;
       transform: translate(-50%, -50%);
     }
   }
@@ -239,16 +241,21 @@ export const ContentEllipsis = styled.div`
   line-height: 1.5;
 `;
 
-export const BgCountryBox = styled.div<{ $countryBg?: string }>`
-  ${(props) => {
-    return css`
-      position: relative;
-      height: 140px;
-      border-bottom-right-radius: 30px;
-      border-bottom-left-radius: 30px;
-      background: center / cover url(${props.$countryBg}) no-repeat;
-    `;
-  }}
+export const BgCountryBox = styled.div`
+  position: relative;
+  height: 140px;
+  border-bottom-right-radius: 30px;
+  border-bottom-left-radius: 30px;
+  background-color: #eee;
+  overflow: hidden;
+`;
+
+export const BgCountryImg = styled.img`
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 export const BadgeCountry = styled.div`
@@ -262,3 +269,23 @@ export const BadgeCountry = styled.div`
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.8);
 `;
+
+export const LikeButton = styled.button`
+  padding: 20px;
+  background-color: transparent;
+  border: none;
+  &:hover {
+    transform: scale(1.2);
+    transition: transform 0.3s ease;
+  }
+  &:not(:hover) {
+    transition: 0.3s ease-out;
+  }
+  cursor: pointer;
+`;
+
+export const Heart = {
+  height: '24px',
+  width: '24px',
+  color: '#670fdf',
+};

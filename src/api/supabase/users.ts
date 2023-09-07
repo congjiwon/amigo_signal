@@ -1,19 +1,19 @@
 import { supabase } from './supabaseClient';
 
 export const getUser = async ({ userId }: { userId: string }) => {
-  let { data } = await supabase.from('users').select('*').eq('id', userId).single();
+  const { data } = await supabase.from('users').select('*').eq('id', userId).single();
   return { data };
 };
 
 // user 정보 배열
 export const getUsers = async () => {
-  let { data } = await supabase.from('users').select('id, nickName, profileImageUrl');
+  const { data } = await supabase.from('users').select('id, nickName, profileImageUrl');
   return data;
 };
 
 // user ID
 export const getUserIds = async () => {
-  let { data } = await supabase.from('users').select('id');
+  const { data } = await supabase.from('users').select('id');
   return data;
 };
 
@@ -27,7 +27,7 @@ export const getAuthId = async () => {
 const authId = getAuthId();
 
 export const getCurrentUser = async (userId: string) => {
-  let { data } = await supabase.from('users').select('*').eq('id', userId).single();
+  const { data } = await supabase.from('users').select('*').eq('id', userId).single();
   return data;
 };
 
@@ -36,7 +36,7 @@ type duplicationCheckProps = {
   value: string;
 };
 export const duplicationCheckFromUserTable = async ({ columnName, value }: duplicationCheckProps) => {
-  let { data, error } = await supabase.from('users').select(columnName).eq(columnName, value);
+  const { data, error } = await supabase.from('users').select(columnName).eq(columnName, value);
   if (data?.length !== undefined && data.length > 0) {
     return true;
   }
@@ -45,7 +45,7 @@ export const duplicationCheckFromUserTable = async ({ columnName, value }: dupli
 
 type userNickNameProps = {
   nickName: string | undefined;
-  userId: string | undefined;
+  userId?: string | null;
 };
 
 export const updateUserNickname = async ({ nickName, userId }: userNickNameProps) => {
@@ -90,7 +90,7 @@ export const removeBookMark = async (logInUserId: string, postId: string) => {
 //북마크 상태 확인
 export const bookmarkCheck = async (logInUserId: string, postId: string) => {
   try {
-    let { data, error } = await supabase.from('bookmarks').select('*').eq('postId', postId).eq('userId', logInUserId);
+    const { data, error } = await supabase.from('bookmarks').select('*').eq('postId', postId).eq('userId', logInUserId);
     if (error) {
       console.log('북마크 데이터 불러오는데 실패함 ..', error);
     }

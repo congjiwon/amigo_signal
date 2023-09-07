@@ -11,13 +11,35 @@ export const getSpotShareDefaultImg = async (country: string) => {
   return await supabase.from('countryInfo').select('imageUrl').eq('country', country);
 };
 
-export const getPartnerPosts = async () => {
-  let { data, error } = await supabase.from('partnerPosts').select('*, users!partnerPosts_writerId_fkey(*)').order('createdAt', { ascending: false });
-  return { data, error };
+// 동행 목록: 3중 필터 (모집 여부 + 국가 + 여행 기간)
+type PartnerFilterType = {
+  isOpen?: boolean;
+  country?: string;
+  startDate?: string;
+  endDate?: string;
+};
+
+export const getPartnerPosts = async ({ isOpen, country, startDate, endDate, page = 0, limit = 8 }: PartnerFilterType & { page?: number; limit?: number }) => {
+  let PartnerPosts = supabase.from('partnerPosts').select('*, users(*), country(*)', { count: 'exact' }).order('createdAt', { ascending: false });
+
+  if (isOpen !== undefined) {
+    PartnerPosts = PartnerPosts.eq('isOpen', isOpen);
+  }
+
+  if (country !== undefined) {
+    PartnerPosts = PartnerPosts.eq('country', country);
+  }
+
+  if (startDate !== undefined && endDate !== undefined) {
+    PartnerPosts = PartnerPosts.gte('startDate', startDate).lte('endDate', endDate);
+  }
+
+  const { data, error, count } = await PartnerPosts.range(page * limit, (page + 1) * limit - 1);
+  return { data, error, count, page };
 };
 
 export const getPartnerPost = async ({ postId }: { postId: string }) => {
-  let { data } = await supabase.from('partnerPosts').select('*').eq('id', postId).single();
+  const { data } = await supabase.from('partnerPosts').select('*, country(country), users(nickName, profileImageUrl)').eq('id', postId).single();
   return data;
 };
 
@@ -33,14 +55,14 @@ export const updatePartnerPost = async (updatePost: any) => {
 
 // 동행 댓글 가져오기(정렬)
 export const getPartnerComments = async () => {
-  let { data, error } = await supabase.from('partnerComments').select('*').order('date', { ascending: false });
+  const { data, error } = await supabase.from('partnerComments').select('*').order('date', { ascending: false });
   // console.log('getPartnerComments');
   return data;
 };
 
 // 동행 댓글(댓글 작성한 모든 유저도 같이) 안씀.
 export const getPostData = async () => {
-  let { data, error } = await supabase.from('partnerComments').select('*, users!comments_writerId_fkey(*)');
+  const { data, error } = await supabase.from('partnerComments').select('*, users!comments_writerId_fkey(*)');
   return data;
 };
 
@@ -66,7 +88,7 @@ export const updatePartnerComment = async (updateComment: TPartnerUpdate) => {
 
 // 동행 답댓글 가져오기(답글 작성한 모든 유저도 같이)
 export const getReCommentData = async () => {
-  let { data, error } = await supabase.from('reComments').select('*, users!reComments_writerId_fkey(*)').order('date', { ascending: true });
+  const { data, error } = await supabase.from('reComments').select('*, users(*)').order('date', { ascending: true });
   return data;
 };
 
@@ -88,29 +110,31 @@ export const updatePartnerReComment = async (updateReComment: TPartnerReComments
 
 // 포스트 작성자 ID
 export const getPartnerPostId = async () => {
-  let { data, error } = await supabase.from('partnerPosts').select('id');
+  const { data, error } = await supabase.from('partnerPosts').select('id');
   return data;
 };
 
 // 코멘트 작성자 ID 배열
 export const getWriterIds = async () => {
-  let { data, error } = await supabase.from('partnerComments').select('writerId');
+  const { data, error } = await supabase.from('partnerComments').select('writerId');
   return data;
 };
 
 // 답댓글 작성자 ID 배열
 export const getReCommentWriterIds = async () => {
-  let { data, error } = await supabase.from('reComments').select('writerId');
+  const { data, error } = await supabase.from('reComments').select('writerId');
   return data;
 };
 
 //동행 글 추가
-export const insertPost = async (dataToInsert: any) => {
-  const { data, error } = await supabase.from('partnerPosts').insert(dataToInsert);
+// export const insertPost = async (dataToInsert: any) => {
+export const insertPost = async (dataToInsert: Inserts<'partnerPosts'>) => {
+  const { data, error } = await supabase.from('partnerPosts').insert(dataToInsert).select();
   if (error) {
     console.error('Insert error:', error);
   } else {
     console.log('Inserted data:', data);
+    return data;
   }
 };
 
@@ -156,9 +180,8 @@ export const getApplicantList = async (postId: string) => {
 };
 
 // 신청자 목록 -> 수락 / 거절
-export const updateStatus = async (applicantId: string, isAccepted: boolean) => {
-  const { data, error } = await supabase.from('applicants').update({ isAccepted, isConfirmed: true }).eq('applicantId', applicantId);
-
+export const updateStatus = async (applicantId: string, postId: string, isAccepted: boolean) => {
+  const { data, error } = await supabase.from('applicants').update({ isAccepted, isConfirmed: true }).eq('applicantId', applicantId).eq('postId', postId);
   return { data, error };
 };
 
@@ -178,7 +201,7 @@ type MyPartnerPostProps = {
 export const getMyPartnerPosts = async ({ userId, filterIsOpen, page }: MyPartnerPostProps) => {
   const { from, to } = getRangePagination(page, NUMBER_OF_ITEMS);
 
-  let partnerPosts = supabase.from('partnerPosts').select('*', { count: 'exact' }).eq('writerId', userId);
+  let partnerPosts = supabase.from('partnerPosts').select('*, country(country, flagUrl)', { count: 'exact' }).eq('writerId', userId);
 
   if (filterIsOpen === null) {
     partnerPosts = partnerPosts;
@@ -195,12 +218,6 @@ export const getMyPartnerPosts = async ({ userId, filterIsOpen, page }: MyPartne
   return { data, count };
 };
 
-// export const getSpotLikes = async () => {
-//   let data = supabase.from('spotPosts').select('*', { count: 'exact' });
-//   console.log(data);
-// };
-// getSpotLikes();
-
 // 내가 지원한 동행 포스트들
 type AppliedPostProps = {
   userId: string | undefined;
@@ -211,7 +228,7 @@ type AppliedPostProps = {
 export const getAppliedPosts = async ({ userId, filterIsAccepted, page }: AppliedPostProps) => {
   const { from, to } = getRangePagination(page, NUMBER_OF_ITEMS);
 
-  let appliedPosts = supabase.from('applicants').select('*, postId(*, writerId(*))', { count: 'exact' }).eq('applicantId', userId);
+  let appliedPosts = supabase.from('applicants').select('*, postId(*, writerId(*), country(country, flagUrl))', { count: 'exact' }).eq('applicantId', userId);
 
   if (filterIsAccepted === null) {
     appliedPosts = appliedPosts.is('isAccepted', null);
@@ -235,39 +252,9 @@ type BookmarkedPostProps = {
 export const getBookmarkedPosts = async ({ userId, page }: BookmarkedPostProps) => {
   const { from, to } = getRangePagination(page, NUMBER_OF_ITEMS);
 
-  const { data, count } = await supabase.from('bookmarks').select('*, postId (*, writerId(*))', { count: 'exact' }).eq('userId', userId).order('postId(startDate)').range(from, to);
+  const { data, count } = await supabase.from('bookmarks').select('*, postId (*, country(country, flagUrl), writerId(*))', { count: 'exact' }).eq('userId', userId).order('postId(startDate)').range(from, to);
 
   return { data, count };
-};
-
-// 동행 메인 리스트 국가 + 기간별 + 모집여부 필터
-type filteredPostProps = {
-  country?: string;
-  startDate?: string;
-  endDate?: string;
-  isOpen?: boolean;
-};
-
-export const getFilteredPartnerPost = async ({ country, startDate, endDate, isOpen }: filteredPostProps) => {
-  let partnerPosts = supabase.from('partnerPosts').select('*, users!partnerPosts_writerId_fkey(*)').order('createdAt', { ascending: false });
-
-  if (isOpen !== undefined) {
-    partnerPosts = partnerPosts.eq('isOpen', isOpen);
-  }
-
-  if (country !== undefined) {
-    partnerPosts = partnerPosts.eq('country', country);
-  }
-
-  if (startDate !== undefined && endDate !== undefined) {
-    partnerPosts = partnerPosts.gte('startDate', startDate).lte('endDate', endDate);
-  }
-
-  const { data, error } = await partnerPosts;
-  if (error) {
-    return null;
-  }
-  return data;
 };
 
 // 모집중 <-> 모집완료 바꾸는 로직
@@ -286,6 +273,6 @@ export const getNumOfPeople = async (postId: string) => {
 
 // 해당 동행 모집글의 모집 상태 여부만 가져오기
 export const isPostOpen = async (postId: string): Promise<{ data: { isOpen: boolean } | null }> => {
-  let { data } = await supabase.from('partnerPosts').select('isOpen').eq('id', postId).single();
+  const { data } = await supabase.from('partnerPosts').select('isOpen').eq('id', postId).single();
   return { data };
 };

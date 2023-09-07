@@ -2,9 +2,10 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { checkApply, getConfirmedApplicantList, getPartnerPost, updatePostStatus } from '../api/supabase/partner';
+import LoadingSpinner from '../components/common/loadingSpinner/LoadingSpinner';
 import Communication from '../components/partner/communicate/Communication';
 import ConfirmedPartnerList from '../components/partner/communicate/ConfirmedPartnerList';
-import PartnerCommentsList from '../components/partner/partnerComment/PartnerComments';
+import PartnerComments from '../components/partner/partnerComment/PartnerComments';
 import PartnerDetailInfo from '../components/partner/partnerDetailInfo/PartnerDetailInfo';
 import { useStateStore } from '../zustand/communicate';
 import useSessionStore from '../zustand/store';
@@ -19,9 +20,9 @@ function PartnerDetail() {
 
   const [isApply, setIsApply] = useState<boolean | null>(null);
 
-  const { data: partnerPost, isLoading, isError } = useQuery(['partnerPost', postid], () => getPartnerPost({ postId: postid as string }));
+  const { data: partnerPost, isLoading: isLoadingPost, isError } = useQuery(['partnerPost', postid], () => getPartnerPost({ postId: postid as string }));
 
-  const { data: confirmedApplicants } = useQuery(['confirmedApplicants', postid], () => getConfirmedApplicantList(postid!));
+  const { data: confirmedApplicants, isLoading: isLoadingApplicants } = useQuery(['confirmedApplicants', postid], () => getConfirmedApplicantList(postid!));
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,18 +63,20 @@ function PartnerDetail() {
     }
   }, [partnerPost, postid, confirmedApplicants, setPartnerStatus]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (isLoadingPost || isLoadingApplicants) {
+    return <LoadingSpinner />;
   }
 
   if (isError) {
-    return <div>Error loading data</div>;
+    <div>error data</div>;
   }
 
   return (
     <>
       <St.PartnerDetailMain>
-        <PartnerDetailInfo partnerPostData={partnerPost!} />
+        <St.PartnerDetailInfoSection>
+          <PartnerDetailInfo partnerPostData={partnerPost!} />
+        </St.PartnerDetailInfoSection>
         <St.CommunicateDiv>
           <ConfirmedPartnerList postId={postid} />
           {logInUserId ? <Communication postId={postid} writerId={partnerPost?.writerId!} logInUserId={logInUserId} isApply={isApply} setIsApply={setIsApply} /> : <></>}
@@ -81,9 +84,9 @@ function PartnerDetail() {
       </St.PartnerDetailMain>
       <St.Status>
         <St.PostStatus $partnerStatus={partnerStatus}>{partnerStatus === '모집중' ? '모집중' : '모집완료'}</St.PostStatus>
-        {isApply && applicantStatus !== null ? <St.ApplyStatus>{applicantStatus}</St.ApplyStatus> : <></>}
+        {partnerStatus === '모집중' && isApply && applicantStatus !== null ? <St.ApplyStatus>{applicantStatus}</St.ApplyStatus> : <></>}
       </St.Status>
-      <PartnerCommentsList />
+      <PartnerComments />
     </>
   );
 }

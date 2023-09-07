@@ -1,16 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
+import { Pagination, PaginationProps } from 'antd';
 import { useState } from 'react';
 import { getBookmarkedPosts } from '../../../api/supabase/partner';
-import useSessionStore from '../../../zustand/store';
 import useMyPageTabPanel from '../../../zustand/myPageTabPanel';
-import { Pagination, PaginationProps } from 'antd';
 import { NUMBER_OF_ITEMS } from '../../common/getRangePagination/getRangePagination';
-import * as StCommon from './../common/style/style';
 import MyPartnerCard from '../common/myPartnerCard/MyPartnerCard';
+import * as StCommon from './../common/style/style';
 
 export default function BookmarkedPosts() {
-  const session = useSessionStore((state) => state.session);
-  const userId = session?.user.id;
+  const userId = localStorage.getItem('authId') as string;
   const [currentPage, setCurrentPage] = useState(1);
   const isTabActive = useMyPageTabPanel((state) => state.active)[2];
 

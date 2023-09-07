@@ -8,8 +8,14 @@ export const PartnerDetailMain = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  @media (max-width: 768px) {
-    flex-direction: column;
+`;
+
+export const PartnerDetailInfoSection = styled.section`
+  margin-top: 30px;
+  flex-basis: 791px;
+  flex-shrink: 1;
+  @media (max-width: 1090px) {
+    flex-grow: 1;
   }
 `;
 
@@ -28,9 +34,8 @@ export const PostStatus = styled.span<StatusProps>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 2.8rem;
   padding: 5px;
-  background-color: ${(props) => (props.$partnerStatus === '모집중' ? '#FF7000' : '#994504')};
+  background-color: ${(props) => (props.$partnerStatus === '모집중' ? '#9cbdf7' : '#233f70')};
   border-radius: 30px;
   font-size: 0.8rem;
   color: ${(props) => (props.$partnerStatus === '모집중' ? '#000000' : '#ffffff')};
@@ -42,7 +47,7 @@ export const ApplyStatus = styled.div`
   align-items: center;
   width: 4rem;
   padding: 5px;
-  background-color: #ffb67c;
+  background-color: #e3dbb1;
   border-radius: 30px;
   font-size: 0.8rem;
 `;

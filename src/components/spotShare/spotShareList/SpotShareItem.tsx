@@ -10,13 +10,6 @@ import * as St from './style';
 
 type SpotItemProps = {
   post: Tables<'spotPosts'>;
-  countryData: {
-    country: string;
-    countryId: string;
-    flagUrl: string;
-    id: number;
-    imageUrl: string;
-  };
   likedPost?: {
     id: string;
     postId: {
@@ -44,40 +37,25 @@ type SpotItemProps = {
   }[];
 };
 
-function SpotShareItem({ post, likedPost, countryData }: SpotItemProps) {
-  const [countryImg, setCountryImg] = useState<string>('');
+function SpotShareItem({ post, likedPost }: SpotItemProps) {
   const [like, setLike] = useState(false);
   const session = useSessionStore((state) => state.session);
   const logInUserId = session?.user.id;
   const queryClient = useQueryClient();
-  const [likeCount, setLikeCount] = useState(0); // 이 부분을 추가
-  let updateLikeCount = post.likeCount;
-
-  // // 국가 디폴트 이미지 넣기
-  // useEffect(() => {
-  //   const getDefaultImgHandler = async () => {
-  //     const { data, error } = await getSpotShareDefaultImg(post.country.country);
-  //     if (error || !data) {
-  //       console.error('디폴트이미지 가져오는 과정에서 에러 발생', error);
-  //     } else {
-  //       setCountryImg(data[0].imageUrl);
-  //     }
-  //   };
-  //   getDefaultImgHandler();
-  // }, []);
 
   // 좋아요
   const LikeCheck = async (logInUserId: string) => {
     const liked = likedPost?.some((like) => like.postId.id === post.id && like.userId === logInUserId);
-    console.log('이게뭐야', liked);
-    // if (liked) {
-    setLike(liked!);
-    // }
+
+    if (liked) {
+      setLike(liked!);
+    } else if (liked === false) {
+      setLike(false);
+    }
   };
   useEffect(() => {
     LikeCheck(logInUserId!);
-    // }, [likedPost]);
-  }, [logInUserId!, post.id!, like]);
+  }, [likedPost]);
 
   //방문날짜 2023-05-05 => 2023년 5월 5일 바꾸는 로직
   const visitDate = post.visitDate.split('-');
@@ -87,7 +65,6 @@ function SpotShareItem({ post, likedPost, countryData }: SpotItemProps) {
   if (visitDate[2][0] == '0') {
     visitDate[2] = visitDate[2].substring(1);
   }
-  console.log('countryImg', countryImg);
   const contentWithoutTags = post.content.replace(/<\/?[^>]+(>|$)/g, '');
 
   // 좋아요 클릭 시
@@ -102,10 +79,10 @@ function SpotShareItem({ post, likedPost, countryData }: SpotItemProps) {
 
   const handleEmptyHeart = async (event: React.MouseEvent<SVGElement, MouseEvent>) => {
     event.preventDefault();
+    await queryClient.invalidateQueries(['likes', post.id]);
     setLike(!like);
     await deleteLike(post.id!, logInUserId!);
     await countLike(--post.likeCount, post.id!);
-    await queryClient.invalidateQueries(['likes', post.id]);
   };
 
   return (
@@ -120,25 +97,20 @@ function SpotShareItem({ post, likedPost, countryData }: SpotItemProps) {
           </St.TravelDateBox>
           {logInUserId ? (
             <div>
-              <St.LikeButton>
-                {like ? <RiHeartFill onClick={(event) => handleEmptyHeart(event)} style={{ height: '24px', width: '24px' }} /> : <RiHeartLine onClick={(event) => handleFillHeart(event)} style={{ height: '24px', width: '22px' }} />}
-              </St.LikeButton>
+              <St.LikeButton>{like ? <RiHeartFill onClick={(event) => handleEmptyHeart(event)} style={St.Heart} /> : <RiHeartLine onClick={(event) => handleFillHeart(event)} style={St.Heart} />}</St.LikeButton>
             </div>
           ) : (
             ''
           )}
         </St.DateLikeBox>
         <St.TitleBox>
-          <h1>{post.title}</h1>
+          <p>{post.title}</p>
         </St.TitleBox>
         <St.ContentBox>
           <p>{contentWithoutTags}</p>
         </St.ContentBox>
-        {/* <St.DefaultImg src={post.country.imageUrl}></St.DefaultImg> */}
-        <St.DefaultImg $countryBg={post.country.imageUrl!}></St.DefaultImg>
-        {/* <St.DefaultImg $countryBg={countryImg}></St.DefaultImg> */}
-
-        <St.Span>{countryData.country}</St.Span>
+        <St.DefaultImg src={post.country.imageUrl}></St.DefaultImg>
+        <St.Span>{post.country.country}</St.Span>
       </St.PostCard>
     </Link>
   );

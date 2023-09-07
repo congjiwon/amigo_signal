@@ -17,6 +17,11 @@ type ConfirmedListStore = {
   updatedConfirmedList: (newList: Tables<'applicants'>[]) => void;
 };
 
+type ApplicantStore = {
+  hasApplicant: boolean;
+  setHasApplicant: (value: boolean) => void;
+};
+
 export const useStateStore = create<StateStore>((set) => ({
   partnerStatus: '모집중',
   applicantStatus: null,
@@ -34,4 +39,9 @@ export const useConfirmedListStore = create<ConfirmedListStore>((set) => ({
     set(() => ({
       confirmedList: newList,
     })),
+}));
+
+export const useApplicantStore = create<ApplicantStore>((set) => ({
+  hasApplicant: false,
+  setHasApplicant: (value) => set({ hasApplicant: value }),
 }));

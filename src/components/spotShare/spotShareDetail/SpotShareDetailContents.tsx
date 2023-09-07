@@ -10,7 +10,8 @@ import { countLike, countLikes, deleteLike, deleteSpotSharePost, getDetailSpotSh
 import { supabase } from '../../../api/supabase/supabaseClient';
 import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import useSessionStore from '../../../zustand/store';
-import { ConfirmDelete } from '../../common/modal/alert';
+import LoadingSpinner from '../../common/loadingSpinner/LoadingSpinner';
+import { AlertError, ConfirmDelete } from '../../common/modal/alert';
 import * as St from './style';
 
 function SpotShareDetailContents() {
@@ -55,7 +56,7 @@ function SpotShareDetailContents() {
   };
   useEffect(() => {
     LikeCheck(logInUserId!, postid!);
-  }, [likeCount]); // 여기도.. 수정?
+  }, [likeCount]);
 
   const mapRef = useRef<HTMLDivElement>(null);
 
@@ -63,6 +64,11 @@ function SpotShareDetailContents() {
   const mutation = useMutation(deleteSpotSharePost, {
     onSuccess: async () => {
       await queryClient.invalidateQueries(['spotSharePost']);
+    },
+    onError: () => {
+      AlertError({ title: '삭제오류' });
+    },
+    onSettled: () => {
       navigate('/spotshare');
     },
   });
@@ -106,7 +112,7 @@ function SpotShareDetailContents() {
   }, [spotSharePost]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
   if (isError) {
     return <div>Error loading data</div>;
@@ -131,8 +137,6 @@ function SpotShareDetailContents() {
     await queryClient.invalidateQueries(['likes', postid]);
   };
 
-  console.log('ㅋㅋㅋㅋ', spotSharePost?.country);
-
   return (
     <>
       <St.TitleBox>
@@ -142,7 +146,7 @@ function SpotShareDetailContents() {
       <div>
         <St.InfoOuterBox>
           <St.PostInfoBox>
-            {spotSharePost?.users.profileImageUrl ? <St.ProfileImage src={`${storagaUrl}/${spotSharePost.users.profileImageUrl}`} alt="profile" /> : <St.ProfileImage src={defaultProfileImage} alt="profile" />}
+            {spotSharePost?.users?.profileImageUrl ? <St.ProfileImage src={`${storagaUrl}/${spotSharePost.users.profileImageUrl}`} alt="profile" /> : <St.ProfileImage src={defaultProfileImage} alt="profile" />}
             <St.InfoInnerBox>
               <St.NickNameSpan style={{ paddingTop: '1px', paddingBottom: '5px' }}>{spotSharePost?.users?.nickName} </St.NickNameSpan>
               <St.InfoContainer>
@@ -153,7 +157,7 @@ function SpotShareDetailContents() {
             </St.InfoInnerBox>
           </St.PostInfoBox>
           <St.ButtonBox>
-            {logInUserId && <button>{like ? <RiHeartFill onClick={() => handleEmptyHeart()} style={{ height: '24px', width: '24px' }} /> : <RiHeartLine onClick={() => handleFillHeart()} style={{ height: '24px', width: '24px' }} />}</button>}
+            {logInUserId && <button>{like ? <RiHeartFill onClick={() => handleEmptyHeart()} style={St.Heart} /> : <RiHeartLine onClick={() => handleFillHeart()} style={St.Heart} />}</button>}
             {isPostWriter() ? (
               <>
                 <button>{<FiEdit onClick={() => navigate(`/spotshare/write/${spotSharePost?.id}`)} style={{ height: '24px', width: '24px' }} />}</button>
@@ -171,7 +175,7 @@ function SpotShareDetailContents() {
           <St.DetailInfoBox>
             <St.GraySpan>나라 </St.GraySpan>
             <St.BlackSpan>
-              {spotSharePost?.region} &gt; {spotSharePost?.countryInfo?.country}
+              {spotSharePost?.region} &gt; {spotSharePost?.country.country}
             </St.BlackSpan>
           </St.DetailInfoBox>
           <St.DetailInfoBox>

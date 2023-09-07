@@ -1,21 +1,23 @@
 import { useQuery } from '@tanstack/react-query';
-import { getMyPartnerPosts } from '../../../api/supabase/partner';
-import useSessionStore from '../../../zustand/store';
-import { useState } from 'react';
-import * as StCommon from '../common/style/style';
 import { Pagination, PaginationProps } from 'antd';
-import { NUMBER_OF_ITEMS } from '../../common/getRangePagination/getRangePagination';
+import { useState } from 'react';
+import { getMyPartnerPosts } from '../../../api/supabase/partner';
 import useMyPageTabPanel from '../../../zustand/myPageTabPanel';
+import { NUMBER_OF_ITEMS } from '../../common/getRangePagination/getRangePagination';
 import MyPartnerCard from '../common/myPartnerCard/MyPartnerCard';
+import * as StCommon from '../common/style/style';
 
 export default function MyPartnerPost() {
-  const session = useSessionStore((state) => state.session);
-  const userId = session?.user.id;
+  const userId = localStorage.getItem('authId') as string;
   const [filterStatus, setFilterStatus] = useState<boolean | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const isTabActive = useMyPageTabPanel((state) => state.active)[0];
 
-  const { data: myPartnerPosts, isError } = useQuery({
+  const {
+    data: myPartnerPosts,
+    isError,
+    isLoading,
+  } = useQuery({
     queryKey: ['myPartnerPosts', userId, filterStatus, currentPage - 1],
     queryFn: () => getMyPartnerPosts({ userId, filterIsOpen: filterStatus, page: currentPage - 1 }),
     enabled: isTabActive,
@@ -30,6 +32,8 @@ export default function MyPartnerPost() {
   const handlePageChange: PaginationProps['onChange'] = (page) => {
     setCurrentPage(page);
   };
+
+  if (isLoading) <div>loading..</div>;
   return (
     <>
       <StCommon.MyFilterBtns>
