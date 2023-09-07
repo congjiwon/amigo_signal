@@ -142,7 +142,7 @@ function PartnerWriteTemplate() {
           <PartnerDropDown setPartner={setPartner} />
         </St.SelectListBox>
         <St.WriteInput
-          maxLength={100}
+          maxLength={50}
           value={title}
           onChange={(event) => {
             setTitle(event.target.value);

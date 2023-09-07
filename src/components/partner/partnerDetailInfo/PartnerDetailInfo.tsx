@@ -5,7 +5,7 @@ import * as St from './style';
 const PartnerDetailInfo = ({ partnerPostData }: { partnerPostData: Tables<'partnerPosts'> }) => {
   return (
     <>
-      <St.H2>{partnerPostData?.title}</St.H2>
+      <St.Title>{partnerPostData?.title}</St.Title>
       {partnerPostData && <UserFeedback partnerPostData={partnerPostData} />}
       <St.DetailInfoList>
         <St.DetailInfoBox>
