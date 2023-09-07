@@ -2,6 +2,7 @@ import { styled } from 'styled-components';
 
 export const FormContainer = styled.div`
   margin-top: 80px;
+  margin-bottom: 80px;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;

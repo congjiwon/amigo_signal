@@ -43,6 +43,11 @@ export const Inner = styled.div<InnerProps>`
         width: 45%;
         height: 55%;
         border-radius: 30px;
+
+        @media screen and (max-width: 600px) {
+          width: 80%;
+        }
+        
         `;
       case 'small':
         return `

@@ -2,15 +2,12 @@ import { styled } from 'styled-components';
 
 export const Layout = styled.div`
   border-top: 1px solid #efefef;
-  /* position: relative; */
-  /* transform: translateY(-100%); */
 `;
 
 export const FooterContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  /* position: absolute; */
   min-height: 200px;
   min-width: 360px;
   max-width: 1200px;

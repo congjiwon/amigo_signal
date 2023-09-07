@@ -74,7 +74,9 @@ function PartnerDetail() {
   return (
     <>
       <St.PartnerDetailMain>
-        <PartnerDetailInfo partnerPostData={partnerPost!} />
+        <St.PartnerDetailInfoSection>
+          <PartnerDetailInfo partnerPostData={partnerPost!} />
+        </St.PartnerDetailInfoSection>
         <St.CommunicateDiv>
           <ConfirmedPartnerList postId={postid} />
           {logInUserId ? <Communication postId={postid} writerId={partnerPost?.writerId!} logInUserId={logInUserId} isApply={isApply} setIsApply={setIsApply} /> : <></>}

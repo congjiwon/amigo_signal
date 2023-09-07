@@ -62,10 +62,20 @@ export const LikeButton = styled.button`
   background-color: transparent;
   border: none;
   &:hover {
-    transform: scale(1.5);
+    transform: scale(1.2);
+    transition: transform 0.3s ease;
+  }
+  &:not(:hover) {
+    transition: 0.3s ease-out;
   }
   cursor: pointer;
 `;
+
+export const Heart = {
+  height: '24px',
+  width: '24px',
+  color: '#670fdf',
+};
 
 export const DefaultImg = styled.img`
   width: 282px;

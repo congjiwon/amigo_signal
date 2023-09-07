@@ -269,3 +269,23 @@ export const BadgeCountry = styled.div`
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.8);
 `;
+
+export const LikeButton = styled.button`
+  padding: 20px;
+  background-color: transparent;
+  border: none;
+  &:hover {
+    transform: scale(1.2);
+    transition: transform 0.3s ease;
+  }
+  &:not(:hover) {
+    transition: 0.3s ease-out;
+  }
+  cursor: pointer;
+`;
+
+export const Heart = {
+  height: '24px',
+  width: '24px',
+  color: '#670fdf',
+};

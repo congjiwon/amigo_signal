@@ -22,33 +22,61 @@ export const MainImage = styled.img`
   transform: translate(0%, -20%);
 `;
 
-export const MainBannerBox = styled.div`
+export const PartnerImageMainText = styled.span`
   position: absolute;
-  width: 100%;
-  max-width: 1200px;
   bottom: 55%;
-  left: 52%;
-  transform: translateX(-50%);
-  @media (max-width: 850px) {
-    bottom: 51%;
-  }
-`;
-
-export const ImageMainText = styled.p`
-  margin-bottom: 16px;
+  left: 5%;
   color: black;
   font-size: 1.4rem;
   font-weight: bold;
   @media (max-width: 850px) {
+    bottom: 55%;
+    left: 2%;
     font-size: 0.7rem;
   }
 `;
 
-export const ImageSubText = styled.span`
+export const PartnerImageSubText = styled.span`
+  position: absolute;
+  bottom: 45%;
+  left: 5%;
   color: black;
   font-size: 0.8rem;
-  line-height: 1.6;
   @media (max-width: 850px) {
+    bottom: 45%;
+    left: 2%;
+    font-size: 0.5rem;
+  }
+`;
+
+export const SpotImageMainText = styled.span`
+  position: absolute;
+  bottom: 55%;
+  left: 62%;
+  color: black;
+  font-size: 1.4rem;
+  font-weight: bold;
+  @media (max-width: 850px) {
+    bottom: 55%;
+    left: 62%;
+    font-size: 0.7rem;
+  }
+`;
+
+export const SpotImageSubText = styled.span`
+  position: absolute;
+  bottom: 48%;
+  left: 62%;
+  color: black;
+  font-size: 0.8rem;
+  @media (max-width: 850px) {
+    bottom: 48%;
+    left: 62%;
+    font-size: 0.5rem;
+  }
+  @media (max-width: 560px) {
+    bottom: 43%;
+    left: 62%;
     font-size: 0.5rem;
   }
 `;
