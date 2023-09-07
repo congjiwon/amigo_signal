@@ -13,9 +13,8 @@ export const Span = styled.span`
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  text-transform: uppercase;
   @media (max-width: 600px) {
-    justify-content: space-around;
+    /* justify-content: space-around; */
     font-size: 13px;
     font-weight: 400;
   }
