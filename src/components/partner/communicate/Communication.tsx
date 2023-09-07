@@ -111,7 +111,7 @@ const Communication = ({ postId, writerId, logInUserId, isApply, setIsApply }: C
             </Button>
           )}
 
-          {hasApplicant ? <St.NewApplicantAlert>새로운 동행 신청이 있습니다.</St.NewApplicantAlert> : <></>}
+          {hasApplicant && isThisPostOpen ? <St.NewApplicantAlert>새로운 동행 신청이 있습니다.</St.NewApplicantAlert> : <></>}
         </>
       )}
 
