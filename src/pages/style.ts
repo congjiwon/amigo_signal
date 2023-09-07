@@ -29,7 +29,7 @@ export const PostStatus = styled.span<StatusProps>`
   justify-content: center;
   align-items: center;
   padding: 5px;
-  background-color: ${(props) => (props.$partnerStatus === '모집중' ? '#FF7000' : '#994504')};
+  background-color: ${(props) => (props.$partnerStatus === '모집중' ? '#9cbdf7' : '#233f70')};
   border-radius: 30px;
   font-size: 0.8rem;
   color: ${(props) => (props.$partnerStatus === '모집중' ? '#000000' : '#ffffff')};
@@ -41,7 +41,7 @@ export const ApplyStatus = styled.div`
   align-items: center;
   width: 4rem;
   padding: 5px;
-  background-color: #ffb67c;
+  background-color: #e3dbb1;
   border-radius: 30px;
   font-size: 0.8rem;
 `;

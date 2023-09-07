@@ -4,13 +4,15 @@ import { supabase } from './supabaseClient';
 
 //스팟 필터링
 type filteredPostProps = {
-  country: string;
+  sort?: string;
+  country?: string;
   startDate?: string;
   endDate?: string;
 };
 
-export const getFilteredSpotSharePost = async ({ country, startDate, endDate }: filteredPostProps) => {
-  let sharePosts = supabase.from('spotPosts').select('*, users(*), country(imageUrl, country), likes(postId)').order('createdAt', { ascending: false });
+export const getFilteredSpotSharePost = async ({ sort = 'createdAt', country, startDate, endDate, page = 0, limit = 4 }: filteredPostProps & { page?: number; limit?: number }) => {
+  let sharePosts = supabase.from('spotPosts').select('*, users(*), country(imageUrl, country), likes(postId)').order(`${sort}`, { ascending: false });
+
   if (country !== undefined) {
     sharePosts = sharePosts.eq('country', country);
   }
@@ -19,11 +21,8 @@ export const getFilteredSpotSharePost = async ({ country, startDate, endDate }: 
     sharePosts = sharePosts.gte('visitDate', startDate).lte('visitDate', endDate);
   }
 
-  const { data, error } = await sharePosts;
-  if (error) {
-    return null;
-  }
-  return data;
+  const { data, error, count } = await sharePosts.range(page * limit, (page + 1) * limit - 1);
+  return { data, error, count, page };
 };
 
 // 클릭한 게시글 id?

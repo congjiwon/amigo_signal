@@ -22,29 +22,33 @@ export const MainImage = styled.img`
   transform: translate(0%, -20%);
 `;
 
-export const ImageMainText = styled.span`
+export const MainBannerBox = styled.div`
   position: absolute;
+  width: 100%;
+  max-width: 1200px;
   bottom: 55%;
-  left: 5%;
+  left: 52%;
+  transform: translateX(-50%);
+  @media (max-width: 850px) {
+    bottom: 51%;
+  }
+`;
+
+export const ImageMainText = styled.p`
+  margin-bottom: 16px;
   color: black;
   font-size: 1.4rem;
   font-weight: bold;
   @media (max-width: 850px) {
-    bottom: 55%;
-    left: 2%;
     font-size: 0.7rem;
   }
 `;
 
 export const ImageSubText = styled.span`
-  position: absolute;
-  bottom: 45%;
-  left: 5%;
   color: black;
   font-size: 0.8rem;
+  line-height: 1.6;
   @media (max-width: 850px) {
-    bottom: 45%;
-    left: 2%;
     font-size: 0.5rem;
   }
 `;

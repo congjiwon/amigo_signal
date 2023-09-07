@@ -149,7 +149,17 @@ export function SortDropDown({ setSort }: SortProps) {
   };
   return (
     <Space wrap>
-      <Select defaultValue="최신순" allowClear style={{ width: '90px', marginRight: '24px' }} onChange={handleChange} options={[{ value: '최신순' }, { value: '인기순' }]} />
+      <Select
+        placeholder="최신순"
+        defaultValue="최신순"
+        allowClear
+        style={{ width: '90px', marginRight: '24px' }}
+        onChange={handleChange}
+        options={[
+          { value: 'createdAt', label: '최신순' },
+          { value: 'likeCount', label: '인기순' },
+        ]}
+      />
     </Space>
   );
 }
