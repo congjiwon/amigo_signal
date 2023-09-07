@@ -144,14 +144,18 @@ const SpotMap = ({ setLatitude, setLongitude, address, setAddress }: SpotMapProp
 
   return (
     <div style={{ marginTop: '50px' }}>
-      <St.SearchAddress>
-        <input type="text" value={inputValue} onChange={handleInputChange} onKeyPress={handleEnterToSearch} placeholder="장소를 검색하세요!" />
-        <button type="button" onClick={handleSearch}>
-          검색
-        </button>
-        <button onClick={handleClearAddress}>지도 초기화</button>
-        <St.Address>{`장소를 검색 or 클릭하시면, 해당 위치가 등록됩니다 -> ${address}`}</St.Address>
-      </St.SearchAddress>
+      <St.SearchAddressBox>
+        <St.SearchAddress>
+          <input className="map-search-input" type="text" value={inputValue} onChange={handleInputChange} onKeyPress={handleEnterToSearch} placeholder="장소를 검색하세요!" />
+          <button type="button" onClick={handleSearch}>
+            검색
+          </button>
+        </St.SearchAddress>
+        <St.Address>
+          {address ? address : `검색한 주소가 표시됩니다`}
+          <button onClick={handleClearAddress}>지도 초기화</button>
+        </St.Address>
+      </St.SearchAddressBox>
       <div ref={mapRef} style={{ width: '100%', height: '50vh', marginTop: '20px' }} />
     </div>
   );
