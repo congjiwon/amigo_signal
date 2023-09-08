@@ -207,7 +207,7 @@ function SpotCommentList({ allComments, allReCommentsData, comment, isLoginUser,
             );
           }
         })}
-        {logInUserId && (
+        {logInUserId ? (
           <St.CommentBottomBox>
             <St.DateButtonBox>
               {' '}
@@ -250,6 +250,14 @@ function SpotCommentList({ allComments, allReCommentsData, comment, isLoginUser,
                 </form>
               </div>
             )}
+          </St.CommentBottomBox>
+        ) : (
+          <St.CommentBottomBox>
+            <St.DateButtonBox>
+              <St.DateBox>
+                <St.DateParagraph>{comment!.date!.substring(0, 10) + ' ' + comment!.date!.substring(11, 16)}</St.DateParagraph>
+              </St.DateBox>
+            </St.DateButtonBox>
           </St.CommentBottomBox>
         )}
         {isReComment && (
