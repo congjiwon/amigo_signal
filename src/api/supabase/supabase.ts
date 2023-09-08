@@ -602,4 +602,3 @@ export type TPartnerUpdate = Database['public']['Tables']['partnerComments']['Up
 export type TPartnerReComments = Database['public']['Tables']['reComments']['Row'];
 export type TPartnerReCommentsInsert = Database['public']['Tables']['reComments']['Insert'];
 export type TPartnerReCommentsUpdate = Database['public']['Tables']['reComments']['Update'];
-export type TPPartnerBookmarkInsert = Database['public']['Tables']['bookmarks']['Insert'];
