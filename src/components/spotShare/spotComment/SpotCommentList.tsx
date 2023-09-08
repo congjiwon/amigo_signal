@@ -88,6 +88,19 @@ function SpotCommentList({ allComments, allReCommentsData, comment, isLoginUser,
     return now;
   };
 
+  const handleUpdateComment = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (event.target.value === ' ') {
+      return;
+    }
+    setUpdateComment(event.target.value);
+  };
+
+  const handlePostReContent = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (event.target.value.trim() !== '') {
+      setReContent(event.target.value);
+    }
+  };
+
   const handleSubmitBtn = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -207,7 +220,7 @@ function SpotCommentList({ allComments, allReCommentsData, comment, isLoginUser,
             );
           }
         })}
-        {logInUserId && (
+        {logInUserId ? (
           <St.CommentBottomBox>
             <St.DateButtonBox>
               {' '}
@@ -237,7 +250,7 @@ function SpotCommentList({ allComments, allReCommentsData, comment, isLoginUser,
               <div>
                 <form onSubmit={handleSubmitBtn}>
                   <St.InputBox>
-                    <St.Textarea placeholder="댓글을 남겨보세요" value={updateComment} onChange={(event) => setUpdateComment(event.target.value)} />
+                    <St.Textarea placeholder="댓글을 남겨보세요" value={updateComment} onChange={handleUpdateComment} maxLength={300} />
                     <St.CancelSubmitButtonBox>
                       <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleCancelBtn('updateCancel')}>
                         취소
@@ -251,12 +264,20 @@ function SpotCommentList({ allComments, allReCommentsData, comment, isLoginUser,
               </div>
             )}
           </St.CommentBottomBox>
+        ) : (
+          <St.CommentBottomBox>
+            <St.DateButtonBox>
+              <St.DateBox>
+                <St.DateParagraph>{comment!.date!.substring(0, 10) + ' ' + comment!.date!.substring(11, 16)}</St.DateParagraph>
+              </St.DateBox>
+            </St.DateButtonBox>
+          </St.CommentBottomBox>
         )}
         {isReComment && (
           <St.CommentBottomBox>
             <form onSubmit={handleReCommentSubmit}>
               <St.InputBox>
-                <St.Textarea placeholder="댓글을 입력하세요" value={reContent} onChange={(event) => setReContent(event?.target.value)} />
+                <St.Textarea placeholder="댓글을 입력하세요" value={reContent} onChange={handlePostReContent} maxLength={300} />
                 <St.CancelSubmitButtonBox>
                   <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleCancelBtn('reCommentCancel')}>
                     취소

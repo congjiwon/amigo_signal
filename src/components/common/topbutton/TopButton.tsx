@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { FiChevronsUp } from 'react-icons/fi';
-import styled from 'styled-components';
 
 function TopButton() {
   const [showButton, setShowButton] = useState(false);

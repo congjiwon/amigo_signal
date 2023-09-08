@@ -25,6 +25,13 @@ function SpotWrite() {
     const now = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
     return now;
   };
+
+  const handlePostContent = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (event.target.value.trim() !== '') {
+      setContent(event.target.value);
+    }
+  };
+
   const handleSubmitBtnClick = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const newComment = {
@@ -40,7 +47,7 @@ function SpotWrite() {
     <>
       {logInUserId && (
         <St.Form onSubmit={handleSubmitBtnClick}>
-          <St.CommentTextarea name="content" placeholder="댓글을 남겨보세요" value={content} onChange={(e) => setContent(e.target.value)} />
+          <St.CommentTextarea name="content" placeholder="댓글을 남겨보세요" value={content} onChange={handlePostContent} maxLength={300} />
           <St.CommentButton type="submit" disabled={content.length < 1}>
             등록
           </St.CommentButton>

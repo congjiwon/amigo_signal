@@ -1,5 +1,5 @@
+import { Col, Row, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { Select, Row, Col } from 'antd';
 import useBirthdayStore from '../../../zustand/birthdayData';
 
 const { Option } = Select;
@@ -17,6 +17,7 @@ const BirthdaySelect: React.FC = () => {
     const birthdayString = selectedYear && formattedMonth && formattedDay && `${selectedYear}-${formattedMonth}-${formattedDay}`;
 
     birthdayString && setBirthday(birthdayString);
+    console.log('useEffect', birthdayString);
   }, [selectedDay, selectedMonth, selectedYear]);
 
   const yearsRange = () => {
@@ -37,10 +38,39 @@ const BirthdaySelect: React.FC = () => {
     }
   };
 
+  type CheckLastDayInYearMonthProps = {
+    selectName: 'year' | 'month';
+    value: number;
+  };
+  const checkLastDayInYearMonth = ({ selectName, value }: CheckLastDayInYearMonthProps) => {
+    switch (selectName) {
+      case 'year': {
+        if (selectedMonth && selectedDay) {
+          const newDayMax = maxDaysInMonth(selectedMonth!, value!);
+          newDayMax < selectedDay && setSelectedDay(newDayMax);
+        }
+        break;
+      }
+      case 'month': {
+        if (selectedDay) {
+          const newDayMax = maxDaysInMonth(value!, selectedYear!);
+          newDayMax < selectedDay && setSelectedDay(newDayMax);
+        }
+      }
+    }
+  };
+
   return (
     <Row gutter={16}>
       <Col span={8}>
-        <Select placeholder="연도" style={{ width: '100%' }} onChange={(value: number) => setSelectedYear(value)}>
+        <Select
+          placeholder="연도"
+          style={{ width: '100%' }}
+          onChange={(value: number) => {
+            setSelectedYear(value);
+            checkLastDayInYearMonth({ selectName: 'year', value });
+          }}
+        >
           {yearsRange().map((year) => (
             <Option key={year} value={year}>
               {year}
@@ -49,7 +79,14 @@ const BirthdaySelect: React.FC = () => {
         </Select>
       </Col>
       <Col span={8}>
-        <Select placeholder="월" style={{ width: '100%' }} onChange={(value: number) => setSelectedMonth(value)}>
+        <Select
+          placeholder="월"
+          style={{ width: '100%' }}
+          onChange={(value: number) => {
+            setSelectedMonth(value);
+            checkLastDayInYearMonth({ selectName: 'month', value });
+          }}
+        >
           {selectedYear &&
             months.map((month) => (
               <Option key={month.value} value={month.value}>
@@ -59,7 +96,7 @@ const BirthdaySelect: React.FC = () => {
         </Select>
       </Col>
       <Col span={8}>
-        <Select placeholder="일" style={{ width: '100%' }} onChange={(value: number) => setSelectedDay(value)}>
+        <Select placeholder="일" style={{ width: '100%' }} onChange={(value: number) => setSelectedDay(value)} value={selectedDay}>
           {selectedMonth &&
             Array.from({ length: maxDaysInMonth(selectedMonth, selectedYear!) }, (_, index) => index + 1).map((day) => (
               <Option key={day} value={day}>

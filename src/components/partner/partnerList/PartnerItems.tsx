@@ -5,6 +5,7 @@ import SkeletonList from '../../common/Skeleton/SkeletonList';
 import TopButton from '../../common/topbutton/TopButton';
 import PartnerItem from './PartnerItem';
 import * as St from './style';
+import icon_nodata from '../../../assets/imgs/NoData/icon_nodata.png';
 
 type PartnerItemsProps = {
   isOpen?: boolean;
@@ -21,13 +22,12 @@ export default function PartnerItems({ isOpen, country, startDate, endDate }: Pa
     isLoading: infiniteDataLoading,
     fetchNextPage,
     hasNextPage,
-    isFetchingNextPage,
   } = useInfiniteQuery({
     queryKey: ['PartnerPostsList', isOpen, country, startDate, endDate],
     queryFn: async ({ pageParam = 0 }) => {
       return getPartnerPosts({ isOpen, country, startDate, endDate, page: pageParam });
     },
-    getNextPageParam: (lastPage, allPages) => {
+    getNextPageParam: (lastPage) => {
       if (lastPage.data && lastPage.data.length !== 0) {
         return lastPage.page + 1;
       }
@@ -60,6 +60,15 @@ export default function PartnerItems({ isOpen, country, startDate, endDate }: Pa
     return <SkeletonList />;
   }
 
+  if (infiniteData?.pages[0].data?.length === 0) {
+    return (
+      <St.NoDataImgBox>
+        <img src={icon_nodata} style={{ width: '60px' }}></img>
+        <p>검색결과가 없습니다!</p>
+      </St.NoDataImgBox>
+    );
+  }
+
   return (
     <>
       <St.Grid>
@@ -73,10 +82,7 @@ export default function PartnerItems({ isOpen, country, startDate, endDate }: Pa
           <TopButton />
         </St.MoveButtonArea>
       </St.Grid>
-
-      <div className="loader" ref={observerElem}>
-        {isFetchingNextPage && hasNextPage && 'Loading...'}
-      </div>
+      <div className="loader" ref={observerElem}></div>
     </>
   );
 }

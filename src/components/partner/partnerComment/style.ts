@@ -111,6 +111,7 @@ export const DateBox = styled.div`
 
 export const DateParagraph = styled.p`
   color: var(--gray, #adb1b8);
+  font-size: 12px;
 `;
 
 export const Bar = styled.p`
