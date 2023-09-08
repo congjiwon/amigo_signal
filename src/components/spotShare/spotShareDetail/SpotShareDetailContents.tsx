@@ -108,25 +108,7 @@ function SpotShareDetailContents() {
   // 글 작성자인지 확인하는 함수
   const isPostWriter = () => logInUserId == spotSharePost?.writerId;
 
-  // 좋아요 추가
-  // const handleFillHeart = async () => {
-  //   setLike(!like);
-  //   await postLike({ postId: postid!, userId: logInUserId! });
-  //   await countLike(++updateLikeCount, postid!);
-  //   await queryClient.invalidateQueries(['likes', postid]);
-  // };
-
-  // 좋아요 해제
-  // const handleEmptyHeart = async () => {
-  //   setLike(!like);
-  //   await deleteLike(postid!, logInUserId!);
-  //   await countLike(--updateLikeCount, postid!);
-  //   await queryClient.invalidateQueries(['likes', postid]);
-  // };
-
-  //디바운싱
   const debouncedAddLikeHandle = _.debounce(() => {
-    // 좋아요 추가
     const handleFillHeart = async () => {
       setLike(!like);
       await postLike({ postId: postid!, userId: logInUserId! });
@@ -138,7 +120,6 @@ function SpotShareDetailContents() {
   }, 300);
 
   const debouncedRemoveLikeHandle = _.debounce(() => {
-    // 좋아요 해제
     const handleEmptyHeart = async () => {
       setLike(!like);
       await deleteLike(postid!, logInUserId!);
