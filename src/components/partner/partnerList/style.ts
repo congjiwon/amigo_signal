@@ -28,6 +28,7 @@ export const MoveButtonArea = styled.div`
   right: 40px;
   bottom: 40px;
 `;
+
 export const WriterInfoBox = styled.div`
   p {
     color: var(--dark-gray, #81858a);
