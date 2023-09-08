@@ -24,6 +24,7 @@ export default function WriteTemplate() {
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
   const [address, setAddress] = useState<string | null>('');
+  const [disable, setDisable] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -85,6 +86,7 @@ export default function WriteTemplate() {
       likeCount: 0,
     };
     if (validation()) {
+      setDisable(true);
       try {
         await insertSpotPost(newData);
       } catch (err) {
@@ -111,7 +113,7 @@ export default function WriteTemplate() {
           <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={() => navigate('/spotshare')}>
             취소하기
           </Button>
-          <Button type="submit" styleType={BtnStyleType.BTN_DARK}>
+          <Button type="submit" disabled={disable} styleType={BtnStyleType.BTN_DARK}>
             등록하기
           </Button>
         </St.ButtonBox>

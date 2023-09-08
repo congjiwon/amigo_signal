@@ -28,6 +28,7 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
   const [longitude, setLongitude] = useState<number | null>(null);
   const [address, setAddress] = useState<string | null>('');
   const [like, setLike] = useState<number>(0);
+  const [disable, setDisable] = useState(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -106,6 +107,7 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
       likeCount: like,
     };
     if (validation()) {
+      setDisable(true);
       await mutation.mutate(updateData);
       navigate(`/spotshare/detail/${postId}`);
     }
@@ -128,7 +130,7 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
           <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={() => navigate('/spotshare')}>
             취소하기
           </Button>
-          <Button type="submit" styleType={BtnStyleType.BTN_DARK}>
+          <Button type="submit" disabled={disable} styleType={BtnStyleType.BTN_DARK}>
             수정하기
           </Button>
         </St.ButtonBox>
