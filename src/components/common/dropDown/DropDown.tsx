@@ -1,5 +1,5 @@
 import { Select, Space } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 interface PartnerProps {
   setPartner: React.Dispatch<React.SetStateAction<number>>;
@@ -165,17 +165,13 @@ export function SortDropDown({ setSort }: SortProps) {
 }
 
 export function RecruitmentDropDown({ setIsOpen }: RecruitmentProps) {
-  const [selectedValue, setSelectedValue] = useState<boolean | undefined>();
-  useEffect(() => {}, [selectedValue]);
   const handleChange = (value: boolean | undefined) => {
     setIsOpen(value);
-
-    setSelectedValue(value);
   };
+
   return (
     <Space wrap>
       <Select
-        value={selectedValue}
         placeholder="모집중"
         style={{ width: '90px', marginRight: '24px' }}
         onChange={handleChange}

@@ -29,6 +29,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
   const [interestDiscription, setInterestDiscription] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [writerId, setWriterId] = useState<string>('');
+  const [disable, setDisable] = useState(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const session = useSessionStore((state) => state.session);
@@ -178,6 +179,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
         numOfPeople: partner,
         writerId: userId,
       };
+      setDisable(true);
       setLoading(true);
       await mutation.mutate(dataToInsert);
       setLoading(false);
@@ -251,7 +253,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
           <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={() => navigate(`partner/detail/${postId}`)}>
             취소하기
           </Button>
-          <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={handleUpdateClick}>
+          <Button type="button" disabled={disable} styleType={BtnStyleType.BTN_DARK} onClick={handleUpdateClick}>
             수정하기
           </Button>
         </St.ButtonBox>

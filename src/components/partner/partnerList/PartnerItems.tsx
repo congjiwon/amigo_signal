@@ -22,13 +22,12 @@ export default function PartnerItems({ isOpen, country, startDate, endDate }: Pa
     isLoading: infiniteDataLoading,
     fetchNextPage,
     hasNextPage,
-    isFetchingNextPage,
   } = useInfiniteQuery({
     queryKey: ['PartnerPostsList', isOpen, country, startDate, endDate],
     queryFn: async ({ pageParam = 0 }) => {
       return getPartnerPosts({ isOpen, country, startDate, endDate, page: pageParam });
     },
-    getNextPageParam: (lastPage, allPages) => {
+    getNextPageParam: (lastPage) => {
       if (lastPage.data && lastPage.data.length !== 0) {
         return lastPage.page + 1;
       }
@@ -83,9 +82,7 @@ export default function PartnerItems({ isOpen, country, startDate, endDate }: Pa
           <TopButton />
         </St.MoveButtonArea>
       </St.Grid>
-      <div className="loader" ref={observerElem}>
-        {isFetchingNextPage && hasNextPage && 'Loading...'}
-      </div>
+      <div className="loader" ref={observerElem}></div>
     </>
   );
 }
