@@ -282,8 +282,6 @@ export const addBookmark = async (bookMarkInsert: Inserts<'bookmarks'>) => {
   const { error } = await supabase.from('bookmarks').insert(bookMarkInsert).select();
   if (error) {
     console.log('북마크 추가 실패', error);
-  } else {
-    console.log('북마크 추가 성공');
   }
 };
 

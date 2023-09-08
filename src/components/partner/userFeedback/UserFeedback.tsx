@@ -26,8 +26,6 @@ const UserFeedback = ({ partnerPostData }: Props) => {
 
   const storagaUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
 
-  // 300ms 딜레이 설정 (원하는 시간으로 변경 가능)
-
   //북마크
   const bookmarkCheckHanlde = async (logInUserId: string, postId: string) => {
     let data = await bookmarkCheck(logInUserId, postId);
@@ -38,22 +36,14 @@ const UserFeedback = ({ partnerPostData }: Props) => {
     bookmarkCheckHanlde(logInUserId!, id);
   }, []);
 
-  const addBookMarkHandle = async () => {
-    setBookMark(!bookMark);
-    await addBookmark({ userId: logInUserId!, postId: id });
-  };
-
-  const removeBookMarkHandle = async () => {
-    setBookMark(!bookMark);
-    await removeBookMark(logInUserId!, id);
-  };
-
   //디바운싱
   const debouncedAddBookMarkHandle = _.debounce(() => {
     const addBookMarkHandle = async () => {
       setBookMark(!bookMark);
       await addBookmark({ userId: logInUserId!, postId: id });
     };
+
+    addBookMarkHandle();
   }, 300);
 
   const debouncedRemoveBookMarkHandle = _.debounce(() => {
@@ -61,9 +51,9 @@ const UserFeedback = ({ partnerPostData }: Props) => {
       setBookMark(!bookMark);
       await removeBookMark(logInUserId!, id);
     };
-  }, 300);
 
-  console.log('bookMark', bookMark);
+    removeBookMarkHandle();
+  }, 300);
 
   //오픈채팅
   const [, onCopy] = useCopyClipBoard();
