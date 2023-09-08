@@ -27,11 +27,10 @@ export default function SpotShareItems({ sort, country, startDate, endDate }: Sp
     isLoading: spotShareLoading,
     fetchNextPage,
     hasNextPage,
-    isFetchingNextPage,
   } = useInfiniteQuery({
     queryKey: ['SpotShareList', sort, country, startDate, endDate],
     queryFn: async ({ pageParam = 0 }) => getFilteredSpotSharePost({ sort, country, startDate, endDate, page: pageParam }),
-    getNextPageParam: (lastPage, allPages) => {
+    getNextPageParam: (lastPage) => {
       if (lastPage.data && lastPage.data.length !== 0) {
         return lastPage.page + 1;
       }
@@ -81,9 +80,7 @@ export default function SpotShareItems({ sort, country, startDate, endDate }: Sp
           <TopButton />
         </St.MoveButtonArea>
       </St.Grid>
-      <div className="loader" ref={observerElem}>
-        {isFetchingNextPage && hasNextPage && 'Loading...'}
-      </div>
+      <div className="loader" ref={observerElem}></div>
     </>
   );
 }
