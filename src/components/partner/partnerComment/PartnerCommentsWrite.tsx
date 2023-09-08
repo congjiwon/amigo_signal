@@ -44,7 +44,7 @@ function PartnerCommentsWrite() {
     <>
       {logInUserId && (
         <St.Form onSubmit={handleSubmitBtnClick}>
-          <St.CommentTextarea name="content" placeholder="댓글을 남겨보세요" value={content} onChange={(e) => setContent(e.target.value)} />
+          <St.CommentTextarea name="content" placeholder="댓글을 남겨보세요" value={content} onChange={(e) => setContent(e.target.value)} maxLength={300} />
           <St.CommentButton type="submit" disabled={content.length < 1}>
             등록
           </St.CommentButton>

@@ -241,7 +241,7 @@ function PartnerCommentList({ allComments, allReCommentsData, comment, isLoginUs
                 <div>
                   <form onSubmit={handleSubmitBtn}>
                     <St.InputBox>
-                      <St.Textarea placeholder="댓글을 남겨보세요" value={updateComment} onChange={(event) => setUpdateComment(event.target.value)} />
+                      <St.Textarea placeholder="댓글을 남겨보세요" value={updateComment} onChange={(event) => setUpdateComment(event.target.value)} maxLength={300} />
                       <St.CancelSubmitButtonBox>
                         <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleCancelBtn('updateCancel')}>
                           취소
@@ -268,7 +268,7 @@ function PartnerCommentList({ allComments, allReCommentsData, comment, isLoginUs
             <St.CommentBottomBox>
               <form onSubmit={handleReCommentSubmit}>
                 <St.InputBox>
-                  <St.Textarea placeholder="댓글을 입력하세요" value={reContent} onChange={(event) => setReContent(event?.target.value)} />
+                  <St.Textarea placeholder="댓글을 입력하세요" value={reContent} onChange={(event) => setReContent(event?.target.value)} maxLength={300} />
                   <St.CancelSubmitButtonBox>
                     <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleCancelBtn('reCommentCancel')}>
                       취소
