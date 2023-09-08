@@ -3,7 +3,6 @@ import { ConfigProvider, DatePicker, Space } from 'antd';
 import type { RangePickerProps } from 'antd/es/date-picker';
 import koKR from 'antd/es/locale/ko_KR';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
 import { createGlobalStyle } from 'styled-components';
 
 interface CalendarProps {
@@ -56,19 +55,6 @@ export function UpdateSpotCalendar({ spotDate, setSpotDate }: UpdateCalendarProp
 }
 
 export function FilterSpotCalendar({ setSpotDate }: FilterCalendarProps) {
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
   const getDateHandle = (dates: any, dateString: any) => {
     setSpotDate(dateString);
   };
@@ -81,7 +67,7 @@ export function FilterSpotCalendar({ setSpotDate }: FilterCalendarProps) {
       <GlobalStyle />
       <ConfigProvider locale={koKR}>
         <Space direction="vertical" size={12}>
-          <RangePicker className={isMobile ? 'mobile-range-picker' : ''} allowClear disabledDate={disabledDate} onChange={getDateHandle} inputReadOnly />
+          <RangePicker allowClear disabledDate={disabledDate} onChange={getDateHandle} inputReadOnly />
         </Space>
       </ConfigProvider>
     </>
