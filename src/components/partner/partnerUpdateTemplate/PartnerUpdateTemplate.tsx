@@ -125,6 +125,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
     },
     onError: () => {
       AlertError({});
+      setDisable(false);
     },
   });
 
@@ -252,13 +253,14 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
         </St.ExplanationBox>
         <St.ButtonBox>
           <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={() => navigate(`partner/detail/${postId}`)}>
-            취소하기
+            취소
           </Button>
           <Button type="button" disabled={disable} styleType={BtnStyleType.BTN_DARK} onClick={handleUpdateClick}>
-            수정하기
+            수정완료
           </Button>
         </St.ButtonBox>
       </St.WriteForm>
+      {disable && <LoadingSpinner />}
     </St.FormContainer>
   );
 }

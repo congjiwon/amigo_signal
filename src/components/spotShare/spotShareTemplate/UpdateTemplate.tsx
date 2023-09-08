@@ -62,6 +62,7 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
     },
     onError: () => {
       AlertError({});
+      setDisable(false);
     },
   });
 
@@ -131,13 +132,14 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
         <SpotMap setLatitude={setLatitude} setLongitude={setLongitude} address={address} setAddress={setAddress} />
         <St.ButtonBox>
           <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={() => navigate('/spotshare')}>
-            취소하기
+            취소
           </Button>
           <Button type="submit" disabled={disable} styleType={BtnStyleType.BTN_DARK}>
-            수정하기
+            수정완료
           </Button>
         </St.ButtonBox>
       </St.WriteForm>
+      {disable && <LoadingSpinner />}
     </St.FormContainer>
   );
 }

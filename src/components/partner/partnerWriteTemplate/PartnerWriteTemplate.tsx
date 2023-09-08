@@ -9,6 +9,7 @@ import Button from '../../common/button/Button';
 import PartnerCalendar from '../../common/calendar/PartnerCalendar';
 import { PartnerDropDown } from '../../common/dropDown/DropDown';
 import LocationDropDown from '../../common/dropDown/LocationDropDown';
+import LoadingSpinner from '../../common/loadingSpinner/LoadingSpinner';
 import { AlertError, AlertWarning } from '../../common/modal/alert';
 import * as St from './style';
 
@@ -56,6 +57,7 @@ function PartnerWriteTemplate() {
     },
     onError: () => {
       AlertError({});
+      setDisable(false);
     },
   });
 
@@ -197,13 +199,14 @@ function PartnerWriteTemplate() {
         </St.ExplanationBox>
         <St.ButtonBox>
           <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={() => navigate('/partner')}>
-            취소하기
+            취소
           </Button>
           <Button type="button" disabled={disable} styleType={BtnStyleType.BTN_DARK} onClick={handleWriteClick}>
-            작성하기
+            작성완료
           </Button>
         </St.ButtonBox>
       </St.WriteForm>
+      {disable && <LoadingSpinner />}
     </St.FormContainer>
   );
 }

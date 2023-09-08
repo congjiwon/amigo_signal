@@ -7,6 +7,7 @@ import useSessionStore from '../../../zustand/store';
 import Button from '../../common/button/Button';
 import { SpotCalendar } from '../../common/calendar/SpotCalendar';
 import LocationDropDown from '../../common/dropDown/LocationDropDown';
+import LoadingSpinner from '../../common/loadingSpinner/LoadingSpinner';
 import { AlertError, AlertWarning } from '../../common/modal/alert';
 import StarRate from '../../common/starRate/StarRate';
 import SpotMap from '../map/SpotMap';
@@ -54,6 +55,7 @@ export default function WriteTemplate() {
     },
     onError: () => {
       AlertError({});
+      setDisable(false);
     },
   });
 
@@ -118,13 +120,14 @@ export default function WriteTemplate() {
         <SpotMap setLatitude={setLatitude} setLongitude={setLongitude} address={address} setAddress={setAddress} />
         <St.ButtonBox>
           <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={() => navigate('/spotshare')}>
-            취소하기
+            취소
           </Button>
           <Button type="submit" disabled={disable} styleType={BtnStyleType.BTN_DARK}>
-            등록하기
+            작성완료
           </Button>
         </St.ButtonBox>
       </St.WriteForm>
+      {disable && <LoadingSpinner />}
     </St.FormContainer>
   );
 }
