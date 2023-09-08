@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { checkApply, getConfirmedApplicantList, getPartnerPost, updatePostStatus } from '../api/supabase/partner';
 import LoadingSpinner from '../components/common/loadingSpinner/LoadingSpinner';
+import MetaTags from '../components/common/metaTags/MetaTags';
 import Communication from '../components/partner/communicate/Communication';
 import ConfirmedPartnerList from '../components/partner/communicate/ConfirmedPartnerList';
 import PartnerComments from '../components/partner/partnerComment/PartnerComments';
@@ -73,6 +74,16 @@ function PartnerDetail() {
 
   return (
     <>
+      {' '}
+      <MetaTags
+        title="동행 찾기 상세 | Amigo Signal"
+        ogTitle="Amigo Signal"
+        ogUrl={`https://amigo-signal.com/partner/detail/${postid}`}
+        ogDescription="내가 맞는 조건이라면 참여 신청을 해보세요."
+        ogImage="https://images.unsplash.com/photo-1506012787146-f92b2d7d6d96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80"
+        ogImageWidth="1200"
+        ogImageHeight="630"
+      />{' '}
       <St.PartnerDetailMain>
         <St.PartnerDetailInfoSection>
           <PartnerDetailInfo partnerPostData={partnerPost!} />
