@@ -119,8 +119,13 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
   };
 
   const mutation = useMutation(updatePartnerPost, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['partnerPost']);
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(['partnerPost']);
+      navigate(`/partner/detail/${postId}`);
+    },
+    onError: () => {
+      AlertError({});
+      setDisable(false);
     },
   });
 
@@ -163,7 +168,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
   }
 
   // 글 작성 버튼 클릭 핸들러
-  const handleUpdateClick = async () => {
+  const handleUpdateClick = () => {
     if (validation()) {
       const dataToInsert = {
         id: postId,
@@ -180,10 +185,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
         writerId: userId,
       };
       setDisable(true);
-      setLoading(true);
-      await mutation.mutate(dataToInsert);
-      setLoading(false);
-      navigate(`/partner/detail/${postId}`);
+      mutation.mutate(dataToInsert);
     }
   };
 
@@ -202,7 +204,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
           </St.ExplanationBox>
         </St.SelectListBox>
         <St.WriteInput
-          maxLength={50}
+          maxLength={100}
           value={title}
           onChange={(event) => {
             setTitle(event.target.value);
@@ -210,6 +212,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
           placeholder="원활한 동료찾기를 위해 지역명을 함께 입력해주세요"
         ></St.WriteInput>
         <St.TextArea
+          maxLength={5000}
           value={content}
           onChange={(event) => {
             setContent(event.target.value);
@@ -251,14 +254,14 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
         </St.ExplanationBox>
         <St.ButtonBox>
           <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={() => navigate(`partner/detail/${postId}`)}>
-            취소하기
+            취소
           </Button>
           <Button type="button" disabled={disable} styleType={BtnStyleType.BTN_DARK} onClick={handleUpdateClick}>
-            수정하기
+            수정완료
           </Button>
         </St.ButtonBox>
       </St.WriteForm>
-      {loading && <p>로딩중</p>}
+      {disable && <LoadingSpinner />}
     </St.FormContainer>
   );
 }
