@@ -276,3 +276,28 @@ export const isPostOpen = async (postId: string): Promise<{ data: { isOpen: bool
   const { data } = await supabase.from('partnerPosts').select('isOpen').eq('id', postId).single();
   return { data };
 };
+
+//북마크 추가
+export const addBookmark = async (bookMarkInsert: Inserts<'bookmarks'>) => {
+  const { error } = await supabase.from('bookmarks').insert(bookMarkInsert).select();
+  if (error) {
+    console.log('북마크 추가 실패', error);
+  } else {
+    console.log('북마크 추가 성공');
+  }
+};
+
+//북마크 삭제
+export const removeBookMark = async (logInUserId: string, postId: string) => {
+  const { error } = await supabase.from('bookmarks').delete().eq('postId', postId).eq('userId', logInUserId);
+  if (error) throw error;
+};
+
+//북마크 상태 확인
+export const bookmarkCheck = async (logInUserId: string, postId: string) => {
+  const { data, error } = await supabase.from('bookmarks').select('*').eq('postId', postId).eq('userId', logInUserId);
+  if (error) {
+    console.log('북마크 데이터 불러오기 실패', error);
+  }
+  return data;
+};
