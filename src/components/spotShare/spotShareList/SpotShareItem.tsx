@@ -6,6 +6,7 @@ import { countLike, deleteLike, postLike } from '../../../api/supabase/spotshare
 import { Tables } from '../../../api/supabase/supabase';
 import Calendar from '../../../assets/imgs/partner/Calendar.svg';
 import useSessionStore from '../../../zustand/store';
+import _ from 'lodash';
 import * as St from './style';
 
 type SpotItemProps = {
@@ -67,23 +68,29 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
   }
   const contentWithoutTags = post.content.replace(/<\/?[^>]+(>|$)/g, '');
 
-  // 좋아요 클릭 시
-  const handleFillHeart = async (event: React.MouseEvent<SVGElement, MouseEvent>) => {
-    event.preventDefault();
-    await queryClient.invalidateQueries(['likes', post.id]);
-    setLike(!like);
-    const addLike = { postId: post.id!, userId: logInUserId! };
-    await postLike(addLike);
-    await countLike(++post.likeCount, post.id!);
-  };
+  const debouncedAddLikeHandle = _.debounce((event) => {
+    const handleFillHeart = async (event: React.MouseEvent<SVGElement, MouseEvent>) => {
+      event.preventDefault();
+      await queryClient.invalidateQueries(['likes', post.id]);
+      setLike(!like);
+      await postLike({ postId: post.id!, userId: logInUserId! });
+      await countLike(++post.likeCount, post.id!);
+    };
 
-  const handleEmptyHeart = async (event: React.MouseEvent<SVGElement, MouseEvent>) => {
-    event.preventDefault();
-    await queryClient.invalidateQueries(['likes', post.id]);
-    setLike(!like);
-    await deleteLike(post.id!, logInUserId!);
-    await countLike(--post.likeCount, post.id!);
-  };
+    handleFillHeart(event);
+  }, 300);
+
+  const debouncedRemoveLikeHandle = _.debounce((event) => {
+    const handleEmptyHeart = async (event: React.MouseEvent<SVGElement, MouseEvent>) => {
+      event.preventDefault();
+      await queryClient.invalidateQueries(['likes', post.id]);
+      setLike(!like);
+      await deleteLike(post.id!, logInUserId!);
+      await countLike(--post.likeCount, post.id!);
+    };
+
+    handleEmptyHeart(event);
+  }, 300);
 
   return (
     <Link to={`detail/${post.id}`}>
@@ -97,7 +104,7 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
           </St.TravelDateBox>
           {logInUserId ? (
             <div>
-              <St.LikeButton>{like ? <RiHeartFill onClick={(event) => handleEmptyHeart(event)} style={St.Heart} /> : <RiHeartLine onClick={(event) => handleFillHeart(event)} style={St.Heart} />}</St.LikeButton>
+              <St.LikeButton>{like ? <RiHeartFill onClick={(event) => debouncedRemoveLikeHandle(event)} style={St.Heart} /> : <RiHeartLine onClick={(event) => debouncedAddLikeHandle(event)} style={St.Heart} />}</St.LikeButton>
             </div>
           ) : (
             ''

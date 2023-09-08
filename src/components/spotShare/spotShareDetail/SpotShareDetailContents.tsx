@@ -7,7 +7,6 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
 import { useNavigate, useParams } from 'react-router';
 import { countLike, countLikes, deleteLike, deleteSpotSharePost, getDetailSpotSharePost, getLikesCondition, postLike } from '../../../api/supabase/spotshare';
-import { supabase } from '../../../api/supabase/supabaseClient';
 import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import useSessionStore from '../../../zustand/store';
 import LoadingSpinner from '../../common/loadingSpinner/LoadingSpinner';
