@@ -1,3 +1,4 @@
+import { QueryClient, useMutation } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { insertSpotPost } from '../../../api/supabase/spotshare';
@@ -13,6 +14,7 @@ import SpotShareEditor from '../spotShareEditor/SpotShareEditor';
 import * as St from './style';
 
 export default function WriteTemplate() {
+  const queryClient = new QueryClient();
   const session = useSessionStore((state) => state.session);
   const userId = session?.user.id;
   const authId = window.localStorage.getItem('authId');
@@ -45,28 +47,38 @@ export default function WriteTemplate() {
     return now;
   };
 
+  const mutation = useMutation(insertSpotPost, {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(['spotSharePost']);
+      navigate('/spotshare');
+    },
+    onError: () => {
+      AlertError({});
+    },
+  });
+
   const validation = (): boolean => {
     if (location.length < 1) {
-      AlertWarning({ title: '국가를 선택해주세요.', position: 'top' });
+      AlertWarning({ title: '국가를 선택해주세요.' });
       return false;
     } else if (spotDate.length < 1) {
-      AlertWarning({ title: '방문날짜를 입력해주세요.', position: 'top' });
+      AlertWarning({ title: '방문날짜를 입력해주세요.' });
       return false;
     } else if (title.length < 1) {
-      AlertWarning({ title: '제목을 입력해주세요.', position: 'top' });
+      AlertWarning({ title: '제목을 입력해주세요.' });
       return false;
     } else {
       // html 태그 지우기
       const contentWithoutTags = editorHtml.replace(/<\/?[^>]+(>|$)/g, '');
       if (contentWithoutTags.length < 1) {
-        AlertWarning({ title: '내용을 입력해주세요.', position: 'top' });
+        AlertWarning({ title: '내용을 입력해주세요.' });
         return false;
       }
     }
     return true;
   };
 
-  const handleOnSumbit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleOnSumbit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const nowData = currentTime();
@@ -87,12 +99,7 @@ export default function WriteTemplate() {
     };
     if (validation()) {
       setDisable(true);
-      try {
-        await insertSpotPost(newData);
-      } catch (err) {
-        AlertError({ title: '스팟 공유 게시물을 업로드하지 못했습니다.' });
-      }
-      navigate('/spotshare');
+      mutation.mutate(newData);
     }
   };
 

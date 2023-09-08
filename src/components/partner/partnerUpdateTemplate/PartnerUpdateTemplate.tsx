@@ -119,8 +119,12 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
   };
 
   const mutation = useMutation(updatePartnerPost, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['partnerPost']);
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(['partnerPost']);
+      navigate(`/partner/detail/${postId}`);
+    },
+    onError: () => {
+      AlertError({});
     },
   });
 
@@ -163,7 +167,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
   }
 
   // 글 작성 버튼 클릭 핸들러
-  const handleUpdateClick = async () => {
+  const handleUpdateClick = () => {
     if (validation()) {
       const dataToInsert = {
         id: postId,
@@ -180,10 +184,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
         writerId: userId,
       };
       setDisable(true);
-      setLoading(true);
-      await mutation.mutate(dataToInsert);
-      setLoading(false);
-      navigate(`/partner/detail/${postId}`);
+      mutation.mutate(dataToInsert);
     }
   };
 
@@ -258,7 +259,6 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
           </Button>
         </St.ButtonBox>
       </St.WriteForm>
-      {loading && <p>로딩중</p>}
     </St.FormContainer>
   );
 }

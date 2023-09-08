@@ -8,7 +8,7 @@ import Button from '../../common/button/Button';
 import { UpdateSpotCalendar } from '../../common/calendar/SpotCalendar';
 import { UpdateLocationDropDown } from '../../common/dropDown/LocationDropDown';
 import LoadingSpinner from '../../common/loadingSpinner/LoadingSpinner';
-import { AlertWarning } from '../../common/modal/alert';
+import { AlertError, AlertWarning } from '../../common/modal/alert';
 import { UpdateStarRate } from '../../common/starRate/StarRate';
 import SpotMap from '../map/SpotMap';
 import SpotShareEditor from '../spotShareEditor/SpotShareEditor';
@@ -56,8 +56,12 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
   }, [spotSharePost]);
 
   const mutation = useMutation(updateSpotPost, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['spotSharePost']);
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(['spotSharePost']);
+      navigate(`/spotshare/detail/${postId}`);
+    },
+    onError: () => {
+      AlertError({});
     },
   });
 
@@ -89,7 +93,7 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
     return <div>Error loading data</div>;
   }
 
-  const handleOnSumbit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleOnSumbit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const updateData = {
@@ -108,8 +112,7 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
     };
     if (validation()) {
       setDisable(true);
-      await mutation.mutate(updateData);
-      navigate(`/spotshare/detail/${postId}`);
+      mutation.mutate(updateData);
     }
   };
 

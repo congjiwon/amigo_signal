@@ -1,3 +1,4 @@
+import { QueryClient, useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { getInterests } from '../../../api/supabase/interest';
@@ -12,6 +13,7 @@ import { AlertError, AlertWarning } from '../../common/modal/alert';
 import * as St from './style';
 
 function PartnerWriteTemplate() {
+  const queryClient = new QueryClient();
   const [location, setLocation] = useState<string[]>([]);
   const [partnerDates, setPartnerDates] = useState<string[]>([]);
   const [partner, setPartner] = useState<number>(1);
@@ -21,7 +23,6 @@ function PartnerWriteTemplate() {
   const [interestTagList, setInterestTagList] = useState<Tables<'interest'>[]>([]);
   const [interestUrl, setInterestUrl] = useState<string[]>([]);
   const [interestDiscription, setInterestDiscription] = useState<string[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
   const [writerId, setWriterId] = useState<string>('');
   const [disable, setDisable] = useState(false);
   const navigate = useNavigate();
@@ -47,6 +48,16 @@ function PartnerWriteTemplate() {
       navigate('/login');
     }
   }, [navigate, authId]);
+
+  const mutation = useMutation(insertPost, {
+    onSuccess: async () => {
+      queryClient.invalidateQueries(['partnerPost']);
+      navigate('/partner');
+    },
+    onError: () => {
+      AlertError({});
+    },
+  });
 
   const handleInterestClick = (imageUrl: string, discription: string) => {
     if (interestUrl.includes(imageUrl)) {
@@ -105,7 +116,7 @@ function PartnerWriteTemplate() {
     return true;
   };
   // 글 작성 버튼 클릭 핸들러
-  const handleWriteClick = async () => {
+  const handleWriteClick = () => {
     const time = currentTime();
     const dataToInsert = {
       title,
@@ -124,14 +135,7 @@ function PartnerWriteTemplate() {
     };
     if (validation()) {
       setDisable(true);
-      try {
-        setLoading(true);
-        await insertPost(dataToInsert);
-      } catch (err) {
-        AlertError({ title: '동행 찾기 게시물을 업로드하지 못했습니다.' });
-      }
-      setLoading(false);
-      navigate('/partner');
+      mutation.mutate(dataToInsert);
     }
   };
 
@@ -200,7 +204,6 @@ function PartnerWriteTemplate() {
           </Button>
         </St.ButtonBox>
       </St.WriteForm>
-      {loading && <p>로딩중</p>}
     </St.FormContainer>
   );
 }

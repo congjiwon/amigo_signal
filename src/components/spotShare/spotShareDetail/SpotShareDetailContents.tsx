@@ -64,12 +64,10 @@ function SpotShareDetailContents() {
   const mutation = useMutation(deleteSpotSharePost, {
     onSuccess: async () => {
       await queryClient.invalidateQueries(['spotSharePost']);
+      navigate('/spotshare');
     },
     onError: () => {
-      AlertError({ title: '삭제오류' });
-    },
-    onSettled: () => {
-      navigate('/spotshare');
+      AlertError({});
     },
   });
 
