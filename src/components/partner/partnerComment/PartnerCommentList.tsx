@@ -88,6 +88,19 @@ function PartnerCommentList({ allComments, allReCommentsData, comment, isLoginUs
     return now;
   };
 
+  const handlePostReContent = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (event.target.value.trim() !== '') {
+      setReContent(event.target.value);
+    }
+  };
+
+  const handleUpdateComment = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (event.target.value === ' ') {
+      return;
+    }
+    setUpdateComment(event.target.value);
+  };
+
   const handleSubmitBtn = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -163,8 +176,8 @@ function PartnerCommentList({ allComments, allReCommentsData, comment, isLoginUs
     } else if (name === 'updateReComment') {
       const reCommentToEdit = allReCommentsData!.find((reComment) => reComment.id === reCommentId);
       if (reCommentToEdit) {
-        setReCommentId(reCommentId!); // 수정할 게시글 아이디 담아서 보내야함.
-        setUpdateReComment(reCommentToEdit.reContent); // 수정 클릭 시 초기값으로 원댓글 넣어줌.
+        setReCommentId(reCommentId!);
+        setUpdateReComment(reCommentToEdit.reContent);
         setIsUpdate('');
         setIsReComment('');
       }
@@ -241,7 +254,7 @@ function PartnerCommentList({ allComments, allReCommentsData, comment, isLoginUs
                 <div>
                   <form onSubmit={handleSubmitBtn}>
                     <St.InputBox>
-                      <St.Textarea placeholder="댓글을 남겨보세요" value={updateComment} onChange={(event) => setUpdateComment(event.target.value)} maxLength={300} />
+                      <St.Textarea placeholder="댓글을 남겨보세요" value={updateComment} onChange={handleUpdateComment} maxLength={300} />
                       <St.CancelSubmitButtonBox>
                         <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleCancelBtn('updateCancel')}>
                           취소
@@ -268,7 +281,7 @@ function PartnerCommentList({ allComments, allReCommentsData, comment, isLoginUs
             <St.CommentBottomBox>
               <form onSubmit={handleReCommentSubmit}>
                 <St.InputBox>
-                  <St.Textarea placeholder="댓글을 입력하세요" value={reContent} onChange={(event) => setReContent(event?.target.value)} maxLength={300} />
+                  <St.Textarea placeholder="댓글을 입력하세요" value={reContent} onChange={handlePostReContent} maxLength={300} />
                   <St.CancelSubmitButtonBox>
                     <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleCancelBtn('reCommentCancel')}>
                       취소

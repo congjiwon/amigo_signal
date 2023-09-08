@@ -37,6 +37,13 @@ type PartnerReCommentsProps = {
 function PartnerReComments({ comment, storageUrl, reCommentId, reComment, isPostWriter, isLoginCommentUser, updateReComment, setUpdateReComment, handleCancelBtn, handleIsOpenBtn, handleReSubmitBtn }: PartnerReCommentsProps) {
   const { deleteReCommentMutation } = usePartnerComments();
 
+  const handleUpdateReComment = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (event.target.value === ' ') {
+      return;
+    }
+    setUpdateReComment(event.target.value);
+  };
+
   const handleReDelBtn = async (id: string) => {
     const isConfirmed = await ConfirmDelete('');
 
@@ -78,7 +85,7 @@ function PartnerReComments({ comment, storageUrl, reCommentId, reComment, isPost
           {reCommentId === reComment?.id ? (
             <form onSubmit={handleReSubmitBtn}>
               <St.InputBox>
-                <St.RecommentTextarea placeholder="댓글을 남겨보세요" value={updateReComment} onChange={(event) => setUpdateReComment(event.target.value)} maxLength={300} />
+                <St.RecommentTextarea placeholder="댓글을 남겨보세요" value={updateReComment} onChange={handleUpdateReComment} maxLength={300} />
                 <St.CancelSubmitButtonBox>
                   <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleCancelBtn('reCommentUpdateCancelBtn')}>
                     취소
