@@ -64,12 +64,10 @@ function SpotShareDetailContents() {
   const mutation = useMutation(deleteSpotSharePost, {
     onSuccess: async () => {
       await queryClient.invalidateQueries(['spotSharePost']);
+      navigate('/spotshare');
     },
     onError: () => {
-      AlertError({ title: '삭제오류' });
-    },
-    onSettled: () => {
-      navigate('/spotshare');
+      AlertError({});
     },
   });
 
@@ -111,9 +109,6 @@ function SpotShareDetailContents() {
     }
   }, [spotSharePost]);
 
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
   if (isError) {
     return <div>Error loading data</div>;
   }
@@ -139,10 +134,10 @@ function SpotShareDetailContents() {
 
   return (
     <>
+      {isLoading && <LoadingSpinner />}
       <St.TitleBox>
         <p>{spotSharePost?.title}</p>
       </St.TitleBox>
-
       <div>
         <St.InfoOuterBox>
           <St.PostInfoBox>

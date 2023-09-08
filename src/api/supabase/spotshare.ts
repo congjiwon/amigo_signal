@@ -12,6 +12,9 @@ type filteredPostProps = {
 
 export const getFilteredSpotSharePost = async ({ sort = 'createdAt', country, startDate, endDate, page = 0, limit = 4 }: filteredPostProps & { page?: number; limit?: number }) => {
   let sharePosts = supabase.from('spotPosts').select('*, users(*), country(imageUrl, country), likes(postId)').order(`${sort}`, { ascending: false });
+  sharePosts.then(({ data }) => {
+    console.log('data', data);
+  });
 
   if (country !== undefined) {
     sharePosts = sharePosts.eq('country', country);

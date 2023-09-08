@@ -1,3 +1,4 @@
+import { QueryClient, useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { getInterests } from '../../../api/supabase/interest';
@@ -8,10 +9,12 @@ import Button from '../../common/button/Button';
 import PartnerCalendar from '../../common/calendar/PartnerCalendar';
 import { PartnerDropDown } from '../../common/dropDown/DropDown';
 import LocationDropDown from '../../common/dropDown/LocationDropDown';
+import LoadingSpinner from '../../common/loadingSpinner/LoadingSpinner';
 import { AlertError, AlertWarning } from '../../common/modal/alert';
 import * as St from './style';
 
 function PartnerWriteTemplate() {
+  const queryClient = new QueryClient();
   const [location, setLocation] = useState<string[]>([]);
   const [partnerDates, setPartnerDates] = useState<string[]>([]);
   const [partner, setPartner] = useState<number>(1);
@@ -21,7 +24,6 @@ function PartnerWriteTemplate() {
   const [interestTagList, setInterestTagList] = useState<Tables<'interest'>[]>([]);
   const [interestUrl, setInterestUrl] = useState<string[]>([]);
   const [interestDiscription, setInterestDiscription] = useState<string[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
   const [writerId, setWriterId] = useState<string>('');
   const [disable, setDisable] = useState(false);
   const navigate = useNavigate();
@@ -47,6 +49,17 @@ function PartnerWriteTemplate() {
       navigate('/login');
     }
   }, [navigate, authId]);
+
+  const mutation = useMutation(insertPost, {
+    onSuccess: async () => {
+      queryClient.invalidateQueries(['partnerPost']);
+      navigate('/partner');
+    },
+    onError: () => {
+      AlertError({});
+      setDisable(false);
+    },
+  });
 
   const handleInterestClick = (imageUrl: string, discription: string) => {
     if (interestUrl.includes(imageUrl)) {
@@ -105,7 +118,7 @@ function PartnerWriteTemplate() {
     return true;
   };
   // 글 작성 버튼 클릭 핸들러
-  const handleWriteClick = async () => {
+  const handleWriteClick = () => {
     const time = currentTime();
     const dataToInsert = {
       title,
@@ -124,14 +137,7 @@ function PartnerWriteTemplate() {
     };
     if (validation()) {
       setDisable(true);
-      try {
-        setLoading(true);
-        await insertPost(dataToInsert);
-      } catch (err) {
-        AlertError({ title: '동행 찾기 게시물을 업로드하지 못했습니다.' });
-      }
-      setLoading(false);
-      navigate('/partner');
+      mutation.mutate(dataToInsert);
     }
   };
 
@@ -144,7 +150,7 @@ function PartnerWriteTemplate() {
           <PartnerDropDown setPartner={setPartner} />
         </St.SelectListBox>
         <St.WriteInput
-          maxLength={50}
+          maxLength={100}
           value={title}
           onChange={(event) => {
             setTitle(event.target.value);
@@ -152,6 +158,7 @@ function PartnerWriteTemplate() {
           placeholder="원활한 동료찾기를 위해 지역명을 함께 입력해주세요"
         ></St.WriteInput>
         <St.TextArea
+          maxLength={5000}
           value={content}
           onChange={(event) => {
             setContent(event.target.value);
@@ -193,14 +200,14 @@ function PartnerWriteTemplate() {
         </St.ExplanationBox>
         <St.ButtonBox>
           <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={() => navigate('/partner')}>
-            취소하기
+            취소
           </Button>
           <Button type="button" disabled={disable} styleType={BtnStyleType.BTN_DARK} onClick={handleWriteClick}>
-            작성하기
+            작성완료
           </Button>
         </St.ButtonBox>
       </St.WriteForm>
-      {loading && <p>로딩중</p>}
+      {disable && <LoadingSpinner />}
     </St.FormContainer>
   );
 }
