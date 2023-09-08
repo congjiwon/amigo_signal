@@ -10,30 +10,20 @@ import * as St from './style';
 
 function SpotComments() {
   const { postid } = useParams<string>();
-
-  // 모든 댓글(유저정보 포함)
   const { data: allComments } = useQuery(['spotComments'], getSpotComments);
   const { data: users } = useQuery(['userData'], getUsers);
-
-  // 모든 스팟 게시글 작성자 ID
   const { data: spotPostWriterId } = useQuery(['spotPostId'], getPostWriterId);
-  console.log('1', allComments);
-  console.log('2', spotPostWriterId);
-  // 작성자가 작성한 댓글 찾기(배열의 0번째.id)
   const findCommentId = spotPostWriterId?.filter((comment) => {
     return comment.id === postid;
   });
   const filteredPostId = findCommentId && findCommentId[0] && findCommentId[0].id;
-  // 모든 댓글 중 해당 게시글의 댓글 배열
   const filteredComments = allComments?.filter((comment) => {
-    // 얘의 갯수랑,,
     return comment.postId === filteredPostId;
   });
 
   const [reCommentCount, setReCommentCount] = useState(0);
   const { data: reCommentsData } = useQuery(['spotReComments'], getReCommentData);
   useEffect(() => {
-    // spotReComments 테이블에서 해당 게시글에 대한 답댓글 수 계산
     const reCommentCountForPost =
       reCommentsData?.filter((reComment) => {
         const parentComment = filteredComments?.find((comment) => comment.id === reComment.commentId);
