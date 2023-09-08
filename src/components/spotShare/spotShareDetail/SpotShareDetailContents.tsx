@@ -109,9 +109,6 @@ function SpotShareDetailContents() {
     }
   }, [spotSharePost]);
 
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
   if (isError) {
     return <div>Error loading data</div>;
   }
@@ -137,10 +134,10 @@ function SpotShareDetailContents() {
 
   return (
     <>
+      {isLoading && <LoadingSpinner />}
       <St.TitleBox>
         <p>{spotSharePost?.title}</p>
       </St.TitleBox>
-
       <div>
         <St.InfoOuterBox>
           <St.PostInfoBox>

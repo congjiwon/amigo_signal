@@ -204,7 +204,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
           </St.ExplanationBox>
         </St.SelectListBox>
         <St.WriteInput
-          maxLength={50}
+          maxLength={100}
           value={title}
           onChange={(event) => {
             setTitle(event.target.value);
@@ -212,6 +212,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
           placeholder="원활한 동료찾기를 위해 지역명을 함께 입력해주세요"
         ></St.WriteInput>
         <St.TextArea
+          maxLength={5000}
           value={content}
           onChange={(event) => {
             setContent(event.target.value);
