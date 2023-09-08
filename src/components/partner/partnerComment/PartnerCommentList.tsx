@@ -210,7 +210,7 @@ function PartnerCommentList({ allComments, allReCommentsData, comment, isLoginUs
               );
             }
           })}
-          {logInUserId && (
+          {logInUserId ? (
             <St.CommentBottomBox>
               <St.DateButtonBox>
                 {' '}
@@ -254,6 +254,14 @@ function PartnerCommentList({ allComments, allReCommentsData, comment, isLoginUs
                   </form>
                 </div>
               )}
+            </St.CommentBottomBox>
+          ) : (
+            <St.CommentBottomBox>
+              <St.DateButtonBox>
+                <St.DateBox>
+                  <St.DateParagraph>{comment?.date.substring(0, 10) + ' ' + comment?.date.substring(11, 16)}</St.DateParagraph>
+                </St.DateBox>
+              </St.DateButtonBox>
             </St.CommentBottomBox>
           )}
           {isReComment && (
