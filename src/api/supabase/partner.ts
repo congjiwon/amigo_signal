@@ -133,7 +133,7 @@ export const insertPost = async (dataToInsert: Inserts<'partnerPosts'>) => {
   if (error) {
     console.error('Insert error:', error);
   } else {
-    console.log('Inserted data:', data);
+    // console.log('Inserted data:', data);
     return data;
   }
 };

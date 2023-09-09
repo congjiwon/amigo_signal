@@ -42,8 +42,8 @@ function SpotShareDetailContents() {
 
   // 좋아요 싱테 가져오기
   const LikeCheck = async (logInUserId: string, postid: string) => {
-    let data = await getLikesCondition(logInUserId, postid);
-    setLike(data!.length > 0);
+    const data = await getLikesCondition(logInUserId, postid);
+    setLike(data! && data!.length > 0);
   };
   useEffect(() => {
     LikeCheck(logInUserId!, postid!);
@@ -128,7 +128,6 @@ function SpotShareDetailContents() {
 
     handleEmptyHeart();
   }, 300);
-
   return (
     <>
       {isLoading && <LoadingSpinner />}
@@ -143,7 +142,7 @@ function SpotShareDetailContents() {
               <St.NickNameSpan style={{ paddingTop: '1px', paddingBottom: '5px' }}>{spotSharePost?.users?.nickName} </St.NickNameSpan>
               <St.InfoContainer>
                 <span>{spotSharePost?.createdAt.substring(0, 10) + ' ' + spotSharePost?.createdAt.substring(11, 16)} </span>
-                <span>조회 100</span>
+                {/* <span>조회 100</span> */}
                 <span>좋아요 {likeCount}</span>
               </St.InfoContainer>
             </St.InfoInnerBox>
@@ -173,9 +172,7 @@ function SpotShareDetailContents() {
           <St.GraySpan>방문날짜</St.GraySpan>
           <St.BlackSpan> {spotSharePost?.visitDate}</St.BlackSpan>
         </St.DetailInfoBox>
-        <St.DetailInfoBox>
-          <Rate disabled defaultValue={spotSharePost?.starRate} />
-        </St.DetailInfoBox>
+        <St.DetailInfoBox>{spotSharePost?.starRate && <Rate disabled defaultValue={spotSharePost.starRate} />}</St.DetailInfoBox>
 
         <ReactQuill readOnly={true} theme="bubble" value={spotSharePost?.content} />
       </St.SpotShareBox>

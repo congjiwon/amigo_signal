@@ -28,7 +28,7 @@ const UserFeedback = ({ partnerPostData }: Props) => {
 
   //북마크
   const bookmarkCheckHanlde = async (logInUserId: string, postId: string) => {
-    let data = await bookmarkCheck(logInUserId, postId);
+    const data = await bookmarkCheck(logInUserId, postId);
     setBookMark(data!.length > 0);
   };
 
@@ -37,22 +37,14 @@ const UserFeedback = ({ partnerPostData }: Props) => {
   }, []);
 
   //디바운싱
-  const debouncedAddBookMarkHandle = _.debounce(() => {
-    const addBookMarkHandle = async () => {
-      setBookMark(!bookMark);
-      await addBookmark({ userId: logInUserId!, postId: id });
-    };
-
-    addBookMarkHandle();
+  const debouncedAddBookMarkHandle = _.debounce(async () => {
+    setBookMark(!bookMark);
+    await addBookmark({ userId: logInUserId!, postId: id });
   }, 300);
 
-  const debouncedRemoveBookMarkHandle = _.debounce(() => {
-    const removeBookMarkHandle = async () => {
-      setBookMark(!bookMark);
-      await removeBookMark(logInUserId!, id);
-    };
-
-    removeBookMarkHandle();
+  const debouncedRemoveBookMarkHandle = _.debounce(async () => {
+    setBookMark(!bookMark);
+    await removeBookMark(logInUserId!, id);
   }, 300);
 
   //오픈채팅
@@ -101,10 +93,7 @@ const UserFeedback = ({ partnerPostData }: Props) => {
         {logInUserId ? (
           <>
             <button>{openChat.length > 1 && <FiMessageSquare onClick={() => handleCopyClipBoard(openChat)} style={St.Icons} />}</button>
-            {/* <button>{bookMark ? <RiBookmarkFill onClick={() => removeBookMarkHandle()} style={{ height: '24px', width: '24px' }} /> : <RiBookmarkLine onClick={() => addBookMarkHandle()} style={{ height: '24px', width: '24px' }} />}</button> */}
-            <button>
-              {bookMark ? <RiBookmarkFill onClick={() => debouncedRemoveBookMarkHandle()} style={{ height: '24px', width: '24px' }} /> : <RiBookmarkLine onClick={() => debouncedAddBookMarkHandle()} style={{ height: '24px', width: '24px' }} />}
-            </button>
+            <button>{bookMark ? <RiBookmarkFill onClick={debouncedRemoveBookMarkHandle} style={{ height: '24px', width: '24px' }} /> : <RiBookmarkLine onClick={debouncedAddBookMarkHandle} style={{ height: '24px', width: '24px' }} />}</button>
           </>
         ) : (
           <></>

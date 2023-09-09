@@ -6,7 +6,7 @@ import Calender from '../../../assets/imgs/partner/Calendar.svg';
 import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import classifyingAge from '../../common/classifyingAge/classifyingAge';
 import * as St from './style';
-
+import { FiCheck } from 'react-icons/fi';
 type PartnerItemProps = {
   post: Tables<'partnerPosts'>;
 };
@@ -33,10 +33,18 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
   return (
     <Link to={`detail/${post.id}`}>
       <St.PostCard>
-        <St.Location>
+        <St.LocationBox>
           <St.FlagBox>{country.flagUrl && <St.FlagImage src={country.flagUrl} alt="Image" />}</St.FlagBox>
           <St.Country>{post?.country.country!}</St.Country>
-        </St.Location>
+          {post.isOpen === false ? (
+            <St.CheckBox style={{ color: '#643bdc' }}>
+              <FiCheck />
+              <span>모집완료</span>
+            </St.CheckBox>
+          ) : (
+            ''
+          )}
+        </St.LocationBox>
         <St.Main>
           <St.TravelDate>
             <img src={Calender} alt="여행기간" />
@@ -48,10 +56,6 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
             <p>{post.title}</p>
           </St.TitleBox>
         </St.Main>
-        <St.Body>
-          <St.Status $isOpen={post.isOpen}>{post.isOpen ? '모집중' : '모집완료'}</St.Status>
-          <p>모집인원: {post.numOfPeople}명</p>
-        </St.Body>
         <St.Footer>
           <St.UserProfile>
             {users.profileImageUrl ? <St.ProfileImage src={`${storagaUrl}/${users?.profileImageUrl}`} alt="profile" /> : <St.ProfileImage src={defaultProfileImage} alt="profile" />}
