@@ -1,12 +1,12 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef } from 'react';
 import { getFilteredSpotSharePost, getLikes } from '../../../api/supabase/spotshare';
+import icon_nodata from '../../../assets/imgs/NoData/icon_nodata.png';
 import useSessionStore from '../../../zustand/store';
 import SkeletonList from '../../common/Skeleton/SkeletonList';
 import TopButton from '../../common/topbutton/TopButton';
 import SpotShareItem from './SpotShareItem';
 import * as St from './style';
-import icon_nodata from '../../../assets/imgs/NoData/icon_nodata.png';
 
 type SpotShareProps = {
   sort?: string;
@@ -78,12 +78,15 @@ export default function SpotShareItems({ sort, country, startDate, endDate }: Sp
       <St.Grid>
         {spotShareItems?.pages
           .flatMap((page) => page.data)
-          .filter((post) => post !== null && post !== undefined)
           .map((post) => {
             const likedPost = likeData?.filter((like) => {
               return like.userId === logInUserId;
             });
-            return <SpotShareItem key={post!.id} post={post!} likedPost={likedPost} />;
+            if (post !== null && post !== undefined) {
+              return <SpotShareItem key={post!.id} post={post!} likedPost={likedPost} />;
+            } else {
+              return null;
+            }
           })}
 
         <St.MoveButtonArea>
