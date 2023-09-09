@@ -177,9 +177,7 @@ function SpotShareDetailContents() {
             <St.GraySpan>방문날짜</St.GraySpan>
             <St.BlackSpan> {spotSharePost?.visitDate}</St.BlackSpan>
           </St.DetailInfoBox>
-          <St.DetailInfoBox>
-            <Rate disabled defaultValue={spotSharePost?.starRate} />
-          </St.DetailInfoBox>
+          <St.DetailInfoBox>{spotSharePost?.starRate && <Rate disabled defaultValue={spotSharePost.starRate} />}</St.DetailInfoBox>
         </div>
 
         <ReactQuill readOnly={true} theme="bubble" value={spotSharePost?.content} />
