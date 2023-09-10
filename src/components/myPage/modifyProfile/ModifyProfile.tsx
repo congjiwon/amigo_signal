@@ -7,9 +7,7 @@ import { modifyProfileImg } from '../../../api/supabase/storage';
 import { duplicationCheckFromUserTable, updateUserNickname, updateUserProfileImgUrl } from '../../../api/supabase/users';
 import iconProfileImgBtn from '../../../assets/imgs/myPage/icon_profile_img_btn.png';
 import defaultImg from '../../../assets/imgs/users/default_profile_img.png';
-import { BtnStyleType } from '../../../types/styleTypes';
 import useCurrentUserStore from '../../../zustand/currentUser';
-import Button from '../../common/button/Button';
 import { Alert } from '../../common/modal/alert';
 import * as St from './style';
 
@@ -92,6 +90,13 @@ export default function ModifyProfile() {
     }
   };
 
+  const handleResetModifyProfile = () => {
+    setNickName(currentUser?.nickName);
+    setNickNameValidationMsg('');
+    setNickNameStatus(true);
+    setProfileImgUrl(currentUser?.profileImageUrl ? `${storagaUrl}/${currentUser?.profileImageUrl}` : defaultImg);
+    setProfileImgFile(null);
+  };
   const handleSubmitUpdateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     mutationNickName.mutate({ nickName, userId });
@@ -135,9 +140,12 @@ export default function ModifyProfile() {
           </div>
         </St.ModifyProfileBox>
         <St.BtnBox>
-          <Button styleType={BtnStyleType.BTN_DARK} type="submit" fullWidth={true} disabled={!nickNameStatus}>
-            수정 완료
-          </Button>
+          <St.Btn type="reset" onClick={handleResetModifyProfile} $width="65px" $height="32px" $bgColor="#6C7486">
+            취소
+          </St.Btn>
+          <St.Btn type="submit" disabled={!nickNameStatus} $width="65px" $height="32px" $bgColor="#643BDC">
+            적용
+          </St.Btn>
         </St.BtnBox>
       </form>
     </St.ModifyProfileWrapper>
