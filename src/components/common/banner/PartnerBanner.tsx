@@ -1,4 +1,5 @@
 import TravelWith from '../../../assets/imgs/partner/TravelWith.jpg';
+// import
 import * as St from './style';
 
 function PartnerBanner() {

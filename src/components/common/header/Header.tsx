@@ -7,6 +7,8 @@ import { getCurrentUser } from '../../../api/supabase/users';
 import logo from '../../../assets/imgs/Logo/logo.png';
 import useCurrentUserStore from '../../../zustand/currentUser';
 import useSessionStore from '../../../zustand/store';
+import One from '../../../assets/imgs/Logo/One.png';
+
 import { Alert } from '../modal/alert';
 import * as St from './style';
 
@@ -57,7 +59,7 @@ export default function Header() {
         <St.H1>
           <Link to="/">
             <img src={logo} style={{ width: '40px' }} />
-            <span>Amigo Signal</span>
+            <img src={One} style={{ width: '120px' }} />
           </Link>
         </St.H1>
         <St.Gnb>
