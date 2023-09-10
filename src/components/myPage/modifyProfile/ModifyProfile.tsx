@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import imageCompression from 'browser-image-compression';
 import debounce from 'lodash/debounce';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -67,9 +68,27 @@ export default function ModifyProfile() {
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
+    var reg = /(.*?)\.(jpg|svg|jpeg|png)$/;
     if (selectedFile) {
-      setProfileImgUrl(URL.createObjectURL(selectedFile));
-      setProfileImgFile(selectedFile);
+      const selectedFileName = e.target.files?.[0].name;
+
+      if (selectedFileName?.match(reg) === null || reg.test(selectedFileName!) === false) {
+        alert('jpg, jpeg, png, svg 형식의 이미지 파일만 업로드 가능합니다.');
+        return;
+      } else {
+        const options = {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 640,
+          useWebWorker: true,
+        };
+        try {
+          const compressedFile = await imageCompression(selectedFile, options);
+          setProfileImgUrl(URL.createObjectURL(selectedFile));
+          setProfileImgFile(compressedFile);
+        } catch (error) {
+          console.log(`프로필 이미지 업로드 중 에러 발생: ${error}`);
+        }
+      }
     }
   };
 
@@ -104,7 +123,7 @@ export default function ModifyProfile() {
               <img src={iconProfileImgBtn} alt="이미지 선택 아이콘" />
             </St.ProfileImgLabel>
 
-            <input type="file" name="" id="profileImg" onChange={handleFileChange} />
+            <input type="file" name="" id="profileImg" accept="image/*" onChange={handleFileChange} />
           </St.ProfileImgBox>
 
           <div style={{ width: '100%' }}>
