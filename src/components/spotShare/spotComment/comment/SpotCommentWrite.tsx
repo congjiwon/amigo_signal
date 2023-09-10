@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useParams } from 'react-router';
-import { getAuthId } from '../../../api/supabase/users';
-import useSessionStore from '../../../zustand/store';
-import * as St from './style';
-import useSpotComment from './useSpotComment';
+import { getAuthId } from '../../../../api/supabase/users';
+import useSessionStore from '../../../../zustand/store';
+import * as St from '../style';
+import useSpotComment from '../useSpotComment';
 
 function SpotWrite() {
   const { postid } = useParams<string>();

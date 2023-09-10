@@ -1,63 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { getPartnerPost } from '../../../api/supabase/partner';
-import DefaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
-import { BtnStyleType } from '../../../types/styleTypes';
-import useSessionStore from '../../../zustand/store';
-import { CommentButton } from '../../common/button/Button';
-import { ConfirmDelete } from '../../common/modal/alert';
-import TopButton from '../../common/topbutton/TopButton';
-import PartnerReComments from './PartnerReComments';
-import * as St from './style';
-import { usePartnerComments } from './usePartnerComment';
-
-type allReCommentsData =
-  | {
-      commentId: string;
-      date: string;
-      id: string;
-      reContent: string;
-      writerId: string;
-      users: {
-        nickName: string;
-        profileImageUrl: string | null;
-      };
-    }[]
-  | null
-  | undefined;
-
-type UsersProps =
-  | {
-      id: string;
-      nickName: string;
-      profileImageUrl: string | null;
-    }[]
-  | null
-  | undefined;
-
-type allCommentsProps =
-  | {
-      content: string;
-      id: string;
-    }[]
-  | null
-  | undefined;
-
-type CommentProps = {
-  content: string;
-  date: string;
-  id: string;
-  postId: string | null;
-  writerId: string;
-};
-
-export type PartnerCommentListProps = {
-  users: UsersProps;
-  allComments: allCommentsProps;
-  allReCommentsData: allReCommentsData;
-  comment: CommentProps | undefined;
-  isLoginUser: boolean;
-};
+import { getPartnerPost } from '../../../../api/supabase/partner';
+import useSessionStore from '../../../../zustand/store';
+import TopButton from '../../../common/topbutton/TopButton';
+import PartnerReComments from '../reComment/PartnerReComments';
+import * as St from '../style';
+import { PartnerCommentListProps } from '../type/CommentType';
+import { usePartnerComments } from '../usePartnerComment';
+import CancelSubmitBox from './CancelSubmitBox';
+import CommentTopBox from './CommentTopBox';
+import DateButtonBox from './DateButtonBox';
 
 function PartnerCommentList({ allComments, allReCommentsData, comment, isLoginUser, users }: PartnerCommentListProps) {
   const storageUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
@@ -71,7 +23,7 @@ function PartnerCommentList({ allComments, allReCommentsData, comment, isLoginUs
   const [updateReComment, setUpdateReComment] = useState('');
   const [reCommentId, setReCommentId] = useState('');
 
-  const { updateCommentMutation, deleteCommentMutation, postReCommentMutation, updateReCommentMutation } = usePartnerComments();
+  const { updateCommentMutation, postReCommentMutation, updateReCommentMutation } = usePartnerComments();
   const { data: partnerPost } = useQuery(['partnerPost', comment?.postId], () => getPartnerPost({ postId: comment?.postId! }));
   const postWriterId = partnerPost?.writerId;
 
@@ -86,14 +38,6 @@ function PartnerCommentList({ allComments, allReCommentsData, comment, isLoginUs
     const seconds = ('0' + today.getSeconds()).slice(-2);
     const now = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
     return now;
-  };
-
-  const handlePostReContent = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setReContent(event.target.value.replace(/ /g, '\u00A0'));
-  };
-
-  const handleUpdateComment = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setUpdateComment(event.target.value.replace(/ /g, '\u00A0'));
   };
 
   const handleSubmitBtn = (event: React.FormEvent<HTMLFormElement>) => {
@@ -157,14 +101,6 @@ function PartnerCommentList({ allComments, allReCommentsData, comment, isLoginUs
     setIsReComment('');
   };
 
-  const handleDelBtn = async (id: string) => {
-    const isConfirmed = await ConfirmDelete('');
-
-    if (isConfirmed) {
-      deleteCommentMutation.mutate(id);
-    }
-  };
-
   const handleIsOpenBtn = (name: string, commentId: string, reCommentId: string | null) => {
     if (name === 'postReComment') {
       setIsReComment(commentId);
@@ -202,6 +138,14 @@ function PartnerCommentList({ allComments, allReCommentsData, comment, isLoginUs
     }
   };
 
+  const handleUpdateComment = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setUpdateComment(event.target.value.replace(/ /g, '\u00A0'));
+  };
+
+  const handlePostReContent = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setReContent(event.target.value.replace(/ /g, '\u00A0'));
+  };
+
   {
     return (
       <St.PartnerCommentsContainerBox>
@@ -212,68 +156,13 @@ function PartnerCommentList({ allComments, allReCommentsData, comment, isLoginUs
           {users?.map((user) => {
             if (user.id === comment?.writerId) {
               const isPostWriter = comment.writerId === postWriterId;
-              return (
-                <St.CommentTopBox key={user.id}>
-                  <div>
-                    <St.Img src={user! && user!.profileImageUrl! ? `${storageUrl}/${user!.profileImageUrl!}` : DefaultProfileImage} />
-                  </div>
-                  <St.WriterContainerBox>
-                    <St.WriterBox>
-                      <St.NickNameParagraph>{user.nickName}</St.NickNameParagraph>
-                      {isPostWriter && <St.WriterParagraph>작성자</St.WriterParagraph>}
-                    </St.WriterBox>
-                    <St.CommentBox>
-                      <St.CommentParagraph>{comment?.content}</St.CommentParagraph>
-                    </St.CommentBox>
-                  </St.WriterContainerBox>
-                </St.CommentTopBox>
-              );
+              return <CommentTopBox user={user} storageUrl={storageUrl} isPostWriter={isPostWriter} comment={comment} />;
             }
           })}
           {logInUserId ? (
             <St.CommentBottomBox>
-              <St.DateButtonBox>
-                {' '}
-                <St.DateBox>
-                  <St.DateParagraph>{comment?.date.substring(0, 10) + ' ' + comment?.date.substring(11, 16)}</St.DateParagraph>
-                </St.DateBox>
-                {/* 여기 작성자태그코드 넣어보기 */}
-                {isLoginUser && (
-                  <St.ButtonBox>
-                    <div>
-                      <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('updateComment', comment!.id, null)}>
-                        수정
-                      </CommentButton>
-                    </div>
-                    <St.Bar>|</St.Bar>
-                    <div>
-                      <CommentButton type="submit" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleDelBtn(comment!.id)}>
-                        삭제
-                      </CommentButton>
-                    </div>
-                  </St.ButtonBox>
-                )}
-                <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('postReComment', comment!.id, null)}>
-                  답글쓰기
-                </CommentButton>
-              </St.DateButtonBox>
-              {isUpdate && (
-                <div>
-                  <form onSubmit={handleSubmitBtn}>
-                    <St.InputBox>
-                      <St.Textarea placeholder="댓글을 남겨보세요" value={updateComment} onChange={handleUpdateComment} maxLength={300} />
-                      <St.CancelSubmitButtonBox>
-                        <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleCancelBtn('updateCancel')}>
-                          취소
-                        </CommentButton>
-                        <CommentButton type="submit" disabled={updateComment.length < 1} styleType={BtnStyleType.BTN_ONLYFONT}>
-                          등록
-                        </CommentButton>
-                      </St.CancelSubmitButtonBox>
-                    </St.InputBox>
-                  </form>
-                </div>
-              )}
+              <DateButtonBox comment={comment} isLoginUser={isLoginUser} handleIsOpenBtn={handleIsOpenBtn} />
+              {isUpdate && <CancelSubmitBox handleSubmitBtn={handleSubmitBtn} comment={updateComment} handleComment={handleUpdateComment} handleCancelBtn={() => handleCancelBtn('updateCancel')} />}
             </St.CommentBottomBox>
           ) : (
             <St.CommentBottomBox>
@@ -286,19 +175,7 @@ function PartnerCommentList({ allComments, allReCommentsData, comment, isLoginUs
           )}
           {isReComment && (
             <St.CommentBottomBox>
-              <form onSubmit={handleReCommentSubmit}>
-                <St.InputBox>
-                  <St.Textarea placeholder="댓글을 입력하세요" value={reContent} onChange={handlePostReContent} maxLength={300} />
-                  <St.CancelSubmitButtonBox>
-                    <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleCancelBtn('reCommentCancel')}>
-                      취소
-                    </CommentButton>
-                    <CommentButton type="submit" disabled={reContent.length < 1} styleType={BtnStyleType.BTN_ONLYFONT}>
-                      등록
-                    </CommentButton>
-                  </St.CancelSubmitButtonBox>
-                </St.InputBox>
-              </form>
+              <CancelSubmitBox handleSubmitBtn={handleReCommentSubmit} comment={reContent} handleComment={handlePostReContent} handleCancelBtn={() => handleCancelBtn('reCommentCancel')} />
             </St.CommentBottomBox>
           )}
         </St.PartnerCommentsBox>

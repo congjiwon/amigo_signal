@@ -1,33 +1,13 @@
-import DefaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
-import { BtnStyleType } from '../../../types/styleTypes';
-import { CommentButton } from '../../common/button/Button';
-import { ConfirmDelete } from '../../common/modal/alert';
-import * as St from './style';
-import useSpotComment from './useSpotComment';
+import DefaultProfileImage from '../../../../assets/imgs/users/default_profile_img.png';
+import { BtnStyleType } from '../../../../types/styleTypes';
+import { CommentButton } from '../../../common/button/Button';
+import { ConfirmDelete } from '../../../common/modal/alert';
+import * as St from '../style';
+import { PartnerReCommentsProps } from '../type/CommentType';
+import { usePartnerComments } from '../usePartnerComment';
 
-type PartnerReCommentsProps = {
-  storageUrl?: string;
-  reCommentId: string;
-  reComment: {
-    date: string;
-    id: string;
-    reContent: string;
-    users: {
-      nickName: string;
-      profileImageUrl: string | null;
-    } | null;
-  };
-  isPostWriter: boolean;
-  isLoginCommentUser: boolean;
-  updateReComment: string;
-  setUpdateReComment: React.Dispatch<React.SetStateAction<string>>;
-  onCancelBtn: (name: string) => void;
-  handleIsOpenBtn: (name: string, id: string | null) => void;
-  handleReSubmitBtn: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
-};
-
-function SpotReCommentList({ storageUrl, reCommentId, reComment, isPostWriter, isLoginCommentUser, updateReComment, setUpdateReComment, onCancelBtn, handleIsOpenBtn, handleReSubmitBtn }: PartnerReCommentsProps) {
-  const { deleteReCommentMutation } = useSpotComment();
+function PartnerReComments({ comment, storageUrl, reCommentId, reComment, isPostWriter, isLoginCommentUser, updateReComment, setUpdateReComment, handleCancelBtn, handleIsOpenBtn, handleReSubmitBtn }: PartnerReCommentsProps) {
+  const { deleteReCommentMutation } = usePartnerComments();
 
   const handleUpdateReComment = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setUpdateReComment(event.target.value.replace(/ /g, '\u00A0'));
@@ -63,7 +43,7 @@ function SpotReCommentList({ storageUrl, reCommentId, reComment, isPostWriter, i
             <St.DateBox>
               <St.DateParagraph>{reComment?.date.substring(0, 10) + ' ' + reComment?.date.substring(11, 16)}</St.DateParagraph>
             </St.DateBox>
-            <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('updateReComment', reComment!.id)}>
+            <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('updateReComment', comment.id, reComment!.id)}>
               수정
             </CommentButton>
             <St.Bar>|</St.Bar>
@@ -76,7 +56,7 @@ function SpotReCommentList({ storageUrl, reCommentId, reComment, isPostWriter, i
               <St.InputBox>
                 <St.RecommentTextarea placeholder="댓글을 남겨보세요" value={updateReComment} onChange={handleUpdateReComment} maxLength={300} />
                 <St.CancelSubmitButtonBox>
-                  <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => onCancelBtn('reCommentUpdateCancelBtn')}>
+                  <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleCancelBtn('reCommentUpdateCancelBtn')}>
                     취소
                   </CommentButton>
                   <CommentButton type="submit" styleType={BtnStyleType.BTN_ONLYFONT} disabled={updateReComment.length < 1}>
@@ -102,4 +82,4 @@ function SpotReCommentList({ storageUrl, reCommentId, reComment, isPostWriter, i
   );
 }
 
-export default SpotReCommentList;
+export default PartnerReComments;

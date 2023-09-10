@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useParams } from 'react-router';
-import { getAuthId } from '../../../api/supabase/users';
-import useSessionStore from '../../../zustand/store';
-import * as St from './style';
-import { usePartnerComments } from './usePartnerComment';
+import { getAuthId } from '../../../../api/supabase/users';
+import useSessionStore from '../../../../zustand/store';
+import * as St from '../style';
+import { usePartnerComments } from '../usePartnerComment';
 
 function PartnerCommentsWrite() {
   const params = useParams();
