@@ -28,7 +28,6 @@ function SpotShareDetailContents() {
   // 디테일 포스트 불러오기
   const { data: spotSharePost, isLoading, isError } = useQuery(['spotSharePost', postid], () => getDetailSpotSharePost(postid));
 
-  // 좋아요 수 가져오기
   const { data: likeCountData } = useQuery(['likes', postid], () => countLikes(postid!));
 
   useEffect(() => {
@@ -40,19 +39,15 @@ function SpotShareDetailContents() {
     updateLikeCount();
   }, [like, likeCountData]);
 
-  // 좋아요
   const LikeCheck = async (logInUserId: string, postid: string) => {
     try {
       let { data: likeData, error } = await supabase.from('likes').select('*').eq('userId', logInUserId).eq('postId', postid);
 
       if (error) {
-        console.log('좋아요 가져오기 처참히 실패', error);
       } else {
         setLike(likeData!.length > 0);
       }
-    } catch (error) {
-      console.log('처참히 실패 개웃겨', error);
-    }
+    } catch (error) {}
   };
   useEffect(() => {
     LikeCheck(logInUserId!, postid!);
@@ -116,7 +111,6 @@ function SpotShareDetailContents() {
   // 글 작성자인지 확인하는 함수
   const isPostWriter = () => logInUserId == spotSharePost?.writerId;
 
-  // 좋아요 클릭 시
   const handleFillHeart = async () => {
     setLike(!like);
     const addLike = { postId: postid!, userId: logInUserId! };
@@ -152,11 +146,11 @@ function SpotShareDetailContents() {
             </St.InfoInnerBox>
           </St.PostInfoBox>
           <St.ButtonBox>
-            {logInUserId && <button>{like ? <RiHeartFill onClick={() => handleEmptyHeart()} style={St.Heart} /> : <RiHeartLine onClick={() => handleFillHeart()} style={St.Heart} />}</button>}
+            {logInUserId && <button>{like ? <RiHeartFill className="fillIcon" onClick={() => handleEmptyHeart()} /> : <RiHeartLine className="lineIcon" onClick={() => handleFillHeart()} />}</button>}
             {isPostWriter() ? (
               <>
-                <button>{<FiEdit onClick={() => navigate(`/spotshare/write/${spotSharePost?.id}`)} style={{ height: '24px', width: '24px' }} />}</button>
-                <button>{<FiTrash2 onClick={() => deletePostHandle(spotSharePost?.id)} style={{ height: '24px', width: '24px' }} />}</button>
+                <button>{<FiEdit className="lineIcon" onClick={() => navigate(`/spotshare/write/${spotSharePost?.id}`)} />}</button>
+                <button>{<FiTrash2 className="lineIcon" onClick={() => deletePostHandle(spotSharePost?.id)} />}</button>
               </>
             ) : (
               ''

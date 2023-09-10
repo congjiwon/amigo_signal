@@ -89,19 +89,18 @@ function SpotCommentList({ allComments, allReCommentsData, comment, isLoginUser,
   };
 
   const handleUpdateComment = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (event.target.value === ' ') {
-      return;
-    }
-    setUpdateComment(event.target.value);
+    setUpdateComment(event.target.value.replace(/ /g, '\u00A0'));
   };
 
   const handlePostReContent = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (event.target.value.trim() !== '') {
-      setReContent(event.target.value);
-    }
+    setReContent(event.target.value.replace(/ /g, '\u00A0'));
   };
 
   const handleSubmitBtn = (event: React.FormEvent<HTMLFormElement>) => {
+    if (updateComment.trim() === '') {
+      event.preventDefault();
+      return;
+    }
     event.preventDefault();
 
     const newComment = {
@@ -118,6 +117,10 @@ function SpotCommentList({ allComments, allReCommentsData, comment, isLoginUser,
   };
 
   const handleReCommentSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    if (reContent.trim() === '') {
+      event.preventDefault();
+      return;
+    }
     event.preventDefault();
 
     const reComment = {
@@ -134,6 +137,10 @@ function SpotCommentList({ allComments, allReCommentsData, comment, isLoginUser,
   };
 
   const handleReSubmitBtn = async (event: React.FormEvent<HTMLFormElement>) => {
+    if (updateReComment.trim() === '') {
+      event.preventDefault();
+      return;
+    }
     event.preventDefault();
 
     const newReComment = {

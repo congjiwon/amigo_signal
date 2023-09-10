@@ -102,16 +102,16 @@ const UserFeedback = ({ partnerPostData }: Props) => {
       <St.ButtonBox>
         {logInUserId ? (
           <>
-            <button>{openChat.length > 1 && <FiMessageSquare onClick={() => handleCopyClipBoard(openChat)} style={St.Icons} />}</button>
-            <button>{bookMark ? <RiBookmarkFill onClick={() => removeBookMarkHandle()} style={{ height: '24px', width: '24px' }} /> : <RiBookmarkLine onClick={() => addBookMarkHandle()} style={{ height: '24px', width: '24px' }} />}</button>
+            <button>{openChat.length > 1 && <FiMessageSquare className="lineIcon" onClick={() => handleCopyClipBoard(openChat)} />}</button>
+            <button>{bookMark ? <RiBookmarkFill className="fillIcon" onClick={() => removeBookMarkHandle()} /> : <RiBookmarkLine className="lineIcon" onClick={() => addBookMarkHandle()} />}</button>
           </>
         ) : (
           <></>
         )}
         {isPostUser() ? (
           <>
-            <button>{<FiEdit style={{ height: '24px', width: '24px' }} onClick={() => navigate(`/partner/write/${id}`)} />}</button>
-            <button>{<FiTrash2 onClick={() => handleDelBtn(id)} style={{ height: '24px', width: '24px' }} />}</button>
+            <button>{<FiEdit className="lineIcon" onClick={() => navigate(`/partner/write/${id}`)} />}</button>
+            <button>{<FiTrash2 className="lineIcon" onClick={() => handleDelBtn(id)} />}</button>
           </>
         ) : (
           <></>

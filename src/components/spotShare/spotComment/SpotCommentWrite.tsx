@@ -27,12 +27,14 @@ function SpotWrite() {
   };
 
   const handlePostContent = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (event.target.value.trim() !== '') {
-      setContent(event.target.value);
-    }
+    setContent(event.target.value.replace(/ /g, '\u00A0'));
   };
 
   const handleSubmitBtnClick = (event: React.FormEvent<HTMLFormElement>) => {
+    if (content.trim() === '') {
+      event.preventDefault();
+      return;
+    }
     event.preventDefault();
     const newComment = {
       content: content,

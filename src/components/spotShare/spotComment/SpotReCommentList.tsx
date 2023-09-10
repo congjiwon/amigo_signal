@@ -30,10 +30,7 @@ function SpotReCommentList({ storageUrl, reCommentId, reComment, isPostWriter, i
   const { deleteReCommentMutation } = useSpotComment();
 
   const handleUpdateReComment = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (event.target.value === ' ') {
-      return;
-    }
-    setUpdateReComment(event.target.value);
+    setUpdateReComment(event.target.value.replace(/ /g, '\u00A0'));
   };
 
   const handleReDelBtn = async (id: string) => {

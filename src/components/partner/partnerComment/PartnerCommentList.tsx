@@ -89,19 +89,18 @@ function PartnerCommentList({ allComments, allReCommentsData, comment, isLoginUs
   };
 
   const handlePostReContent = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (event.target.value.trim() !== '') {
-      setReContent(event.target.value);
-    }
+    setReContent(event.target.value.replace(/ /g, '\u00A0'));
   };
 
   const handleUpdateComment = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (event.target.value === ' ') {
-      return;
-    }
-    setUpdateComment(event.target.value);
+    setUpdateComment(event.target.value.replace(/ /g, '\u00A0'));
   };
 
   const handleSubmitBtn = (event: React.FormEvent<HTMLFormElement>) => {
+    if (updateComment.trim() === '') {
+      event.preventDefault();
+      return;
+    }
     event.preventDefault();
 
     const newComment = {
@@ -118,6 +117,10 @@ function PartnerCommentList({ allComments, allReCommentsData, comment, isLoginUs
   };
 
   const handleReSubmitBtn = (event: React.FormEvent<HTMLFormElement>) => {
+    if (updateReComment.trim() === '') {
+      event.preventDefault();
+      return;
+    }
     event.preventDefault();
 
     const newReComment = {
@@ -135,6 +138,10 @@ function PartnerCommentList({ allComments, allReCommentsData, comment, isLoginUs
   };
 
   const handleReCommentSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    if (reContent.trim() === '') {
+      event.preventDefault();
+      return;
+    }
     event.preventDefault();
 
     const reComment = {

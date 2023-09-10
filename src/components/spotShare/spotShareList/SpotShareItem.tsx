@@ -43,7 +43,6 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
   const logInUserId = session?.user.id;
   const queryClient = useQueryClient();
 
-  // 좋아요
   const LikeCheck = async (logInUserId: string) => {
     const liked = likedPost?.some((like) => like.postId.id === post.id && like.userId === logInUserId);
 
@@ -67,7 +66,6 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
   }
   const contentWithoutTags = post.content.replace(/<\/?[^>]+(>|$)/g, '');
 
-  // 좋아요 클릭 시
   const handleFillHeart = async (event: React.MouseEvent<SVGElement, MouseEvent>) => {
     event.preventDefault();
     await queryClient.invalidateQueries(['likes', post.id]);
@@ -96,9 +94,12 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
             </p>
           </St.TravelDateBox>
           {logInUserId ? (
-            <div>
-              <St.LikeButton>{like ? <RiHeartFill onClick={(event) => handleEmptyHeart(event)} style={St.Heart} /> : <RiHeartLine onClick={(event) => handleFillHeart(event)} style={St.Heart} />}</St.LikeButton>
-            </div>
+            // <div>
+            //   <St.LikeButton>{like ? <RiHeartFill className="fillIcon" onClick={(event) => handleEmptyHeart(event)} /> : <RiHeartLine className="lineIcon" onClick={(event) => handleFillHeart(event)} />}</St.LikeButton>
+            // </div>
+            <St.ButtonBox>
+              <button>{like ? <RiHeartFill className="fillIcon" onClick={(event) => handleEmptyHeart(event)} /> : <RiHeartLine className="lineIcon" onClick={(event) => handleFillHeart(event)} />}</button>
+            </St.ButtonBox>
           ) : (
             ''
           )}

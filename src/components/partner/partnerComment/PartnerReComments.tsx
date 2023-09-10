@@ -38,10 +38,7 @@ function PartnerReComments({ comment, storageUrl, reCommentId, reComment, isPost
   const { deleteReCommentMutation } = usePartnerComments();
 
   const handleUpdateReComment = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (event.target.value === ' ') {
-      return;
-    }
-    setUpdateReComment(event.target.value);
+    setUpdateReComment(event.target.value.replace(/ /g, '\u00A0'));
   };
 
   const handleReDelBtn = async (id: string) => {

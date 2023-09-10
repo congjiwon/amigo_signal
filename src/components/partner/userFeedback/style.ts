@@ -54,13 +54,25 @@ export const ButtonBox = styled.div`
     border: none;
     background-color: transparent;
     &:hover {
-      color: #670fdf;
+      color: #643bdc;
       transform: scale(1.2);
       transition: transform 0.3s ease;
+      cursor: pointer;
     }
     &:not(:hover) {
       transition: 0.3s ease-out;
     }
+  }
+
+  .lineIcon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .fillIcon {
+    width: 24px;
+    height: 24px;
+    color: #643bdc;
   }
 `;
 
