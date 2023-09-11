@@ -63,39 +63,27 @@ export const updateUserProfileImgUrl = async ({ profileImageUrl, userId }: userP
   return data;
 };
 
-//북마크 추가
-export const addBookmark = async (bookMarkInsert: any) => {
-  try {
-    const { data, error } = await supabase.from('bookmarks').insert(bookMarkInsert).select();
-    if (error) {
-      console.log('북마크 추가하기 실패', error);
-    } else {
-      console.log('북마크 추가 성공');
-    }
-  } catch (error) {
-    console.log('error', error);
-  }
-};
+// //북마크 추가
+// export const addBookmark = async (bookMarkInsert: any) => {
+//   const { data, error } = await supabase.from('bookmarks').insert(bookMarkInsert).select();
+//   if (error) {
+//     console.log('북마크 추가하기 실패', error);
+//   } else {
+//     console.log('북마크 추가 성공');
+//   }
+// };
 
-//북마크 삭제
-export const removeBookMark = async (logInUserId: string, postId: string) => {
-  try {
-    const { error } = await supabase.from('bookmarks').delete().eq('postId', postId).eq('userId', logInUserId);
-    if (error) throw error;
-  } catch (error) {
-    console.log('북마크 삭제 기능 에러', error);
-  }
-};
+// //북마크 삭제
+// export const removeBookMark = async (logInUserId: string, postId: string) => {
+//   const { error } = await supabase.from('bookmarks').delete().eq('postId', postId).eq('userId', logInUserId);
+//   if (error) throw error;
+// };
 
-//북마크 상태 확인
-export const bookmarkCheck = async (logInUserId: string, postId: string) => {
-  try {
-    const { data, error } = await supabase.from('bookmarks').select('*').eq('postId', postId).eq('userId', logInUserId);
-    if (error) {
-      console.log('북마크 데이터 불러오는데 실패함 ..', error);
-    }
-    return data;
-  } catch (error) {
-    console.log('처참히 실패', error);
-  }
-};
+// //북마크 상태 확인
+// export const bookmarkCheck = async (logInUserId: string, postId: string) => {
+//   const { data, error } = await supabase.from('bookmarks').select('*').eq('postId', postId).eq('userId', logInUserId);
+//   if (error) {
+//     console.log('북마크 데이터 불러오는데 실패함 ..', error);
+//   }
+//   return data;
+// };

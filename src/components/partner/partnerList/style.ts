@@ -31,15 +31,6 @@ export const PartnerListLayout = styled.div`
   margin: 0 auto;
 `;
 
-export const Country = styled.p`
-  color: var(--black, #000);
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 150%; /* 21px */
-  margin-top: 23px;
-`;
-
 //탑버튼
 export const MoveButtonArea = styled.div`
   position: fixed;
@@ -111,13 +102,13 @@ export const Grid = styled.div`
 
 export const PostCard = styled.div`
   width: 282px;
-  height: 282px;
+  height: 232px;
   position: relative;
   border-radius: 30px;
-  box-shadow: 5px 5px 10px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
 `;
 
-export const Location = styled.div`
+export const LocationBox = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
@@ -128,9 +119,10 @@ export const Location = styled.div`
 
 export const FlagBox = styled.div`
   position: relative;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  width: 50px;
+  height: 36px;
+  /* border-radius: 50%; */
+  border: 1px solid var(--light-gray, #e3e9f3);
   overflow: hidden;
   margin: 24px 0px 0px 20px;
 `;
@@ -142,10 +134,40 @@ export const FlagImage = styled.img`
   object-fit: cover;
 `;
 
+export const Country = styled.p`
+  color: var(--black, #000);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%; /* 21px */
+  margin-top: 23px;
+`;
+
+export const CheckBox = styled.div`
+  border-radius: 18px;
+  border: 1px solid var(--purple, #643bdc);
+  width: 89px;
+  height: 32px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-left: 50px;
+  margin-top: 22px;
+  span {
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 160%; /* 19.2px */
+    letter-spacing: -0.3px;
+    margin-left: 5px;
+  }
+`;
+
 export const Main = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 30px;
+  margin-top: 37px;
   p {
     font-size: 0.8rem;
     margin-bottom: 10px;
@@ -155,12 +177,13 @@ export const Main = styled.div`
 export const TravelDate = styled.div`
   display: flex;
   align-items: flex-start;
-  gap: 5px;
+  gap: 10px;
   p {
     margin-top: 3px;
   }
   img {
     margin-left: 20px;
+    margin-bottom: 14px;
   }
 `;
 
@@ -211,6 +234,10 @@ export const InterestImage = styled.img`
 
 export const Footer = styled.div`
   display: flex;
+  width: 242px;
+  height: 62px;
+  margin-left: 20px;
+  border-top: 1px solid #e3e9f3;
   justify-content: space-between;
   margin-right: 20px;
   align-items: center;
@@ -222,7 +249,7 @@ export const UserProfile = styled.div`
   align-items: center;
   gap: 7px;
   /* marg */
-  margin-left: 20px;
+  /* margin-left: 20px; */
   p {
     margin-left: 2px;
   }

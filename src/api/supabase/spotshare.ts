@@ -12,9 +12,6 @@ type filteredPostProps = {
 
 export const getFilteredSpotSharePost = async ({ sort = 'createdAt', country, startDate, endDate, page = 0, limit = 4 }: filteredPostProps & { page?: number; limit?: number }) => {
   let sharePosts = supabase.from('spotPosts').select('*, users(*), country(imageUrl, country), likes(postId)').order(`${sort}`, { ascending: false });
-  sharePosts.then(({ data }) => {
-    console.log('data', data);
-  });
 
   if (country !== undefined) {
     sharePosts = sharePosts.eq('country', country);
@@ -134,6 +131,14 @@ export const countLike = async (like: number, postId: string) => {
 export const getLikes = async () => {
   const { data } = await supabase.from('likes').select('*, postId(writerId, id)');
   return { data };
+};
+
+export const getLikesCondition = async (logInUserId: string, postid: string) => {
+  let { data, error } = await supabase.from('likes').select('*').eq('userId', logInUserId).eq('postId', postid);
+  if (error) {
+    console.log('좋아요 데이터 불러오기 실패', error);
+  }
+  return data;
 };
 
 // 내가 작성한 스팟공유 글 가져오기

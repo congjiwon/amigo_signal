@@ -6,7 +6,6 @@ export const NoDataImgBox = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   p {
     margin-top: 24px;
     color: var(--black, #121621);
@@ -17,7 +16,6 @@ export const NoDataImgBox = styled.div`
     line-height: 150%; /* 24px */
   }
 `;
-
 export const MoveButtonArea = styled.div`
   position: fixed;
   right: 40px;
@@ -31,58 +29,48 @@ export const SpotShareLayout = styled.div`
   max-width: 1200px;
   margin: 0 auto;
 `;
-export const filterBox = styled.div`
+export const FilterBox = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-
   @media screen and (max-width: 1200px) {
     padding: 0 16px;
   }
-
   @media screen and (max-width: 650px) {
     flex-direction: column;
     align-items: flex-start;
     padding: 0 20px;
     gap: 12px;
-
     & button:last-of-type {
       align-self: flex-end;
     }
   }
 `;
-
 export const SelectsBox = styled.div`
   display: flex;
   gap: 12px;
-
   @media screen and (max-width: 650px) {
     align-items: flex-start;
     flex-direction: column;
   }
 `;
-
 export const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, minmax(200px, auto));
   grid-gap: 24px;
   place-items: center;
   margin: 50px auto;
-
   @media screen and (max-width: 1200px) {
     grid-template-columns: repeat(3, minmax(200px, auto));
   }
-
   @media screen and (max-width: 850px) {
     grid-template-columns: repeat(2, minmax(200px, auto));
   }
-
   @media screen and (max-width: 600px) {
     grid-template-columns: repeat(1, minmax(200px, auto));
   }
 `;
-
 export const PostCard = styled.div`
   width: 282px;
   height: 282px;
@@ -90,64 +78,53 @@ export const PostCard = styled.div`
   border-radius: 30px;
   box-shadow: 5px 5px 10px 3px rgba(0, 0, 0, 0.1);
 `;
-
 export const DateLikeBox = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
 `;
-
 export const CalendarImage = styled.img`
-  padding-left: 20px;
+  padding-left: 21px;
 `;
-
-export const ButtonBox = styled.div`
-  padding: 22px 15.5px;
+export const LikeBox = styled.div`
+  position: relative;
+  bottom: 264px;
+  right: -230px;
+`;
+export const LikeButton = styled.button`
+  /* padding: 20px; */
   background-color: transparent;
   border: none;
-  button {
-    background-color: transparent;
-    border: none;
-    &:hover {
-      color: #670fdf;
-      transform: scale(1.2);
-      transition: transform 0.3s ease;
-    }
-    &:not(:hover) {
-      transition: 0.3s ease-out;
-    }
-    cursor: pointer;
-    .lineIcon {
-      width: 24px;
-      height: 24px;
-    }
-
-    .fillIcon {
-      width: 24px;
-      height: 24px;
-      color: #643bdc;
-    }
+  &:hover {
+    transform: scale(1.2);
+    transition: transform 0.3s ease;
   }
+  &:not(:hover) {
+    transition: 0.3s ease-out;
+  }
+  cursor: pointer;
 `;
-
+export const Heart = {
+  height: '24px',
+  width: '24px',
+  color: '#670FDF',
+};
 export const DefaultImg = styled.img`
   width: 282px;
   height: 143px;
   object-fit: cover;
   border-radius: 0px 0px 30px 30px;
 `;
-
 export const TravelDateBox = styled.div`
   display: flex;
   align-items: flex-start;
   padding-top: 24px;
-  gap: 10px;
+  gap: 5px;
   p {
     margin: 3px 0 21px 0;
     font-size: 12px;
   }
 `;
-
 export const TitleBox = styled.div`
   width: 200px;
   margin-bottom: 10px;
@@ -159,7 +136,6 @@ export const TitleBox = styled.div`
     text-overflow: ellipsis;
   }
 `;
-
 export const ContentBox = styled.div`
   p {
     width: 242px;
@@ -171,7 +147,6 @@ export const ContentBox = styled.div`
     margin-bottom: 17px;
   }
 `;
-
 export const CountryNameBox = styled.div`
   display: flex;
   height: 20px;
@@ -184,7 +159,6 @@ export const CountryNameBox = styled.div`
     display: inline-block;
   }
 `;
-
 export const Span = styled.span`
   padding: 6px 14px;
   border-radius: 18px;

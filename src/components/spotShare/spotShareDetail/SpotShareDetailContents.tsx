@@ -1,13 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Rate } from 'antd';
+import _ from 'lodash';
 import { useEffect, useRef, useState } from 'react';
 import { FiEdit, FiMapPin, FiTrash2 } from 'react-icons/fi';
 import { RiHeartFill, RiHeartLine } from 'react-icons/ri';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
 import { useNavigate, useParams } from 'react-router';
-import { countLike, countLikes, deleteLike, deleteSpotSharePost, getDetailSpotSharePost, postLike } from '../../../api/supabase/spotshare';
-import { supabase } from '../../../api/supabase/supabaseClient';
+import { countLike, countLikes, deleteLike, deleteSpotSharePost, getDetailSpotSharePost, getLikesCondition, postLike } from '../../../api/supabase/spotshare';
 import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import useSessionStore from '../../../zustand/store';
 import LoadingSpinner from '../../common/loadingSpinner/LoadingSpinner';
@@ -39,15 +39,10 @@ function SpotShareDetailContents() {
     updateLikeCount();
   }, [like, likeCountData]);
 
+  // 좋아요 상태 가져오기
   const LikeCheck = async (logInUserId: string, postid: string) => {
-    try {
-      let { data: likeData, error } = await supabase.from('likes').select('*').eq('userId', logInUserId).eq('postId', postid);
-
-      if (error) {
-      } else {
-        setLike(likeData!.length > 0);
-      }
-    } catch (error) {}
+    const data = await getLikesCondition(logInUserId, postid);
+    setLike(data! && data!.length > 0);
   };
   useEffect(() => {
     LikeCheck(logInUserId!, postid!);
@@ -111,21 +106,27 @@ function SpotShareDetailContents() {
   // 글 작성자인지 확인하는 함수
   const isPostWriter = () => logInUserId == spotSharePost?.writerId;
 
-  const handleFillHeart = async () => {
-    setLike(!like);
-    const addLike = { postId: postid!, userId: logInUserId! };
-    await postLike(addLike);
-    await countLike(++updateLikeCount, postid!);
-    await queryClient.invalidateQueries(['likes', postid]);
-  };
+  const debouncedAddLikeHandle = _.debounce(() => {
+    const handleFillHeart = async () => {
+      setLike(!like);
+      await postLike({ postId: postid!, userId: logInUserId! });
+      await countLike(++updateLikeCount, postid!);
+      await queryClient.invalidateQueries(['likes', postid]);
+    };
 
-  const handleEmptyHeart = async () => {
-    setLike(!like);
-    await deleteLike(postid!, logInUserId!);
-    await countLike(--updateLikeCount, postid!);
-    await queryClient.invalidateQueries(['likes', postid]);
-  };
+    handleFillHeart();
+  }, 300);
 
+  const debouncedRemoveLikeHandle = _.debounce(() => {
+    const handleEmptyHeart = async () => {
+      setLike(!like);
+      await deleteLike(postid!, logInUserId!);
+      await countLike(--updateLikeCount, postid!);
+      await queryClient.invalidateQueries(['likes', postid]);
+    };
+
+    handleEmptyHeart();
+  }, 300);
   return (
     <>
       {isLoading && <LoadingSpinner />}
@@ -140,13 +141,13 @@ function SpotShareDetailContents() {
               <St.NickNameSpan style={{ paddingTop: '1px', paddingBottom: '5px' }}>{spotSharePost?.users?.nickName} </St.NickNameSpan>
               <St.InfoContainer>
                 <span>{spotSharePost?.createdAt.substring(0, 10) + ' ' + spotSharePost?.createdAt.substring(11, 16)} </span>
-                <span>조회 100</span>
+                {/* <span>조회 100</span> */}
                 <span>좋아요 {likeCount}</span>
               </St.InfoContainer>
             </St.InfoInnerBox>
           </St.PostInfoBox>
           <St.ButtonBox>
-            {logInUserId && <button>{like ? <RiHeartFill className="fillIcon" onClick={() => handleEmptyHeart()} /> : <RiHeartLine className="lineIcon" onClick={() => handleFillHeart()} />}</button>}
+            {logInUserId && <button>{like ? <RiHeartFill className="fillIcon" onClick={() => debouncedRemoveLikeHandle()} /> : <RiHeartLine className="lineIcon" onClick={() => debouncedAddLikeHandle()} />}</button>}
             {isPostWriter() ? (
               <>
                 <button>{<FiEdit className="lineIcon" onClick={() => navigate(`/spotshare/write/${spotSharePost?.id}`)} />}</button>
@@ -160,21 +161,17 @@ function SpotShareDetailContents() {
       </div>
 
       <St.SpotShareBox>
-        <div>
-          <St.DetailInfoBox>
-            <St.GraySpan>나라 </St.GraySpan>
-            <St.BlackSpan>
-              {spotSharePost?.region} &gt; {spotSharePost?.country.country}
-            </St.BlackSpan>
-          </St.DetailInfoBox>
-          <St.DetailInfoBox>
-            <St.GraySpan>방문날짜</St.GraySpan>
-            <St.BlackSpan> {spotSharePost?.visitDate}</St.BlackSpan>
-          </St.DetailInfoBox>
-          <St.DetailInfoBox>
-            <Rate disabled defaultValue={spotSharePost?.starRate} />
-          </St.DetailInfoBox>
-        </div>
+        <St.DetailInfoBox>
+          <St.GraySpan>나라 </St.GraySpan>
+          <St.BlackSpan>
+            {spotSharePost?.region} &gt; {spotSharePost?.country.country}
+          </St.BlackSpan>
+        </St.DetailInfoBox>
+        <St.DetailInfoBox>
+          <St.GraySpan>방문날짜</St.GraySpan>
+          <St.BlackSpan> {spotSharePost?.visitDate}</St.BlackSpan>
+        </St.DetailInfoBox>
+        <St.DetailInfoBox>{spotSharePost?.starRate && <Rate disabled defaultValue={spotSharePost.starRate} />}</St.DetailInfoBox>
 
         <ReactQuill readOnly={true} theme="bubble" value={spotSharePost?.content} />
       </St.SpotShareBox>
