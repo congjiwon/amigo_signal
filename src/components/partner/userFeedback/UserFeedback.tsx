@@ -3,14 +3,13 @@ import { useEffect, useState } from 'react';
 import { FiEdit, FiMessageSquare, FiTrash2 } from 'react-icons/fi';
 import { RiBookmarkFill, RiBookmarkLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router';
-import { deletePartnerPost } from '../../../api/supabase/partner';
+import { addBookmark, bookmarkCheck, deletePartnerPost, removeBookMark } from '../../../api/supabase/partner';
 import { Tables } from '../../../api/supabase/supabase';
-import { supabase } from '../../../api/supabase/supabaseClient';
-import { addBookmark, removeBookMark } from '../../../api/supabase/users';
 import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import useCopyClipBoard from '../../../hooks/useCopyClipBoard';
 import useSessionStore from '../../../zustand/store';
 import { Alert, AlertError, ConfirmDelete } from '../../common/modal/alert';
+import _ from 'lodash';
 import * as St from './style';
 
 interface Props {
@@ -28,34 +27,25 @@ const UserFeedback = ({ partnerPostData }: Props) => {
   const storagaUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
 
   //북마크
-  const bookmarkCheck = async (logInUserId: string, postId: string) => {
-    try {
-      let { data: checkBookmark, error } = await supabase.from('bookmarks').select('*').eq('postId', postId).eq('userId', logInUserId);
-      // console.log('checkBookmark', checkBookmark);
-      if (error) {
-        console.log('북마크 데이터 불러오는데 실패함 ..', error);
-      } else {
-        setBookMark(checkBookmark!.length > 0);
-      }
-    } catch (error) {
-      console.log('처참히 실패', error);
-    }
+  const bookmarkCheckHanlde = async (logInUserId: string, postId: string) => {
+    const data = await bookmarkCheck(logInUserId, postId);
+    setBookMark(data!.length > 0);
   };
 
   useEffect(() => {
-    bookmarkCheck(logInUserId!, id);
+    bookmarkCheckHanlde(logInUserId!, id);
   }, []);
 
-  const addBookMarkHandle = async () => {
+  //디바운싱
+  const debouncedAddBookMarkHandle = _.debounce(async () => {
     setBookMark(!bookMark);
-    const bookMarkInsert = [{ userId: logInUserId, postId: id }];
-    await addBookmark(bookMarkInsert);
-  };
+    await addBookmark({ userId: logInUserId!, postId: id });
+  }, 300);
 
-  const removeBookMarkHandle = async () => {
+  const debouncedRemoveBookMarkHandle = _.debounce(async () => {
     setBookMark(!bookMark);
     await removeBookMark(logInUserId!, id);
-  };
+  }, 300);
 
   //오픈채팅
   const [, onCopy] = useCopyClipBoard();
@@ -103,7 +93,7 @@ const UserFeedback = ({ partnerPostData }: Props) => {
         {logInUserId ? (
           <>
             <button>{openChat.length > 1 && <FiMessageSquare onClick={() => handleCopyClipBoard(openChat)} style={St.Icons} />}</button>
-            <button>{bookMark ? <RiBookmarkFill onClick={() => removeBookMarkHandle()} style={{ height: '24px', width: '24px' }} /> : <RiBookmarkLine onClick={() => addBookMarkHandle()} style={{ height: '24px', width: '24px' }} />}</button>
+            <button>{bookMark ? <RiBookmarkFill onClick={debouncedRemoveBookMarkHandle} style={{ height: '24px', width: '24px' }} /> : <RiBookmarkLine onClick={debouncedAddBookMarkHandle} style={{ height: '24px', width: '24px' }} />}</button>
           </>
         ) : (
           <></>
