@@ -29,7 +29,7 @@ const UserFeedback = ({ partnerPostData }: Props) => {
   //북마크
   const bookmarkCheckHanlde = async (logInUserId: string, postId: string) => {
     const data = await bookmarkCheck(logInUserId, postId);
-    setBookMark(data!.length > 0);
+    setBookMark(data! && data!.length > 0);
   };
 
   useEffect(() => {

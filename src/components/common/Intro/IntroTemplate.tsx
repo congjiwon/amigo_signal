@@ -15,7 +15,7 @@ function IntroTemplate() {
       <St.Container>
         <img src={logo_gif} alt="amigo-signal" style={{ width: '170px' }} />
         <St.ExplanationContainer>
-          <St.Span>Amigo Signal과 함께 여행에 동행할 친구를 찾아보세요.</St.Span>
+          <St.Span>Amigo Signal과 여행을 함께할 동행을 찾아보세요.</St.Span>
           <St.Span>여행이 더 즐거워질 거예요.</St.Span>
         </St.ExplanationContainer>
         <St.LinkContainer>
