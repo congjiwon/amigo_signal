@@ -31,7 +31,7 @@ export const SpotShareLayout = styled.div`
   max-width: 1200px;
   margin: 0 auto;
 `;
-export const filterBox = styled.div`
+export const FilterBox = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;

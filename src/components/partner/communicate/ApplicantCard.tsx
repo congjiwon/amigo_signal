@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { updatePostStatus, updateStatus } from '../../../api/supabase/partner';
+import { makeRestApplicantStatusReject, updatePostStatus, updateStatus } from '../../../api/supabase/partner';
 import { Tables } from '../../../api/supabase/supabase';
 import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import { useConfirmedListStore, useStateStore } from '../../../zustand/communicate';
@@ -49,6 +49,7 @@ const ApplicantCard = ({ data, postId, onClick, isSelected, removeConfirmedAppli
       if (numOfPeople <= updatedConfirmedLength) {
         setPartnerStatus('모집완료');
         updatePostStatus(postId, false);
+        makeRestApplicantStatusReject(postId);
       }
       addConfirmedApplicant(data);
       removeConfirmedApplicant(applicantId);

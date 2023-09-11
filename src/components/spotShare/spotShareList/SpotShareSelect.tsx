@@ -7,17 +7,17 @@ import LocationDropDown from '../../common/dropDown/LocationDropDown';
 import * as St from './style';
 
 type SpotShareSelectProps = {
+  setSort: React.Dispatch<React.SetStateAction<string>>;
   setLocation: React.Dispatch<React.SetStateAction<string[]>>;
   setSpotDate: React.Dispatch<React.SetStateAction<string[]>>;
-  setSort: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const SpotShareSelect = ({ setLocation, setSpotDate, setSort }: SpotShareSelectProps) => {
+const SpotShareSelect = ({ setSort, setLocation, setSpotDate }: SpotShareSelectProps) => {
   const navigate = useNavigate();
 
   return (
     <div>
-      <St.filterBox>
+      <St.FilterBox>
         <St.SelectsBox>
           <SortDropDown setSort={setSort} />
           <LocationDropDown setLocation={setLocation} />
@@ -26,7 +26,7 @@ const SpotShareSelect = ({ setLocation, setSpotDate, setSort }: SpotShareSelectP
         <Button styleType={BtnStyleType.BTN_DARK} onClick={() => navigate('/spotshare/write')}>
           글쓰기
         </Button>
-      </St.filterBox>
+      </St.FilterBox>
     </div>
   );
 };

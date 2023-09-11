@@ -1,11 +1,11 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef } from 'react';
 import { getPartnerPosts } from '../../../api/supabase/partner';
+import icon_nodata from '../../../assets/imgs/NoData/icon_nodata.png';
 import SkeletonList from '../../common/Skeleton/SkeletonList';
 import TopButton from '../../common/topbutton/TopButton';
 import PartnerItem from './PartnerItem';
 import * as St from './style';
-import icon_nodata from '../../../assets/imgs/NoData/icon_nodata.png';
 
 type PartnerItemsProps = {
   isOpen?: boolean;
@@ -74,10 +74,13 @@ export default function PartnerItems({ isOpen, country, startDate, endDate }: Pa
       <St.Grid>
         {infiniteData?.pages
           .flatMap((page) => page.data)
-          .filter((post) => post !== null && post !== undefined)
-          .map((post) => (
-            <PartnerItem key={post!.id} post={post!} />
-          ))}
+          .map((post) => {
+            if (post !== null && post !== undefined) {
+              return <PartnerItem key={post!.id} post={post!} />;
+            } else {
+              return null;
+            }
+          })}
         <St.MoveButtonArea>
           <TopButton />
         </St.MoveButtonArea>
