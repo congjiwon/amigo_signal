@@ -65,6 +65,9 @@ function SpotShareDetailContents() {
     onSuccess: async () => {
       await queryClient.invalidateQueries(['spotSharePost']);
       navigate('/spotshare');
+      if (spotSharePost) {
+        const { data } = await supabase.storage.from('quillImgs').remove(spotSharePost.postImageUrl);
+      }
     },
     onError: () => {
       AlertError({});

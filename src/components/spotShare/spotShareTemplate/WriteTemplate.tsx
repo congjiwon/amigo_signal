@@ -2,6 +2,7 @@ import { QueryClient, useMutation } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { insertSpotPost } from '../../../api/supabase/spotshare';
+import { supabase } from '../../../api/supabase/supabaseClient';
 import { BtnStyleType } from '../../../types/styleTypes';
 import useSessionStore from '../../../zustand/store';
 import Button from '../../common/button/Button';
@@ -27,6 +28,7 @@ export default function WriteTemplate() {
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
   const [address, setAddress] = useState<string | null>('');
+  const [postImageUrl, setPostImageUrl] = useState<string[]>([]);
   const [disable, setDisable] = useState(false);
   const navigate = useNavigate();
 
@@ -97,12 +99,18 @@ export default function WriteTemplate() {
       latitude,
       longitude,
       address,
+      postImageUrl,
       likeCount: 0,
     };
     if (validation()) {
       setDisable(true);
       mutation.mutate(newData);
     }
+  };
+
+  const handleonClickCancel = async () => {
+    navigate('/spotshare');
+    const { data } = await supabase.storage.from('quillImgs').remove(postImageUrl);
   };
 
   return (
@@ -116,10 +124,10 @@ export default function WriteTemplate() {
         <div>
           <St.SpotShareTitleInput maxLength={100} type="text" placeholder="제목을 입력해주세요" value={title} onChange={(e) => setTitle(e.target.value)} />
         </div>
-        <SpotShareEditor editorHtml={editorHtml} setEditorHtml={setEditorHtml} />
+        <SpotShareEditor editorHtml={editorHtml} setEditorHtml={setEditorHtml} postImageUrlArray={postImageUrl} setPostImageUrl={setPostImageUrl} />
         <SpotMap setLatitude={setLatitude} setLongitude={setLongitude} address={address} setAddress={setAddress} />
         <St.ButtonBox>
-          <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={() => navigate('/spotshare')}>
+          <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={handleonClickCancel}>
             취소
           </Button>
           <Button type="submit" disabled={disable} styleType={BtnStyleType.BTN_DARK}>
