@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { Tables } from '../api/supabase/supabase';
 
 type PartnerStatus = '모집중' | '모집완료';
-type ApplicantStatus = '참여 신청 중' | '참여 수락됨' | '참여 거절됨' | null;
+type ApplicantStatus = '참여 신청중' | '참여 수락됨' | '참여 거절됨' | null;
 
 type StateStore = {
   partnerStatus: PartnerStatus;
