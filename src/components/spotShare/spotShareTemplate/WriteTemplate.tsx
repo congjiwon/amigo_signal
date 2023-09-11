@@ -7,6 +7,7 @@ import { BtnStyleType } from '../../../types/styleTypes';
 import useSessionStore from '../../../zustand/store';
 import Button from '../../common/button/Button';
 import { SpotCalendar } from '../../common/calendar/SpotCalendar';
+import { currentTime } from '../../common/currentTime/CurrentTime';
 import LocationDropDown from '../../common/dropDown/LocationDropDown';
 import LoadingSpinner from '../../common/loadingSpinner/LoadingSpinner';
 import { AlertError, AlertWarning } from '../../common/modal/alert';
@@ -37,18 +38,6 @@ export default function WriteTemplate() {
       navigate('/login');
     }
   }, [navigate, authId]);
-
-  const currentTime = function () {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = ('0' + (today.getMonth() + 1)).slice(-2);
-    const day = ('0' + today.getDate()).slice(-2);
-    const hours = ('0' + today.getHours()).slice(-2);
-    const minutes = ('0' + today.getMinutes()).slice(-2);
-    const seconds = ('0' + today.getSeconds()).slice(-2);
-    const now = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
-    return now;
-  };
 
   const mutation = useMutation(insertSpotPost, {
     onSuccess: async () => {
