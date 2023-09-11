@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import imageCompression from 'browser-image-compression';
 import debounce from 'lodash/debounce';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -6,9 +7,7 @@ import { modifyProfileImg } from '../../../api/supabase/storage';
 import { duplicationCheckFromUserTable, updateUserNickname, updateUserProfileImgUrl } from '../../../api/supabase/users';
 import iconProfileImgBtn from '../../../assets/imgs/myPage/icon_profile_img_btn.png';
 import defaultImg from '../../../assets/imgs/users/default_profile_img.png';
-import { BtnStyleType } from '../../../types/styleTypes';
 import useCurrentUserStore from '../../../zustand/currentUser';
-import Button from '../../common/button/Button';
 import { Alert } from '../../common/modal/alert';
 import * as St from './style';
 
@@ -67,12 +66,37 @@ export default function ModifyProfile() {
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
+    var reg = /(.*?)\.(jpg|svg|jpeg|png)$/;
     if (selectedFile) {
-      setProfileImgUrl(URL.createObjectURL(selectedFile));
-      setProfileImgFile(selectedFile);
+      const selectedFileName = e.target.files?.[0].name;
+
+      if (selectedFileName?.match(reg) === null || reg.test(selectedFileName!) === false) {
+        alert('jpg, jpeg, png, svg 형식의 이미지 파일만 업로드 가능합니다.');
+        return;
+      } else {
+        const options = {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 640,
+          useWebWorker: true,
+        };
+        try {
+          const compressedFile = await imageCompression(selectedFile, options);
+          setProfileImgUrl(URL.createObjectURL(selectedFile));
+          setProfileImgFile(compressedFile);
+        } catch (error) {
+          console.log(`프로필 이미지 업로드 중 에러 발생: ${error}`);
+        }
+      }
     }
   };
 
+  const handleResetModifyProfile = () => {
+    setNickName(currentUser?.nickName);
+    setNickNameValidationMsg('');
+    setNickNameStatus(true);
+    setProfileImgUrl(currentUser?.profileImageUrl ? `${storagaUrl}/${currentUser?.profileImageUrl}` : defaultImg);
+    setProfileImgFile(null);
+  };
   const handleSubmitUpdateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     mutationNickName.mutate({ nickName, userId });
@@ -104,7 +128,7 @@ export default function ModifyProfile() {
               <img src={iconProfileImgBtn} alt="이미지 선택 아이콘" />
             </St.ProfileImgLabel>
 
-            <input type="file" name="" id="profileImg" onChange={handleFileChange} />
+            <input type="file" name="" id="profileImg" accept="image/*" onChange={handleFileChange} />
           </St.ProfileImgBox>
 
           <div style={{ width: '100%' }}>
@@ -116,9 +140,12 @@ export default function ModifyProfile() {
           </div>
         </St.ModifyProfileBox>
         <St.BtnBox>
-          <Button styleType={BtnStyleType.BTN_DARK} type="submit" fullWidth={true} disabled={!nickNameStatus}>
-            수정 완료
-          </Button>
+          <St.Btn type="reset" onClick={handleResetModifyProfile} $width="65px" $height="32px" $bgColor="#6C7486">
+            취소
+          </St.Btn>
+          <St.Btn type="submit" disabled={!nickNameStatus} $width="65px" $height="32px" $bgColor="#643BDC">
+            적용
+          </St.Btn>
         </St.BtnBox>
       </form>
     </St.ModifyProfileWrapper>

@@ -220,7 +220,7 @@ export const getMyPartnerPosts = async ({ userId, filterIsOpen, page }: MyPartne
     partnerPosts = partnerPosts.is('isOpen', false);
   }
 
-  const { data, count } = await partnerPosts.order('startDate', { ascending: true }).range(from, to);
+  const { data, count } = await partnerPosts.order('createdAt', { ascending: false }).range(from, to);
   return { data, count };
 };
 

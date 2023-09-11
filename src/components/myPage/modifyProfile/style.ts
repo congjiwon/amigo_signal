@@ -1,4 +1,4 @@
-import { styled } from 'styled-components';
+import { css, styled } from 'styled-components';
 
 type ValidationStatusProps = {
   $validationStatus: boolean;
@@ -51,14 +51,6 @@ export const MofifyNickNameMsg = styled.p<ValidationStatusProps>`
   font-size: 14px;
 `;
 
-export const BtnBox = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  margin-top: 14px;
-`;
-
 export const ProfileNicknameLabelBox = styled.div`
   width: 100%;
   display: flex;
@@ -75,11 +67,42 @@ export const ProfileNicknameLabelBox = styled.div`
 export const ProfileNicknameInput = styled.input`
   width: 100%;
   margin-top: 8px;
-  padding: 16px 20px;
+  padding: 14px 20px;
   border: 1px solid #e8ebee;
   border-radius: 10px;
   box-sizing: border-box;
   font-size: 15px;
   font-weight: 500;
   color: #81858a;
+`;
+
+export const BtnBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 64px;
+`;
+
+export const Btn = styled.button<{ $width: string; $height: string; $bgColor: string }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  border: 0;
+  color: #fff;
+  cursor: pointer;
+
+  ${(props) => {
+    return css`
+      width: ${props.$width};
+      height: ${props.$height};
+      background-color: ${props.$bgColor};
+    `;
+  }}
+
+  &:disabled {
+    background-color: #6c7486;
+    cursor: not-allowed;
+  }
 `;

@@ -1,5 +1,4 @@
 import { styled } from 'styled-components';
-import iconCalendar from '../../../../assets/imgs/partner/Calendar.svg';
 
 export const MyFilterBtns = styled.div`
   display: flex;
@@ -50,12 +49,12 @@ export const MyCard = styled.li`
 `;
 
 export const PaddingBox = styled.div`
-  padding: 20px;
+  padding: 24px 20px;
   box-sizing: border-box;
 `;
 
 export const MsgNoData = styled.p`
-  margin-top: 148px;
+  margin: 148px 0;
   text-align: center;
   font-size: 16px;
   font-weight: 600;
@@ -69,9 +68,10 @@ export const CountryInfo = styled.div`
 
   > div {
     position: relative;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    width: 50px;
+    height: 36px;
+    border: 1px solid #e3e9f3;
+    border-radius: 3px;
     overflow: hidden;
     background-color: #e8ebee;
 
@@ -94,32 +94,35 @@ export const CountryInfo = styled.div`
 `;
 
 export const OpenStatus = styled.div`
-  padding: 6px 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  width: 89px;
+  height: 32px;
   font-size: 12px;
-  color: #81858a;
-  font-weight: 400;
+  color: #643bdc;
+  font-weight: 600;
   line-height: 1.6;
   letter-spacing: -0.3px;
   box-sizing: border-box;
+  border: 1px solid #643bdc;
   border-radius: 18px;
-  background-color: #e8ebee;
 `;
 
 export const DateInfo = styled.div`
-  position: relative;
-  padding-left: 26px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
   font-size: 12px;
   font-weight: 400;
-  color: #000;
+  color: #121621;
   line-height: 1.5;
 
-  &::before {
-    content: '';
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    left: 0;
-    background: url(${iconCalendar});
+  & svg {
+    color: #6c7486;
+    font-size: 16px;
   }
 `;
 
@@ -127,13 +130,13 @@ export const CardTitle = styled.h3`
   width: 100%;
   font-size: 16px;
   font-weight: 600;
-  line-height: 1.5;
+  line-height: 1.2;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 
   &.partner-title {
-    margin: 12px 0 21px;
+    margin: 14px 0 8px;
   }
 
   &.spot-title {
@@ -213,7 +216,7 @@ export const FlexBetween = styled.div`
   align-items: center;
 
   &.partner-top {
-    margin-bottom: 33px;
+    margin-bottom: 36px;
   }
 
   &.partner-bottom {
@@ -226,6 +229,42 @@ export const FlexBetween = styled.div`
 export const PaginationBox = styled.div`
   text-align: center;
   margin-top: 40px;
+
+  :where(.css-dev-only-do-not-override-byeoj0).ant-pagination .ant-pagination-item {
+    border-radius: 50%;
+  }
+
+  :where(.css-dev-only-do-not-override-byeoj0).ant-pagination .ant-pagination-item:not(.ant-pagination-item-active):hover {
+    background-color: transparent;
+    & a {
+      font-weight: 600;
+      color: #000;
+    }
+  }
+
+  :where(.css-dev-only-do-not-override-byeoj0).ant-pagination .ant-pagination-item-active {
+    border-color: transparent;
+  }
+
+  :where(.css-dev-only-do-not-override-byeoj0).ant-pagination .ant-pagination-item a {
+    color: #6c7486;
+  }
+
+  :where(.css-dev-only-do-not-override-byeoj0).ant-pagination .ant-pagination-item-active a {
+    color: #000;
+  }
+
+  /* prev, next */
+  :where(.css-dev-only-do-not-override-byeoj0).ant-pagination .ant-pagination-prev .ant-pagination-item-link,
+  :where(.css-dev-only-do-not-override-byeoj0).ant-pagination .ant-pagination-prev .ant-pagination-item-link,
+  :where(.css-dev-only-do-not-override-byeoj0).ant-pagination .ant-pagination-next .ant-pagination-item-link {
+    border-radius: 50%;
+    background-color: #e3e9f3;
+  }
+  :where(.css-dev-only-do-not-override-byeoj0).ant-pagination .ant-pagination-prev.ant-pagination-disabled:hover .ant-pagination-item-link,
+  :where(.css-dev-only-do-not-override-byeoj0).ant-pagination .ant-pagination-next.ant-pagination-disabled:hover .ant-pagination-item-link {
+    background-color: #e3e9f3;
+  }
 `;
 
 export const ContentEllipsis = styled.div`
