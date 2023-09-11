@@ -129,7 +129,7 @@ export const countLike = async (like: number, postId: string) => {
 
 // 좋아요 가져오기
 export const getLikes = async () => {
-  const { data } = await supabase.from('likes').select('*, postId(*)');
+  const { data } = await supabase.from('likes').select('*, postId(writerId, id)');
   return { data };
 };
 

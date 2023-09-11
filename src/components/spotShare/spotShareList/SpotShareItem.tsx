@@ -1,4 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
+import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { RiHeartFill, RiHeartLine } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
@@ -7,7 +8,6 @@ import { Tables } from '../../../api/supabase/supabase';
 import Calendar from '../../../assets/imgs/partner/Calendar.svg';
 import useSessionStore from '../../../zustand/store';
 import * as St from './style';
-import _ from 'lodash';
 
 type SpotItemProps = {
   post: Tables<'spotPosts'>;
@@ -44,7 +44,6 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
   const logInUserId = session?.user.id;
   const queryClient = useQueryClient();
 
-  // 좋아요
   const LikeCheck = async (logInUserId: string) => {
     const liked = likedPost?.some((like) => like.postId.id === post.id && like.userId === logInUserId);
 

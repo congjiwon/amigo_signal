@@ -1,18 +1,22 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useParams } from 'react-router';
-import { getAuthId } from '../../../api/supabase/users';
-import useSessionStore from '../../../zustand/store';
-import * as St from './style';
-import useSpotComment from './useSpotComment';
+import { getAuthId } from '../../../../api/supabase/users';
+import useSessionStore from '../../../../zustand/store';
+import * as St from '../style';
+import { usePartnerComments } from '../usePartnerComment';
 
-function SpotWrite() {
-  const { postid } = useParams<string>();
+function PartnerCommentsWrite() {
+  const params = useParams();
   const [content, setContent] = useState('');
   const { isLoading, data: authId } = useQuery(['auth'], getAuthId);
   const session = useSessionStore((state) => state.session);
   const logInUserId = session?.user.id;
-  const { postCommentMutation } = useSpotComment();
+  const { postCommentMutation } = usePartnerComments();
+  // 항상 뜸
+  if (isLoading) {
+    // console.log('로딩중');
+  }
   // 지원님 시간 가져옴.
   const currentTime = function () {
     const today = new Date();
@@ -27,18 +31,20 @@ function SpotWrite() {
   };
 
   const handlePostContent = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (event.target.value.trim() !== '') {
-      setContent(event.target.value);
-    }
+    setContent(event.target.value.replace(/ /g, '\u00A0'));
   };
 
   const handleSubmitBtnClick = (event: React.FormEvent<HTMLFormElement>) => {
+    if (content.trim() === '') {
+      event.preventDefault();
+      return;
+    }
     event.preventDefault();
     const newComment = {
       content: content,
       date: currentTime(),
-      writerId: authId!,
-      postId: postid,
+      writerId: authId,
+      postId: params.postid,
     };
     postCommentMutation.mutate(newComment);
     setContent('');
@@ -56,4 +62,4 @@ function SpotWrite() {
     </>
   );
 }
-export default SpotWrite;
+export default PartnerCommentsWrite;

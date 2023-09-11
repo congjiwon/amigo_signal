@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { getPartnerComments, getPartnerPostId, getReCommentData } from '../../../api/supabase/partner';
 import { getUsers } from '../../../api/supabase/users';
-import PartnerCommentList from './PartnerCommentList';
-import PartnerCommentsWrite from './PartnerCommentsWrite';
+import PartnerCommentList from './comment/PartnerCommentList';
+import PartnerCommentsWrite from './comment/PartnerCommentsWrite';
 import * as St from './style';
 
 const PartnerComments = () => {

@@ -28,12 +28,10 @@ export const GraySpan = styled.span`
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
-  /* line-height: 150%;  */
 `;
 
 export const NickNameSpan = styled.span`
   color: #000;
-  font-family: Pretendard;
   font-size: 14px;
   font-style: normal;
   font-weight: 600;
@@ -59,7 +57,6 @@ export const ButtonBox = styled.div`
   flex-direction: row;
   align-items: flex-end;
   gap: 20px;
-  /* width: 120%; */
   button {
     background-color: transparent;
     border: none;
@@ -72,6 +69,16 @@ export const ButtonBox = styled.div`
       transition: 0.3s ease-out;
     }
     cursor: pointer;
+    .lineIcon {
+      width: 24px;
+      height: 24px;
+    }
+
+    .fillIcon {
+      width: 24px;
+      height: 24px;
+      color: #643bdc;
+    }
   }
 `;
 
@@ -81,11 +88,10 @@ export const TitleBox = styled.div`
   height: 36px;
   p {
     color: #000;
-    font-family: Pretendard;
     font-size: 24px;
     font-style: normal;
     font-weight: 600;
-    line-height: 150%; /* 36px */
+    line-height: 150%;
   }
 `;
 
@@ -106,11 +112,10 @@ export const PostInfoBox = styled.div`
 export const LocationIngoSpan = styled.span`
   color: #000;
   font-feature-settings: 'clig' off, 'liga' off;
-  font-family: Pretendard;
   font-size: 14px;
   font-style: normal;
   font-weight: 600;
-  line-height: 150%; /* 21px */
+  line-height: 150%;
   letter-spacing: -0.3px;
 `;
 

@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { FiEdit, FiMessageSquare, FiTrash2 } from 'react-icons/fi';
 import { RiBookmarkFill, RiBookmarkLine } from 'react-icons/ri';
@@ -9,7 +10,6 @@ import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.
 import useCopyClipBoard from '../../../hooks/useCopyClipBoard';
 import useSessionStore from '../../../zustand/store';
 import { Alert, AlertError, ConfirmDelete } from '../../common/modal/alert';
-import _ from 'lodash';
 import * as St from './style';
 
 interface Props {
@@ -92,16 +92,16 @@ const UserFeedback = ({ partnerPostData }: Props) => {
       <St.ButtonBox>
         {logInUserId ? (
           <>
-            <button>{openChat.length > 1 && <FiMessageSquare onClick={() => handleCopyClipBoard(openChat)} style={St.Icons} />}</button>
-            <button>{bookMark ? <RiBookmarkFill onClick={debouncedRemoveBookMarkHandle} style={{ height: '24px', width: '24px' }} /> : <RiBookmarkLine onClick={debouncedAddBookMarkHandle} style={{ height: '24px', width: '24px' }} />}</button>
+            <button>{openChat.length > 1 && <FiMessageSquare className="lineIcon" onClick={() => handleCopyClipBoard(openChat)} />}</button>
+            <button>{bookMark ? <RiBookmarkFill className="fillIcon" onClick={debouncedRemoveBookMarkHandle} /> : <RiBookmarkLine className="lineIcon" onClick={debouncedAddBookMarkHandle} />}</button>
           </>
         ) : (
           <></>
         )}
         {isPostUser() ? (
           <>
-            <button>{<FiEdit style={{ height: '24px', width: '24px' }} onClick={() => navigate(`/partner/write/${id}`)} />}</button>
-            <button>{<FiTrash2 onClick={() => handleDelBtn(id)} style={{ height: '24px', width: '24px' }} />}</button>
+            <button>{<FiEdit className="lineIcon" onClick={() => navigate(`/partner/write/${id}`)} />}</button>
+            <button>{<FiTrash2 className="lineIcon" onClick={() => handleDelBtn(id)} />}</button>
           </>
         ) : (
           <></>

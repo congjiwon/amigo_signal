@@ -1,65 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { getSpotPost } from '../../../api/supabase/spotshare';
-import DefaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
-import { BtnStyleType } from '../../../types/styleTypes';
-import useSessionStore from '../../../zustand/store';
-import { CommentButton } from '../../common/button/Button';
-import { ConfirmDelete } from '../../common/modal/alert';
-import SpotReCommentList from './SpotReCommentList';
-import * as St from './style';
-import useSpotComment from './useSpotComment';
+import { getSpotPost } from '../../../../api/supabase/spotshare';
+import useSessionStore from '../../../../zustand/store';
+import { ConfirmDelete } from '../../../common/modal/alert';
+import SpotReCommentList from '../reComment/SpotReCommentList';
+import * as St from '../style';
+import { SpotCommentListProps } from '../type/CommentType';
+import useSpotComment from '../useSpotComment';
+import CancelSubmitBox from './CancelSubmitBox';
+import CommentTopBox from './CommentTopBox';
+import DateButtonBox from './DateButtonBox';
 
-type AllCommentsProps =
-  | {
-      content: string;
-      id: string;
-    }[]
-  | null
-  | undefined;
-
-type AllReCommentsprops =
-  | {
-      commentId: string;
-      date: string;
-      id: string;
-      reContent: string;
-      writerId: string;
-      users: {
-        id: string;
-        nickName: string;
-        profileImageUrl: string | null;
-      } | null;
-    }[]
-  | null
-  | undefined;
-
-type CommentProps = {
-  content: string;
-  date: string | null;
-  id: string;
-  postId: string | null;
-  writerId: string;
-};
-
-type UsersProps =
-  | {
-      id: string;
-      nickName: string;
-      profileImageUrl: string | null;
-    }[]
-  | null
-  | undefined;
-
-export type PartnerCommentListProps = {
-  allComments: AllCommentsProps;
-  allReCommentsData: AllReCommentsprops;
-  comment?: CommentProps;
-  isLoginUser: boolean;
-  users: UsersProps;
-};
-
-function SpotCommentList({ allComments, allReCommentsData, comment, isLoginUser, users }: PartnerCommentListProps) {
+function SpotCommentList({ allComments, allReCommentsData, comment, isLoginUser, users }: SpotCommentListProps) {
   const storageUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
   const session = useSessionStore((state) => state.session);
   const logInUserId = session?.user.id;
@@ -89,19 +41,18 @@ function SpotCommentList({ allComments, allReCommentsData, comment, isLoginUser,
   };
 
   const handleUpdateComment = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (event.target.value === ' ') {
-      return;
-    }
-    setUpdateComment(event.target.value);
+    setUpdateComment(event.target.value.replace(/ /g, '\u00A0'));
   };
 
   const handlePostReContent = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (event.target.value.trim() !== '') {
-      setReContent(event.target.value);
-    }
+    setReContent(event.target.value.replace(/ /g, '\u00A0'));
   };
 
   const handleSubmitBtn = (event: React.FormEvent<HTMLFormElement>) => {
+    if (updateComment.trim() === '') {
+      event.preventDefault();
+      return;
+    }
     event.preventDefault();
 
     const newComment = {
@@ -118,6 +69,10 @@ function SpotCommentList({ allComments, allReCommentsData, comment, isLoginUser,
   };
 
   const handleReCommentSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    if (reContent.trim() === '') {
+      event.preventDefault();
+      return;
+    }
     event.preventDefault();
 
     const reComment = {
@@ -134,6 +89,10 @@ function SpotCommentList({ allComments, allReCommentsData, comment, isLoginUser,
   };
 
   const handleReSubmitBtn = async (event: React.FormEvent<HTMLFormElement>) => {
+    if (updateReComment.trim() === '') {
+      event.preventDefault();
+      return;
+    }
     event.preventDefault();
 
     const newReComment = {
@@ -202,67 +161,13 @@ function SpotCommentList({ allComments, allReCommentsData, comment, isLoginUser,
         {users?.map((user) => {
           if (user.id === comment?.writerId) {
             const isPostWriter = comment.writerId === postWriterId;
-            return (
-              <St.CommentTopBox key={user.id}>
-                <div>
-                  <St.Img src={user! && user!.profileImageUrl! ? `${storageUrl}/${user!.profileImageUrl!}` : DefaultProfileImage} />
-                </div>
-                <St.WriterContainerBox>
-                  <St.WriterBox>
-                    <St.NickNameParagraph>{user.nickName}</St.NickNameParagraph>
-                    {isPostWriter && <St.WriterParagraph>작성자</St.WriterParagraph>}
-                  </St.WriterBox>
-                  <St.CommentBox>
-                    <St.CommentParagraph>{comment?.content}</St.CommentParagraph>
-                  </St.CommentBox>
-                </St.WriterContainerBox>
-              </St.CommentTopBox>
-            );
+            return <CommentTopBox user={user} storageUrl={storageUrl} isPostWriter={isPostWriter} comment={comment} />;
           }
         })}
         {logInUserId ? (
           <St.CommentBottomBox>
-            <St.DateButtonBox>
-              {' '}
-              <St.DateBox>
-                <St.DateParagraph>{comment!.date!.substring(0, 10) + ' ' + comment!.date!.substring(11, 16)}</St.DateParagraph>
-              </St.DateBox>
-              {isLoginUser && (
-                <St.ButtonBox>
-                  <div>
-                    <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('updateComment', comment!.id)}>
-                      수정
-                    </CommentButton>
-                  </div>
-                  <St.Bar>|</St.Bar>
-                  <div>
-                    <CommentButton type="submit" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleDelBtn(comment!.id)}>
-                      삭제
-                    </CommentButton>
-                  </div>
-                </St.ButtonBox>
-              )}
-              <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleIsOpenBtn('postReComment', comment!.id)}>
-                답글쓰기
-              </CommentButton>
-            </St.DateButtonBox>
-            {isUpdate && (
-              <div>
-                <form onSubmit={handleSubmitBtn}>
-                  <St.InputBox>
-                    <St.Textarea placeholder="댓글을 남겨보세요" value={updateComment} onChange={handleUpdateComment} maxLength={300} />
-                    <St.CancelSubmitButtonBox>
-                      <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleCancelBtn('updateCancel')}>
-                        취소
-                      </CommentButton>
-                      <CommentButton type="submit" disabled={updateComment.length < 1} styleType={BtnStyleType.BTN_ONLYFONT}>
-                        등록
-                      </CommentButton>
-                    </St.CancelSubmitButtonBox>
-                  </St.InputBox>
-                </form>
-              </div>
-            )}
+            <DateButtonBox comment={comment} isLoginUser={isLoginUser} handleIsOpenBtn={handleIsOpenBtn} handleDelBtn={handleDelBtn} />
+            {isUpdate && <CancelSubmitBox handleSubmitBtn={handleSubmitBtn} comment={updateComment} handleComment={handleUpdateComment} handleCancelBtn={() => handleCancelBtn('updateCancel')} />}
           </St.CommentBottomBox>
         ) : (
           <St.CommentBottomBox>
@@ -275,19 +180,7 @@ function SpotCommentList({ allComments, allReCommentsData, comment, isLoginUser,
         )}
         {isReComment && (
           <St.CommentBottomBox>
-            <form onSubmit={handleReCommentSubmit}>
-              <St.InputBox>
-                <St.Textarea placeholder="댓글을 입력하세요" value={reContent} onChange={handlePostReContent} maxLength={300} />
-                <St.CancelSubmitButtonBox>
-                  <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleCancelBtn('reCommentCancel')}>
-                    취소
-                  </CommentButton>
-                  <CommentButton type="submit" disabled={reContent.length < 1} styleType={BtnStyleType.BTN_ONLYFONT}>
-                    등록
-                  </CommentButton>
-                </St.CancelSubmitButtonBox>
-              </St.InputBox>
-            </form>
+            <CancelSubmitBox handleSubmitBtn={handleReCommentSubmit} comment={reContent} handleComment={handlePostReContent} handleCancelBtn={() => handleCancelBtn('reCommentCancel')} />
           </St.CommentBottomBox>
         )}
       </St.PartnerCommentsBox>

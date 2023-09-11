@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 
 export const IntroLayout = styled.div`
@@ -24,10 +25,10 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* 가운데 정렬을 위해 추가 */
+  justify-content: center;
   position: absolute;
-  top: -100px; /* 이미지 위에 오버레이되도록 */
-  left: 0; /* 이미지 위에 오버레이되도록 */
+  top: -100px;
+  left: 0;
 `;
 
 export const LogoDiv = styled.div`
@@ -47,17 +48,16 @@ export const ExplanationContainer = styled.div`
   flex-direction: column;
   align-items: center;
 
-  margin-bottom: 30px;
+  margin-bottom: 32px;
 `;
 
 export const Span = styled.span`
   color: var(--white, #fff);
   text-align: center;
-  font-family: Pretendard;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  line-height: 150%; /* 24px */
+  line-height: 150%;
 `;
 
 export const LinkIcon = styled.div`
@@ -65,19 +65,24 @@ export const LinkIcon = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 70px;
-  height: 70px;
+  width: 80px;
+  height: 80px;
   border-radius: 100px;
   margin-bottom: 18px;
   background-color: rgba(0, 0, 0, 0.4);
   cursor: pointer;
-
+  .FiIcon {
+    width: 36px;
+    height: 36px;
+  }
   &:hover {
     transform: scale(1.2);
     transition: transform 0.3s ease;
+    color: #643bdc;
   }
   &:not(:hover) {
     transition: 0.3s ease-out;
+    color: white;
   }
 `;
 
@@ -94,20 +99,21 @@ export const LinkContainer = styled.div`
   }
 `;
 
-export const LinkBox = styled.button`
+export const LinkBox = styled(Link)`
   background-color: transparent;
   border: none;
   display: flex;
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  p {
-    color: var(--white, #fff);
-    text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
-    font-family: Pretendard;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-  }
+`;
+
+export const Paragraph = styled.p`
+  text-align: center;
+  color: var(--white, #fff);
+  text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
 `;

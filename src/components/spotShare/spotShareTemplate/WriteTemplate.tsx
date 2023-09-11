@@ -68,13 +68,13 @@ export default function WriteTemplate() {
     } else if (spotDate.length < 1) {
       AlertWarning({ title: '방문날짜를 입력해주세요.' });
       return false;
-    } else if (title.length < 1) {
+    } else if (title.length < 1 || title.trim() === '') {
       AlertWarning({ title: '제목을 입력해주세요.' });
       return false;
     } else {
       // html 태그 지우기
       const contentWithoutTags = editorHtml.replace(/<\/?[^>]+(>|$)/g, '');
-      if (contentWithoutTags.length < 1) {
+      if (contentWithoutTags.length < 1 || contentWithoutTags.trim() === '') {
         AlertWarning({ title: '내용을 입력해주세요.' });
         return false;
       }

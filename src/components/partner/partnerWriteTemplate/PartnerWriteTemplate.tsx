@@ -104,10 +104,10 @@ function PartnerWriteTemplate() {
     } else if (partnerDates.length < 1) {
       AlertWarning({ title: '날짜를 선택해주세요.' });
       return false;
-    } else if (title.length < 1) {
+    } else if (title.length < 1 || title.trim() === '') {
       AlertWarning({ title: '제목을 입력해주세요.' });
       return false;
-    } else if (content.length < 1) {
+    } else if (content.length < 1 || content.trim() === '') {
       AlertWarning({ title: '내용을 입력해주세요.' });
       return false;
     }
@@ -118,7 +118,7 @@ function PartnerWriteTemplate() {
     return true;
   };
   // 글 작성 버튼 클릭 핸들러
-  const handleWriteClick = () => {
+  const handleWriteClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const time = currentTime();
     const dataToInsert = {
       title,

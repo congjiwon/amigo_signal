@@ -14,13 +14,15 @@ const MetaTags = ({ title, ogTitle, ogUrl, ogDescription, ogImage, ogImageWidth,
   return (
     <Helmet>
       <title>{title}</title>
-      <meta property="og:title" content={ogTitle} />
-      <meta property="og:url" content={ogUrl} />
-      <meta property="og:type" content="website" />
-      <meta property="og:image" content={ogImage} />
-      <meta property="og:description" content={ogDescription} />
-      <meta property="og:image:width" content={ogImageWidth} />
-      <meta property="og:image:height" content={ogImageHeight} />
+      <meta property="title" content={ogTitle} />
+      <meta property="url" content={ogUrl} />
+      <meta property="type" content="website" />
+      <meta property="image" content={ogImage} />
+      <meta property="description" content={ogDescription} />
+      <meta property="site_name" content="Amigo Signal" />
+      <meta property="locale" content="en_US" />
+      <meta property="image:width" content={ogImageWidth} />
+      <meta property="image:height" content={ogImageHeight} />
     </Helmet>
   );
 };
