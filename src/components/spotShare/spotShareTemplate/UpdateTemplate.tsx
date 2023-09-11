@@ -27,6 +27,7 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
   const [address, setAddress] = useState<string | null>('');
+  const [postImageUrl, setPostImageUrl] = useState<string[]>([]);
   const [like, setLike] = useState<number>(0);
   const [disable, setDisable] = useState(false);
   const navigate = useNavigate();
@@ -49,6 +50,7 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
         setLatitude(spotSharePost.latitude);
         setLongitude(spotSharePost.longitude);
         setAddress(spotSharePost.address);
+        setPostImageUrl(spotSharePost.postImageUrl);
         setLike(spotSharePost.likeCount);
       }
     };
@@ -109,6 +111,7 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
       latitude,
       longitude,
       address,
+      postImageUrl,
       likeCount: like,
     };
     if (validation()) {
@@ -128,7 +131,7 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
         <div>
           <St.SpotShareTitleInput maxLength={100} type="text" placeholder="제목을 입력해주세요" value={title || ''} onChange={(e) => setTitle(e.target.value)} />
         </div>
-        <SpotShareEditor editorHtml={editorHtml} setEditorHtml={setEditorHtml} />
+        <SpotShareEditor editorHtml={editorHtml} setEditorHtml={setEditorHtml} postImageUrlArray={postImageUrl} setPostImageUrl={setPostImageUrl} />
         <SpotMap setLatitude={setLatitude} setLongitude={setLongitude} address={address} setAddress={setAddress} country={location[1]} />
         <St.ButtonBox>
           <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={() => navigate('/spotshare')}>
