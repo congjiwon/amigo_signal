@@ -300,8 +300,5 @@ export const removeBookMark = async (logInUserId: string, postId: string) => {
 //북마크 상태 확인
 export const bookmarkCheck = async (logInUserId: string, postId: string) => {
   const { data, error } = await supabase.from('bookmarks').select('*').eq('postId', postId).eq('userId', logInUserId);
-  if (error) {
-    console.log('북마크 데이터 불러오기 실패', error);
-  }
   return data;
 };

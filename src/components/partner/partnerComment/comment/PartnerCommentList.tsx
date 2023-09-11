@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { getPartnerPost } from '../../../../api/supabase/partner';
 import useSessionStore from '../../../../zustand/store';
+import { currentTime } from '../../../common/currentTime/CurrentTime';
 import TopButton from '../../../common/topbutton/TopButton';
 import PartnerReComments from '../reComment/PartnerReComments';
 import * as St from '../style';
@@ -26,19 +27,6 @@ function PartnerCommentList({ allComments, allReCommentsData, comment, isLoginUs
   const { updateCommentMutation, postReCommentMutation, updateReCommentMutation } = usePartnerComments();
   const { data: partnerPost } = useQuery(['partnerPost', comment?.postId], () => getPartnerPost({ postId: comment?.postId! }));
   const postWriterId = partnerPost?.writerId;
-
-  // 지원님 시간 가져옴.
-  const currentTime = function () {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = ('0' + (today.getMonth() + 1)).slice(-2);
-    const day = ('0' + today.getDate()).slice(-2);
-    const hours = ('0' + today.getHours()).slice(-2);
-    const minutes = ('0' + today.getMinutes()).slice(-2);
-    const seconds = ('0' + today.getSeconds()).slice(-2);
-    const now = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
-    return now;
-  };
 
   const handleSubmitBtn = (event: React.FormEvent<HTMLFormElement>) => {
     if (updateComment.trim() === '') {

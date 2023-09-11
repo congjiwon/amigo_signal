@@ -92,7 +92,6 @@ export const getDetailSpotSharePost = async (postId: string | undefined) => {
 //스팟공유 게시글 삭제
 export const deleteSpotSharePost = async (postId: string | undefined) => {
   const { error } = await supabase.from('spotPosts').delete().eq('id', postId);
-  console.log('글 삭제 에러', error);
 };
 
 //스팟공유 게시글 작성하기

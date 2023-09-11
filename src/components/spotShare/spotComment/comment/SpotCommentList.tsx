@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { getSpotPost } from '../../../../api/supabase/spotshare';
 import useSessionStore from '../../../../zustand/store';
+import { currentTime } from '../../../common/currentTime/CurrentTime';
 import { ConfirmDelete } from '../../../common/modal/alert';
 import SpotReCommentList from '../reComment/SpotReCommentList';
 import * as St from '../style';
@@ -26,19 +27,6 @@ function SpotCommentList({ allComments, allReCommentsData, comment, isLoginUser,
   const { updateCommentMutation, deleteCommentMutation, postReCommentMutation, updateReCommentMutation } = useSpotComment();
   const { data: spotPost } = useQuery(['spotPost', comment?.postId], () => getSpotPost({ postId: comment?.postId! }));
   const postWriterId = spotPost?.writerId;
-
-  // 지원님 시간 가져옴.
-  const currentTime = function () {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = ('0' + (today.getMonth() + 1)).slice(-2);
-    const day = ('0' + today.getDate()).slice(-2);
-    const hours = ('0' + today.getHours()).slice(-2);
-    const minutes = ('0' + today.getMinutes()).slice(-2);
-    const seconds = ('0' + today.getSeconds()).slice(-2);
-    const now = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
-    return now;
-  };
 
   const handleUpdateComment = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setUpdateComment(event.target.value.replace(/ /g, '\u00A0'));
@@ -109,7 +97,6 @@ function SpotCommentList({ allComments, allReCommentsData, comment, isLoginUser,
     setReCommentId('');
   };
 
-  // 댓글 삭제 버튼
   const handleDelBtn = async (id: string) => {
     const isConfirmed = await ConfirmDelete('');
 
