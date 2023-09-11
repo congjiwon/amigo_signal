@@ -2,7 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { RiHeartFill, RiHeartLine } from 'react-icons/ri';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { countLike, deleteLike, postLike } from '../../../api/supabase/spotshare';
 import { Tables } from '../../../api/supabase/supabase';
 import Calendar from '../../../assets/imgs/partner/Calendar.svg';
@@ -43,6 +43,7 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
   const session = useSessionStore((state) => state.session);
   const logInUserId = session?.user.id;
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const LikeCheck = async (logInUserId: string) => {
     const liked = likedPost?.some((like) => like.postId.id === post.id && like.userId === logInUserId);
@@ -69,6 +70,10 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
 
   // 좋아요 클릭 시
   const handleFillHeart = _.debounce(async (event: React.MouseEvent<SVGElement, MouseEvent>) => {
+    if (logInUserId === undefined) {
+      navigate('/login');
+    }
+
     await queryClient.invalidateQueries(['likes', post.id]);
     setLike(!like);
     const addLike = { postId: post.id!, userId: logInUserId! };
@@ -106,13 +111,9 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
         </St.PostCard>
       </Link>
 
-      {logInUserId ? (
-        <St.LikeBox>
-          <St.LikeButton>{like ? <RiHeartFill onClick={(event) => handleEmptyHeart(event)} style={St.Heart} /> : <RiHeartLine onClick={(event) => handleFillHeart(event)} style={St.Heart} />}</St.LikeButton>
-        </St.LikeBox>
-      ) : (
-        ''
-      )}
+      <St.LikeBox>
+        <St.LikeButton>{like ? <RiHeartFill onClick={(event) => handleEmptyHeart(event)} style={St.Heart} /> : <RiHeartLine onClick={(event) => handleFillHeart(event)} style={St.Heart} />}</St.LikeButton>
+      </St.LikeBox>
     </div>
   );
 }
