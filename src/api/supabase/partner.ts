@@ -133,7 +133,7 @@ export const insertPost = async (dataToInsert: Inserts<'partnerPosts'>) => {
   if (error) {
     console.error('Insert error:', error);
   } else {
-    console.log('Inserted data:', data);
+    // console.log('Inserted data:', data);
     return data;
   }
 };
@@ -183,6 +183,12 @@ export const getApplicantList = async (postId: string) => {
 export const updateStatus = async (applicantId: string, postId: string, isAccepted: boolean) => {
   const { data, error } = await supabase.from('applicants').update({ isAccepted, isConfirmed: true }).eq('applicantId', applicantId).eq('postId', postId);
   return { data, error };
+};
+
+// 모집완료 시 -> 신청 대기 목록에 있던 나머지 지원자의 지원 상태: 거절로 변경
+export const makeRestApplicantStatusReject = async (postId: string) => {
+  const { data } = await supabase.from('applicants').update({ isAccepted: false, isConfirmed: true }).eq('postId', postId).eq('isConfirmed', false);
+  return { data };
 };
 
 // 참여 수락된 신청자 정보 가져오기
@@ -275,4 +281,27 @@ export const getNumOfPeople = async (postId: string) => {
 export const isPostOpen = async (postId: string): Promise<{ data: { isOpen: boolean } | null }> => {
   const { data } = await supabase.from('partnerPosts').select('isOpen').eq('id', postId).single();
   return { data };
+};
+
+//북마크 추가
+export const addBookmark = async (bookMarkInsert: Inserts<'bookmarks'>) => {
+  const { error } = await supabase.from('bookmarks').insert(bookMarkInsert).select();
+  if (error) {
+    console.log('북마크 추가 실패', error);
+  }
+};
+
+//북마크 삭제
+export const removeBookMark = async (logInUserId: string, postId: string) => {
+  const { error } = await supabase.from('bookmarks').delete().eq('postId', postId).eq('userId', logInUserId);
+  if (error) throw error;
+};
+
+//북마크 상태 확인
+export const bookmarkCheck = async (logInUserId: string, postId: string) => {
+  const { data, error } = await supabase.from('bookmarks').select('*').eq('postId', postId).eq('userId', logInUserId);
+  if (error) {
+    console.log('북마크 데이터 불러오기 실패', error);
+  }
+  return data;
 };

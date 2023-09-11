@@ -38,7 +38,9 @@ export const FootTitle = styled.p`
 `;
 
 export const FootText = styled.p`
-  font-size: 0.8rem;
-  color: #666;
-  margin-bottom: 10px;
+  color: var(--black, #121621);
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 200%;
 `;
