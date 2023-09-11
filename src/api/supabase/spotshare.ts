@@ -149,7 +149,7 @@ type mySpotSharePostsType = {
 export const getMySpotSharePosts = async ({ writerId, page }: mySpotSharePostsType) => {
   const { from, to } = getRangePagination(page, NUMBER_OF_ITEMS);
 
-  const { data, count } = await supabase.from('spotPosts').select('*, country(*)', { count: 'exact' }).eq('writerId', writerId).order('visitDate', { ascending: false }).range(from, to);
+  const { data, count } = await supabase.from('spotPosts').select('*, country(*)', { count: 'exact' }).eq('writerId', writerId).order('createdAt', { ascending: false }).range(from, to);
   return { data, count };
 };
 

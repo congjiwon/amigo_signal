@@ -185,6 +185,12 @@ export const updateStatus = async (applicantId: string, postId: string, isAccept
   return { data, error };
 };
 
+// 모집완료 시 -> 신청 대기 목록에 있던 나머지 지원자의 지원 상태: 거절로 변경
+export const makeRestApplicantStatusReject = async (postId: string) => {
+  const { data } = await supabase.from('applicants').update({ isAccepted: false, isConfirmed: true }).eq('postId', postId).eq('isConfirmed', false);
+  return { data };
+};
+
 // 참여 수락된 신청자 정보 가져오기
 export const getConfirmedApplicantList = async (postId: string) => {
   const { data, error } = await supabase.from('applicants').select('*, users!applicants_applicantId_fkey(*)').eq('postId', postId).eq('isAccepted', true);
@@ -214,7 +220,7 @@ export const getMyPartnerPosts = async ({ userId, filterIsOpen, page }: MyPartne
     partnerPosts = partnerPosts.is('isOpen', false);
   }
 
-  const { data, count } = await partnerPosts.order('startDate', { ascending: true }).range(from, to);
+  const { data, count } = await partnerPosts.order('createdAt', { ascending: false }).range(from, to);
   return { data, count };
 };
 
