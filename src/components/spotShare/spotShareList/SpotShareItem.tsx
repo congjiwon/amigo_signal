@@ -7,6 +7,7 @@ import { Tables } from '../../../api/supabase/supabase';
 import Calendar from '../../../assets/imgs/partner/Calendar.svg';
 import useSessionStore from '../../../zustand/store';
 import * as St from './style';
+import _ from 'lodash';
 
 type SpotItemProps = {
   post: Tables<'spotPosts'>;
@@ -68,51 +69,52 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
   const contentWithoutTags = post.content.replace(/<\/?[^>]+(>|$)/g, '');
 
   // 좋아요 클릭 시
-  const handleFillHeart = async (event: React.MouseEvent<SVGElement, MouseEvent>) => {
-    event.preventDefault();
+  const handleFillHeart = _.debounce(async (event: React.MouseEvent<SVGElement, MouseEvent>) => {
     await queryClient.invalidateQueries(['likes', post.id]);
     setLike(!like);
     const addLike = { postId: post.id!, userId: logInUserId! };
     await postLike(addLike);
     await countLike(++post.likeCount, post.id!);
-  };
+  }, 300);
 
-  const handleEmptyHeart = async (event: React.MouseEvent<SVGElement, MouseEvent>) => {
-    event.preventDefault();
+  const handleEmptyHeart = _.debounce(async (event: React.MouseEvent<SVGElement, MouseEvent>) => {
     await queryClient.invalidateQueries(['likes', post.id]);
     setLike(!like);
     await deleteLike(post.id!, logInUserId!);
     await countLike(--post.likeCount, post.id!);
-  };
+  }, 300);
 
   return (
-    <Link to={`detail/${post.id}`}>
-      <St.PostCard>
-        <St.DateLikeBox>
-          <St.TravelDateBox>
-            <St.CalendarImage src={Calendar} alt="방문날짜" />
-            <p>
-              {visitDate[0]}년 {visitDate[1]}월 {visitDate[2]}일
-            </p>
-          </St.TravelDateBox>
-          {logInUserId ? (
-            <div>
-              <St.LikeButton>{like ? <RiHeartFill onClick={(event) => handleEmptyHeart(event)} style={St.Heart} /> : <RiHeartLine onClick={(event) => handleFillHeart(event)} style={St.Heart} />}</St.LikeButton>
-            </div>
-          ) : (
-            ''
-          )}
-        </St.DateLikeBox>
-        <St.TitleBox>
-          <p>{post.title}</p>
-        </St.TitleBox>
-        <St.ContentBox>
-          <p>{contentWithoutTags}</p>
-        </St.ContentBox>
-        <St.DefaultImg src={post.country.imageUrl}></St.DefaultImg>
-        <St.Span>{post.country.country}</St.Span>
-      </St.PostCard>
-    </Link>
+    <div>
+      <Link to={`detail/${post.id}`}>
+        <St.PostCard>
+          <St.DateLikeBox>
+            <St.TravelDateBox>
+              <St.CalendarImage src={Calendar} alt="방문날짜" />
+              <p>
+                {visitDate[0]}년 {visitDate[1]}월 {visitDate[2]}일
+              </p>
+            </St.TravelDateBox>
+          </St.DateLikeBox>
+          <St.TitleBox>
+            <p>{post.title}</p>
+          </St.TitleBox>
+          <St.ContentBox>
+            <p>{contentWithoutTags}</p>
+          </St.ContentBox>
+          <St.DefaultImg src={post.country.imageUrl}></St.DefaultImg>
+          <St.Span>{post.country.country}</St.Span>
+        </St.PostCard>
+      </Link>
+
+      {logInUserId ? (
+        <St.LikeBox>
+          <St.LikeButton>{like ? <RiHeartFill onClick={(event) => handleEmptyHeart(event)} style={St.Heart} /> : <RiHeartLine onClick={(event) => handleFillHeart(event)} style={St.Heart} />}</St.LikeButton>
+        </St.LikeBox>
+      ) : (
+        ''
+      )}
+    </div>
   );
 }
 
