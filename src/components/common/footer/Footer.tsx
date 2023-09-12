@@ -7,10 +7,17 @@ const Footer = () => {
   return (
     <St.Layout>
       <St.FooterContainer>
-        <St.FootLogo>
-          <img src={logo} style={{ width: '40px' }} />
-          <img src={One} style={{ width: '120px' }} />
-        </St.FootLogo>
+        <St.FootInfoBox>
+          <St.FootLogo>
+            <img src={logo} style={{ width: '40px' }} />
+            <img src={One} style={{ width: '120px' }} />
+          </St.FootLogo>
+          <div>
+            <p style={{ fontWeight: 'bold' }}>내일배움캠프 React 6 </p>
+            <p>양지원 | 임설빈 | 송현섭 | 임지영 | 박희연 | Designed by 김수연</p>
+            <p>&copy; 2023 NBC AMIGO SIGNAL ALL RIGHTS RESERVED</p>
+          </div>
+        </St.FootInfoBox>
         <St.LinkBox>
           <a href="https://github.com/congjiwon/amigo_signal" target="_blank">
             <RxGithubLogo className="githubIcon" />
@@ -19,9 +26,6 @@ const Footer = () => {
             <RxNotionLogo className="notionIcon" />
           </a>
         </St.LinkBox>
-        <St.FootText>내일배움캠프 React 6 </St.FootText>
-        <St.FootText>양지원 | 임설빈 | 송현섭 | 임지영 | 박희연 | Designed by 김수연</St.FootText>
-        <St.FootText style={{ marginBottom: '60px' }}>&copy; 2023 NBC AMIGO SIGNAL ALL RIGHTS RESERVED</St.FootText>
       </St.FooterContainer>
     </St.Layout>
   );
