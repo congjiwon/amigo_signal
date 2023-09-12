@@ -108,7 +108,7 @@ export const ConfirmCustom = ({ title, text, confirmButtonText, cancelButtonText
       })
       .then((result) => {
         if (result.isConfirmed) {
-          swalCustomButtons.fire(confirmMessage, message, 'success');
+          swalCustomButtons.fire({ title: confirmMessage, text: message, confirmButtonText: '확인' });
           resolve(true);
         } else {
           resolve(false);
@@ -139,7 +139,7 @@ export const ConfirmCancel = (cancelMessage: string): Promise<boolean> => {
       })
       .then((result) => {
         if (result.isConfirmed) {
-          Swal.fire('취소됨', cancelMessage, 'success');
+          swalCustomButtons.fire({ title: '취소됨', text: cancelMessage, confirmButtonText: '확인' });
           resolve(true);
         } else {
           resolve(false);
@@ -172,7 +172,6 @@ export const ConfirmDelete = (deleteMessage: string): Promise<boolean> => {
       })
       .then((result) => {
         if (result.isConfirmed) {
-          // Swal.fire('삭제됨', deleteMessage, 'success');
           resolve(true);
         } else {
           resolve(false);
@@ -200,7 +199,7 @@ export const ConfirmSave = (): Promise<boolean> => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire('수정되었습니다!', '', 'success');
+        swalCustomButtons.fire({ title: '수정되었습니다!', text: '', confirmButtonText: '확인' });
         resolve(true);
       } else resolve(false);
     });
