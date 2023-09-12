@@ -8,9 +8,9 @@ import logo from '../../../assets/imgs/Logo/logo.png';
 import useCurrentUserStore from '../../../zustand/currentUser';
 import useSessionStore from '../../../zustand/store';
 import One from '../../../assets/imgs/Logo/One.png';
-
 import { Alert } from '../modal/alert';
 import * as St from './style';
+import PartnerAlert from '../../partner/alert/PartnerAlert';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -54,7 +54,7 @@ export default function Header() {
   );
 
   return (
-    <St.HeaderLayout>
+    <St.HeaderLayout className="header-layout">
       <St.Header>
         <St.H1>
           <Link to="/">
@@ -79,17 +79,10 @@ export default function Header() {
         <St.Utils>
           {session ? (
             <>
+              <PartnerAlert />
               <Popover content={myPagePopover} trigger="hover" placement="topRight">
                 <St.PopOverButton>{currentUser?.nickName}님</St.PopOverButton>
               </Popover>
-
-              {/* <NavLink to="/mypage" className={({ isActive }) => (isActive ? 'active' : '')}>
-                {currentUser?.nickName}
-                &nbsp;님
-              </NavLink> */}
-              {/* <Link to="/login" onClick={handleSignout}>
-                로그아웃
-              </Link> */}
             </>
           ) : (
             <>
