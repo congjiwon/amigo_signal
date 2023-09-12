@@ -44,3 +44,31 @@ export const FootText = styled.p`
   font-weight: 400;
   line-height: 200%;
 `;
+
+export const LinkBox = styled.div`
+  display: flex;
+  gap: 17px;
+  a {
+    padding: 0;
+    background-color: transparent;
+    &:hover {
+      color: #643bdc;
+      transform: scale(1.2);
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+    &:not(:hover) {
+      transition: 0.3s ease-out;
+    }
+  }
+
+  .githubIcon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .notionIcon {
+    width: 30px;
+    height: 30px;
+  }
+`;

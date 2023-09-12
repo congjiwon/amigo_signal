@@ -21,6 +21,7 @@ const Router: React.FC = () => {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/partner" element={<Partner />} />
         <Route path="/spotshare" element={<SpotShare />} />
+        <Route path="*" element={<ErrorPage />} />
         <Route element={<Layout />}>
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/partner/detail/:postid" element={<PartnerDetail />} />
@@ -29,7 +30,6 @@ const Router: React.FC = () => {
           <Route path="/spotshare/detail/:postid" element={<SpotShareDetail />} />
           <Route path="/spotshare/write" element={<SpotShareWrite />} />
           <Route path="/spotshare/write/:postid" element={<SpotShareWrite />} />
-          <Route path="*" element={<ErrorPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
