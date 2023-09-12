@@ -150,7 +150,7 @@ export const RejectButton = styled.button<CheckButtonProps>`
 
 export const ApplicantContent = styled.p`
   margin-top: 20px;
-  margin-left: 40px;
+  margin-left: 56px;
   overflow-wrap: anywhere;
   font-size: 14px;
   line-height: 150%;
