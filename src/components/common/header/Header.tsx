@@ -182,7 +182,7 @@ export default function Header() {
   );
 
   return (
-    <St.HeaderLayout>
+    <St.HeaderLayout className="header-layout">
       <St.Header>
         <St.H1>
           <Link to="/">
