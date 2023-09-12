@@ -13,7 +13,7 @@ const ErrorPage = () => {
         ogImageWidth="1200"
         ogImageHeight="630"
       />{' '}
-      <div>에러 페이지</div>
+      {/* <ErrorTemplate /> */}
     </>
   );
 };
