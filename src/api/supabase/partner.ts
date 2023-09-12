@@ -283,6 +283,12 @@ export const isPostOpen = async (postId: string): Promise<{ data: { isOpen: bool
   return { data };
 };
 
+// 헤더 alert에 담길 post 제목 가져오기
+export const fetchPartnerPostTitle = async (postId: string) => {
+  const { data } = await supabase.from('partnerPosts').select('title').eq('id', postId).single();
+  return data?.title;
+};
+
 //북마크 추가
 export const addBookmark = async (bookMarkInsert: Inserts<'bookmarks'>) => {
   const { error } = await supabase.from('bookmarks').insert(bookMarkInsert).select();

@@ -9,6 +9,7 @@ export interface Database {
           content: string;
           id: string;
           isConfirmed: boolean;
+          writerId: string;
           postId: {
             content: string;
             country: {
@@ -44,6 +45,7 @@ export interface Database {
           isConfirmed: boolean;
           postId: string;
           isAccepted?: boolean;
+          writerId: string;
         };
         Update: {
           applicantId?: string;
@@ -52,6 +54,7 @@ export interface Database {
           isConfirmed?: boolean;
           postId?: string;
           isAccepted?: boolean;
+          writerId?: string;
         };
         Relationships: [
           {

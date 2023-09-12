@@ -116,7 +116,7 @@ const Communication = ({ postId, writerId, logInUserId, isApply, setIsApply }: C
 
       {openedModals.applyWithInfo && (
         <Modal id="applyWithInfo" size="medium">
-          <ApplyWithInfo postId={postId} applicantId={logInUserId} setIsApply={setIsApply} />
+          <ApplyWithInfo postId={postId} writerId={writerId} applicantId={logInUserId} setIsApply={setIsApply} />
         </Modal>
       )}
 

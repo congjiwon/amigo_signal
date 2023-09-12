@@ -10,11 +10,12 @@ import * as St from './style';
 
 type ApplyWithInfoProps = {
   postId: string | undefined;
+  writerId: string | undefined | null;
   applicantId: string | undefined;
   setIsApply: React.Dispatch<React.SetStateAction<boolean | null>>;
 };
 
-const ApplyWithInfo = ({ postId, applicantId, setIsApply }: ApplyWithInfoProps) => {
+const ApplyWithInfo = ({ postId, writerId, applicantId, setIsApply }: ApplyWithInfoProps) => {
   const { closeModal } = useModalStore();
 
   const [text, setText] = useState('');
@@ -27,7 +28,7 @@ const ApplyWithInfo = ({ postId, applicantId, setIsApply }: ApplyWithInfoProps) 
   };
 
   const handleSubmit = async () => {
-    if (!postId || !applicantId) {
+    if (!postId || !applicantId || !writerId) {
       console.error('postId 또는 applicantId 유효하지 않습니다.');
       return;
     }
@@ -37,6 +38,7 @@ const ApplyWithInfo = ({ postId, applicantId, setIsApply }: ApplyWithInfoProps) 
       applicantId,
       content: text,
       isConfirmed: false,
+      writerId,
     };
 
     if (text.trim() === '') {
