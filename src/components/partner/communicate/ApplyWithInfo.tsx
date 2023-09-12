@@ -50,7 +50,7 @@ const ApplyWithInfo = ({ postId, applicantId, setIsApply }: ApplyWithInfoProps) 
       });
       if (!isConfirmed) return;
       try {
-        setApplicantStatus('참여 신청 중');
+        setApplicantStatus('참여 신청중');
         await insertApplicant(applicantData);
         setIsApply(true);
         closeModal('applyWithInfo');
@@ -59,7 +59,7 @@ const ApplyWithInfo = ({ postId, applicantId, setIsApply }: ApplyWithInfoProps) 
       }
     } else {
       try {
-        setApplicantStatus('참여 신청 중');
+        setApplicantStatus('참여 신청중');
         await insertApplicant(applicantData);
         setIsApply(true);
         closeModal('applyWithInfo');
