@@ -2,6 +2,9 @@ import IntroTemplate from '../components/common/Intro/IntroTemplate';
 import MetaTags from '../components/common/metaTags/MetaTags';
 
 const Intro = () => {
+  const rootId = document.getElementById('root');
+  rootId?.classList.add('no-header');
+
   return (
     <>
       <MetaTags
