@@ -1,5 +1,5 @@
+import ErrorTemplate from '../components/common/error/ErrorTemplate';
 import MetaTags from '../components/common/metaTags/MetaTags';
-
 const ErrorPage = () => {
   return (
     <>
@@ -13,7 +13,7 @@ const ErrorPage = () => {
         ogImageWidth="1200"
         ogImageHeight="630"
       />{' '}
-      {/* <ErrorTemplate /> */}
+      <ErrorTemplate />
     </>
   );
 };
