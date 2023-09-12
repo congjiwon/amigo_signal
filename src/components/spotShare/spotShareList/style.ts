@@ -13,7 +13,7 @@ export const NoDataImgBox = styled.div`
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
-    line-height: 150%; /* 24px */
+    line-height: 150%;
   }
 `;
 
@@ -77,6 +77,10 @@ export const Grid = styled.div`
   }
 `;
 
+export const PostCardBox = styled.div`
+  position: relative;
+`;
+
 export const PostCard = styled.div`
   width: 282px;
   height: 282px;
@@ -88,54 +92,49 @@ export const PostCard = styled.div`
 export const DateLikeBox = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
 `;
 
 export const CalendarImage = styled.img`
-  padding-left: 20px;
+  padding-left: 21px;
 `;
 
 export const LikeBox = styled.div`
-  position: relative;
-  bottom: 264px;
-  right: -230px;
+  position: absolute;
+  top: 20px;
+  right: 21px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
-export const ButtonBox = styled.div`
-  padding: 22px 15.5px;
-
+export const LikeButton = styled.button`
+  padding: 0;
   background-color: transparent;
   border: none;
-  button {
-    background-color: transparent;
-    border: none;
-    &:hover {
-      color: #670fdf;
-      transform: scale(1.2);
-      transition: transform 0.3s ease;
-    }
-    &:not(:hover) {
-      transition: 0.3s ease-out;
-    }
-    cursor: pointer;
-    .lineIcon {
-      width: 24px;
-      height: 24px;
-    }
-    .fillIcon {
-      width: 24px;
-      height: 24px;
-      color: #643bdc;
-    }
-    &:hover {
-      transform: scale(1.2);
-      transition: transform 0.3s ease;
-    }
-    &:not(:hover) {
-      transition: 0.3s ease-out;
-    }
-    cursor: pointer;
+  &:hover {
+    transform: scale(1.2);
+    transition: transform 0.3s ease;
   }
+  &:not(:hover) {
+    transition: 0.3s ease-out;
+  }
+  cursor: pointer;
+`;
+
+export const Heart = {
+  fontSize: '18px',
+};
+
+export const HeartFill = {
+  fontSize: '18px',
+  color: '#670FDF',
+};
+
+export const HeartCount = styled.span`
+  color: #121621;
+  font-size: 10px;
+  font-weight: 400;
 `;
 
 export const DefaultImg = styled.img`
@@ -149,7 +148,7 @@ export const TravelDateBox = styled.div`
   display: flex;
   align-items: flex-start;
   padding-top: 24px;
-  gap: 10px;
+  gap: 5px;
   p {
     margin: 3px 0 21px 0;
     font-size: 12px;

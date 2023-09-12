@@ -30,8 +30,8 @@ export const Inner = styled.div<InnerProps>`
     switch (size) {
       case 'large':
         return `
-        width: 60%;
-        height: 70%;
+        width: 51.87%;
+        height: 68.33%;
         border-radius: 30px;
 
         @media screen and (max-width: 800px) {
@@ -82,9 +82,6 @@ export const CloseButton = styled.button`
   right: 37px;
   display: flex;
   justify-content: flex-end;
-  /* width: 30px;
-  height: 30px; */
-  /* padding: 30px; */
   padding-bottom: 0px;
   background: none;
   border: none;

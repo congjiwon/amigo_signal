@@ -54,7 +54,6 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
       setLike(false);
     }
   };
-
   useEffect(() => {
     LikeCheck(logInUserId!);
   }, [likedPost]);
@@ -74,6 +73,7 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
     if (logInUserId === undefined) {
       navigate('/login');
     }
+
     try {
       await queryClient.invalidateQueries(['likes', post.id]);
       const addLike = { postId: post.id!, userId: logInUserId! };
@@ -89,6 +89,7 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
     try {
       await queryClient.invalidateQueries(['likes', post.id]);
       await deleteLike(post.id!, logInUserId!);
+
       post.likeCount -= 1;
       setLike(false);
       await countLike(post.likeCount, post.id!);
@@ -96,7 +97,7 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
   }, 300);
 
   return (
-    <div>
+    <St.PostCardBox>
       <Link to={`detail/${post.id}`}>
         <St.PostCard>
           <St.DateLikeBox>
@@ -119,12 +120,10 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
       </Link>
 
       <St.LikeBox>
-        <St.ButtonBox>
-          <button>{like ? <RiHeartFill className="fillIcon" onClick={(event) => handleEmptyHeart(event)} /> : <RiHeartLine className="lineIcon" onClick={(event) => handleFillHeart(event)} />}</button>
-        </St.ButtonBox>{' '}
-        <span>{post.likeCount}</span>
+        <St.LikeButton>{like ? <RiHeartFill onClick={(event) => handleEmptyHeart(event)} style={St.HeartFill} /> : <RiHeartLine onClick={(event) => handleFillHeart(event)} style={St.Heart} />}</St.LikeButton>
+        <St.HeartCount>{post.likeCount}</St.HeartCount>
       </St.LikeBox>
-    </div>
+    </St.PostCardBox>
   );
 }
 
