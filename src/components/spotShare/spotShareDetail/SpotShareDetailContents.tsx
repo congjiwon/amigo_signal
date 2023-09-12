@@ -111,6 +111,9 @@ function SpotShareDetailContents() {
   const isPostWriter = () => logInUserId == spotSharePost?.writerId;
 
   const debouncedAddLikeHandle = _.debounce(() => {
+    if (logInUserId === undefined) {
+      navigate('/login');
+    }
     const handleFillHeart = async () => {
       setLike(!like);
       await postLike({ postId: postid!, userId: logInUserId! });
@@ -151,7 +154,7 @@ function SpotShareDetailContents() {
             </St.InfoInnerBox>
           </St.PostInfoBox>
           <St.ButtonBox>
-            {logInUserId && <button>{like ? <RiHeartFill className="fillIcon" onClick={() => debouncedRemoveLikeHandle()} /> : <RiHeartLine className="lineIcon" onClick={() => debouncedAddLikeHandle()} />}</button>}
+            <button>{like ? <RiHeartFill className="fillIcon" onClick={() => debouncedRemoveLikeHandle()} /> : <RiHeartLine className="lineIcon" onClick={() => debouncedAddLikeHandle()} />}</button>
             {isPostWriter() ? (
               <>
                 <button>{<FiEdit className="lineIcon" onClick={() => navigate(`/spotshare/write/${spotSharePost?.id}`)} />}</button>
