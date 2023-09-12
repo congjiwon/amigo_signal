@@ -38,6 +38,9 @@ const UserFeedback = ({ partnerPostData }: Props) => {
 
   //디바운싱
   const debouncedAddBookMarkHandle = _.debounce(async () => {
+    if (logInUserId === undefined) {
+      navigate('/login');
+    }
     setBookMark(!bookMark);
     await addBookmark({ userId: logInUserId!, postId: id });
   }, 300);
@@ -50,6 +53,10 @@ const UserFeedback = ({ partnerPostData }: Props) => {
   //오픈채팅
   const [, onCopy] = useCopyClipBoard();
   const handleCopyClipBoard = (text: string) => {
+    if (logInUserId === undefined) {
+      navigate('/login');
+      return;
+    }
     onCopy(text);
     Alert({ title: '복사 완료!' });
   };
@@ -77,7 +84,6 @@ const UserFeedback = ({ partnerPostData }: Props) => {
     }
     mutation.mutate({ postId: id });
   };
-
   return (
     <St.UserFeedbackBox>
       <St.UserProfileBox>
@@ -90,14 +96,9 @@ const UserFeedback = ({ partnerPostData }: Props) => {
         </div>
       </St.UserProfileBox>
       <St.ButtonBox>
-        {logInUserId ? (
-          <>
-            <button>{openChat.length > 1 && <FiMessageSquare className="lineIcon" onClick={() => handleCopyClipBoard(openChat)} />}</button>
-            <button>{bookMark ? <RiBookmarkFill className="fillIcon" onClick={debouncedRemoveBookMarkHandle} /> : <RiBookmarkLine className="lineIcon" onClick={debouncedAddBookMarkHandle} />}</button>
-          </>
-        ) : (
-          <></>
-        )}
+        <button>{openChat.length > 1 && <FiMessageSquare className="lineIcon" onClick={() => handleCopyClipBoard(openChat)} />}</button>
+        <button>{bookMark ? <RiBookmarkFill className="fillIcon" onClick={debouncedRemoveBookMarkHandle} /> : <RiBookmarkLine className="lineIcon" onClick={debouncedAddBookMarkHandle} />}</button>
+
         {isPostUser() ? (
           <>
             <button>{<FiEdit className="lineIcon" onClick={() => navigate(`/partner/write/${id}`)} />}</button>
