@@ -86,7 +86,6 @@ export const ConfirmCancel = (cancelMessage: string): Promise<boolean> => {
       cancelButtonText: '닫기',
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire('취소됨', cancelMessage, 'success');
         resolve(true);
       } else {
         resolve(false);
@@ -109,7 +108,6 @@ export const ConfirmDelete = (deleteMessage: string): Promise<boolean> => {
       cancelButtonText: '취소',
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire('삭제됨', deleteMessage, 'success');
         resolve(true);
       } else {
         resolve(false);
