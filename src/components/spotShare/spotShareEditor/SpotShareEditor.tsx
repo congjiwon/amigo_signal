@@ -1,5 +1,6 @@
 import { ImageActions } from '@xeger/quill-image-actions';
 import { ImageFormats } from '@xeger/quill-image-formats';
+import imageCompression from 'browser-image-compression';
 import React, { useCallback, useMemo, useRef } from 'react';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -51,8 +52,14 @@ const SoptShareEditor = ({ editorHtml, setEditorHtml, setPostImageUrl, postImage
       input.addEventListener('change', async () => {
         console.log('온체인지');
         const file = input.files![0];
+        const options = {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 1000,
+          useWebWorker: true,
+        };
+        const compressedFile = await imageCompression(file, options);
         const fileNewName = uuidv4();
-        const { data, error } = await supabase.storage.from('quillImgs').upload(`quill_imgs/${fileNewName}`, file);
+        const { data, error } = await supabase.storage.from('quillImgs').upload(`quill_imgs/${fileNewName}`, compressedFile);
         if (error) {
           console.error('이미지 업로드 중 오류 발생:', error);
         } else {
