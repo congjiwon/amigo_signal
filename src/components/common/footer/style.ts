@@ -1,48 +1,48 @@
 import { styled } from 'styled-components';
 
 export const Layout = styled.div`
-  border-top: 1px solid #efefef;
-`;
-
-export const FooterContainer = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  border-top: 1px solid #efefef;
   width: 100%;
-  min-height: 200px;
-  min-width: 360px;
+  height: 245px;
+  top: 0;
+  left: 0;
+`;
+
+export const FooterContainer = styled.footer`
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  gap: 24px;
   max-width: 1200px;
-  margin: 0 auto;
+  padding-left: 20px;
+  padding-right: 20px;
+  & p {
+    color: var(--black, #121621);
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 200%;
 
-  @media (max-width: 1200px) {
-    padding-left: 100px;
-    box-sizing: border-box;
-  }
-
-  @media (max-width: 600px) {
-    padding-left: 20px;
+    @media (max-width: 430px) {
+      font-size: 12px;
+      line-height: 180%;
+    }
   }
 `;
 
 export const FootLogo = styled.div`
-  width: 300px;
-  height: 40px;
-  margin: 40px 0 20px 0;
   display: flex;
   flex-direction: row;
   align-items: center;
 `;
 
-export const FootTitle = styled.p`
-  color: #666;
-  font-weight: bold;
-`;
-
-export const FootText = styled.p`
-  color: var(--black, #121621);
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 200%;
+export const FootInfoBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 21px;
 `;
 
 export const LinkBox = styled.div`
