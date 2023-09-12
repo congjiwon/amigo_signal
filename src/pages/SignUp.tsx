@@ -4,6 +4,7 @@ import Header from '../components/common/header/Header';
 import MetaTags from '../components/common/metaTags/MetaTags';
 
 function SignUp() {
+  window.history.forward();
   return (
     <>
       {' '}
