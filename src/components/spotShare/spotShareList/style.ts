@@ -88,11 +88,11 @@ export const PostCard = styled.div`
 export const DateLikeBox = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
 `;
 
 export const CalendarImage = styled.img`
-  padding-left: 21px;
+  padding-left: 20px;
 `;
 
 export const LikeBox = styled.div`
@@ -101,27 +101,42 @@ export const LikeBox = styled.div`
   right: -230px;
 `;
 
-export const LikeButton = styled.button`
-  /* padding: 20px; */
-  position: absolute;
+export const ButtonBox = styled.div`
+  padding: 22px 15.5px;
 
   background-color: transparent;
   border: none;
-  &:hover {
-    transform: scale(1.2);
-    transition: transform 0.3s ease;
+  button {
+    background-color: transparent;
+    border: none;
+    &:hover {
+      color: #670fdf;
+      transform: scale(1.2);
+      transition: transform 0.3s ease;
+    }
+    &:not(:hover) {
+      transition: 0.3s ease-out;
+    }
+    cursor: pointer;
+    .lineIcon {
+      width: 24px;
+      height: 24px;
+    }
+    .fillIcon {
+      width: 24px;
+      height: 24px;
+      color: #643bdc;
+    }
+    &:hover {
+      transform: scale(1.2);
+      transition: transform 0.3s ease;
+    }
+    &:not(:hover) {
+      transition: 0.3s ease-out;
+    }
+    cursor: pointer;
   }
-  &:not(:hover) {
-    transition: 0.3s ease-out;
-  }
-  cursor: pointer;
 `;
-
-export const Heart = {
-  height: '24px',
-  width: '24px',
-  color: '#670FDF',
-};
 
 export const DefaultImg = styled.img`
   width: 282px;
@@ -134,7 +149,7 @@ export const TravelDateBox = styled.div`
   display: flex;
   align-items: flex-start;
   padding-top: 24px;
-  gap: 5px;
+  gap: 10px;
   p {
     margin: 3px 0 21px 0;
     font-size: 12px;

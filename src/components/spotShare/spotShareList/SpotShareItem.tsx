@@ -54,6 +54,7 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
       setLike(false);
     }
   };
+
   useEffect(() => {
     LikeCheck(logInUserId!);
   }, [likedPost]);
@@ -73,19 +74,25 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
     if (logInUserId === undefined) {
       navigate('/login');
     }
+    try {
+      await queryClient.invalidateQueries(['likes', post.id]);
+      const addLike = { postId: post.id!, userId: logInUserId! };
+      await postLike(addLike);
 
-    await queryClient.invalidateQueries(['likes', post.id]);
-    setLike(!like);
-    const addLike = { postId: post.id!, userId: logInUserId! };
-    await postLike(addLike);
-    await countLike(++post.likeCount, post.id!);
+      post.likeCount += 1;
+      setLike(true);
+      await countLike(post.likeCount, post.id!);
+    } catch (error) {}
   }, 300);
 
   const handleEmptyHeart = _.debounce(async (event: React.MouseEvent<SVGElement, MouseEvent>) => {
-    await queryClient.invalidateQueries(['likes', post.id]);
-    setLike(!like);
-    await deleteLike(post.id!, logInUserId!);
-    await countLike(--post.likeCount, post.id!);
+    try {
+      await queryClient.invalidateQueries(['likes', post.id]);
+      await deleteLike(post.id!, logInUserId!);
+      post.likeCount -= 1;
+      setLike(false);
+      await countLike(post.likeCount, post.id!);
+    } catch (error) {}
   }, 300);
 
   return (
@@ -112,7 +119,10 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
       </Link>
 
       <St.LikeBox>
-        <St.LikeButton>{like ? <RiHeartFill onClick={(event) => handleEmptyHeart(event)} style={St.Heart} /> : <RiHeartLine onClick={(event) => handleFillHeart(event)} style={St.Heart} />}</St.LikeButton>
+        <St.ButtonBox>
+          <button>{like ? <RiHeartFill className="fillIcon" onClick={(event) => handleEmptyHeart(event)} /> : <RiHeartLine className="lineIcon" onClick={(event) => handleFillHeart(event)} />}</button>
+        </St.ButtonBox>{' '}
+        <span>{post.likeCount}</span>
       </St.LikeBox>
     </div>
   );

@@ -29,18 +29,23 @@ export const NewApplicantAlert = styled.p`
 `;
 
 export const ModalTitle = styled.h1`
-  padding-left: 50px;
+  margin-top: 48px;
+  margin-left: 40px;
+  /* padding-left: 50px; */
   font-size: 1.4rem;
   font-weight: bold;
 `;
 
 export const TextCount = styled.span`
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
-  margin-right: 50px;
-  font-size: 12px;
-  color: gray;
+  position: absolute;
+  top: 281px;
+  right: 60px;
+  /* display: flex; */
+  /* justify-content: flex-end; */
+  /* margin-top: 10px; */
+  /* margin-right: 50px; */
+  font-size: 14px;
+  color: #3f4656;
 `;
 
 export const SubmitApply = styled.div`

@@ -1,8 +1,8 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
-import * as St from './style';
-import { useModalStore } from '../../../zustand/store';
 import CloseButton from '../../../assets/imgs/partner/CloseButton.svg';
+import { useModalStore } from '../../../zustand/store';
+import * as St from './style';
 
 export const PORTAL_MODAL = 'portal-root';
 

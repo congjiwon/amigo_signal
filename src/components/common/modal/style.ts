@@ -40,8 +40,8 @@ export const Inner = styled.div<InnerProps>`
         `;
       case 'medium':
         return `
-        width: 45%;
-        height: 55%;
+        width: 41.25%;
+        height: 42.41%;
         border-radius: 30px;
 
         @media screen and (max-width: 1100px) {
@@ -77,9 +77,14 @@ export const Inner = styled.div<InnerProps>`
 `;
 
 export const CloseButton = styled.button`
+  position: absolute;
+  top: 40px;
+  right: 37px;
   display: flex;
   justify-content: flex-end;
-  padding: 30px;
+  /* width: 30px;
+  height: 30px; */
+  /* padding: 30px; */
   padding-bottom: 0px;
   background: none;
   border: none;
