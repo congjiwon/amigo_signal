@@ -1,17 +1,18 @@
-import { useQuery } from '@tanstack/react-query';
-import { Popover } from 'antd';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../../../api/supabase/supabaseClient';
 import { getCurrentUser } from '../../../api/supabase/users';
 import useCurrentUserStore from '../../../zustand/currentUser';
 import useSessionStore from '../../../zustand/store';
+import { Popover, Drawer } from 'antd';
 import { Alert } from '../modal/alert';
-import * as St from './style';
 import PartnerAlert from '../../partner/alert/PartnerAlert';
-import defaultImg from '../../../assets/imgs/users/default_profile_img.png';
-import { FiChevronDown } from 'react-icons/fi';
+import * as St from './style';
 import logoHeader from '../../../assets/imgs/Logo/logo_header.png';
+import defaultImg from '../../../assets/imgs/users/default_profile_img.png';
+import { FiChevronDown, FiMenu } from 'react-icons/fi';
+import { BiX } from 'react-icons/bi';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -44,6 +45,16 @@ export default function Header() {
     navigate('/login');
   };
 
+  const [open, setOpen] = useState(false);
+
+  const showDrawer = () => {
+    setOpen(true);
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
+
   const myPagePopover = (
     <St.MyPagePopover>
       <NavLink to="/mypage" className={({ isActive }) => (isActive ? 'active' : '')}>
@@ -61,10 +72,9 @@ export default function Header() {
         <St.H1>
           <Link to="/">
             <img src={logoHeader} style={{ width: '144px' }} />
-            {/* <img src={logo} style={{ width: '40px' }} /> */}
-            {/* <img src={One} style={{ width: '120px' }} /> */}
           </Link>
         </St.H1>
+        {/* web */}
         <St.Gnb>
           <ul>
             <li>
@@ -100,6 +110,64 @@ export default function Header() {
             </>
           )}
         </St.Utils>
+
+        {/* mobile */}
+        <St.MobileMenu>
+          {session && <PartnerAlert />}
+
+          <FiMenu onClick={showDrawer} className="hambuger-menu" />
+
+          <Drawer placement="right" onClose={onClose} closable={false} open={open} width={307} bodyStyle={{ padding: '0' }}>
+            <div>
+              <St.DrawerHeader>
+                {session ? (
+                  <St.UserBoxM>
+                    <St.ProfileImgM src={currentUser?.profileImageUrl ? `${storagaUrl}/${currentUser?.profileImageUrl}` : defaultImg} alt={`${currentUser?.nickName} 프로필 이미지`} />
+                    <St.NickNameM>{currentUser?.nickName} 님</St.NickNameM>
+                  </St.UserBoxM>
+                ) : (
+                  <St.LoginBoxM>
+                    <Link to="/login" className="link-login">
+                      로그인
+                    </Link>
+                    <Link to="/signup" className="link-join">
+                      회원가입
+                    </Link>
+                  </St.LoginBoxM>
+                )}
+                <BiX onClick={onClose} className="icon-close-menu" title="닫기" />
+              </St.DrawerHeader>
+
+              <St.DrawerBody>
+                <St.GnbM>
+                  <ul>
+                    <li>
+                      <NavLink to="/partner" className={({ isActive }) => (isActive ? 'active' : '')}>
+                        동행 찾기
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink to="/spotshare" className={({ isActive }) => (isActive ? 'active' : '')}>
+                        스팟 공유
+                      </NavLink>
+                    </li>
+                  </ul>
+                </St.GnbM>
+
+                {session && (
+                  <St.UserMenuM>
+                    <NavLink to="/mypage" className="btn-mypage">
+                      마이페이지
+                    </NavLink>
+                    <Link to="/login" onClick={handleSignout} className="btn-logout">
+                      로그아웃
+                    </Link>
+                  </St.UserMenuM>
+                )}
+              </St.DrawerBody>
+            </div>
+          </Drawer>
+        </St.MobileMenu>
       </St.Header>
     </St.HeaderLayout>
   );
