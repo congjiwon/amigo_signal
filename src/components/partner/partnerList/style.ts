@@ -133,6 +133,7 @@ export const LocationBox = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+  /* position: absolute; */
   h1 {
     margin: 30px 0px 0px 5px;
   }
@@ -169,12 +170,15 @@ export const CheckBox = styled.div`
   border: 1px solid var(--purple, #643bdc);
   width: 89px;
   height: 32px;
+
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin-left: 50px;
-  margin-top: 22px;
+
+  position: absolute;
+  top: 22px;
+  left: 180px;
   span {
     font-size: 12px;
     font-style: normal;
