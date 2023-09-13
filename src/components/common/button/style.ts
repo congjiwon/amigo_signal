@@ -90,7 +90,15 @@ export const Button = styled.button<{ $styleType: BtnStyleType; disabled: boolea
         case BtnStyleType.BTN_APPLY:
           return css`
             ${btnCommonStyles}
+            background: #643bdc;
+          `;
+        case BtnStyleType.BTN_NOTEXTAPPLY:
+          return css`
+            ${btnCommonStyles}
             background: #99A3BA;
+            &:hover {
+              background: #643bdc;
+            }
           `;
         default:
           return ``;

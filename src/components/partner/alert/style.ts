@@ -17,6 +17,8 @@ export const ListBox = styled.ul`
 `;
 
 export const ListList = styled.li`
+  cursor: pointer;
+
   &:not(:last-child) {
     margin-bottom: 20px;
   }
