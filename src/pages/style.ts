@@ -12,13 +12,27 @@ export const PartnerDetailMain = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 100px 0px 0px 0px;
-  padding: 0 20px 0 20px;
+  /* padding: 0 20px 0 20px; */
 
   @media (max-width: 1256px) {
     flex-direction: column;
     align-items: center;
     gap: 100px;
-    padding: 0 100px 0 100px;
+    padding: 0 50px 0 50px;
+  }
+
+  @media (max-width: 800px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 100px;
+    padding: 0 20px 0 20px;
+  }
+
+  @media (max-width: 500px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 100px;
+    padding: 0 10px 0 10px;
   }
 `;
 

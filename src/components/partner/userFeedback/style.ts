@@ -21,6 +21,10 @@ export const UserProfileImgBox = styled.div`
   height: 40px;
   border-radius: 50%;
   overflow: hidden;
+  @media (max-width: 500px) {
+    width: 30px;
+    height: 30px;
+  }
 `;
 
 export const UserProfileImg = styled.img`
@@ -36,6 +40,9 @@ export const GrayParagraph = styled.p`
   font-style: normal;
   font-weight: 400;
   line-height: 150%; /* 21px */
+  @media (max-width: 500px) {
+    font-size: 12px;
+  }
 `;
 
 export const BlackParagraph = styled.p`
@@ -44,6 +51,9 @@ export const BlackParagraph = styled.p`
   font-style: normal;
   font-weight: 600;
   line-height: 150%; /* 21px */
+  @media (max-width: 500px) {
+    font-size: 12px;
+  }
 `;
 
 export const ButtonBox = styled.div`
@@ -67,12 +77,20 @@ export const ButtonBox = styled.div`
   .lineIcon {
     width: 24px;
     height: 24px;
+    @media (max-width: 500px) {
+      width: 20px;
+      height: 20px;
+    }
   }
 
   .fillIcon {
     width: 24px;
     height: 24px;
     color: #643bdc;
+    @media (max-width: 500px) {
+      width: 20px;
+      height: 20px;
+    }
   }
 `;
 

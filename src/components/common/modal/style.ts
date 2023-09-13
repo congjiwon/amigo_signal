@@ -34,8 +34,26 @@ export const Inner = styled.div<InnerProps>`
         height: 68.33%;
         border-radius: 30px;
 
-        @media screen and (max-width: 800px) {
+        @media screen and (max-width: 1256px) {
+          width: 60%;
+        }
+        @media screen and (max-width: 1024px) {
+          width: 65%;
+        }
+        @media screen and (max-width: 820px) {
+          width: 70%;
+        }
+        @media screen and (max-width: 744px) {
+          width: 75%;
+        }
+        @media screen and (max-width: 701px) {
           width: 80%;
+        }
+        @media screen and (max-width: 655px) {
+          width: 85%;
+        }
+        @media screen and (max-width: 612px) {
+          width: 90%;
         }
         `;
       case 'medium':

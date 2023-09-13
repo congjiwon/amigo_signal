@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
-import { FiEdit, FiMessageSquare, FiTrash2 } from 'react-icons/fi';
-import { RiBookmarkFill, RiBookmarkLine } from 'react-icons/ri';
+import { FiEdit, FiTrash2 } from 'react-icons/fi';
+import { RiBookmarkFill, RiBookmarkLine, RiKakaoTalkLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router';
 import { addBookmark, bookmarkCheck, deletePartnerPost, removeBookMark } from '../../../api/supabase/partner';
 import { Tables } from '../../../api/supabase/supabase';
@@ -96,8 +96,8 @@ const UserFeedback = ({ partnerPostData }: Props) => {
         </div>
       </St.UserProfileBox>
       <St.ButtonBox>
-        <button>{openChat.length > 1 && <FiMessageSquare className="lineIcon" onClick={() => handleCopyClipBoard(openChat)} />}</button>
         <button>{bookMark ? <RiBookmarkFill className="fillIcon" onClick={debouncedRemoveBookMarkHandle} /> : <RiBookmarkLine className="lineIcon" onClick={debouncedAddBookMarkHandle} />}</button>
+        <button>{openChat.length > 1 && <RiKakaoTalkLine className="lineIcon" onClick={() => handleCopyClipBoard(openChat)} />}</button>
 
         {isPostUser() ? (
           <>
