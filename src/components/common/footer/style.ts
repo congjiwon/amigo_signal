@@ -2,8 +2,8 @@ import { styled } from 'styled-components';
 
 export const Layout = styled.div`
   display: flex;
-  flex-direction: column;
   justify-content: center;
+  align-items: center;
   border-top: 1px solid #efefef;
   width: 100%;
   height: 245px;
@@ -16,7 +16,7 @@ export const FooterContainer = styled.footer`
   flex-flow: row wrap;
   justify-content: space-between;
   gap: 24px;
-  max-width: 1200px;
+  flex-basis: 1200px;
   padding-left: 20px;
   padding-right: 20px;
   & p {
@@ -47,13 +47,14 @@ export const FootInfoBox = styled.div`
 
 export const LinkBox = styled.div`
   display: flex;
+  align-items: baseline;
   gap: 17px;
   a {
     padding: 0;
     background-color: transparent;
     &:hover {
       color: #643bdc;
-      transform: scale(1.2);
+      transform: scale(1.05);
       transition: transform 0.3s ease;
       cursor: pointer;
     }
