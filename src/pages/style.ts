@@ -36,6 +36,9 @@ export const PartnerDetailMain = styled.div`
 export const PartnerDetailInfoSection = styled.section`
   flex-basis: 791px;
   flex-shrink: 1;
+  @media (max-width: 1256px) {
+    margin-bottom: 100px;
+  }
 `;
 
 export const CommunicateDiv = styled.section``;
