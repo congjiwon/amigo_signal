@@ -8,15 +8,6 @@ import { Alert } from '../components/common/modal/alert';
 
 function SignUp() {
   window.history.forward();
-  const navigate = useNavigate();
-  const localSession = localStorage.getItem('authId');
-
-  useEffect(() => {
-    if (localSession !== null) {
-      Alert({ title: '접근이 불가한 페이지 입니다.' });
-      navigate('/myPage');
-    }
-  }, []);
 
   return (
     <>
