@@ -19,6 +19,15 @@ type newUserType = {
   birthday: string;
 };
 
+type InputStatusType = {
+  emailStatus?: boolean;
+  nickNameStatus?: boolean;
+  passwordStatus?: boolean;
+  passwordConfirmStatus?: boolean;
+  genderStatus?: boolean;
+  birthdayStatus?: boolean;
+};
+
 export default function SignUpForm() {
   const navigate = useNavigate();
   const [newUser, setNewUser] = useState<newUserType>({ email: '', nickName: '', password: '', passwordConfirm: '', gender: '여성', birthday: '' });
@@ -34,13 +43,13 @@ export default function SignUpForm() {
     birthdayMsg: '',
   });
 
-  const [validationStatus, setValidationStatus] = useState({
-    emailStatus: false,
-    nickNameStatus: false,
-    passwordStatus: false,
-    passwordConfirmStatus: false,
+  const [validationStatus, setValidationStatus] = useState<InputStatusType>({
+    emailStatus: undefined,
+    nickNameStatus: undefined,
+    passwordStatus: undefined,
+    passwordConfirmStatus: undefined,
     genderStatus: true,
-    birthdayStatus: false,
+    birthdayStatus: undefined,
   });
 
   const [btnSubmitStatus, setBtnSubmitStatus] = useState(false);
@@ -80,7 +89,7 @@ export default function SignUpForm() {
               msg = '이미 사용중인 이메일입니다.';
               currentStatus = false;
             } else {
-              msg = '사용가능한 이메일입니다.';
+              msg = '';
               currentStatus = true;
             }
           }
@@ -103,7 +112,7 @@ export default function SignUpForm() {
             msg = '사용가능한 닉네임이 아닙니다.(특수문자 제외, 2~8자리)';
             currentStatus = false;
           } else {
-            msg = '사용가능한 닉네임입니다.';
+            msg = '';
             currentStatus = true;
           }
           setValidationMsg((prev) => ({
@@ -121,10 +130,10 @@ export default function SignUpForm() {
           let msg = '';
           let currentStatus = false;
           if (!validateValue(name, value)) {
-            msg = '영문 대/소문자 + 숫자 + 특수문자(~?!@#$%^&*_-) 포함 8자이상 15자이하';
+            msg = '영문 대/소문자+숫자+특수문자 포함 8자이상~15자이하';
             currentStatus = false;
           } else {
-            msg = '사용가능한 비밀번호입니다.';
+            msg = '';
             currentStatus = true;
           }
           setValidationMsg((prev) => ({
@@ -145,7 +154,7 @@ export default function SignUpForm() {
             msg = '비밀번호가 일치하지 않습니다.';
             currentStatus = false;
           } else {
-            msg = '비밀번호가 일치합니다.';
+            msg = '';
             currentStatus = true;
           }
           setValidationMsg((prev) => ({
@@ -197,7 +206,7 @@ export default function SignUpForm() {
       if (birthday.length > 0) {
         setValidationMsg((prev) => ({
           ...prev,
-          birthdayMsg: '생년월일이 모두 선택되었습니다.',
+          birthdayMsg: '',
         }));
         setValidationStatus((prev) => ({
           ...prev,
@@ -250,7 +259,7 @@ export default function SignUpForm() {
                 <label htmlFor="email" className="label-text">
                   이메일
                 </label>
-                <Input id="email" name="email" type="email" value={newUser.email} inputStyleType="auth" placeholder="이메일을 입력해주세요." border={true} onChange={onChangeInput} />
+                <St.Input id="email" name="email" type="email" value={newUser.email} placeholder="이메일을 입력해주세요." onChange={onChangeInput} $validationStatus={validationStatus.emailStatus} />
               </div>
               <St.ValidationMsgBox $validationStatusColor={validationStatus.emailStatus}>{validationMsg.emailMsg}</St.ValidationMsgBox>
             </St.FormRow>
@@ -259,7 +268,7 @@ export default function SignUpForm() {
                 <label htmlFor="password" className="label-text">
                   비밀번호
                 </label>
-                <Input id="password" name="password" type="password" value={newUser.password} inputStyleType="auth" placeholder="비밀번호를 입력해주세요." border={true} onChange={onChangeInput} />
+                <St.Input id="password" name="password" type="password" value={newUser.password} placeholder="비밀번호를 입력해주세요." onChange={onChangeInput} $validationStatus={validationStatus.passwordStatus} />
               </div>
               <St.ValidationMsgBox $validationStatusColor={validationStatus.passwordStatus}>{validationMsg.pwasswordMsg}</St.ValidationMsgBox>
             </St.FormRow>
@@ -268,7 +277,7 @@ export default function SignUpForm() {
                 <label htmlFor="passwordConfirm" className="label-text">
                   비밀번호 재확인
                 </label>
-                <Input id="passwordConfirm" name="passwordConfirm" type="password" value={newUser.passwordConfirm} inputStyleType="auth" placeholder="비밀번호를 입력해주세요." border={true} onChange={onChangeInput} />
+                <St.Input id="passwordConfirm" name="passwordConfirm" type="password" value={newUser.passwordConfirm} placeholder="비밀번호를 입력해주세요." onChange={onChangeInput} $validationStatus={validationStatus.passwordConfirmStatus} />
               </div>
               <St.ValidationMsgBox $validationStatusColor={validationStatus.passwordConfirmStatus}>{validationMsg.passwordConfirmMsg}</St.ValidationMsgBox>
             </St.FormRow>
@@ -277,9 +286,18 @@ export default function SignUpForm() {
                 <label htmlFor="nickName" className="label-text">
                   닉네임
                 </label>
-                <Input id="nickName" name="nickName" type="text" value={newUser.nickName} inputStyleType="auth" placeholder="닉네임을 입력해주세요." border={true} onChange={onChangeInput} />
+                <St.Input id="nickName" name="nickName" type="text" value={newUser.nickName} placeholder="닉네임을 입력해주세요." onChange={onChangeInput} $validationStatus={validationStatus.nickNameStatus} />
               </div>
               <St.ValidationMsgBox $validationStatusColor={validationStatus.nickNameStatus}>{validationMsg.nickNameMsg}</St.ValidationMsgBox>
+            </St.FormRow>
+            <St.FormRow>
+              <label htmlFor="" className="label-text">
+                생년월일
+              </label>
+              <div onFocus={() => setReadyBirthday(true)}>
+                <BirthdaySelect birthdayStatus={validationStatus.birthdayStatus} />
+              </div>
+              <St.ValidationMsgBox $validationStatusColor={validationStatus.birthdayStatus}>{validationMsg.birthdayMsg}</St.ValidationMsgBox>
             </St.FormRow>
             <St.FormRow>
               <St.GenderRow>
@@ -295,15 +313,6 @@ export default function SignUpForm() {
                   </div>
                 </div>
               </St.GenderRow>
-            </St.FormRow>
-            <St.FormRow>
-              <label htmlFor="" className="label-text">
-                생년월일
-              </label>
-              <div onFocus={() => setReadyBirthday(true)}>
-                <BirthdaySelect />
-              </div>
-              <St.ValidationMsgBox $validationStatusColor={validationStatus.birthdayStatus}>{validationMsg.birthdayMsg}</St.ValidationMsgBox>
             </St.FormRow>
           </St.SignUpInputsBox>
 

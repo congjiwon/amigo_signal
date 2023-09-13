@@ -1,10 +1,15 @@
 import { Col, Row, Select } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useBirthdayStore from '../../../zustand/birthdayData';
+import * as St from './style';
 
 const { Option } = Select;
 
-const BirthdaySelect: React.FC = () => {
+type birthdayStatusProps = {
+  birthdayStatus?: boolean;
+};
+
+const BirthdaySelect = (birthdayStatus: birthdayStatusProps) => {
   const [selectedYear, setSelectedYear] = useState<number | undefined>(undefined);
   const [selectedMonth, setSelectedMonth] = useState<number | undefined>(undefined);
   const [selectedDay, setSelectedDay] = useState<number | undefined>(undefined);
@@ -59,53 +64,58 @@ const BirthdaySelect: React.FC = () => {
       }
     }
   };
-
+  const currentStatus = birthdayStatus.birthdayStatus;
+  const selectStyle = {
+    width: '100%',
+  };
   return (
-    <Row gutter={16}>
-      <Col span={8}>
-        <Select
-          placeholder="연도"
-          style={{ width: '100%' }}
-          onChange={(value: number) => {
-            setSelectedYear(value);
-            checkLastDayInYearMonth({ selectName: 'year', value });
-          }}
-        >
-          {yearsRange().map((year) => (
-            <Option key={year} value={year}>
-              {year}
-            </Option>
-          ))}
-        </Select>
-      </Col>
-      <Col span={8}>
-        <Select
-          placeholder="월"
-          style={{ width: '100%' }}
-          onChange={(value: number) => {
-            setSelectedMonth(value);
-            checkLastDayInYearMonth({ selectName: 'month', value });
-          }}
-        >
-          {selectedYear &&
-            months.map((month) => (
-              <Option key={month.value} value={month.value}>
-                {`${month.value}월`}
+    <St.SelectorBox $birthdayStatus={currentStatus}>
+      <Row gutter={11}>
+        <Col span={8}>
+          <Select
+            placeholder="연도"
+            style={selectStyle}
+            onChange={(value: number) => {
+              setSelectedYear(value);
+              checkLastDayInYearMonth({ selectName: 'year', value });
+            }}
+          >
+            {yearsRange().map((year) => (
+              <Option key={year} value={year}>
+                {year}
               </Option>
             ))}
-        </Select>
-      </Col>
-      <Col span={8}>
-        <Select placeholder="일" style={{ width: '100%' }} onChange={(value: number) => setSelectedDay(value)} value={selectedDay}>
-          {selectedMonth &&
-            Array.from({ length: maxDaysInMonth(selectedMonth, selectedYear!) }, (_, index) => index + 1).map((day) => (
-              <Option key={day} value={day}>
-                {`${day}일`}
-              </Option>
-            ))}
-        </Select>
-      </Col>
-    </Row>
+          </Select>
+        </Col>
+        <Col span={8}>
+          <Select
+            placeholder="월"
+            style={selectStyle}
+            onChange={(value: number) => {
+              setSelectedMonth(value);
+              checkLastDayInYearMonth({ selectName: 'month', value });
+            }}
+          >
+            {selectedYear &&
+              months.map((month) => (
+                <Option key={month.value} value={month.value}>
+                  {`${month.value}월`}
+                </Option>
+              ))}
+          </Select>
+        </Col>
+        <Col span={8}>
+          <Select placeholder="일" style={selectStyle} onChange={(value: number) => setSelectedDay(value)} value={selectedDay}>
+            {selectedMonth &&
+              Array.from({ length: maxDaysInMonth(selectedMonth, selectedYear!) }, (_, index) => index + 1).map((day) => (
+                <Option key={day} value={day}>
+                  {`${day}일`}
+                </Option>
+              ))}
+          </Select>
+        </Col>
+      </Row>
+    </St.SelectorBox>
   );
 };
 

@@ -1,10 +1,23 @@
+import { useNavigate } from 'react-router';
 import SignUpForm from '../components/auth/signUpForm/SignUpForm';
 import Footer from '../components/common/footer/Footer';
 import Header from '../components/common/header/Header';
 import MetaTags from '../components/common/metaTags/MetaTags';
+import { useEffect } from 'react';
+import { Alert } from '../components/common/modal/alert';
 
 function SignUp() {
   window.history.forward();
+  const navigate = useNavigate();
+  const localSession = localStorage.getItem('authId');
+
+  useEffect(() => {
+    if (localSession !== null) {
+      Alert({ title: '접근이 불가한 페이지 입니다.' });
+      navigate('/myPage');
+    }
+  }, []);
+
   return (
     <>
       {' '}
