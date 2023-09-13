@@ -7,11 +7,11 @@ import LoadingSpinner from '../components/common/loadingSpinner/LoadingSpinner';
 import MetaTags from '../components/common/metaTags/MetaTags';
 import Communication from '../components/partner/communicate/Communication';
 import ConfirmedPartnerList from '../components/partner/communicate/ConfirmedPartnerList';
-import PartnerComments from '../components/partner/partnerComment/PartnerComments';
 import PartnerDetailInfo from '../components/partner/partnerDetailInfo/PartnerDetailInfo';
 import { useStateStore } from '../zustand/communicate';
 import useSessionStore from '../zustand/store';
 import * as St from './style';
+import PartnerComments from '../components/partner/partnerComment/PartnerComments';
 
 function PartnerDetail() {
   const { postid } = useParams<string>();
