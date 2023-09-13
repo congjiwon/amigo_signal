@@ -2,6 +2,7 @@ import { styled } from 'styled-components';
 
 export const HeaderLayout = styled.div`
   position: fixed;
+  display: flex;
   width: 100%;
   height: 70px;
   top: 0;
@@ -55,7 +56,7 @@ export const H1 = styled.h1`
 export const Gnb = styled.header`
   & ul {
     display: flex;
-    gap: 16px;
+    gap: 60px;
 
     & a {
       color: #81858a;
@@ -85,10 +86,30 @@ export const Utils = styled.div`
   }
 `;
 
-export const PopOverButton = styled.button`
-  background: none;
-  border: none;
+export const UserBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0px;
+`;
+
+export const ProfileImg = styled.img`
+  width: 28px;
+  height: 28px;
+  margin-left: 28px;
+  border-radius: 50%;
+`;
+
+export const NickName = styled.p`
+  margin-left: 10px;
   font-size: 14px;
+  cursor: pointer;
+`;
+
+export const PopOverButton = styled.button`
+  margin-left: 10px;
+  padding: 0;
+  border: none;
+  background: none;
   cursor: pointer;
 `;
 
