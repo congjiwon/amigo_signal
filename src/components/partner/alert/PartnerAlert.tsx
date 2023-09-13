@@ -159,7 +159,14 @@ export default function PartnerAlert() {
           <img src={YesAlert} alt="alert" />
         </Popover>
       ) : (
-        <Popover content={`알람이 없습니다.`} trigger="click" placement="topRight">
+        <Popover
+          content={`알람이 없습니다.`}
+          trigger="hover"
+          placement="topRight"
+          overlayStyle={{
+            width: '150px',
+          }}
+        >
           <img src={NoAlert} alt="noAlert" />
         </Popover>
       )}
