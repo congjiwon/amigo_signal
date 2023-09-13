@@ -19,9 +19,13 @@ const PartnerSelect = ({ setIsOpen, setLocation, setDate }: PartnerSelectProps) 
   return (
     <St.FilterWriteBox>
       <St.SelectsBox>
-        <RecruitmentDropDown setIsOpen={setIsOpen} />
-        <LocationDropDown setLocation={setLocation} />
-        <PartnerCalendar setPartnerDates={setDate} />
+        <St.CustomDropBox>
+          <RecruitmentDropDown setIsOpen={setIsOpen} />
+        </St.CustomDropBox>
+        <div>
+          <LocationDropDown setLocation={setLocation} />
+          <PartnerCalendar setPartnerDates={setDate} />
+        </div>
       </St.SelectsBox>
       <Button styleType={BtnStyleType.BTN_DARK} onClick={() => navigate('/partner/write')}>
         글쓰기

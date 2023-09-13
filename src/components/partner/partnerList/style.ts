@@ -1,8 +1,15 @@
 import styled from 'styled-components';
+import { RecruitmentDropDown } from '../../common/dropDown/DropDown';
 
 type StatusProps = {
   $isOpen: boolean;
 };
+
+export const CustomDropBox = styled.div`
+  @media screen and (max-width: 690px) {
+    padding-right: 92px;
+  }
+`;
 
 export const NoDataImgBox = styled.div`
   height: 588px;
@@ -54,12 +61,12 @@ export const FilterWriteBox = styled.div`
     padding: 0 16px;
   }
 
-  @media screen and (max-width: 650px) {
-    flex-direction: column;
+  @media screen and (max-width: 690px) {
+    flex-direction: column-reverse;
     align-items: flex-start;
     padding: 0 20px;
     gap: 12px;
-
+    /* height: 100px; */
     & button:last-of-type {
       align-self: flex-end;
     }
@@ -69,10 +76,18 @@ export const FilterWriteBox = styled.div`
 export const SelectsBox = styled.div`
   display: flex;
 
-  @media screen and (max-width: 650px) {
-    align-items: flex-start;
+  @media screen and (max-width: 690px) {
+    position: relative;
+    top: -48px;
     flex-direction: column;
-    gap: 12px;
+    align-items: flex-end;
+    gap: 15px;
+    width: 100%;
+
+    & > div {
+      display: flex;
+      gap: 12px;
+    }
 
     & :where(.css-dev-only-do-not-override-byeoj0).ant-space-vertical {
       margin-left: 0 !important;
@@ -106,6 +121,11 @@ export const PostCard = styled.div`
   position: relative;
   border-radius: 30px;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+
+  @media screen and (max-width: 600px) {
+    width: 335px;
+    height: 216px;
+  }
 `;
 
 export const LocationBox = styled.div`
@@ -239,17 +259,20 @@ export const Footer = styled.div`
   margin-left: 20px;
   border-top: 1px solid #e3e9f3;
   justify-content: space-between;
-  margin-right: 20px;
   align-items: center;
+  margin-right: 20px;
   font-size: 0.8rem;
+
+  @media screen and (max-width: 600px) {
+    width: 295px;
+    height: 49px;
+  }
 `;
 
 export const UserProfile = styled.div`
   display: flex;
   align-items: center;
   gap: 7px;
-  /* marg */
-  /* margin-left: 20px; */
   p {
     margin-left: 2px;
   }

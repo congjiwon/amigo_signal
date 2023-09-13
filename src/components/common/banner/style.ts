@@ -13,6 +13,10 @@ export const ImageWrapper = styled.div<bannerProps>`
   overflow: hidden;
   margin-bottom: 100px;
   background: ${(props) => (props.$banner === 'partner' ? 'linear-gradient(0deg, #d9daee 0%, rgba(227, 233, 243, 0) 100%)' : '#121621')};
+
+  @media screen and (max-width: 690px) {
+    margin-bottom: 24px;
+  }
 `;
 
 export const PartnerMainImage = styled.img`
