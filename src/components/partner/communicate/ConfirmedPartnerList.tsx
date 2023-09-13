@@ -22,14 +22,7 @@ const ConfirmedPartnerList = ({ postId }: ConfirmedPartnerListProps) => {
   return (
     <St.ConfirmedApplicantList $isExist={confirmedList.length !== 0}>
       <h1>이 사람들과 같이 여행가요:)</h1>
-      {confirmedList.length === 0 && (
-        <St.AlertEmpty>
-          아직 함께하는 동행이 없습니다.
-          <br />
-          <br />
-          함께해주세요!
-        </St.AlertEmpty>
-      )}
+      {confirmedList.length === 0 && <St.AlertEmpty>아직 함께하는 동행이 없습니다.</St.AlertEmpty>}
       <br />
       <div>
         {confirmedList.map((item) => {

@@ -72,14 +72,17 @@ const ApplyWithInfo = ({ postId, writerId, applicantId, setIsApply }: ApplyWithI
     }
   };
 
+  const buttonStyleType = text.trim() === '' ? BtnStyleType.BTN_NOTEXTAPPLY : BtnStyleType.BTN_APPLY;
+
   return (
     <>
       <St.ModalTitle>동행 참여 신청하기</St.ModalTitle>
-      <Input type="textarea" inputStyleType="apply" border={true} placeholder="간단한 자기소개를 작성해주세요." value={text} onChange={handleText} />
-
-      <St.TextCount>{text.length}/300 자</St.TextCount>
+      <St.InputBox>
+        <Input type="textarea" inputStyleType="apply" border={true} placeholder="간단한 자기소개를 작성해주세요." value={text} onChange={handleText} />
+        <St.TextCount>{text.length}/300 자</St.TextCount>
+      </St.InputBox>
       <St.SubmitApply>
-        <Button type="submit" styleType={BtnStyleType.BTN_APPLY} onClick={handleSubmit}>
+        <Button type="submit" styleType={buttonStyleType} onClick={handleSubmit}>
           신청
         </Button>
       </St.SubmitApply>

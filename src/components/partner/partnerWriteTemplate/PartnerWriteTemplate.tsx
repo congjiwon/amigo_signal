@@ -53,7 +53,7 @@ function PartnerWriteTemplate() {
 
   const mutation = useMutation(insertPost, {
     onSuccess: async () => {
-      queryClient.invalidateQueries(['partnerPost']);
+      await queryClient.invalidateQueries(['partnerPost']);
       navigate('/partner');
     },
     onError: () => {
@@ -191,7 +191,7 @@ function PartnerWriteTemplate() {
           <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={() => navigate('/partner')}>
             취소
           </Button>
-          <Button type="button" disabled={disable} styleType={BtnStyleType.BTN_DARK} onClick={handleWriteClick}>
+          <Button type="submit" disabled={disable} styleType={BtnStyleType.BTN_DARK} onClick={handleWriteClick}>
             작성완료
           </Button>
         </St.ButtonBox>

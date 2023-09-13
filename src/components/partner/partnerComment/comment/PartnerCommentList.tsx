@@ -134,66 +134,64 @@ function PartnerCommentList({ allComments, allReCommentsData, comment, isLoginUs
     setReContent(event.target.value.replace(/ /g, '\u00A0'));
   };
 
-  {
-    return (
-      <St.PartnerCommentsContainerBox>
-        <St.MoveButtonArea>
-          <TopButton />
-        </St.MoveButtonArea>
-        <St.PartnerCommentsBox>
-          {users?.map((user) => {
-            if (user.id === comment?.writerId) {
-              const isPostWriter = comment.writerId === postWriterId;
-              return <CommentTopBox user={user} storageUrl={storageUrl} isPostWriter={isPostWriter} comment={comment} />;
-            }
-          })}
-          {logInUserId ? (
-            <St.CommentBottomBox>
-              <DateButtonBox comment={comment} isLoginUser={isLoginUser} handleIsOpenBtn={handleIsOpenBtn} />
-              {isUpdate && <CancelSubmitBox handleSubmitBtn={handleSubmitBtn} comment={updateComment} handleComment={handleUpdateComment} handleCancelBtn={() => handleCancelBtn('updateCancel')} />}
-            </St.CommentBottomBox>
-          ) : (
-            <St.CommentBottomBox>
-              <St.DateButtonBox>
-                <St.DateBox>
-                  <St.DateParagraph>{comment?.date.substring(0, 10) + ' ' + comment?.date.substring(11, 16)}</St.DateParagraph>
-                </St.DateBox>
-              </St.DateButtonBox>
-            </St.CommentBottomBox>
-          )}
-          {isReComment && (
-            <St.CommentBottomBox>
-              <CancelSubmitBox handleSubmitBtn={handleReCommentSubmit} comment={reContent} handleComment={handlePostReContent} handleCancelBtn={() => handleCancelBtn('reCommentCancel')} />
-            </St.CommentBottomBox>
-          )}
-        </St.PartnerCommentsBox>
-        <St.PartnerReCommentsBox>
-          {allReCommentsData?.map((reComment) => {
-            if (reComment.commentId === comment?.id) {
-              const isPostWriter = reComment.writerId === postWriterId;
-              const isLoginCommentUser = logInUserId === reComment.writerId;
-              return (
-                <PartnerReComments
-                  key={reComment.id}
-                  comment={comment}
-                  storageUrl={storageUrl}
-                  reCommentId={reCommentId}
-                  reComment={reComment}
-                  handleCancelBtn={handleCancelBtn}
-                  handleIsOpenBtn={handleIsOpenBtn}
-                  handleReSubmitBtn={handleReSubmitBtn}
-                  isPostWriter={isPostWriter}
-                  isLoginCommentUser={isLoginCommentUser}
-                  updateReComment={updateReComment}
-                  setUpdateReComment={setUpdateReComment}
-                />
-              );
-            }
-          })}
-        </St.PartnerReCommentsBox>
-      </St.PartnerCommentsContainerBox>
-    );
-  }
+  return (
+    <St.PartnerCommentsContainerBox>
+      <St.MoveButtonArea>
+        <TopButton />
+      </St.MoveButtonArea>
+      <St.PartnerCommentsBox>
+        {users?.map((user) => {
+          if (user.id === comment?.writerId) {
+            const isPostWriter = comment.writerId === postWriterId;
+            return <CommentTopBox user={user} storageUrl={storageUrl} isPostWriter={isPostWriter} comment={comment} />;
+          }
+        })}
+        {logInUserId ? (
+          <St.CommentBottomBox>
+            <DateButtonBox comment={comment} isLoginUser={isLoginUser} handleIsOpenBtn={handleIsOpenBtn} />
+            {isUpdate && <CancelSubmitBox handleSubmitBtn={handleSubmitBtn} comment={updateComment} handleComment={handleUpdateComment} handleCancelBtn={() => handleCancelBtn('updateCancel')} />}
+          </St.CommentBottomBox>
+        ) : (
+          <St.CommentBottomBox>
+            <St.DateButtonBox>
+              <St.DateBox>
+                <St.DateParagraph>{comment?.date.substring(0, 10) + ' ' + comment?.date.substring(11, 16)}</St.DateParagraph>
+              </St.DateBox>
+            </St.DateButtonBox>
+          </St.CommentBottomBox>
+        )}
+        {isReComment && (
+          <St.CommentBottomBox>
+            <CancelSubmitBox handleSubmitBtn={handleReCommentSubmit} comment={reContent} handleComment={handlePostReContent} handleCancelBtn={() => handleCancelBtn('reCommentCancel')} />
+          </St.CommentBottomBox>
+        )}
+      </St.PartnerCommentsBox>
+      <St.PartnerReCommentsBox>
+        {allReCommentsData?.map((reComment) => {
+          if (reComment.commentId === comment?.id) {
+            const isPostWriter = reComment.writerId === postWriterId;
+            const isLoginCommentUser = logInUserId === reComment.writerId;
+            return (
+              <PartnerReComments
+                key={reComment.id}
+                comment={comment}
+                storageUrl={storageUrl}
+                reCommentId={reCommentId}
+                reComment={reComment}
+                handleCancelBtn={handleCancelBtn}
+                handleIsOpenBtn={handleIsOpenBtn}
+                handleReSubmitBtn={handleReSubmitBtn}
+                isPostWriter={isPostWriter}
+                isLoginCommentUser={isLoginCommentUser}
+                updateReComment={updateReComment}
+                setUpdateReComment={setUpdateReComment}
+              />
+            );
+          }
+        })}
+      </St.PartnerReCommentsBox>
+    </St.PartnerCommentsContainerBox>
+  );
 }
 
 export default PartnerCommentList;

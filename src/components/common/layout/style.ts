@@ -9,5 +9,5 @@ export const LayoutContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   min-height: calc(100vh - 285px);
-  padding: 70px 20px 0 20px;
+  padding: 70px 0px 0 0px;
 `;

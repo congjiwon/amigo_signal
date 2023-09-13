@@ -256,7 +256,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
           <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={() => navigate(`partner/detail/${postId}`)}>
             취소
           </Button>
-          <Button type="button" disabled={disable} styleType={BtnStyleType.BTN_DARK} onClick={handleUpdateClick}>
+          <Button type="submit" disabled={disable} styleType={BtnStyleType.BTN_DARK} onClick={handleUpdateClick}>
             수정완료
           </Button>
         </St.ButtonBox>

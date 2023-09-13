@@ -37,7 +37,7 @@ const PartnerComments = () => {
   const commentsCount = (filteredComments?.length || 0) + reCommentCount;
 
   return (
-    <div>
+    <St.CommentContainer>
       <St.CommentLengthBox>
         <St.CommentLengthParagraph>댓글 {commentsCount}개</St.CommentLengthParagraph>
       </St.CommentLengthBox>
@@ -46,7 +46,7 @@ const PartnerComments = () => {
         const isLoginUser = localStorage.getItem('authId') === comment.writerId;
         return <PartnerCommentList key={comment.id} allComments={allComments} comment={comment} isLoginUser={isLoginUser!} users={users} allReCommentsData={reCommentsData} />;
       })}
-    </div>
+    </St.CommentContainer>
   );
 };
 

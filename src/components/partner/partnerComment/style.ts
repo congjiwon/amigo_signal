@@ -6,6 +6,18 @@ export const MoveButtonArea = styled.div`
   bottom: 40px;
 `;
 
+export const CommentContainer = styled.div`
+  @media (max-width: 1256px) {
+    padding: 0 50px 0 50px;
+  }
+  @media (max-width: 800px) {
+    padding: 0 20px;
+  }
+  @media (max-width: 375px) {
+    padding: 24px 20px 72px 20px;
+  }
+`;
+
 export const CommentLengthBox = styled.div`
   height: 21px;
 `;
@@ -18,28 +30,69 @@ export const CommentLengthParagraph = styled.p`
 
 export const Form = styled.form`
   display: flex;
-  justify-content: space-between;
-
+  gap: 24px;
+  // justify-content: space-between;
   align-items: center;
   margin-bottom: 32px;
+  @media (max-width: 375px) {
+    gap: 16px;
+    margin-bottom: 25px;
+  }
 `;
 
 export const CommentTextarea = styled.textarea`
   resize: none;
-  width: 1057px;
+  // width: 88.08%;
+  flex: 1 1 auto;
   height: 20px;
   padding: 14px 20px 14px 20px;
   border-radius: 15px;
   border: 1px solid var(--light-gray, #e8ebee);
+  // @media (max-width: 1256px) {
+  //   width: 83%;
+  // }
+  @media (max-width: 800px) {
+    width: 77%;
+  }
+  @media (max-width: 500px) {
+    width: 70%;
+  }
+  @media (max-width: 407px) {
+    width: 65%;
+  }
+  @media (max-width: 375px) {
+    width: 231px;
+    height: 20px;
+    padding: 10px 12px;
+    color: var(--dark-gray, #3f4656);
+    border-radius: 8px;
+    border: 1px solid var(--light-gray, #e3e9f3);
+  }
 `;
 
 export const CommentButton = styled.button`
-  width: 78px;
+  width: 6.5%;
   height: 48px;
   background-color: white;
   color: black;
   border-radius: 15px;
   cursor: pointer;
+  // @media (max-width: 1256px) {
+  //   width: 7%;
+  // }
+  @media (max-width: 800px) {
+    width: 10%;
+  }
+  @media (max-width: 500px) {
+    font-size: 12px;
+  }
+
+  @media (max-width: 375px) {
+    width: 64px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid #000;
+  }
 `;
 
 export const PartnerCommentsContainerBox = styled.div``;
@@ -79,8 +132,14 @@ export const CommentBox = styled.div`
 `;
 
 export const CommentParagraph = styled.p`
-  white-space: pre;
+  white-space: pre-line;
   line-height: 130%;
+  @media (max-width: 375px) {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%;
+  }
 `;
 
 export const CommentBottomBox = styled.div`
@@ -89,10 +148,13 @@ export const CommentBottomBox = styled.div`
 `;
 
 export const DateButtonBox = styled.div`
-  align-items: center;
+  align-items: baseLine;
   display: flex;
   margin-left: 52px;
   margin-bottom: 24px;
+  @media (max-width: 375px) {
+    margin-bottom: 0px;
+  }
 `;
 
 export const ButtonBox = styled.div`
@@ -101,7 +163,10 @@ export const ButtonBox = styled.div`
 `;
 
 export const DateBox = styled.div`
-  margin-right: 12px;
+  margin-right: 6px;
+  @media (max-width: 375px) {
+    margin-right: 6px;
+  }
 `;
 
 export const DateParagraph = styled.p`
@@ -117,16 +182,35 @@ export const Bar = styled.p`
 
 export const InputBox = styled.div`
   position: relative;
+  padding-right: 94px;
+  padding-left: 52px;
 `;
 
 export const Textarea = styled.textarea`
   resize: none;
-  width: 1005px;
+  // width: 83.75%;
+  width: 100%;
   height: 43px;
   padding: 14px 20px 43px 20px;
   margin-left: 52px;
   border-radius: 15px;
   border: 1px solid var(--light-gray, #e8ebee);
+  // @media (max-width: 1256px) {
+  //   width: 78%;
+  // }
+  // @media (max-width: 800px) {
+  //   width: 70%;
+  // }
+  @media (max-width: 500px) {
+    width: 65%;
+  }
+  @media (max-width: 375px) {
+    width: 265px;
+    height: 43px;
+    margin-left: 43px;
+    padding: 10px 12px 33px 12px;
+    white-space: pre-line;
+  }
 `;
 
 export const RecommentTextarea = styled.textarea`
@@ -137,6 +221,21 @@ export const RecommentTextarea = styled.textarea`
   margin-left: 52px;
   border-radius: 15px;
   border: 1px solid var(--light-gray, #e8ebee);
+  @media (max-width: 1256px) {
+    width: 79.53%;
+  }
+  @media (max-width: 800px) {
+    width: 70%;
+  }
+  // @media screen and (min-width: 375px) and (max-width: 1256px) {
+  //   width: 100%;
+  // }
+  @media (max-width: 375px) {
+    width: 256px;
+    height: 43px;
+    margin-left: 0px;
+    padding: 10px 12px 33px 12px;
+  }
 `;
 
 export const CancelSubmitButtonBox = styled.div`
@@ -145,6 +244,22 @@ export const CancelSubmitButtonBox = styled.div`
   right: 109px;
   display: flex;
   align-items: center;
+  @media (max-width: 1256px) {
+    right: 14.1%;
+  }
+  @media (max-width: 800px) {
+    right: 18%;
+  }
+  @media (max-width: 500px) {
+    right: 11%;
+  }
+  @media (max-width: 375px) {
+    gap: 4px;
+    color: var(--dark-gray, #3f4656);
+    bottom: 12px;
+    right: 6px;
+    font-size: 14px;
+  }
 `;
 
 export const WriterParagraph = styled.p`
