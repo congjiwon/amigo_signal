@@ -20,6 +20,10 @@ export const ApplyDiv = styled.div`
 
 export const CommunicationDiv = styled.div`
   width: 282px;
+
+  @media (max-width: 1256px) {
+    width: 100%;
+  }
 `;
 
 export const NewApplicantAlert = styled.p`
@@ -35,18 +39,30 @@ export const ModalTitle = styled.h1`
   font-weight: bold;
 `;
 
+export const InputBox = styled.div`
+  display: flex;
+  position: relative;
+  /* min-height: 232px; */
+`;
+
 export const TextCount = styled.span`
   position: absolute;
-  top: 281px;
+  top: 180px;
   right: 60px;
   font-size: 14px;
   color: #3f4656;
+  font-weight: 400;
+  line-height: 150%;
+  @media screen and (max-width: 664px) {
+    top: 280px;
+  }
 `;
 
 export const SubmitApply = styled.div`
   display: flex;
   justify-content: flex-end;
-  margin-right: 45px;
+  margin-right: 40px;
+  margin-top: 40px;
 `;
 
 export const EmptyApplicant = styled.p`
@@ -200,6 +216,10 @@ export const ConfirmedApplicantList = styled.div<ConfirmedApplicantListProps>`
     margin-top: 40px;
     margin-left: 24px;
     font-weight: 600;
+  }
+
+  @media (max-width: 1256px) {
+    width: 100%;
   }
 `;
 

@@ -12,12 +12,9 @@ export const PartnerDetailMain = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 100px 0px 0px 0px;
-  /* padding: 0 20px 0 20px; */
 
   @media (max-width: 1256px) {
-    flex-direction: column;
-    align-items: center;
-    gap: 100px;
+    display: block;
     padding: 0 50px 0 50px;
   }
 
@@ -39,9 +36,6 @@ export const PartnerDetailMain = styled.div`
 export const PartnerDetailInfoSection = styled.section`
   flex-basis: 791px;
   flex-shrink: 1;
-  @media (max-width: 1090px) {
-    flex-grow: 1;
-  }
 `;
 
 export const CommunicateDiv = styled.section``;
@@ -51,9 +45,14 @@ export const Status = styled.div`
   gap: 10px;
   margin-top: 160px;
   margin-bottom: 24px;
-  padding: 0 20px 0 20px;
   @media (max-width: 1256px) {
-    padding: 0 100px 0 100px;
+    padding: 0 50px 0 50px;
+  }
+  @media (max-width: 800px) {
+    padding: 0 20px 0 20px;
+  }
+  @media (max-width: 500px) {
+    padding: 0 10px 0 10px;
   }
 `;
 

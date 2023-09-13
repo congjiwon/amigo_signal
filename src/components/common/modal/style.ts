@@ -59,17 +59,36 @@ export const Inner = styled.div<InnerProps>`
       case 'medium':
         return `
         width: 41.25%;
-        height: 42.41%;
+        height: auto;
         border-radius: 30px;
 
-        @media screen and (max-width: 1100px) {
+        @media screen and (max-width: 1256px) {
+          width: 45%;
+        }
+        @media screen and (max-width: 1156px) {
+          width: 50%;
+        }
+        @media screen and (max-width: 1024px) {
+          width: 55%;
+        }
+        @media screen and (max-width: 914px) {
           width: 60%;
         }
-
-        @media screen and (max-width: 700px) {
+        @media screen and (max-width: 807px) {
+          width: 65%;
+        }
+        @media screen and (max-width: 733px) {
+          width: 70%;
+        }
+        @media screen and (max-width: 664px) {
+          width: 75%;
+        }
+        @media screen and (max-width: 525px) {
           width: 80%;
         }
-        
+        @media screen and (max-width: 390px) {
+          width: 90%;
+        }
         `;
       case 'small':
         return `

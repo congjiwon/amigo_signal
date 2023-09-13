@@ -7,9 +7,11 @@ export const MoveButtonArea = styled.div`
 `;
 
 export const CommentContainer = styled.div`
-  // padding: 0 20px 0 20px;
   @media (max-width: 1256px) {
     padding: 0 50px 0 50px;
+  }
+  @media (max-width: 800px) {
+    padding: 0 20px;
   }
   @media (max-width: 375px) {
     padding: 24px 20px 72px 20px;
@@ -28,23 +30,35 @@ export const CommentLengthParagraph = styled.p`
 
 export const Form = styled.form`
   display: flex;
-  justify-content: space-between;
+  gap: 24px;
+  // justify-content: space-between;
   align-items: center;
   margin-bottom: 32px;
   @media (max-width: 375px) {
+    gap: 16px;
     margin-bottom: 25px;
   }
 `;
 
 export const CommentTextarea = styled.textarea`
   resize: none;
-  width: 1057px;
+  // width: 88.08%;
+  flex: 1 1 auto;
   height: 20px;
   padding: 14px 20px 14px 20px;
   border-radius: 15px;
   border: 1px solid var(--light-gray, #e8ebee);
-  @media (max-width: 1256px) {
-    width: 857px;
+  // @media (max-width: 1256px) {
+  //   width: 83%;
+  // }
+  @media (max-width: 800px) {
+    width: 77%;
+  }
+  @media (max-width: 500px) {
+    width: 70%;
+  }
+  @media (max-width: 407px) {
+    width: 65%;
   }
   @media (max-width: 375px) {
     width: 231px;
@@ -57,12 +71,22 @@ export const CommentTextarea = styled.textarea`
 `;
 
 export const CommentButton = styled.button`
-  width: 78px;
+  width: 6.5%;
   height: 48px;
   background-color: white;
   color: black;
   border-radius: 15px;
   cursor: pointer;
+  // @media (max-width: 1256px) {
+  //   width: 7%;
+  // }
+  @media (max-width: 800px) {
+    width: 10%;
+  }
+  @media (max-width: 500px) {
+    font-size: 12px;
+  }
+
   @media (max-width: 375px) {
     width: 64px;
     height: 40px;
@@ -139,7 +163,7 @@ export const ButtonBox = styled.div`
 `;
 
 export const DateBox = styled.div`
-  margin-right: 12px;
+  margin-right: 6px;
   @media (max-width: 375px) {
     margin-right: 6px;
   }
@@ -158,18 +182,27 @@ export const Bar = styled.p`
 
 export const InputBox = styled.div`
   position: relative;
+  padding-right: 94px;
+  padding-left: 52px;
 `;
 
 export const Textarea = styled.textarea`
   resize: none;
-  width: 1005px;
+  // width: 83.75%;
+  width: 100%;
   height: 43px;
   padding: 14px 20px 43px 20px;
   margin-left: 52px;
   border-radius: 15px;
   border: 1px solid var(--light-gray, #e8ebee);
-  @media (max-width: 1256px) {
-    width: 805px;
+  // @media (max-width: 1256px) {
+  //   width: 78%;
+  // }
+  // @media (max-width: 800px) {
+  //   width: 70%;
+  // }
+  @media (max-width: 500px) {
+    width: 65%;
   }
   @media (max-width: 375px) {
     width: 265px;
@@ -191,6 +224,9 @@ export const RecommentTextarea = styled.textarea`
   @media (max-width: 1256px) {
     width: 79.53%;
   }
+  @media (max-width: 800px) {
+    width: 70%;
+  }
   // @media screen and (min-width: 375px) and (max-width: 1256px) {
   //   width: 100%;
   // }
@@ -209,7 +245,13 @@ export const CancelSubmitButtonBox = styled.div`
   display: flex;
   align-items: center;
   @media (max-width: 1256px) {
-    right: 10.1%;
+    right: 14.1%;
+  }
+  @media (max-width: 800px) {
+    right: 18%;
+  }
+  @media (max-width: 500px) {
+    right: 11%;
   }
   @media (max-width: 375px) {
     gap: 4px;

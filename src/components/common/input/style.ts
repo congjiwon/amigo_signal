@@ -48,14 +48,16 @@ const baseStyles = css<BaseStylesProps>`
         return css`
           width: 84.46%;
           height: 32.96%;
-          margin: 0px auto;
+          margin: 0px 40px;
           margin-top: 26px;
-          margin-bottom: 24px;
-          padding: 20px 23px 61px 20px;
+          padding: 20px 23px 131px 20px;
           border-radius: 20px;
           resize: none;
           &::-webkit-scrollbar {
             display: none;
+          }
+          @media screen and (max-width: 664px) {
+            padding: 20px 23px 233px 20px;
           }
         `;
     }
