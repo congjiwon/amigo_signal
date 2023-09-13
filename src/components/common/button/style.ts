@@ -87,6 +87,11 @@ export const Button = styled.button<{ $styleType: BtnStyleType; disabled: boolea
             ${btnCommonStyles}
             background: #81858A;
           `;
+        case BtnStyleType.BTN_APPLY:
+          return css`
+            ${btnCommonStyles}
+            background: #99A3BA;
+          `;
         default:
           return ``;
       }

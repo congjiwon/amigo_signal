@@ -79,7 +79,7 @@ const ApplyWithInfo = ({ postId, writerId, applicantId, setIsApply }: ApplyWithI
 
       <St.TextCount>{text.length}/300 자</St.TextCount>
       <St.SubmitApply>
-        <Button type="submit" styleType={BtnStyleType.BTN_DARK} onClick={handleSubmit}>
+        <Button type="submit" styleType={BtnStyleType.BTN_APPLY} onClick={handleSubmit}>
           신청
         </Button>
       </St.SubmitApply>

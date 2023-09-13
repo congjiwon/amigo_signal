@@ -74,22 +74,30 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
       navigate('/login');
     }
 
-    await queryClient.invalidateQueries(['likes', post.id]);
-    setLike(!like);
-    const addLike = { postId: post.id!, userId: logInUserId! };
-    await postLike(addLike);
-    await countLike(++post.likeCount, post.id!);
+    try {
+      await queryClient.invalidateQueries(['likes', post.id]);
+      const addLike = { postId: post.id!, userId: logInUserId! };
+      await postLike(addLike);
+
+      post.likeCount += 1;
+      setLike(true);
+      await countLike(post.likeCount, post.id!);
+    } catch (error) {}
   }, 300);
 
   const handleEmptyHeart = _.debounce(async (event: React.MouseEvent<SVGElement, MouseEvent>) => {
-    await queryClient.invalidateQueries(['likes', post.id]);
-    setLike(!like);
-    await deleteLike(post.id!, logInUserId!);
-    await countLike(--post.likeCount, post.id!);
+    try {
+      await queryClient.invalidateQueries(['likes', post.id]);
+      await deleteLike(post.id!, logInUserId!);
+
+      post.likeCount -= 1;
+      setLike(false);
+      await countLike(post.likeCount, post.id!);
+    } catch (error) {}
   }, 300);
 
   return (
-    <div>
+    <St.PostCardBox>
       <Link to={`detail/${post.id}`}>
         <St.PostCard>
           <St.DateLikeBox>
@@ -112,9 +120,10 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
       </Link>
 
       <St.LikeBox>
-        <St.LikeButton>{like ? <RiHeartFill onClick={(event) => handleEmptyHeart(event)} style={St.Heart} /> : <RiHeartLine onClick={(event) => handleFillHeart(event)} style={St.Heart} />}</St.LikeButton>
+        <St.LikeButton>{like ? <RiHeartFill onClick={(event) => handleEmptyHeart(event)} style={St.HeartFill} /> : <RiHeartLine onClick={(event) => handleFillHeart(event)} style={St.Heart} />}</St.LikeButton>
+        <St.HeartCount>{post.likeCount}</St.HeartCount>
       </St.LikeBox>
-    </div>
+    </St.PostCardBox>
   );
 }
 

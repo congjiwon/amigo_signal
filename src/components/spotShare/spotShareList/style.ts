@@ -13,7 +13,7 @@ export const NoDataImgBox = styled.div`
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
-    line-height: 150%; /* 24px */
+    line-height: 150%;
   }
 `;
 
@@ -77,6 +77,10 @@ export const Grid = styled.div`
   }
 `;
 
+export const PostCardBox = styled.div`
+  position: relative;
+`;
+
 export const PostCard = styled.div`
   width: 282px;
   height: 282px;
@@ -96,15 +100,16 @@ export const CalendarImage = styled.img`
 `;
 
 export const LikeBox = styled.div`
-  position: relative;
-  bottom: 264px;
-  right: -230px;
+  position: absolute;
+  top: 20px;
+  right: 21px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 export const LikeButton = styled.button`
-  /* padding: 20px; */
-  position: absolute;
-
+  padding: 0;
   background-color: transparent;
   border: none;
   &:hover {
@@ -118,10 +123,19 @@ export const LikeButton = styled.button`
 `;
 
 export const Heart = {
-  height: '24px',
-  width: '24px',
+  fontSize: '18px',
+};
+
+export const HeartFill = {
+  fontSize: '18px',
   color: '#670FDF',
 };
+
+export const HeartCount = styled.span`
+  color: #121621;
+  font-size: 10px;
+  font-weight: 400;
+`;
 
 export const DefaultImg = styled.img`
   width: 282px;
