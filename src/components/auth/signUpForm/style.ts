@@ -1,13 +1,16 @@
 import { styled } from 'styled-components';
 
 type StyledStatusProps = {
-  $validationStatusColor: boolean;
+  $validationStatusColor?: boolean;
+};
+type StyledValidationProps = {
+  $validationStatus?: boolean;
 };
 
 export const SignUpSection = styled.section`
   width: 100%;
   padding: 90px 20px 100px;
-  background-color: #e8ebee;
+  background-color: #e3e9f3;
   box-sizing: border-box;
 `;
 
@@ -31,6 +34,10 @@ export const SignUpInputsBox = styled.div`
   background-color: #fff;
   border-radius: 10px;
   box-sizing: border-box;
+
+  @media screen and (max-width: 400px) {
+    padding: 64px 20px 56px 20px;
+  }
 `;
 
 export const FormRow = styled.div`
@@ -44,25 +51,42 @@ export const FormRow = styled.div`
   }
 `;
 
+export const Input = styled.input<StyledValidationProps>`
+  width: 100%;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  border: 1px solid
+    ${(props) => {
+      const { $validationStatus } = props;
+      if ($validationStatus === undefined) return '#E3E9F3';
+      if ($validationStatus === true) return '#121621';
+      if ($validationStatus === false) return '#f00';
+    }};
+
+  &:focus {
+    outline: none;
+  }
+`;
+
 export const ValidationMsgBox = styled.div<StyledStatusProps>`
-  height: 22px;
-  margin-top: 8px;
+  height: 21px;
+  margin-top: 4px;
   font-size: 14px;
-  color: ${(props) => (props.$validationStatusColor ? 'green' : 'red')};
+  line-height: 1.5;
+  color: ${(props) => !props.$validationStatusColor && '#f00'};
 `;
 
 export const GenderRow = styled.div`
-  margin-bottom: 38px;
-
   & .gender-inputs {
     display: flex;
     gap: 16px;
 
     & > div {
       flex: 1 0 auto;
-      height: 36px;
-      border: 1px solid #e8ebee;
-      border-radius: 10px;
     }
   }
 
@@ -79,16 +103,17 @@ export const GenderRow = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    height: 36px;
+    border: 1px solid #e8ebee;
     font-size: 14px;
     color: #adb1b8;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
   }
 
   & input:checked + label {
-    color: #fff;
-    background-color: #000;
+    color: #121621;
+    border-color: #121621;
   }
 `;
 
@@ -103,13 +128,13 @@ export const BtnSignUpBox = styled.div`
     font-size: 16px;
     font-weight: 700;
     color: #fff;
-    background-color: #000;
+    background-color: #643bdc;
     border: 0;
     border-radius: 10px;
     cursor: pointer;
 
     &:disabled {
-      background-color: #adb1b8;
+      background-color: #99a3ba;
       cursor: not-allowed;
     }
   }
