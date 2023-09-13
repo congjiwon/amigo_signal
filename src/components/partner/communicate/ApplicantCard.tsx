@@ -92,15 +92,17 @@ const ApplicantCard = ({ data, postId, onClick, isSelected, removeConfirmedAppli
             {classifyingAge(data.users?.birthday!)} | {data.users?.gender}
           </St.ApplicantAgeGender>
         </St.ApplicantInfo>
-        <St.ButtonDiv>
-          <St.AcceptButton onClick={handleAccept} $isAccepted={isAccepted}>
-            수락
-          </St.AcceptButton>
-          <St.RejectButton onClick={handleReject} $isAccepted={isAccepted}>
-            거절
-          </St.RejectButton>
-        </St.ButtonDiv>
       </St.ApplicantProfile>
+
+      <St.ButtonDiv>
+        <St.AcceptButton onClick={handleAccept} $isAccepted={isAccepted}>
+          수락
+        </St.AcceptButton>
+        <St.RejectButton onClick={handleReject} $isAccepted={isAccepted}>
+          거절
+        </St.RejectButton>
+      </St.ButtonDiv>
+
       <St.ApplicantContent>{data.content}</St.ApplicantContent>
     </St.ApplicantCard>
   );
