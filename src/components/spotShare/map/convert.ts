@@ -51,6 +51,7 @@ export const countryMapping = {
   France: '프랑스',
   Italy: '이탈리아',
   Türkiye: '터키',
+  튀르키예: '터키',
   Spain: '스페인',
   UK: '영국',
   Austria: '오스트리아',
