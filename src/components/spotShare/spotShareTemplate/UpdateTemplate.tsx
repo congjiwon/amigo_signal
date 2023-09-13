@@ -29,6 +29,7 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
   const [address, setAddress] = useState<string | null>('');
   const [postImageUrl, setPostImageUrl] = useState<string[]>([]);
   const [like, setLike] = useState<number>(0);
+  const [writerId, setWriterId] = useState<string>('');
   const [disable, setDisable] = useState(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -37,7 +38,12 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
     if (!authId) {
       navigate('/login');
     }
-  }, [navigate, authId]);
+    if (writerId.length > 0) {
+      if (authId !== writerId) {
+        navigate('/partner');
+      }
+    }
+  }, [navigate, authId, writerId]);
 
   useEffect(() => {
     const fetchPostData = async () => {
@@ -52,6 +58,7 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
         setAddress(spotSharePost.address);
         setPostImageUrl(spotSharePost.postImageUrl);
         setLike(spotSharePost.likeCount);
+        setWriterId(spotSharePost.writerId);
       }
     };
     fetchPostData();

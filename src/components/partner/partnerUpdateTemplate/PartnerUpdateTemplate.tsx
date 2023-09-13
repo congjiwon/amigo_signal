@@ -27,7 +27,6 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
   const [interestTagList, setInterestTagList] = useState<Tables<'interest'>[]>([]);
   const [interestUrl, setInterestUrl] = useState<string[]>([]);
   const [interestDiscription, setInterestDiscription] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
   const [writerId, setWriterId] = useState<string>('');
   const [disable, setDisable] = useState(false);
   const navigate = useNavigate();
@@ -92,7 +91,12 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
     if (!authId) {
       navigate('/login');
     }
-  }, [navigate, authId]);
+    if (writerId.length > 0) {
+      if (authId !== writerId) {
+        navigate('/partner');
+      }
+    }
+  }, [navigate, authId, writerId]);
 
   const handleInterestClick = (imageUrl: string, discription: string) => {
     if (interestUrl.includes(imageUrl)) {
