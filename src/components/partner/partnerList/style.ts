@@ -66,7 +66,7 @@ export const FilterWriteBox = styled.div`
     align-items: flex-start;
     padding: 0 20px;
     gap: 12px;
-    /* height: 100px; */
+    /* height: 79px; */
     & button:last-of-type {
       align-self: flex-end;
     }
@@ -83,6 +83,7 @@ export const SelectsBox = styled.div`
     align-items: flex-end;
     gap: 15px;
     width: 100%;
+    margin-bottom: -60px;
 
     & > div {
       display: flex;
