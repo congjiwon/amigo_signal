@@ -6,6 +6,13 @@ export const MoveButtonArea = styled.div`
   bottom: 40px;
 `;
 
+export const CommentContainer = styled.div`
+  padding: 0 20px 0 20px;
+  @media (max-width: 1256px) {
+    padding: 0 100px 0 100px;
+  }
+`;
+
 export const CommentLengthBox = styled.div`
   height: 21px;
 `;
