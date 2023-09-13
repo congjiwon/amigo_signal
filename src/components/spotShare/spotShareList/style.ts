@@ -6,7 +6,6 @@ export const NoDataImgBox = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   p {
     margin-top: 24px;
     color: var(--black, #121621);
@@ -14,7 +13,7 @@ export const NoDataImgBox = styled.div`
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
-    line-height: 150%; /* 24px */
+    line-height: 150%;
   }
 `;
 
@@ -23,6 +22,7 @@ export const MoveButtonArea = styled.div`
   right: 40px;
   bottom: 40px;
 `;
+
 export const SpotShareLayout = styled.div`
   display: flex;
   flex-direction: column;
@@ -31,22 +31,20 @@ export const SpotShareLayout = styled.div`
   max-width: 1200px;
   margin: 0 auto;
 `;
-export const filterBox = styled.div`
+
+export const FilterBox = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-
   @media screen and (max-width: 1200px) {
     padding: 0 16px;
   }
-
   @media screen and (max-width: 650px) {
     flex-direction: column;
     align-items: flex-start;
     padding: 0 20px;
     gap: 12px;
-
     & button:last-of-type {
       align-self: flex-end;
     }
@@ -55,8 +53,7 @@ export const filterBox = styled.div`
 
 export const SelectsBox = styled.div`
   display: flex;
-  gap: 12px;
-
+  gap: 24px;
   @media screen and (max-width: 650px) {
     align-items: flex-start;
     flex-direction: column;
@@ -69,18 +66,19 @@ export const Grid = styled.div`
   grid-gap: 24px;
   place-items: center;
   margin: 50px auto;
-
   @media screen and (max-width: 1200px) {
     grid-template-columns: repeat(3, minmax(200px, auto));
   }
-
   @media screen and (max-width: 850px) {
     grid-template-columns: repeat(2, minmax(200px, auto));
   }
-
   @media screen and (max-width: 600px) {
     grid-template-columns: repeat(1, minmax(200px, auto));
   }
+`;
+
+export const PostCardBox = styled.div`
+  position: relative;
 `;
 
 export const PostCard = styled.div`
@@ -88,7 +86,7 @@ export const PostCard = styled.div`
   height: 282px;
   position: relative;
   border-radius: 30px;
-  box-shadow: 5px 5px 10px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
 `;
 
 export const DateLikeBox = styled.div`
@@ -101,8 +99,17 @@ export const CalendarImage = styled.img`
   padding-left: 21px;
 `;
 
+export const LikeBox = styled.div`
+  position: absolute;
+  top: 20px;
+  right: 21px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 export const LikeButton = styled.button`
-  padding: 20px;
+  padding: 0;
   background-color: transparent;
   border: none;
   &:hover {
@@ -116,10 +123,19 @@ export const LikeButton = styled.button`
 `;
 
 export const Heart = {
-  height: '24px',
-  width: '24px',
-  color: '#670fdf',
+  fontSize: '18px',
 };
+
+export const HeartFill = {
+  fontSize: '18px',
+  color: '#670FDF',
+};
+
+export const HeartCount = styled.span`
+  color: #121621;
+  font-size: 10px;
+  font-weight: 400;
+`;
 
 export const DefaultImg = styled.img`
   width: 282px;

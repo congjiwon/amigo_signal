@@ -1,47 +1,16 @@
-import DefaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
-import { BtnStyleType } from '../../../types/styleTypes';
-import { CommentButton } from '../../common/button/Button';
-import { ConfirmDelete } from '../../common/modal/alert';
-import * as St from './style';
-import { usePartnerComments } from './usePartnerComment';
-
-type CommentProps = {
-  id: string;
-};
-
-type PartnerReCommentsProps = {
-  comment: CommentProps;
-  storageUrl: string | undefined;
-  reCommentId: string;
-  reComment:
-    | {
-        date: string;
-        id: string;
-        reContent: string;
-        users: {
-          nickName: string;
-          profileImageUrl: string | null;
-        };
-      }
-    | null
-    | undefined;
-  isPostWriter: boolean;
-  isLoginCommentUser: boolean;
-  updateReComment: string;
-  setUpdateReComment: React.Dispatch<React.SetStateAction<string>>;
-  handleCancelBtn: (name: string) => void;
-  handleIsOpenBtn: (name: string, commentId: string, reCommentId: string | null) => void;
-  handleReSubmitBtn: (event: React.FormEvent<HTMLFormElement>) => void;
-};
+import DefaultProfileImage from '../../../../assets/imgs/users/default_profile_img.png';
+import { BtnStyleType } from '../../../../types/styleTypes';
+import { CommentButton } from '../../../common/button/Button';
+import { ConfirmDelete } from '../../../common/modal/alert';
+import * as St from '../style';
+import { PartnerReCommentsProps } from '../type/CommentType';
+import { usePartnerComments } from '../usePartnerComment';
 
 function PartnerReComments({ comment, storageUrl, reCommentId, reComment, isPostWriter, isLoginCommentUser, updateReComment, setUpdateReComment, handleCancelBtn, handleIsOpenBtn, handleReSubmitBtn }: PartnerReCommentsProps) {
   const { deleteReCommentMutation } = usePartnerComments();
 
   const handleUpdateReComment = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (event.target.value === ' ') {
-      return;
-    }
-    setUpdateReComment(event.target.value);
+    setUpdateReComment(event.target.value.replace(/ /g, '\u00A0'));
   };
 
   const handleReDelBtn = async (id: string) => {

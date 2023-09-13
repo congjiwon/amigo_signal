@@ -46,11 +46,12 @@ const baseStyles = css<BaseStylesProps>`
         `;
       case 'apply':
         return css`
-          width: 80%;
-          height: 40%;
+          width: 84.46%;
+          height: 32.96%;
           margin: 0px auto;
-          margin-top: 30px;
-          padding: 20px;
+          margin-top: 26px;
+          margin-bottom: 24px;
+          padding: 20px 23px 61px 20px;
           border-radius: 20px;
           resize: none;
           &::-webkit-scrollbar {

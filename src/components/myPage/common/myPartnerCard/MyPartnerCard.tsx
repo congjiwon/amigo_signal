@@ -1,3 +1,4 @@
+import { FiCalendar, FiCheck } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import defaultImg from '../../../../assets/imgs/users/default_profile_img.png';
 import classifyingAge from '../../../common/classifyingAge/classifyingAge';
@@ -88,33 +89,20 @@ export default function MyPartnerCard({ partnerPost, postUserInfo }: PartnerItem
               </div>
               <p>{partnerPost.country.country}</p>
             </StCommon.CountryInfo>
-            <StCommon.OpenStatus>{partnerPost.isOpen ? `모집중` : `모집완료`}</StCommon.OpenStatus>
+            {!partnerPost.isOpen && (
+              <StCommon.OpenStatus>
+                <FiCheck />
+                모집완료
+              </StCommon.OpenStatus>
+            )}
           </StCommon.FlexBetween>
 
           <StCommon.DateInfo>
-            {partnerPost.startDate} ~ {partnerPost.endDate}
+            <FiCalendar />
+            {partnerPost.startDate}~{partnerPost.endDate}
           </StCommon.DateInfo>
 
           <StCommon.CardTitle className="partner-title">{partnerPost.title}</StCommon.CardTitle>
-
-          <StCommon.FlexBetween>
-            <StCommon.InterestList>
-              {partnerPost.interestUrl.map((url, i) => {
-                if (!!url) {
-                  return (
-                    <li key={i}>
-                      <img src={url} />
-                    </li>
-                  );
-                } else {
-                  return <li key={i} style={{ background: '#81858a' }}></li>;
-                }
-              })}
-            </StCommon.InterestList>
-            <StCommon.numOfPeople>
-              모집인원 <span>{partnerPost.numOfPeople}</span>
-            </StCommon.numOfPeople>
-          </StCommon.FlexBetween>
 
           {postUserInfo && (
             <StCommon.FlexBetween className="partner-bottom">

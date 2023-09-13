@@ -39,7 +39,7 @@ const ApplicantList = ({ postId, applicantList, setApplicantList }: ApplicantLis
 
   return (
     <>
-      <St.ModalTitle>동행 신청 대기 목록</St.ModalTitle>
+      <St.ModalTitle>동행 신청자 리스트</St.ModalTitle>
       <St.ApplicantList>
         {applicantList.map((data) => {
           return (

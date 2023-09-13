@@ -2,10 +2,12 @@ import { QueryClient, useMutation } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { insertSpotPost } from '../../../api/supabase/spotshare';
+import { supabase } from '../../../api/supabase/supabaseClient';
 import { BtnStyleType } from '../../../types/styleTypes';
 import useSessionStore from '../../../zustand/store';
 import Button from '../../common/button/Button';
 import { SpotCalendar } from '../../common/calendar/SpotCalendar';
+import { currentTime } from '../../common/currentTime/CurrentTime';
 import LocationDropDown from '../../common/dropDown/LocationDropDown';
 import LoadingSpinner from '../../common/loadingSpinner/LoadingSpinner';
 import { AlertError, AlertWarning } from '../../common/modal/alert';
@@ -27,6 +29,7 @@ export default function WriteTemplate() {
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
   const [address, setAddress] = useState<string | null>('');
+  const [postImageUrl, setPostImageUrl] = useState<string[]>([]);
   const [disable, setDisable] = useState(false);
   const navigate = useNavigate();
 
@@ -35,18 +38,6 @@ export default function WriteTemplate() {
       navigate('/login');
     }
   }, [navigate, authId]);
-
-  const currentTime = function () {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = ('0' + (today.getMonth() + 1)).slice(-2);
-    const day = ('0' + today.getDate()).slice(-2);
-    const hours = ('0' + today.getHours()).slice(-2);
-    const minutes = ('0' + today.getMinutes()).slice(-2);
-    const seconds = ('0' + today.getSeconds()).slice(-2);
-    const now = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
-    return now;
-  };
 
   const mutation = useMutation(insertSpotPost, {
     onSuccess: async () => {
@@ -66,13 +57,13 @@ export default function WriteTemplate() {
     } else if (spotDate.length < 1) {
       AlertWarning({ title: '방문날짜를 입력해주세요.' });
       return false;
-    } else if (title.length < 1) {
+    } else if (title.length < 1 || title.trim() === '') {
       AlertWarning({ title: '제목을 입력해주세요.' });
       return false;
     } else {
       // html 태그 지우기
       const contentWithoutTags = editorHtml.replace(/<\/?[^>]+(>|$)/g, '');
-      if (contentWithoutTags.length < 1) {
+      if (contentWithoutTags.length < 1 || contentWithoutTags.trim() === '') {
         AlertWarning({ title: '내용을 입력해주세요.' });
         return false;
       }
@@ -97,12 +88,18 @@ export default function WriteTemplate() {
       latitude,
       longitude,
       address,
+      postImageUrl,
       likeCount: 0,
     };
     if (validation()) {
       setDisable(true);
       mutation.mutate(newData);
     }
+  };
+
+  const handleonClickCancel = async () => {
+    navigate('/spotshare');
+    const { data } = await supabase.storage.from('quillImgs').remove(postImageUrl);
   };
 
   return (
@@ -116,10 +113,10 @@ export default function WriteTemplate() {
         <div>
           <St.SpotShareTitleInput maxLength={100} type="text" placeholder="제목을 입력해주세요" value={title} onChange={(e) => setTitle(e.target.value)} />
         </div>
-        <SpotShareEditor editorHtml={editorHtml} setEditorHtml={setEditorHtml} />
-        <SpotMap setLatitude={setLatitude} setLongitude={setLongitude} address={address} setAddress={setAddress} />
+        <SpotShareEditor editorHtml={editorHtml} setEditorHtml={setEditorHtml} postImageUrlArray={postImageUrl} setPostImageUrl={setPostImageUrl} />
+        <SpotMap setLatitude={setLatitude} setLongitude={setLongitude} address={address} setAddress={setAddress} country={location[1]} />
         <St.ButtonBox>
-          <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={() => navigate('/spotshare')}>
+          <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={handleonClickCancel}>
             취소
           </Button>
           <Button type="submit" disabled={disable} styleType={BtnStyleType.BTN_DARK}>

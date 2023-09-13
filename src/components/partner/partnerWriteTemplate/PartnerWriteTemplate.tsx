@@ -7,6 +7,7 @@ import { Tables } from '../../../api/supabase/supabase';
 import { BtnStyleType } from '../../../types/styleTypes';
 import Button from '../../common/button/Button';
 import PartnerCalendar from '../../common/calendar/PartnerCalendar';
+import { currentTime } from '../../common/currentTime/CurrentTime';
 import { PartnerDropDown } from '../../common/dropDown/DropDown';
 import LocationDropDown from '../../common/dropDown/LocationDropDown';
 import LoadingSpinner from '../../common/loadingSpinner/LoadingSpinner';
@@ -85,18 +86,6 @@ function PartnerWriteTemplate() {
     return false;
   };
 
-  const currentTime = function () {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = ('0' + (today.getMonth() + 1)).slice(-2);
-    const day = ('0' + today.getDate()).slice(-2);
-    const hours = ('0' + today.getHours()).slice(-2);
-    const minutes = ('0' + today.getMinutes()).slice(-2);
-    const seconds = ('0' + today.getSeconds()).slice(-2);
-    const now = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
-    return now;
-  };
-
   const validation = (): boolean => {
     if (location.length < 1) {
       AlertWarning({ title: '국가를 선택해주세요.' });
@@ -104,10 +93,10 @@ function PartnerWriteTemplate() {
     } else if (partnerDates.length < 1) {
       AlertWarning({ title: '날짜를 선택해주세요.' });
       return false;
-    } else if (title.length < 1) {
+    } else if (title.length < 1 || title.trim() === '') {
       AlertWarning({ title: '제목을 입력해주세요.' });
       return false;
-    } else if (content.length < 1) {
+    } else if (content.length < 1 || content.trim() === '') {
       AlertWarning({ title: '내용을 입력해주세요.' });
       return false;
     }
@@ -118,7 +107,7 @@ function PartnerWriteTemplate() {
     return true;
   };
   // 글 작성 버튼 클릭 핸들러
-  const handleWriteClick = () => {
+  const handleWriteClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const time = currentTime();
     const dataToInsert = {
       title,

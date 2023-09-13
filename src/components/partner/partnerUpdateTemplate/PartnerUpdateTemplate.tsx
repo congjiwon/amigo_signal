@@ -146,10 +146,10 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
     } else if (partnerDates.length < 1) {
       AlertWarning({ title: '날짜를 선택해주세요.' });
       return false;
-    } else if (title.length < 1) {
+    } else if (title.length < 1 || title.trim() === '') {
       AlertWarning({ title: '제목을 입력해주세요.' });
       return false;
-    } else if (content.length < 1) {
+    } else if (content.length < 1 || content.trim() === '') {
       AlertWarning({ title: '내용을 입력해주세요.' });
       return false;
     }

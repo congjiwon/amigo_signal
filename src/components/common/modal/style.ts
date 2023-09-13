@@ -30,8 +30,8 @@ export const Inner = styled.div<InnerProps>`
     switch (size) {
       case 'large':
         return `
-        width: 60%;
-        height: 70%;
+        width: 51.87%;
+        height: 68.33%;
         border-radius: 30px;
 
         @media screen and (max-width: 800px) {
@@ -40,8 +40,8 @@ export const Inner = styled.div<InnerProps>`
         `;
       case 'medium':
         return `
-        width: 45%;
-        height: 55%;
+        width: 41.25%;
+        height: 42.41%;
         border-radius: 30px;
 
         @media screen and (max-width: 1100px) {
@@ -77,9 +77,11 @@ export const Inner = styled.div<InnerProps>`
 `;
 
 export const CloseButton = styled.button`
+  position: absolute;
+  top: 40px;
+  right: 37px;
   display: flex;
   justify-content: flex-end;
-  padding: 30px;
   padding-bottom: 0px;
   background: none;
   border: none;

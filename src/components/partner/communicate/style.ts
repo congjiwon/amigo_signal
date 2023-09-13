@@ -29,18 +29,18 @@ export const NewApplicantAlert = styled.p`
 `;
 
 export const ModalTitle = styled.h1`
-  padding-left: 50px;
+  margin-top: 48px;
+  margin-left: 40px;
   font-size: 1.4rem;
   font-weight: bold;
 `;
 
 export const TextCount = styled.span`
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
-  margin-right: 50px;
-  font-size: 12px;
-  color: gray;
+  position: absolute;
+  top: 281px;
+  right: 60px;
+  font-size: 14px;
+  color: #3f4656;
 `;
 
 export const SubmitApply = styled.div`
@@ -53,7 +53,7 @@ export const ApplicantList = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 90%;
+  width: 91.96%;
   margin: 0px auto;
   margin-top: 30px;
   overflow-y: auto;
@@ -75,41 +75,45 @@ export const ApplicantInfo = styled.div`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 7px;
+  gap: 16px;
 `;
 
 export const ApplicantProfileImage = styled.img`
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
 `;
 
 export const ApplicantNickName = styled.p`
-  margin-left: 5px;
   font-weight: bold;
   font-size: 1rem;
 `;
 
 export const ApplicantAgeGender = styled.p`
-  margin-left: 10px;
   color: gray;
 `;
 
 export const ButtonDiv = styled.div`
   display: flex;
-  gap: 5px;
+  gap: 10px;
   flex: 0 0 auto;
 `;
 
 export const AcceptButton = styled.button<CheckButtonProps>`
+  width: 65px;
+  height: 32px;
   padding: 7px 10px;
   background: none;
   border: 1px solid black;
-  border-radius: 20px;
+  border-radius: 6px;
   cursor: pointer;
   background-color: ${(props) => {
     if (props.$isAccepted === null) return 'white';
-    return props.$isAccepted ? 'black' : 'white';
+    return props.$isAccepted ? '#643BDC' : 'white';
+  }};
+  border-color: ${(props) => {
+    if (props.$isAccepted === null) return 'black';
+    return props.$isAccepted ? '#643BDC' : 'black';
   }};
   color: ${(props) => {
     if (props.$isAccepted === null) return 'black';
@@ -123,10 +127,12 @@ export const AcceptButton = styled.button<CheckButtonProps>`
 `;
 
 export const RejectButton = styled.button<CheckButtonProps>`
+  width: 65px;
+  height: 32px;
   padding: 7px 10px;
   background: none;
   border: 1px solid black;
-  border-radius: 20px;
+  border-radius: 6px;
   cursor: pointer;
   background-color: ${(props) => {
     if (props.$isAccepted === null) return 'white';
@@ -144,8 +150,10 @@ export const RejectButton = styled.button<CheckButtonProps>`
 
 export const ApplicantContent = styled.p`
   margin-top: 20px;
-  margin-left: 40px;
+  margin-left: 56px;
   overflow-wrap: anywhere;
+  font-size: 14px;
+  line-height: 150%;
 `;
 
 export const ConfirmedApplicantList = styled.div<ConfirmedApplicantListProps>`
@@ -187,6 +195,6 @@ export const ConfirmedApplicantInfo = styled.div`
 `;
 
 export const ConfirmedApplicantAgeNGender = styled.p`
-  color: gray;
+  color: #3f4656;
   font-size: 12px;
 `;

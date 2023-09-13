@@ -12,9 +12,6 @@ type filteredPostProps = {
 
 export const getFilteredSpotSharePost = async ({ sort = 'createdAt', country, startDate, endDate, page = 0, limit = 4 }: filteredPostProps & { page?: number; limit?: number }) => {
   let sharePosts = supabase.from('spotPosts').select('*, users(*), country(imageUrl, country), likes(postId)').order(`${sort}`, { ascending: false });
-  sharePosts.then(({ data }) => {
-    console.log('data', data);
-  });
 
   if (country !== undefined) {
     sharePosts = sharePosts.eq('country', country);
@@ -95,7 +92,6 @@ export const getDetailSpotSharePost = async (postId: string | undefined) => {
 //스팟공유 게시글 삭제
 export const deleteSpotSharePost = async (postId: string | undefined) => {
   const { error } = await supabase.from('spotPosts').delete().eq('id', postId);
-  console.log('글 삭제 에러', error);
 };
 
 //스팟공유 게시글 작성하기
@@ -132,8 +128,16 @@ export const countLike = async (like: number, postId: string) => {
 
 // 좋아요 가져오기
 export const getLikes = async () => {
-  const { data } = await supabase.from('likes').select('*, postId(*)');
+  const { data } = await supabase.from('likes').select('*, postId(writerId, id)');
   return { data };
+};
+
+export const getLikesCondition = async (logInUserId: string, postid: string) => {
+  let { data, error } = await supabase.from('likes').select('*').eq('userId', logInUserId).eq('postId', postid);
+  if (error) {
+    console.log('좋아요 데이터 불러오기 실패', error);
+  }
+  return data;
 };
 
 // 내가 작성한 스팟공유 글 가져오기
@@ -144,7 +148,7 @@ type mySpotSharePostsType = {
 export const getMySpotSharePosts = async ({ writerId, page }: mySpotSharePostsType) => {
   const { from, to } = getRangePagination(page, NUMBER_OF_ITEMS);
 
-  const { data, count } = await supabase.from('spotPosts').select('*, country(*)', { count: 'exact' }).eq('writerId', writerId).order('visitDate', { ascending: false }).range(from, to);
+  const { data, count } = await supabase.from('spotPosts').select('*, country(*)', { count: 'exact' }).eq('writerId', writerId).order('createdAt', { ascending: false }).range(from, to);
   return { data, count };
 };
 

@@ -1,12 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { FiEdit, FiMessageSquare, FiTrash2 } from 'react-icons/fi';
 import { RiBookmarkFill, RiBookmarkLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router';
-import { deletePartnerPost } from '../../../api/supabase/partner';
+import { addBookmark, bookmarkCheck, deletePartnerPost, removeBookMark } from '../../../api/supabase/partner';
 import { Tables } from '../../../api/supabase/supabase';
-import { supabase } from '../../../api/supabase/supabaseClient';
-import { addBookmark, removeBookMark } from '../../../api/supabase/users';
 import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import useCopyClipBoard from '../../../hooks/useCopyClipBoard';
 import useSessionStore from '../../../zustand/store';
@@ -28,38 +27,36 @@ const UserFeedback = ({ partnerPostData }: Props) => {
   const storagaUrl = process.env.REACT_APP_SUPABASE_STORAGE_URL;
 
   //북마크
-  const bookmarkCheck = async (logInUserId: string, postId: string) => {
-    try {
-      let { data: checkBookmark, error } = await supabase.from('bookmarks').select('*').eq('postId', postId).eq('userId', logInUserId);
-      // console.log('checkBookmark', checkBookmark);
-      if (error) {
-        console.log('북마크 데이터 불러오는데 실패함 ..', error);
-      } else {
-        setBookMark(checkBookmark!.length > 0);
-      }
-    } catch (error) {
-      console.log('처참히 실패', error);
-    }
+  const bookmarkCheckHanlde = async (logInUserId: string, postId: string) => {
+    const data = await bookmarkCheck(logInUserId, postId);
+    setBookMark(data! && data!.length > 0);
   };
 
   useEffect(() => {
-    bookmarkCheck(logInUserId!, id);
+    bookmarkCheckHanlde(logInUserId!, id);
   }, []);
 
-  const addBookMarkHandle = async () => {
+  //디바운싱
+  const debouncedAddBookMarkHandle = _.debounce(async () => {
+    if (logInUserId === undefined) {
+      navigate('/login');
+    }
     setBookMark(!bookMark);
-    const bookMarkInsert = [{ userId: logInUserId, postId: id }];
-    await addBookmark(bookMarkInsert);
-  };
+    await addBookmark({ userId: logInUserId!, postId: id });
+  }, 300);
 
-  const removeBookMarkHandle = async () => {
+  const debouncedRemoveBookMarkHandle = _.debounce(async () => {
     setBookMark(!bookMark);
     await removeBookMark(logInUserId!, id);
-  };
+  }, 300);
 
   //오픈채팅
   const [, onCopy] = useCopyClipBoard();
   const handleCopyClipBoard = (text: string) => {
+    if (logInUserId === undefined) {
+      navigate('/login');
+      return;
+    }
     onCopy(text);
     Alert({ title: '복사 완료!' });
   };
@@ -87,7 +84,6 @@ const UserFeedback = ({ partnerPostData }: Props) => {
     }
     mutation.mutate({ postId: id });
   };
-
   return (
     <St.UserFeedbackBox>
       <St.UserProfileBox>
@@ -100,18 +96,13 @@ const UserFeedback = ({ partnerPostData }: Props) => {
         </div>
       </St.UserProfileBox>
       <St.ButtonBox>
-        {logInUserId ? (
-          <>
-            <button>{openChat.length > 1 && <FiMessageSquare onClick={() => handleCopyClipBoard(openChat)} style={St.Icons} />}</button>
-            <button>{bookMark ? <RiBookmarkFill onClick={() => removeBookMarkHandle()} style={{ height: '24px', width: '24px' }} /> : <RiBookmarkLine onClick={() => addBookMarkHandle()} style={{ height: '24px', width: '24px' }} />}</button>
-          </>
-        ) : (
-          <></>
-        )}
+        <button>{openChat.length > 1 && <FiMessageSquare className="lineIcon" onClick={() => handleCopyClipBoard(openChat)} />}</button>
+        <button>{bookMark ? <RiBookmarkFill className="fillIcon" onClick={debouncedRemoveBookMarkHandle} /> : <RiBookmarkLine className="lineIcon" onClick={debouncedAddBookMarkHandle} />}</button>
+
         {isPostUser() ? (
           <>
-            <button>{<FiEdit style={{ height: '24px', width: '24px' }} onClick={() => navigate(`/partner/write/${id}`)} />}</button>
-            <button>{<FiTrash2 onClick={() => handleDelBtn(id)} style={{ height: '24px', width: '24px' }} />}</button>
+            <button>{<FiEdit className="lineIcon" onClick={() => navigate(`/partner/write/${id}`)} />}</button>
+            <button>{<FiTrash2 className="lineIcon" onClick={() => handleDelBtn(id)} />}</button>
           </>
         ) : (
           <></>

@@ -1,23 +1,21 @@
 import { styled } from 'styled-components';
 
-//탑버튼
 export const MoveButtonArea = styled.div`
   position: fixed;
   right: 40px;
   bottom: 40px;
 `;
 
-//PartnerComments
 export const CommentLengthBox = styled.div`
   height: 21px;
 `;
 
 export const CommentLengthParagraph = styled.p`
   margin-bottom: 10px;
+  font-weight: bold;
   font-size: 14px;
 `;
 
-// Write
 export const Form = styled.form`
   display: flex;
   justify-content: space-between;
@@ -31,7 +29,6 @@ export const CommentTextarea = styled.textarea`
   width: 1057px;
   height: 20px;
   padding: 14px 20px 14px 20px;
-  /* margin-bottom: 32px; */
   border-radius: 15px;
   border: 1px solid var(--light-gray, #e8ebee);
 `;
@@ -39,13 +36,12 @@ export const CommentTextarea = styled.textarea`
 export const CommentButton = styled.button`
   width: 78px;
   height: 48px;
-  background-color: black;
-  color: white;
+  background-color: white;
+  color: black;
   border-radius: 15px;
   cursor: pointer;
 `;
 
-// PartnerCommentsList, reCommentList
 export const PartnerCommentsContainerBox = styled.div``;
 
 export const PartnerCommentsBox = styled.div`
@@ -63,7 +59,7 @@ export const WriterBox = styled.div`
 `;
 
 export const NickNameParagraph = styled.p`
-  margin-right: 22px;
+  margin-right: 16px;
   font-weight: bold;
 `;
 
@@ -83,7 +79,7 @@ export const CommentBox = styled.div`
 `;
 
 export const CommentParagraph = styled.p`
-  white-space: pre-line;
+  white-space: pre;
   line-height: 130%;
 `;
 
@@ -101,7 +97,6 @@ export const DateButtonBox = styled.div`
 
 export const ButtonBox = styled.div`
   display: flex;
-  /* gap: 8px; */
   align-items: center;
 `;
 
@@ -153,15 +148,14 @@ export const CancelSubmitButtonBox = styled.div`
 `;
 
 export const WriterParagraph = styled.p`
+  color: var(--purple, #643bdc);
   text-align: center;
-  align-items: center;
-  width: 51px;
-  height: 23px;
-  color: white;
-  background: var(--gray, #adb1b8);
-  border-radius: 30px;
+  font-feature-settings: 'clig' off, 'liga' off;
   font-size: 12px;
-  line-height: 170%;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 160%;
+  letter-spacing: -0.3px;
 `;
 
 export const ReCommentBox = styled.div`

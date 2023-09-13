@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { checkApply, getConfirmedApplicantList, getPartnerPost, updatePostStatus } from '../api/supabase/partner';
+import FiCheck from '../assets/imgs/partner/FiCheck.svg';
 import LoadingSpinner from '../components/common/loadingSpinner/LoadingSpinner';
 import MetaTags from '../components/common/metaTags/MetaTags';
 import Communication from '../components/partner/communicate/Communication';
@@ -33,7 +34,7 @@ function PartnerDetail() {
           setIsApply(true);
           const AcceptedStatus = applyHistory[0].isAccepted;
           if (AcceptedStatus === null) {
-            setApplicantStatus('참여 신청 중');
+            setApplicantStatus('참여 신청중');
           }
           if (AcceptedStatus !== null) {
             setApplicantStatus(AcceptedStatus ? '참여 수락됨' : '참여 거절됨');
@@ -94,8 +95,15 @@ function PartnerDetail() {
         </St.CommunicateDiv>
       </St.PartnerDetailMain>
       <St.Status>
-        <St.PostStatus $partnerStatus={partnerStatus}>{partnerStatus === '모집중' ? '모집중' : '모집완료'}</St.PostStatus>
-        {partnerStatus === '모집중' && isApply && applicantStatus !== null ? <St.ApplyStatus>{applicantStatus}</St.ApplyStatus> : <></>}
+        {partnerStatus === '모집중' ? (
+          <St.PostStatus $partnerStatus={partnerStatus}>모집중</St.PostStatus>
+        ) : (
+          <St.PostStatus $partnerStatus={partnerStatus}>
+            <img src={FiCheck} alt="check" />
+            모집완료
+          </St.PostStatus>
+        )}
+        {partnerStatus === '모집중' && isApply && applicantStatus !== null ? <St.ApplyStatus $applicantStatus={applicantStatus}>{applicantStatus}</St.ApplyStatus> : <></>}
       </St.Status>
       <PartnerComments />
     </>

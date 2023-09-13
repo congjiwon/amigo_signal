@@ -58,7 +58,59 @@
   font-family: 'Pretendard', Verdana, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif !important;
 }
 
+.header-layout + * {
+  padding-top: 70px;
+}
+
 a {
   text-decoration: none;
   color: inherit;
+}
+
+.swal2-container .swal2-popup {
+  padding-bottom: 3em;
+  border-radius: 30px;
+}
+
+.swal2-modal .swal2-title {
+  color: #121621;
+  text-align: center;
+  font-family: 'Pretendard';
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.swal2-modal .swal2-html-container {
+  color: #6c7486;
+  text-align: center;
+  font-family: 'Pretendard';
+  font-size: 16px;
+  font-weight: 600;
+}
+.swal2-modal .swal2-actions {
+  width: 100%;
+  padding: 0 40px;
+  gap: 24px;
+}
+.swal2-modal .alert-btn {
+  display: flex;
+  flex: 1 0 auto;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 0;
+  border: 0;
+  border-radius: 10px;
+  color: #fff;
+  font-family: 'Pretendard';
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+  cursor: pointer;
+}
+.alert-btn-confirm {
+  background: #643bdc;
+}
+.swal2-modal .alert-btn-cancel {
+  background: #6c7486;
 }

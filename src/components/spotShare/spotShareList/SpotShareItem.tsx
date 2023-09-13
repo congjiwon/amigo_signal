@@ -1,7 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query';
+import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { RiHeartFill, RiHeartLine } from 'react-icons/ri';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { countLike, deleteLike, postLike } from '../../../api/supabase/spotshare';
 import { Tables } from '../../../api/supabase/supabase';
 import Calendar from '../../../assets/imgs/partner/Calendar.svg';
@@ -42,8 +43,8 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
   const session = useSessionStore((state) => state.session);
   const logInUserId = session?.user.id;
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
-  // 좋아요
   const LikeCheck = async (logInUserId: string) => {
     const liked = likedPost?.some((like) => like.postId.id === post.id && like.userId === logInUserId);
 
@@ -68,51 +69,61 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
   const contentWithoutTags = post.content.replace(/<\/?[^>]+(>|$)/g, '');
 
   // 좋아요 클릭 시
-  const handleFillHeart = async (event: React.MouseEvent<SVGElement, MouseEvent>) => {
-    event.preventDefault();
-    await queryClient.invalidateQueries(['likes', post.id]);
-    setLike(!like);
-    const addLike = { postId: post.id!, userId: logInUserId! };
-    await postLike(addLike);
-    await countLike(++post.likeCount, post.id!);
-  };
+  const handleFillHeart = _.debounce(async (event: React.MouseEvent<SVGElement, MouseEvent>) => {
+    if (logInUserId === undefined) {
+      navigate('/login');
+    }
 
-  const handleEmptyHeart = async (event: React.MouseEvent<SVGElement, MouseEvent>) => {
-    event.preventDefault();
-    await queryClient.invalidateQueries(['likes', post.id]);
-    setLike(!like);
-    await deleteLike(post.id!, logInUserId!);
-    await countLike(--post.likeCount, post.id!);
-  };
+    try {
+      await queryClient.invalidateQueries(['likes', post.id]);
+      const addLike = { postId: post.id!, userId: logInUserId! };
+      await postLike(addLike);
+
+      post.likeCount += 1;
+      setLike(true);
+      await countLike(post.likeCount, post.id!);
+    } catch (error) {}
+  }, 300);
+
+  const handleEmptyHeart = _.debounce(async (event: React.MouseEvent<SVGElement, MouseEvent>) => {
+    try {
+      await queryClient.invalidateQueries(['likes', post.id]);
+      await deleteLike(post.id!, logInUserId!);
+
+      post.likeCount -= 1;
+      setLike(false);
+      await countLike(post.likeCount, post.id!);
+    } catch (error) {}
+  }, 300);
 
   return (
-    <Link to={`detail/${post.id}`}>
-      <St.PostCard>
-        <St.DateLikeBox>
-          <St.TravelDateBox>
-            <St.CalendarImage src={Calendar} alt="방문날짜" />
-            <p>
-              {visitDate[0]}년 {visitDate[1]}월 {visitDate[2]}일
-            </p>
-          </St.TravelDateBox>
-          {logInUserId ? (
-            <div>
-              <St.LikeButton>{like ? <RiHeartFill onClick={(event) => handleEmptyHeart(event)} style={St.Heart} /> : <RiHeartLine onClick={(event) => handleFillHeart(event)} style={St.Heart} />}</St.LikeButton>
-            </div>
-          ) : (
-            ''
-          )}
-        </St.DateLikeBox>
-        <St.TitleBox>
-          <p>{post.title}</p>
-        </St.TitleBox>
-        <St.ContentBox>
-          <p>{contentWithoutTags}</p>
-        </St.ContentBox>
-        <St.DefaultImg src={post.country.imageUrl}></St.DefaultImg>
-        <St.Span>{post.country.country}</St.Span>
-      </St.PostCard>
-    </Link>
+    <St.PostCardBox>
+      <Link to={`detail/${post.id}`}>
+        <St.PostCard>
+          <St.DateLikeBox>
+            <St.TravelDateBox>
+              <St.CalendarImage src={Calendar} alt="방문날짜" />
+              <p>
+                {visitDate[0]}년 {visitDate[1]}월 {visitDate[2]}일
+              </p>
+            </St.TravelDateBox>
+          </St.DateLikeBox>
+          <St.TitleBox>
+            <p>{post.title}</p>
+          </St.TitleBox>
+          <St.ContentBox>
+            <p>{contentWithoutTags}</p>
+          </St.ContentBox>
+          <St.DefaultImg src={post.country.imageUrl}></St.DefaultImg>
+          <St.Span>{post.country.country}</St.Span>
+        </St.PostCard>
+      </Link>
+
+      <St.LikeBox>
+        <St.LikeButton>{like ? <RiHeartFill onClick={(event) => handleEmptyHeart(event)} style={St.HeartFill} /> : <RiHeartLine onClick={(event) => handleFillHeart(event)} style={St.Heart} />}</St.LikeButton>
+        <St.HeartCount>{post.likeCount}</St.HeartCount>
+      </St.LikeBox>
+    </St.PostCardBox>
   );
 }
 

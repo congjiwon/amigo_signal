@@ -133,7 +133,7 @@ export const insertPost = async (dataToInsert: Inserts<'partnerPosts'>) => {
   if (error) {
     console.error('Insert error:', error);
   } else {
-    console.log('Inserted data:', data);
+    // console.log('Inserted data:', data);
     return data;
   }
 };
@@ -185,6 +185,12 @@ export const updateStatus = async (applicantId: string, postId: string, isAccept
   return { data, error };
 };
 
+// 모집완료 시 -> 신청 대기 목록에 있던 나머지 지원자의 지원 상태: 거절로 변경
+export const makeRestApplicantStatusReject = async (postId: string) => {
+  const { data } = await supabase.from('applicants').update({ isAccepted: false, isConfirmed: true }).eq('postId', postId).eq('isConfirmed', false);
+  return { data };
+};
+
 // 참여 수락된 신청자 정보 가져오기
 export const getConfirmedApplicantList = async (postId: string) => {
   const { data, error } = await supabase.from('applicants').select('*, users!applicants_applicantId_fkey(*)').eq('postId', postId).eq('isAccepted', true);
@@ -214,7 +220,7 @@ export const getMyPartnerPosts = async ({ userId, filterIsOpen, page }: MyPartne
     partnerPosts = partnerPosts.is('isOpen', false);
   }
 
-  const { data, count } = await partnerPosts.order('startDate', { ascending: true }).range(from, to);
+  const { data, count } = await partnerPosts.order('createdAt', { ascending: false }).range(from, to);
   return { data, count };
 };
 
@@ -275,4 +281,30 @@ export const getNumOfPeople = async (postId: string) => {
 export const isPostOpen = async (postId: string): Promise<{ data: { isOpen: boolean } | null }> => {
   const { data } = await supabase.from('partnerPosts').select('isOpen').eq('id', postId).single();
   return { data };
+};
+
+// 헤더 alert에 담길 post 제목 가져오기
+export const fetchPartnerPostTitle = async (postId: string) => {
+  const { data } = await supabase.from('partnerPosts').select('title').eq('id', postId).single();
+  return data?.title;
+};
+
+//북마크 추가
+export const addBookmark = async (bookMarkInsert: Inserts<'bookmarks'>) => {
+  const { error } = await supabase.from('bookmarks').insert(bookMarkInsert).select();
+  if (error) {
+    console.log('북마크 추가 실패', error);
+  }
+};
+
+//북마크 삭제
+export const removeBookMark = async (logInUserId: string, postId: string) => {
+  const { error } = await supabase.from('bookmarks').delete().eq('postId', postId).eq('userId', logInUserId);
+  if (error) throw error;
+};
+
+//북마크 상태 확인
+export const bookmarkCheck = async (logInUserId: string, postId: string) => {
+  const { data, error } = await supabase.from('bookmarks').select('*').eq('postId', postId).eq('userId', logInUserId);
+  return data;
 };

@@ -1,39 +1,16 @@
-import DefaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
-import { BtnStyleType } from '../../../types/styleTypes';
-import { CommentButton } from '../../common/button/Button';
-import { ConfirmDelete } from '../../common/modal/alert';
-import * as St from './style';
-import useSpotComment from './useSpotComment';
-
-type PartnerReCommentsProps = {
-  storageUrl?: string;
-  reCommentId: string;
-  reComment: {
-    date: string;
-    id: string;
-    reContent: string;
-    users: {
-      nickName: string;
-      profileImageUrl: string | null;
-    } | null;
-  };
-  isPostWriter: boolean;
-  isLoginCommentUser: boolean;
-  updateReComment: string;
-  setUpdateReComment: React.Dispatch<React.SetStateAction<string>>;
-  onCancelBtn: (name: string) => void;
-  handleIsOpenBtn: (name: string, id: string | null) => void;
-  handleReSubmitBtn: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
-};
+import DefaultProfileImage from '../../../../assets/imgs/users/default_profile_img.png';
+import { BtnStyleType } from '../../../../types/styleTypes';
+import { CommentButton } from '../../../common/button/Button';
+import { ConfirmDelete } from '../../../common/modal/alert';
+import * as St from '../style';
+import { PartnerReCommentsProps } from '../type/CommentType';
+import useSpotComment from '../useSpotComment';
 
 function SpotReCommentList({ storageUrl, reCommentId, reComment, isPostWriter, isLoginCommentUser, updateReComment, setUpdateReComment, onCancelBtn, handleIsOpenBtn, handleReSubmitBtn }: PartnerReCommentsProps) {
   const { deleteReCommentMutation } = useSpotComment();
 
   const handleUpdateReComment = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (event.target.value === ' ') {
-      return;
-    }
-    setUpdateReComment(event.target.value);
+    setUpdateReComment(event.target.value.replace(/ /g, '\u00A0'));
   };
 
   const handleReDelBtn = async (id: string) => {

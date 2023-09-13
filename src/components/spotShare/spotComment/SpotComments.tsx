@@ -4,8 +4,8 @@ import { useParams } from 'react-router';
 import { getPostWriterId, getReCommentData, getSpotComments } from '../../../api/supabase/spotshare';
 import { getUsers } from '../../../api/supabase/users';
 import TopButton from '../../common/topbutton/TopButton';
-import SpotCommentList from './SpotCommentList';
-import SpotWrite from './SpotCommentWrite';
+import SpotCommentList from './comment/SpotCommentList';
+import SpotWrite from './comment/SpotCommentWrite';
 import * as St from './style';
 
 function SpotComments() {
