@@ -91,7 +91,7 @@ export default function Header() {
         </St.Gnb>
         <St.Utils>
           {session ? (
-            <>
+            <St.UtilUser>
               <PartnerAlert />
               <Popover content={myPagePopover} trigger="hover" placement="topRight">
                 <St.UserBox>
@@ -102,12 +102,12 @@ export default function Header() {
                   </St.PopOverButton>
                 </St.UserBox>
               </Popover>
-            </>
+            </St.UtilUser>
           ) : (
-            <>
+            <St.UtilLogin>
               <Link to="/login">로그인</Link>
               <Link to="/signup">회원가입</Link>
-            </>
+            </St.UtilLogin>
           )}
         </St.Utils>
 

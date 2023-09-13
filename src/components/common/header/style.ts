@@ -61,15 +61,16 @@ export const Gnb = styled.header`
     gap: 60px;
 
     & a {
+      font-size: 16px;
       color: #81858a;
-      font-weight: 600;
+      font-weight: 500;
 
       &:hover {
-        color: #000;
+        color: #121621;
       }
 
       &.active {
-        color: #000;
+        color: #121621;
       }
     }
   }
@@ -80,11 +81,10 @@ export const Gnb = styled.header`
 `;
 
 export const Utils = styled.div`
-  display: flex;
-  gap: 8px;
-
   a {
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #121621;
 
     &:hover {
       text-decoration: underline;
@@ -96,6 +96,16 @@ export const Utils = styled.div`
   }
 `;
 
+export const UtilUser = styled.div`
+  display: flex;
+  gap: 24px;
+`;
+
+export const UtilLogin = styled.div`
+  display: flex;
+  gap: 40px;
+`;
+
 export const UserBox = styled.div`
   display: flex;
   align-items: center;
@@ -105,13 +115,13 @@ export const UserBox = styled.div`
 export const ProfileImg = styled.img`
   width: 28px;
   height: 28px;
-  margin-left: 28px;
   border-radius: 50%;
 `;
 
 export const NickName = styled.p`
   margin-left: 10px;
   font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
 `;
 
@@ -129,8 +139,9 @@ export const MyPagePopover = styled.div`
   flex-direction: column;
   gap: 10px;
 
-  & a.active {
-    font-weight: 500;
+  & a:hover,
+  a:active {
+    color: #643bdc;
   }
 `;
 
