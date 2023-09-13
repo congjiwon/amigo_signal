@@ -82,7 +82,7 @@ export const Gnb = styled.header`
 
 export const Utils = styled.div`
   a {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 500;
     color: #121621;
 
@@ -120,7 +120,7 @@ export const ProfileImg = styled.img`
 
 export const NickName = styled.p`
   margin-left: 10px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   cursor: pointer;
 `;
