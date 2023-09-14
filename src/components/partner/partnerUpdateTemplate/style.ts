@@ -83,4 +83,14 @@ export const ButtonBox = styled.div`
   display: flex;
   justify-content: center;
   gap: 15px;
+
+  & button:first-of-type {
+    background: var(--light-gray, #e3e9f3);
+    width: 158px;
+    color: black;
+  }
+  & button:last-of-type {
+    background-color: #643bdc;
+    width: 158px;
+  }
 `;

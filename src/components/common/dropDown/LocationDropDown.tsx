@@ -42,7 +42,7 @@ function LocationDropDown({ setLocation }: Props) {
     }
   };
 
-  return <Cascader style={{ width: 140 }} options={options} onChange={(e) => onChange([String(e)])} placeholder="국가 선택" />;
+  return <Cascader className="LocationDropDown" options={options} onChange={(e) => onChange([String(e)])} placeholder="국가 선택" />;
 }
 
 export default LocationDropDown;
