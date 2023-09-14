@@ -59,6 +59,9 @@ export const BlackParagraph = styled.p`
 export const ButtonBox = styled.div`
   display: flex;
   gap: 20px;
+  @media (max-width: 500px) {
+    gap: 10px;
+  }
   button {
     padding: 0;
     border: none;
@@ -71,6 +74,15 @@ export const ButtonBox = styled.div`
     }
     &:not(:hover) {
       transition: 0.3s ease-out;
+    }
+  }
+
+  .kakaoIcon {
+    width: 26px;
+    height: 26px;
+    @media (max-width: 500px) {
+      width: 22px;
+      height: 22px;
     }
   }
 
