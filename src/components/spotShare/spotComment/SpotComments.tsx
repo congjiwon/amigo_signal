@@ -36,7 +36,7 @@ function SpotComments() {
   const commentsCount = (filteredComments?.length || 0) + reCommentCount;
 
   return (
-    <>
+    <St.CommentContainer>
       <St.CommentLengthBox>
         <St.CommentLengthParagraph>댓글 {commentsCount}개</St.CommentLengthParagraph>
       </St.CommentLengthBox>
@@ -49,7 +49,7 @@ function SpotComments() {
       <St.MoveButtonArea>
         <TopButton />
       </St.MoveButtonArea>
-    </>
+    </St.CommentContainer>
   );
 }
 

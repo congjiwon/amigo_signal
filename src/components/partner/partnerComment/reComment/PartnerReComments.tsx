@@ -54,12 +54,12 @@ function PartnerReComments({ comment, storageUrl, reCommentId, reComment, isPost
           {reCommentId === reComment?.id ? (
             <form onSubmit={handleReSubmitBtn}>
               <St.ReCommentInputBox>
-                <St.RecommentTextarea placeholder="댓글을 남겨보세요" value={updateReComment} onChange={handleUpdateReComment} maxLength={300} />
+                <St.Textarea placeholder="댓글을 남겨보세요" value={updateReComment} onChange={handleUpdateReComment} maxLength={300} />
                 <St.CancelSubmitButtonBox>
                   <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleCancelBtn('reCommentUpdateCancelBtn')}>
                     취소
                   </CommentButton>
-                  <CommentButton type="submit" styleType={BtnStyleType.BTN_ONLYFONT} disabled={updateReComment.length < 1}>
+                  <CommentButton type="submit" styleType={BtnStyleType.BTN_SUBMITCOMMENT}>
                     등록
                   </CommentButton>
                 </St.CancelSubmitButtonBox>
