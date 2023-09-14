@@ -84,10 +84,14 @@ export const ApplicantList = styled.ul`
 `;
 
 export const ApplicantCard = styled.div<ApplicantCardProps>`
+  position: relative;
   margin-top: 15px;
   padding: 20px;
   border: ${(props) => (props.$isClicked ? '1.5px solid black' : '1px solid lightgray')};
   border-radius: 10px;
+  @media (max-width: 612px) {
+    padding-bottom: 70px;
+  }
 `;
 
 export const ApplicantProfile = styled.div`
@@ -127,11 +131,27 @@ export const ApplicantAgeGender = styled.p`
 `;
 
 export const ButtonDiv = styled.div`
-  display: inline-flex;
+  position: absolute;
+  top: 25px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+
+  @media (max-width: 612px) {
+    top: auto;
+    bottom: 20px;
+    left: 20px;
+
+    & button {
+      flex: 1;
+    }
+  }
+
+  /* display: inline-flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
-  flex: 0 0 auto;
+  flex: 0 0 auto; */
 `;
 
 export const AcceptButton = styled.button<CheckButtonProps>`
