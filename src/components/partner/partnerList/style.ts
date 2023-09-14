@@ -91,7 +91,12 @@ export const FilterWriteBox = styled.div`
 
 export const SelectsBox = styled.div`
   display: flex;
+  /* gap: 24px; */
 
+  & > div {
+    display: flex;
+    gap: 24px;
+  }
   @media screen and (max-width: 690px) {
     position: relative;
     top: -48px;
@@ -149,23 +154,15 @@ export const LocationBox = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
-  /* position: absolute; */
   h1 {
     margin: 30px 0px 0px 5px;
   }
-
-  /* @media screen and (max-width: 355px) {
-    CheckBox {
-      left: 320px;
-    }
-  } */
 `;
 
 export const FlagBox = styled.div`
   position: relative;
   width: 50px;
   height: 36px;
-  /* border-radius: 50%; */
   border: 1px solid var(--light-gray, #e3e9f3);
   overflow: hidden;
   margin: 24px 0px 0px 20px;
@@ -251,9 +248,6 @@ export const Body = styled.div`
   display: flex;
   gap: 5px;
   margin: 21px 20px 20px 20px;
-  /* margin-top: 21px; */
-  /* margin-left: 20px; */
-  /* margin-right: 20px; */
   padding-bottom: 19px;
   border-bottom: 1px solid #d9d9d9;
   p {

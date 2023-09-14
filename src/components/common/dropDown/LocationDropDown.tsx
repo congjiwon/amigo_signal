@@ -73,5 +73,14 @@ export function UpdateLocationDropDown({ location, setLocation }: UpdateProps) {
     }
   };
 
-  return <Cascader style={{ width: 140 }} options={options} onChange={(e) => onChange([String(e)])} placeholder="국가 선택" defaultValue={location} />;
+  return (
+    <Cascader
+      className="UpdateLocationDropDown"
+      // style={{ width: 140 }}
+      options={options}
+      onChange={(e) => onChange([String(e)])}
+      placeholder="국가 선택"
+      defaultValue={location}
+    />
+  );
 }
