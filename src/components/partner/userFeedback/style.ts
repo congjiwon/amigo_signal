@@ -59,6 +59,9 @@ export const BlackParagraph = styled.p`
 export const ButtonBox = styled.div`
   display: flex;
   gap: 20px;
+  @media (max-width: 500px) {
+    gap: 10px;
+  }
   button {
     padding: 0;
     border: none;
