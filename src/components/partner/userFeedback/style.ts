@@ -74,6 +74,15 @@ export const ButtonBox = styled.div`
     }
   }
 
+  .kakaoIcon {
+    width: 26px;
+    height: 26px;
+    @media (max-width: 500px) {
+      width: 22px;
+      height: 22px;
+    }
+  }
+
   .lineIcon {
     width: 24px;
     height: 24px;

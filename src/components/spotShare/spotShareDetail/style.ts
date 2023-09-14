@@ -1,5 +1,7 @@
 import { styled } from 'styled-components';
 
+export const DetailSection = styled.section``;
+
 export const DetailInfoBox = styled.div`
   display: inline-flex;
   padding: 20px;

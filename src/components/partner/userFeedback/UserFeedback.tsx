@@ -96,8 +96,8 @@ const UserFeedback = ({ partnerPostData }: Props) => {
         </div>
       </St.UserProfileBox>
       <St.ButtonBox>
+        <button>{openChat.length > 1 && <RiKakaoTalkLine className="kakaoIcon" onClick={() => handleCopyClipBoard(openChat)} />}</button>
         <button>{bookMark ? <RiBookmarkFill className="fillIcon" onClick={debouncedRemoveBookMarkHandle} /> : <RiBookmarkLine className="lineIcon" onClick={debouncedAddBookMarkHandle} />}</button>
-        <button>{openChat.length > 1 && <RiKakaoTalkLine className="lineIcon" onClick={() => handleCopyClipBoard(openChat)} />}</button>
 
         {isPostUser() ? (
           <>
