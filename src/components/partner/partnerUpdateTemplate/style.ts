@@ -7,6 +7,9 @@ export const FormContainer = styled.div`
   font-style: normal;
   font-weight: 400;
   line-height: 150%;
+  @media screen and (max-width: 1260px) {
+    padding: 0 20px;
+  }
 `;
 
 export const WriteForm = styled.form`
@@ -19,13 +22,24 @@ export const SelectListBox = styled.div`
   display: flex;
   gap: 24px;
 
-  @media screen and (max-width: 650px) {
+  .UpdateLocationDropDown,
+  .UpdatePartnerCalendar,
+  .UpdatePartnerDropDown {
+    width: 384px;
+  }
+
+  @media screen and (max-width: 682px) {
     align-items: flex-start;
     flex-direction: column;
     gap: 12px;
 
     & :where(.css-dev-only-do-not-override-byeoj0).ant-space-vertical {
       margin-left: 0 !important;
+    }
+    .UpdateLocationDropDown,
+    .UpdatePartnerCalendar,
+    .UpdatePartnerDropDown {
+      width: 335px;
     }
   }
 `;
@@ -83,4 +97,14 @@ export const ButtonBox = styled.div`
   display: flex;
   justify-content: center;
   gap: 15px;
+
+  & button:first-of-type {
+    background: var(--light-gray, #e3e9f3);
+    width: 158px;
+    color: black;
+  }
+  & button:last-of-type {
+    background-color: #643bdc;
+    width: 158px;
+  }
 `;
