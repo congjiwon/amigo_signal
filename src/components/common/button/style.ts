@@ -39,6 +39,11 @@ export const CommentButton = styled.button<{ $styleType: BtnStyleType; disabled:
           return css`
             ${btnCommentStyles}
           `;
+        case BtnStyleType.BTN_SUBMITCOMMENT:
+          return css`
+            ${btnCommentStyles}
+            color: #643BDC;
+          `;
         case BtnStyleType.BTN_LIKE:
           return css`
             ${btnCommentStyles}
@@ -104,6 +109,18 @@ export const Button = styled.button<{ $styleType: BtnStyleType; disabled: boolea
           return css`
             ${btnCommonStyles}
             background: #643BDC;
+          `;
+        case BtnStyleType.BTN_GOTOLIST:
+          return css`
+            ${btnCommonStyles}
+            height: 48px;
+            background: #e3e9f3;
+            color: black;
+            border-radius: 8px;
+
+            @media (max-width: 500px) {
+              padding: 10px 16px;
+            }
           `;
         default:
           return ``;

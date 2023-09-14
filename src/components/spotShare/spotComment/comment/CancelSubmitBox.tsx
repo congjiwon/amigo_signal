@@ -5,19 +5,19 @@ import { CancelSubmitBoxProps } from '../type/CommentType';
 
 function CancelSubmitBox({ handleSubmitBtn, comment, handleCancelBtn, handleComment }: CancelSubmitBoxProps) {
   return (
-    <form onSubmit={handleSubmitBtn}>
+    <St.FormContainer onSubmit={handleSubmitBtn}>
       <St.InputBox>
         <St.Textarea placeholder="댓글을 남겨보세요" value={comment} onChange={handleComment} maxLength={300} />
         <St.CancelSubmitButtonBox>
           <CommentButton type="button" styleType={BtnStyleType.BTN_ONLYFONT} onClick={() => handleCancelBtn('name')}>
             취소
           </CommentButton>
-          <CommentButton type="submit" disabled={comment.length < 1} styleType={BtnStyleType.BTN_ONLYFONT}>
+          <CommentButton type="submit" styleType={BtnStyleType.BTN_SUBMITCOMMENT}>
             등록
           </CommentButton>
         </St.CancelSubmitButtonBox>
       </St.InputBox>
-    </form>
+    </St.FormContainer>
   );
 }
 

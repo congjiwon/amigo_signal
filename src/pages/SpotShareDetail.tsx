@@ -1,10 +1,14 @@
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
+import Button from '../components/common/button/Button';
 import MetaTags from '../components/common/metaTags/MetaTags';
 import SpotComments from '../components/spotShare/spotComment/SpotComments';
 import SpotShareDetailContents from '../components/spotShare/spotShareDetail/SpotShareDetailContents';
+import { BtnStyleType } from '../types/styleTypes';
+import * as St from './style';
 
 function SpotShareDetail() {
   const { postid } = useParams<string>();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -19,6 +23,11 @@ function SpotShareDetail() {
       />{' '}
       <SpotShareDetailContents />
       <SpotComments />
+      <St.ButtonBox>
+        <Button styleType={BtnStyleType.BTN_GOTOLIST} onClick={() => navigate('/spotshare')}>
+          목록보기
+        </Button>
+      </St.ButtonBox>
     </>
   );
 }
