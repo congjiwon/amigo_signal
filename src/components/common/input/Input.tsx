@@ -4,28 +4,28 @@ export interface InputProps {
   id?: string;
   name?: string;
   type: 'text' | 'textarea' | 'email' | 'password' | 'number';
-  inputStyleType: 'comment' | 'auth' | 'search' | 'write' | 'apply';
+  $inputStyleType: 'comment' | 'auth' | 'search' | 'write' | 'apply';
   placeholder?: string;
   value?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  border: boolean;
+  $border: boolean;
   disabled?: boolean;
   autoFocus?: boolean;
   forwardRef?: React.MutableRefObject<HTMLInputElement | HTMLTextAreaElement | null>;
   autocomplete?: string;
 }
 
-export const Input = ({ id, name, type, inputStyleType, placeholder, value, onChange, border, disabled, autoFocus, forwardRef, autocomplete }: InputProps) => {
+export const Input = ({ id, name, type, $inputStyleType, placeholder, value, onChange, $border, disabled, autoFocus, forwardRef, autocomplete }: InputProps) => {
   if (type === 'textarea') {
     return (
       <St.Textarea
         id={id}
         name={name}
-        inputStyleType={inputStyleType}
+        $inputStyleType={$inputStyleType}
         placeholder={placeholder ?? ''}
         value={value}
         onChange={onChange}
-        border={border}
+        $border={$border}
         disabled={disabled}
         autoFocus={autoFocus}
         ref={forwardRef as React.MutableRefObject<HTMLTextAreaElement | null>}
@@ -38,11 +38,11 @@ export const Input = ({ id, name, type, inputStyleType, placeholder, value, onCh
         id={id}
         name={name}
         type={type}
-        inputStyleType={inputStyleType}
+        $inputStyleType={$inputStyleType}
         placeholder={placeholder ?? ''}
         value={value}
         onChange={onChange}
-        border={border}
+        $border={$border}
         disabled={disabled}
         autoFocus={autoFocus}
         ref={forwardRef as React.MutableRefObject<HTMLInputElement | null>}
