@@ -11,7 +11,7 @@ type ApplyStatusProps = {
 export const PartnerDetailMain = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: 100px 0px 0px 0px;
+  margin-top: 100px;
 
   @media (max-width: 1256px) {
     display: block;
@@ -29,6 +29,7 @@ export const PartnerDetailMain = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 100px;
+    margin-top: 40px;
     padding: 0 10px 0 10px;
   }
 `;
