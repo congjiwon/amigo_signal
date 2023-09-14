@@ -136,22 +136,21 @@ function SpotShareDetailContents() {
   }, 300);
   return (
     <>
-      {isLoading && <LoadingSpinner />}
-      <St.TitleBox>
-        <p>{spotSharePost?.title}</p>
-      </St.TitleBox>
-      <div>
+      <St.DetailSection>
+        {isLoading && <LoadingSpinner />}
+        <St.TitleBox>
+          <p>{spotSharePost?.title}</p>
+        </St.TitleBox>
         <St.InfoOuterBox>
           <St.PostInfoBox>
             {spotSharePost?.users?.profileImageUrl ? <St.ProfileImage src={`${storagaUrl}/${spotSharePost.users.profileImageUrl}`} alt="profile" /> : <St.ProfileImage src={defaultProfileImage} alt="profile" />}
-            <St.InfoInnerBox>
-              <St.NickNameSpan style={{ paddingTop: '1px', paddingBottom: '5px' }}>{spotSharePost?.users?.nickName} </St.NickNameSpan>
+            <div>
+              <St.NickNameSpan>{spotSharePost?.users?.nickName} </St.NickNameSpan>
               <St.InfoContainer>
                 <span>{spotSharePost?.createdAt.substring(0, 10) + ' ' + spotSharePost?.createdAt.substring(11, 16)} </span>
-                {/* <span>조회 100</span> */}
                 <span>좋아요 {likeCount}</span>
               </St.InfoContainer>
-            </St.InfoInnerBox>
+            </div>
           </St.PostInfoBox>
           <St.ButtonBox>
             <button>{like ? <RiHeartFill className="fillIcon" onClick={() => debouncedRemoveLikeHandle()} /> : <RiHeartLine className="lineIcon" onClick={() => debouncedAddLikeHandle()} />}</button>
@@ -165,29 +164,31 @@ function SpotShareDetailContents() {
             )}
           </St.ButtonBox>
         </St.InfoOuterBox>
-      </div>
 
-      <St.SpotShareBox>
-        <St.DetailInfoBox>
-          <St.GraySpan>나라 </St.GraySpan>
-          <St.BlackSpan>
-            {spotSharePost?.region} &gt; {spotSharePost?.country.country}
-          </St.BlackSpan>
-        </St.DetailInfoBox>
-        <St.DetailInfoBox>
-          <St.GraySpan>방문날짜</St.GraySpan>
-          <St.BlackSpan> {spotSharePost?.visitDate}</St.BlackSpan>
-        </St.DetailInfoBox>
-        <St.DetailInfoBox>{spotSharePost?.starRate && <Rate disabled defaultValue={spotSharePost.starRate} />}</St.DetailInfoBox>
+        <St.DetailInfoList>
+          <St.DetailInfoBox>
+            <St.GraySpan>나라 </St.GraySpan>
+            <St.BlackSpan>
+              {spotSharePost?.region} &gt; {spotSharePost?.country.country}
+            </St.BlackSpan>
+          </St.DetailInfoBox>
+          <St.DetailInfoBox>
+            <St.GraySpan>방문날짜</St.GraySpan>
+            <St.BlackSpan> {spotSharePost?.visitDate}</St.BlackSpan>
+          </St.DetailInfoBox>
+          <St.DetailInfoBox>{spotSharePost?.starRate && <Rate disabled defaultValue={spotSharePost.starRate} />}</St.DetailInfoBox>
+        </St.DetailInfoList>
 
-        <ReactQuill readOnly={true} theme="bubble" value={spotSharePost?.content} />
-      </St.SpotShareBox>
-      <div style={{ marginTop: '50px', marginBottom: '50px' }}>
+        <St.SpotShareBox>
+          <ReactQuill readOnly={true} theme="bubble" value={spotSharePost?.content} />
+        </St.SpotShareBox>
+      </St.DetailSection>
+      <div>
         {spotSharePost?.address ? (
-          <p style={{ marginBottom: '10px' }}>
-            <FiMapPin style={{ marginRight: '10px' }} />
-            {spotSharePost?.address}
-          </p>
+          <St.AddressBox>
+            <FiMapPin className="markerIcon" />
+            <span>{spotSharePost?.address}</span>
+          </St.AddressBox>
         ) : (
           <></>
         )}
