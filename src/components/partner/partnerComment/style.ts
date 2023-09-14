@@ -10,9 +10,6 @@ export const CommentContainer = styled.div`
   @media (max-width: 1256px) {
     padding: 0 50px 0 50px;
   }
-  @media (max-width: 800px) {
-    padding: 0 20px;
-  }
   @media (max-width: 375px) {
     padding: 24px 20px 72px 20px;
   }
@@ -31,7 +28,6 @@ export const CommentLengthParagraph = styled.p`
 export const Form = styled.form`
   display: flex;
   gap: 24px;
-  // justify-content: space-between;
   align-items: center;
   margin-bottom: 32px;
   @media (max-width: 375px) {
@@ -42,24 +38,11 @@ export const Form = styled.form`
 
 export const CommentTextarea = styled.textarea`
   resize: none;
-  // width: 88.08%;
   flex: 1 1 auto;
   height: 20px;
   padding: 14px 20px 14px 20px;
   border-radius: 15px;
   border: 1px solid var(--light-gray, #e8ebee);
-  // @media (max-width: 1256px) {
-  //   width: 83%;
-  // }
-  @media (max-width: 800px) {
-    width: 77%;
-  }
-  @media (max-width: 500px) {
-    width: 70%;
-  }
-  @media (max-width: 407px) {
-    width: 65%;
-  }
   @media (max-width: 375px) {
     width: 231px;
     height: 20px;
@@ -71,22 +54,12 @@ export const CommentTextarea = styled.textarea`
 `;
 
 export const CommentButton = styled.button`
-  width: 6.5%;
+  width: 78px;
   height: 48px;
   background-color: white;
   color: black;
   border-radius: 15px;
   cursor: pointer;
-  // @media (max-width: 1256px) {
-  //   width: 7%;
-  // }
-  @media (max-width: 800px) {
-    width: 10%;
-  }
-  @media (max-width: 500px) {
-    font-size: 12px;
-  }
-
   @media (max-width: 375px) {
     width: 64px;
     height: 40px;
@@ -132,7 +105,7 @@ export const CommentBox = styled.div`
 `;
 
 export const CommentParagraph = styled.p`
-  white-space: pre-line;
+  word-break: break-all;
   line-height: 130%;
   @media (max-width: 375px) {
     font-size: 14px;
@@ -180,79 +153,60 @@ export const Bar = styled.p`
   color: var(--gray, #adb1b8);
 `;
 
+export const FormContainer = styled.form`
+  padding-right: 102px;
+  padding-left: 52px;
+`;
+
 export const InputBox = styled.div`
   position: relative;
-  padding-right: 94px;
-  padding-left: 52px;
+  border-radius: 15px;
+  border: 1px solid var(--light-gray, #e8ebee);
+  padding: 14px 20px 43px 20px;
+  @media (max-width: 375px) {
+    width: 268px;
+    height: 43px;
+    padding: 10px 12px 33px 12px;
+    border-radius: 8px;
+  }
 `;
 
 export const Textarea = styled.textarea`
   resize: none;
-  // width: 83.75%;
   width: 100%;
   height: 43px;
-  padding: 14px 20px 43px 20px;
-  margin-left: 52px;
+  border: 0;
+  outline: 0;
+`;
+
+export const ReCommentInputBox = styled.div`
+  position: relative;
   border-radius: 15px;
   border: 1px solid var(--light-gray, #e8ebee);
-  // @media (max-width: 1256px) {
-  //   width: 78%;
-  // }
-  // @media (max-width: 800px) {
-  //   width: 70%;
-  // }
-  @media (max-width: 500px) {
-    width: 65%;
-  }
+  padding: 14px 20px 43px 20px;
+  margin-right: 102px;
   @media (max-width: 375px) {
-    width: 265px;
+    width: 268px;
     height: 43px;
-    margin-left: 43px;
     padding: 10px 12px 33px 12px;
-    white-space: pre-line;
+    border-radius: 8px;
   }
 `;
 
 export const RecommentTextarea = styled.textarea`
   resize: none;
-  width: 953px;
+  width: 100%;
   height: 43px;
-  padding: 14px 20px 43px 20px;
-  margin-left: 52px;
-  border-radius: 15px;
-  border: 1px solid var(--light-gray, #e8ebee);
-  @media (max-width: 1256px) {
-    width: 79.53%;
-  }
-  @media (max-width: 800px) {
-    width: 70%;
-  }
-  // @media screen and (min-width: 375px) and (max-width: 1256px) {
-  //   width: 100%;
-  // }
-  @media (max-width: 375px) {
-    width: 256px;
-    height: 43px;
-    margin-left: 0px;
-    padding: 10px 12px 33px 12px;
-  }
+  border: 0;
+  outline: 0;
 `;
 
 export const CancelSubmitButtonBox = styled.div`
   position: absolute;
-  top: 65px;
-  right: 109px;
+  bottom: 14px;
+  right: 24px;
   display: flex;
   align-items: center;
-  @media (max-width: 1256px) {
-    right: 14.1%;
-  }
-  @media (max-width: 800px) {
-    right: 18%;
-  }
-  @media (max-width: 500px) {
-    right: 11%;
-  }
   @media (max-width: 375px) {
     gap: 4px;
     color: var(--dark-gray, #3f4656);
