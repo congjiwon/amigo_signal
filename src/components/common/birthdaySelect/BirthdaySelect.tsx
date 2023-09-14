@@ -22,7 +22,6 @@ const BirthdaySelect = (birthdayStatus: birthdayStatusProps) => {
     const birthdayString = selectedYear && formattedMonth && formattedDay && `${selectedYear}-${formattedMonth}-${formattedDay}`;
 
     birthdayString && setBirthday(birthdayString);
-    console.log('useEffect', birthdayString);
   }, [selectedDay, selectedMonth, selectedYear]);
 
   const yearsRange = () => {

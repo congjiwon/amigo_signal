@@ -1,8 +1,28 @@
 import { styled } from 'styled-components';
 
 export const FormContainer = styled.div`
-  margin-top: 80px;
-  margin-bottom: 80px;
+  margin-top: 131px;
+  margin-bottom: 120px;
+  @media (max-width: 1256px) {
+    margin-top: 70px;
+    margin-bottom: 70px;
+  }
+  @media (max-width: 500px) {
+    margin-top: 48px;
+    margin-bottom: 104px;
+  }
+`;
+
+export const WriteBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  @media (max-width: 1256px) {
+    padding: 0px 50px 0px 50px;
+  }
+  @media (max-width: 500px) {
+    padding: 0px 20px 0px 20px;
+  }
 `;
 
 export const WriteForm = styled.form`
@@ -15,20 +35,24 @@ export const SelectListBox = styled.div`
   display: flex;
   align-items: center;
   gap: 24px;
-
   .LocationDropDown,
   .SpotCalendar {
     width: 384px;
+    @media (max-width: 1047px) {
+      width: 184px;
+    }
+    @media (max-width: 500px) {
+      width: 335px;
+    }
   }
-
   .StarRate {
     color: #643bdc;
   }
-
   @media screen and (max-width: 650px) {
     align-items: flex-start;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
+    margin-bottom: 8px;
 
     & :where(.css-dev-only-do-not-override-byeoj0).ant-space-vertical {
       margin-left: 0 !important;
@@ -59,6 +83,9 @@ export const ButtonBox = styled.div`
     border: none;
     font-size: 16px;
     cursor: pointer;
+    @media (max-width: 500px) {
+      padding: 16px 31px;
+    }
   }
 
   .CancelBtn {

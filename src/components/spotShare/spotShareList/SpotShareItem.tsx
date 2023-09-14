@@ -66,7 +66,7 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
   if (visitDate[2][0] == '0') {
     visitDate[2] = visitDate[2].substring(1);
   }
-  const contentWithoutTags = post.content.replace(/<\/?[^>]+(>|$)/g, '');
+  const contentWithoutTags = post.content.replace(/<\/?[^>]+(>|$)|&[^;]+;/g, '');
 
   // 좋아요 클릭 시
   const handleFillHeart = _.debounce(async (event: React.MouseEvent<SVGElement, MouseEvent>) => {
