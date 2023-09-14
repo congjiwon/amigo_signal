@@ -21,14 +21,12 @@ function IntroTemplate() {
         <St.LinkContainer>
           <Link to="/partner">
             <St.LinkIcon>
-              {/* <FiUsers style={{ width: '36px', height: '36px', color: 'white' }} /> */}
               <FiUsers className="FiIcon" />
             </St.LinkIcon>
             <St.Paragraph>동행 찾기</St.Paragraph>
           </Link>
           <Link to="/spotshare">
             <St.LinkIcon>
-              {/* <FiMapPin style={{ width: '36px', height: '36px', color: 'white' }} /> */}
               <FiMapPin className="FiIcon" />
             </St.LinkIcon>
             <St.Paragraph>스팟 공유</St.Paragraph>
