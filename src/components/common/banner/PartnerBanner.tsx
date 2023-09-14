@@ -1,4 +1,4 @@
-import mainBanner from '../../../assets/imgs/partner/partnerPostBanner.png';
+import mainBanner from '../../../assets/imgs/partner/partner_post_banner.png';
 // import
 import * as St from './style';
 
@@ -7,7 +7,10 @@ function PartnerBanner() {
     <St.ImageWrapper $banner={`partner`}>
       <St.PartnerMainImage src={mainBanner} alt="동행 찾기 매인 배너 이미지" />
       <St.PartnerBannerTextBox>
-        <St.PartnerImageMainText>친구와 함께라면 더 즐겁지 않을까요?</St.PartnerImageMainText>
+        <St.PartnerImageMainText>
+          <span>친구와 함께라면 </span>
+          <span>더 즐겁지 않을까요?</span>
+        </St.PartnerImageMainText>
         <St.PartnerImageSubText>
           Amigo Signal과 여행을 함께할 동행을 찾아보세요.
           <br />
