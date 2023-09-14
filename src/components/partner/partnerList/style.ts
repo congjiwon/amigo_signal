@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { RecruitmentDropDown } from '../../common/dropDown/DropDown';
 
 type StatusProps = {
   $isOpen: boolean;
@@ -7,7 +6,9 @@ type StatusProps = {
 
 export const CustomDropBox = styled.div`
   @media screen and (max-width: 690px) {
-    padding-right: 92px;
+    position: relative;
+    right: 76px;
+    top: 4px;
   }
 `;
 
@@ -66,9 +67,24 @@ export const FilterWriteBox = styled.div`
     align-items: flex-start;
     padding: 0 20px;
     gap: 12px;
-    /* height: 79px; */
+
     & button:last-of-type {
       align-self: flex-end;
+      z-index: 1;
+      width: 87px;
+      height: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      span {
+        color: var(--white, #fff);
+        text-align: center;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 100%; /* 14px */
+        display: inline-block;
+        width: 45px;
+      }
     }
   }
 `;
@@ -137,6 +153,12 @@ export const LocationBox = styled.div`
   h1 {
     margin: 30px 0px 0px 5px;
   }
+
+  /* @media screen and (max-width: 355px) {
+    CheckBox {
+      left: 320px;
+    }
+  } */
 `;
 
 export const FlagBox = styled.div`
@@ -178,7 +200,7 @@ export const CheckBox = styled.div`
 
   position: absolute;
   top: 22px;
-  left: 180px;
+  right: 20px;
   span {
     font-size: 12px;
     font-style: normal;

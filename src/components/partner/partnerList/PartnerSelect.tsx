@@ -28,7 +28,7 @@ const PartnerSelect = ({ setIsOpen, setLocation, setDate }: PartnerSelectProps) 
         </div>
       </St.SelectsBox>
       <Button styleType={BtnStyleType.BTN_DARK} onClick={() => navigate('/partner/write')}>
-        글쓰기
+        <span>글쓰기</span>
       </Button>
     </St.FilterWriteBox>
   );
