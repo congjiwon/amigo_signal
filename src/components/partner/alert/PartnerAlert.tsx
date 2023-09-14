@@ -10,6 +10,7 @@ import { Popover } from 'antd';
 import * as St from './style';
 import iconAlert from '../../../assets/imgs/header/icon_alert.png';
 import { timeAgo } from '../../common/transferTime/transferTime';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function PartnerAlert() {
   const session = useSessionStore((state) => state.session);
@@ -35,7 +36,9 @@ export default function PartnerAlert() {
           const postTitle = await fetchPartnerPostTitle(payload.new.postId);
           if (postTitle) {
             const newPostInfo = {
-              id: payload.new.id,
+              id: uuidv4(),
+              logInUserId: userId!,
+              applyId: payload.new.id,
               postId: payload.new.postId,
               title: postTitle,
               date: payload.commit_timestamp,
@@ -75,7 +78,9 @@ export default function PartnerAlert() {
           const postTitle = await fetchPartnerPostTitle(payload.new.postId);
           if (postTitle) {
             const newPostInfo = {
-              id: payload.new.id,
+              id: uuidv4(),
+              logInUserId: userId!,
+              applyId: payload.new.id,
               postId: payload.new.postId,
               title: postTitle,
               date: payload.commit_timestamp,
@@ -90,7 +95,9 @@ export default function PartnerAlert() {
           const postTitle = await fetchPartnerPostTitle(payload.new.postId);
           if (postTitle) {
             const newPostInfo = {
-              id: payload.new.id,
+              id: uuidv4(),
+              logInUserId: userId!,
+              applyId: payload.new.id,
               postId: payload.new.postId,
               title: postTitle,
               date: payload.commit_timestamp,
@@ -126,7 +133,7 @@ export default function PartnerAlert() {
       <St.MainTitle>{`새로운 소식 (${alertStorage.length})`}</St.MainTitle>
       <St.ListBox>
         {[...alertStorage].reverse().map((item) => (
-          <St.ListList onClick={() => handleAlertLink(item.id, item.postId)} key={item.id}>
+          <St.ListList onClick={() => handleAlertLink(item.applyId, item.postId)} key={item.applyId}>
             <St.ListItem>
               <div>
                 <img src={iconAlert} alt="동행 아이콘" style={{ width: '40px' }} />

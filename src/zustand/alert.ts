@@ -3,6 +3,8 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 
 type AlertInfo = {
   id: string;
+  logInUserId: string;
+  applyId: string;
   postId: string;
   title: string;
   date: string;
@@ -30,7 +32,7 @@ export const useAlertStorageStore = create<AlertStorageStore>()(
         })),
       removeAlertStorage: (id) =>
         set((state) => ({
-          alertStorage: state.alertStorage.filter((item) => item.id !== id),
+          alertStorage: state.alertStorage.filter((item) => item.applyId !== id),
         })),
     }),
     {
