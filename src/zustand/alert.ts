@@ -8,13 +8,14 @@ type AlertInfo = {
   postId: string;
   title: string;
   date: string;
-  genre?: string;
+  genre: string;
 };
 
 type AlertStorageStore = {
   alertStorage: AlertInfo[];
   addAlertStorage: (postInfo: AlertInfo) => void;
   removeAlertStorage: (postId: string) => void;
+  setAlertStorage: (postInfo: AlertInfo[]) => void;
 };
 
 type NewAlertStore = {
@@ -34,7 +35,12 @@ export const useAlertStorageStore = create<AlertStorageStore>()(
         set((state) => ({
           alertStorage: state.alertStorage.filter((item) => item.applyId !== id),
         })),
+      setAlertStorage: (postInfo) =>
+        set(() => ({
+          alertStorage: [...postInfo],
+        })),
     }),
+
     {
       name: 'alertStorage',
       storage: createJSONStorage(() => sessionStorage),

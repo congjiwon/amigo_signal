@@ -78,7 +78,7 @@ const ApplyWithInfo = ({ postId, writerId, applicantId, setIsApply }: ApplyWithI
     <>
       <St.ModalTitle>동행 참여 신청하기</St.ModalTitle>
       <St.InputBox>
-        <Input type="textarea" inputStyleType="apply" border={true} placeholder="간단한 자기소개를 작성해주세요." value={text} onChange={handleText} />
+        <Input type="textarea" $inputStyleType="apply" $border={true} placeholder="간단한 자기소개를 작성해주세요." value={text} onChange={handleText} />
         <St.TextCount>{text.length}/300 자</St.TextCount>
       </St.InputBox>
       <St.SubmitApply>
