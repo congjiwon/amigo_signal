@@ -11,15 +11,11 @@ import { usePartnerComments } from '../usePartnerComment';
 function PartnerCommentsWrite() {
   const params = useParams();
   const [content, setContent] = useState('');
-  const { isLoading, data: authId } = useQuery(['auth'], getAuthId);
+  const { data: authId } = useQuery(['auth'], getAuthId);
   const session = useSessionStore((state) => state.session);
   const logInUserId = session?.user.id;
   const { postCommentMutation } = usePartnerComments();
   const navigate = useNavigate();
-  // 항상 뜸
-  if (isLoading) {
-    // console.log('로딩중');
-  }
 
   const handlePostContent = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(event.target.value.replace(/ /g, '\u00A0'));

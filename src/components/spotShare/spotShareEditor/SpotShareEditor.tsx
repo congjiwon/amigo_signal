@@ -31,6 +31,8 @@ const toolbarOptions = [
   ['link', 'image'],
 ];
 
+const toolbarOptionsMobile = [[{ size: ['small', false, 'large', 'huge'] }], [{ color: [] }, { background: [] }], ['bold'], ['link', 'image']];
+
 const SoptShareEditor = ({ editorHtml, setEditorHtml, setPostImageUrl, postImageUrlArray }: Props) => {
   const changeContent = useCallback((content: string) => {
     setEditorHtml(content);
@@ -50,7 +52,6 @@ const SoptShareEditor = ({ editorHtml, setEditorHtml, setPostImageUrl, postImage
       input.setAttribute('accept', 'image/*');
       input.click(); // 에디터 이미지버튼을 클릭하면 이 input이 클릭된다.
       input.addEventListener('change', async () => {
-        console.log('온체인지');
         const file = input.files![0];
         const options = {
           maxSizeMB: 1,
@@ -61,9 +62,7 @@ const SoptShareEditor = ({ editorHtml, setEditorHtml, setPostImageUrl, postImage
         const fileNewName = uuidv4();
         const { data, error } = await supabase.storage.from('quillImgs').upload(`quill_imgs/${fileNewName}`, compressedFile);
         if (error) {
-          console.error('이미지 업로드 중 오류 발생:', error);
         } else {
-          console.log('이미지가 성공적으로 업로드되었습니다:', data);
         }
         const response = supabase.storage.from('quillImgs').getPublicUrl(`quill_imgs/${fileNewName}`);
 
@@ -75,12 +74,9 @@ const SoptShareEditor = ({ editorHtml, setEditorHtml, setPostImageUrl, postImage
           editor.insertEmbed(range.index, 'image', postImageUrl);
           editor.setSelection(range.index + 1);
         } else {
-          console.error('No public URL found in response data.');
         }
       });
-    } catch (error) {
-      console.log('error', error);
-    }
+    } catch (error) {}
   };
 
   const modules = useMemo(() => {
@@ -88,7 +84,7 @@ const SoptShareEditor = ({ editorHtml, setEditorHtml, setPostImageUrl, postImage
       imageActions: {},
       imageFormats: {},
       toolbar: {
-        container: toolbarOptions,
+        container: window.innerWidth > 728 ? toolbarOptions : toolbarOptionsMobile,
         handlers: {
           image: imageHandler,
         },

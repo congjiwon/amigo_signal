@@ -68,7 +68,6 @@ const Communication = ({ postId, writerId, logInUserId, isApply, setIsApply }: C
 
   const handleApplyCancel = async () => {
     if (!postId || !logInUserId) {
-      console.error('postId 또는 applicantId 유효하지 않습니다.');
       return;
     }
     // 참여 취소 확인
@@ -81,7 +80,6 @@ const Communication = ({ postId, writerId, logInUserId, isApply, setIsApply }: C
       setIsApply(false);
       setApplicantStatus(null);
     } catch (error) {
-      console.error('참여 취소 과정에서 error 발생', error);
       Alert({ title: '참여 취소 중 문제가 발생했습니다.', position: 'top-end' });
     }
   };

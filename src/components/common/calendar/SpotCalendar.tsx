@@ -31,7 +31,7 @@ export function SpotCalendar({ setSpotDate }: CalendarProps) {
 
   return (
     <Space direction="vertical">
-      <DatePicker disabledDate={disabledDate} onChange={getDateHandle} inputReadOnly />
+      <DatePicker className="SpotCalendar" disabledDate={disabledDate} onChange={getDateHandle} inputReadOnly />
     </Space>
   );
 }
