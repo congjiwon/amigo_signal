@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import { FiChevronsUp } from 'react-icons/fi';
+import { FiChevronUp } from 'react-icons/fi';
+import styled from 'styled-components';
+import * as St from './style';
 
 function TopButton() {
   const [showButton, setShowButton] = useState(false);
@@ -27,9 +29,9 @@ function TopButton() {
   return (
     <div>
       {showButton && (
-        <button onClick={scrollToTop} type="button" style={{ border: 'none', background: 'beige', padding: '10px' }}>
-          <FiChevronsUp />
-        </button>
+        <St.TopButton onClick={scrollToTop} type="button">
+          <FiChevronUp style={{ color: 'white', width: '28px', height: '28px' }} />
+        </St.TopButton>
       )}
     </div>
   );

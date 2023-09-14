@@ -17,6 +17,14 @@ export const NoDataImgBox = styled.div`
   }
 `;
 
+export const CustomDropBox = styled.div`
+  @media screen and (max-width: 690px) {
+    position: relative;
+    right: 100px;
+    top: 4px;
+  }
+`;
+
 export const MoveButtonArea = styled.div`
   position: fixed;
   right: 40px;
@@ -37,16 +45,34 @@ export const FilterBox = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+
   @media screen and (max-width: 1200px) {
     padding: 0 16px;
   }
-  @media screen and (max-width: 650px) {
-    flex-direction: column;
+
+  @media screen and (max-width: 690px) {
+    flex-direction: column-reverse;
     align-items: flex-start;
     padding: 0 20px;
     gap: 12px;
+
     & button:last-of-type {
       align-self: flex-end;
+      z-index: 1;
+      width: 87px;
+      height: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      span {
+        color: var(--white, #fff);
+        text-align: center;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 100%; /* 14px */
+        display: inline-block;
+        width: 45px;
+      }
     }
   }
 `;
@@ -54,9 +80,28 @@ export const FilterBox = styled.div`
 export const SelectsBox = styled.div`
   display: flex;
   gap: 24px;
-  @media screen and (max-width: 650px) {
-    align-items: flex-start;
+
+  & > div {
+    display: flex;
+    gap: 24px;
+  }
+  @media screen and (max-width: 690px) {
+    position: relative;
+    top: -48px;
     flex-direction: column;
+    align-items: flex-end;
+    gap: 15px;
+    width: 100%;
+    margin-bottom: -60px;
+
+    & > div {
+      display: flex;
+      gap: 12px;
+    }
+
+    & :where(.css-dev-only-do-not-override-byeoj0).ant-space-vertical {
+      margin-left: 0 !important;
+    }
   }
 `;
 
