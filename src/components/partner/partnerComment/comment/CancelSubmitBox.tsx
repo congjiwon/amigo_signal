@@ -5,7 +5,7 @@ import { CancelSubmitBoxProps } from '../type/CommentType';
 
 function CancelSubmitBox({ handleSubmitBtn, comment, handleComment, handleCancelBtn }: CancelSubmitBoxProps) {
   return (
-    <form onSubmit={handleSubmitBtn}>
+    <St.FormContainer onSubmit={handleSubmitBtn}>
       <St.InputBox>
         <St.Textarea placeholder="댓글을 남겨보세요" value={comment} onChange={handleComment} maxLength={300} />
         <St.CancelSubmitButtonBox>
@@ -17,7 +17,7 @@ function CancelSubmitBox({ handleSubmitBtn, comment, handleComment, handleCancel
           </CommentButton>
         </St.CancelSubmitButtonBox>
       </St.InputBox>
-    </form>
+    </St.FormContainer>
   );
 }
 
