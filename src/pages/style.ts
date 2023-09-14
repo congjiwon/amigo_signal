@@ -90,3 +90,15 @@ export const ApplyStatus = styled.div<ApplyStatusProps>`
   line-height: 160%;
   letter-spacing: -0.3px;
 `;
+
+export const ButtonBox = styled.div`
+  margin: 40px 474px 120px 474px;
+  display: flex;
+  justify-content: center;
+  @media (max-width: 1060px) {
+    margin: 40px 145px 75px 145px;
+  }
+  @media (max-width: 500px) {
+    margin: 0px 145px 75px 145px;
+  }
+`;
