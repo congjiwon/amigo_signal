@@ -3,9 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { insertSpotPost } from '../../../api/supabase/spotshare';
 import { supabase } from '../../../api/supabase/supabaseClient';
-import { BtnStyleType } from '../../../types/styleTypes';
 import useSessionStore from '../../../zustand/store';
-import Button from '../../common/button/Button';
 import { SpotCalendar } from '../../common/calendar/SpotCalendar';
 import { currentTime } from '../../common/currentTime/CurrentTime';
 import LocationDropDown from '../../common/dropDown/LocationDropDown';
@@ -116,12 +114,12 @@ export default function WriteTemplate() {
         <SpotShareEditor editorHtml={editorHtml} setEditorHtml={setEditorHtml} postImageUrlArray={postImageUrl} setPostImageUrl={setPostImageUrl} />
         <SpotMap setLatitude={setLatitude} setLongitude={setLongitude} address={address} setAddress={setAddress} country={location[1]} />
         <St.ButtonBox>
-          <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={handleonClickCancel}>
+          <button className="CancelBtn" type="button" onClick={handleonClickCancel}>
             취소
-          </Button>
-          <Button type="submit" disabled={disable} styleType={BtnStyleType.BTN_DARK}>
+          </button>
+          <button className="SubmitBtn" type="submit" disabled={disable}>
             작성완료
-          </Button>
+          </button>
         </St.ButtonBox>
       </St.WriteForm>
       {disable && <LoadingSpinner />}

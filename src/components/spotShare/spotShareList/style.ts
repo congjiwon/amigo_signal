@@ -107,7 +107,7 @@ export const SelectsBox = styled.div`
 
 export const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, minmax(200px, auto));
+  grid-template-columns: repeat(4, minmax(282px, auto));
   grid-gap: 24px;
   place-items: center;
   margin: 50px auto;

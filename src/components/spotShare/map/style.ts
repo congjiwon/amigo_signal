@@ -28,9 +28,25 @@ export const SearchAddress = styled.div`
     font-size: 16px;
   }
 
+  input {
+    flex: 1 0 0;
+    width: 237.94px;
+    height: 24px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--light-gray, #e3e9f3);
+    font-size: 14px;
+  }
+
   button {
-    font-size: 16px;
-    padding: 5px 20px;
+    width: 112px;
+    height: 40px;
+    padding: 6.4px 15px;
+    background: var(--light-gray, #e3e9f3);
+    border-radius: 6px;
+    font-size: 14px;
+    color: black;
+    cursor: pointer;
   }
 `;
 
@@ -41,4 +57,8 @@ export const Address = styled.div`
   button {
     background-color: #999;
   }
+`;
+
+export const AddressSearchBox = styled.div`
+  margin-top: 40px;
 `;

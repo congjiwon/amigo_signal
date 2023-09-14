@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { AddressSearch } from './AddressSearch';
 import { addMarker, createAndSetMarker } from './createMarker';
+import * as St from './style';
 
 type SpotMapProps = {
   setLatitude: (lat: number | null) => void;
@@ -67,10 +68,10 @@ const SpotMap = ({ setLatitude, setLongitude, address, setAddress, country }: Sp
   };
 
   return (
-    <div style={{ marginTop: '50px' }}>
+    <St.AddressSearchBox>
       <AddressSearch map={map} setLatitude={setLatitude} setLongitude={setLongitude} setAddress={setAddress} address={address} selectedCountry={selectedCountry} setMarkerOnMap={setMarkerOnMap} />
       <div ref={mapRef} style={{ width: '100%', height: '50vh', marginTop: '20px' }} />
-    </div>
+    </St.AddressSearchBox>
   );
 };
 

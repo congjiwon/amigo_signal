@@ -5,7 +5,6 @@ export const EditorBox = styled.div`
   & strong {
     font-weight: 700;
   }
-
   & em {
     font-style: italic;
   }
