@@ -6,6 +6,7 @@ export const Title = styled.p`
   font-style: normal;
   font-weight: 600;
   line-height: 150%;
+  word-break: break-all;
   /* max-width: 791px; */
   @media (max-width: 500px) {
     color: #000;
@@ -39,6 +40,7 @@ export const ContentParagraph = styled.p`
   font-style: normal;
   font-weight: 400;
   line-height: 150%; /* 21px */
+  word-break: break-all;
 `;
 
 export const DetailInfoSection = styled.div`
