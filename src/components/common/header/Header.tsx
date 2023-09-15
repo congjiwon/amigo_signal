@@ -1,18 +1,18 @@
-import { useEffect, useState } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { Drawer, Popover } from 'antd';
+import { useEffect, useState } from 'react';
+import { BiX } from 'react-icons/bi';
+import { FiChevronDown, FiMenu } from 'react-icons/fi';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { supabase } from '../../../api/supabase/supabaseClient';
 import { getCurrentUser } from '../../../api/supabase/users';
-import useCurrentUserStore from '../../../zustand/currentUser';
-import useSessionStore from '../../../zustand/store';
-import { Popover, Drawer } from 'antd';
-import { Alert } from '../modal/alert';
-import PartnerAlert from '../../partner/alert/PartnerAlert';
-import * as St from './style';
 import logoHeader from '../../../assets/imgs/Logo/logo_header.png';
 import defaultImg from '../../../assets/imgs/users/default_profile_img.png';
-import { FiChevronDown, FiMenu } from 'react-icons/fi';
-import { BiX } from 'react-icons/bi';
+import useCurrentUserStore from '../../../zustand/currentUser';
+import useSessionStore from '../../../zustand/store';
+import PartnerAlert from '../../partner/alert/PartnerAlert';
+import { Alert } from '../modal/alert';
+import * as St from './style';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -71,7 +71,7 @@ export default function Header() {
       <St.Header>
         <St.H1>
           <Link to="/">
-            <img src={logoHeader} style={{ width: '144px' }} />
+            <img src={logoHeader} style={{ width: '144px', height: '24px' }} alt="아미고 시그널 로고" />
           </Link>
         </St.H1>
         {/* web */}

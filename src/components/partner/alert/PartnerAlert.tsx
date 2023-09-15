@@ -197,7 +197,7 @@ export default function PartnerAlert() {
             width: '300px',
           }}
         >
-          <img src={YesAlert} alt="alert" />
+          <img src={YesAlert} alt="alert" style={{ width: '20px', height: '22px' }} />
         </Popover>
       ) : (
         <Popover
@@ -208,7 +208,7 @@ export default function PartnerAlert() {
             width: '150px',
           }}
         >
-          <img src={NoAlert} alt="noAlert" />
+          <img src={NoAlert} alt="noAlert" style={{ width: '24px', height: '24px' }} />
         </Popover>
       )}
     </>

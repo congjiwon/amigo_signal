@@ -214,7 +214,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
                     }}
                   >
                     <St.TegImgBox>
-                      <St.TegImg src={item.imageUrl!} />
+                      <St.TegImg src={item.imageUrl!} alt={`${item.discription} 아이콘`} />
                     </St.TegImgBox>
                     <span>{item.discription}</span>
                   </St.TegButton>

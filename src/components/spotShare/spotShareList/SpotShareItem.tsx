@@ -114,7 +114,7 @@ function SpotShareItem({ post, likedPost }: SpotItemProps) {
           <St.ContentBox>
             <p>{contentWithoutTags}</p>
           </St.ContentBox>
-          <St.DefaultImg src={post.country.imageUrl}></St.DefaultImg>
+          <St.DefaultImg src={post.country.imageUrl} alt={`${post.country.country} 대표 이미지`} />
           <St.Span>{post.country.country}</St.Span>
         </St.PostCard>
       </Link>

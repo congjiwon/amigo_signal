@@ -63,7 +63,7 @@ export default function PartnerItems({ isOpen, country, startDate, endDate }: Pa
   if (infiniteData?.pages[0].data?.length === 0) {
     return (
       <St.NoDataImgBox>
-        <img src={icon_nodata} style={{ width: '60px' }}></img>
+        <img src={icon_nodata} style={{ width: '60px' }} alt="데이터 없음 이미지" />
         <p>검색결과가 없습니다!</p>
       </St.NoDataImgBox>
     );

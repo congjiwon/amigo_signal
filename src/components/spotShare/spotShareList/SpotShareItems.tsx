@@ -67,7 +67,7 @@ export default function SpotShareItems({ sort, country, startDate, endDate }: Sp
   if (spotShareItems?.pages[0].data?.length === 0) {
     return (
       <St.NoDataImgBox>
-        <img src={icon_nodata} style={{ width: '60px' }}></img>
+        <img src={icon_nodata} style={{ width: '60px' }} alt="검색결과 없음 아이콘" />
         <p>검색결과가 없습니다!</p>
       </St.NoDataImgBox>
     );

@@ -82,16 +82,18 @@ export const ImageWrapper = styled.div<bannerProps>`
 `;
 
 // Partner Banner
-export const PartnerMainImage = styled.img`
-  ${CommonMainImage}
+export const PartnerMainImageBox = styled.div`
+  & img {
+    ${CommonMainImage}
 
-  @media screen and (max-width: 1500px) {
-    right: -12%;
-  }
+    @media screen and (max-width: 1500px) {
+      right: -12%;
+    }
 
-  @media screen and (max-width: 640px) {
-    right: -20%;
-    padding-bottom: 6vw;
+    @media screen and (max-width: 640px) {
+      right: -20%;
+      padding-bottom: 6vw;
+    }
   }
 `;
 
@@ -114,16 +116,18 @@ export const PartnerImageSubText = styled.span`
 `;
 
 // SpotShare Banner
-export const SpotMainImage = styled.img`
-  ${CommonMainImage}
+export const SpotMainImageBox = styled.div`
+  & img {
+    ${CommonMainImage}
 
-  @media screen and (max-width: 1500px) {
-    right: -13%;
-  }
+    @media screen and (max-width: 1500px) {
+      right: -13%;
+    }
 
-  @media screen and (max-width: 640px) {
-    top: 4vw;
-    padding-top: 6vw;
+    @media screen and (max-width: 640px) {
+      top: 4vw;
+      padding-top: 6vw;
+    }
   }
 `;
 

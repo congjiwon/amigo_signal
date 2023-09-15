@@ -96,6 +96,7 @@ export const Utils = styled.div`
 
 export const UtilUser = styled.div`
   display: flex;
+  align-items: center;
   gap: 24px;
 `;
 

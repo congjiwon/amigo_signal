@@ -1,10 +1,18 @@
-import SpotBanner1 from '../../../assets/imgs/Spot/spot_share_banner.png';
+import mainBannerAvif from '../../../assets/imgs/Spot/spot_share_banner.avif';
+import mainBanner from '../../../assets/imgs/Spot/spot_share_banner.png';
+import mainBannerWebp from '../../../assets/imgs/Spot/spot_share_banner.webp';
 import * as St from './style';
 
 function SpotShareBanner() {
   return (
     <St.ImageWrapper $banner={`spotShare`}>
-      <St.SpotMainImage src={SpotBanner1} alt="mainImage" />
+      <St.SpotMainImageBox>
+        <picture>
+          <source srcSet={mainBannerAvif} type="image/avif" />
+          <source srcSet={mainBannerWebp} type="image/webp" />
+          <img src={mainBanner} alt="스팟 쉐어 메인 배너 이미지" />
+        </picture>
+      </St.SpotMainImageBox>
       <St.SpotBannerTextBox>
         <St.SpotImageMainText>
           <span>여행의 </span>
