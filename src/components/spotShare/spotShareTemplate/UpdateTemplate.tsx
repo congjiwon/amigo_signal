@@ -98,7 +98,7 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
     return <LoadingSpinner />;
   }
   if (isError) {
-    return <div>Error loading data</div>;
+    navigate('notfound');
   }
 
   const handleOnSumbit = (e: React.FormEvent<HTMLFormElement>) => {
