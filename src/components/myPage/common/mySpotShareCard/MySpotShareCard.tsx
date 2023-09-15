@@ -44,7 +44,7 @@ export default function MySpotShareCard({ spotSharePost }: SpotSharePorps) {
         </StCommon.PaddingBox>
 
         <StCommon.BgCountryBox>
-          <StCommon.BgCountryImg src={`${spotSharePost.country.imageUrl}`} alt="" />
+          <StCommon.BgCountryImg src={`${spotSharePost.country.imageUrl}`} alt={`${spotSharePost.country.country} 국기`} />
           <StCommon.BadgeCountry>{spotSharePost.country.country}</StCommon.BadgeCountry>
         </StCommon.BgCountryBox>
       </Link>

@@ -107,6 +107,13 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
     },
   });
 
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+  if (isError) {
+    navigate('notfound');
+  }
+
   const validation = (): boolean => {
     if (authId !== writerId) {
       AlertError({ title: '수정이 불가능 합니다.', text: '글 작성유저가 아닙니다.' });
@@ -132,13 +139,6 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
     }
     return true;
   };
-
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
-  if (isError) {
-    return <div>Error loading data</div>;
-  }
 
   // 글 작성 버튼 클릭 핸들러
   const handleUpdateClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -166,17 +166,13 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
   return (
     <St.FormContainer>
       <St.WriteForm>
-        <St.SelectListBox>
-          {/* <St.ExplanationBox> */}
-          <UpdateLocationDropDown location={[partnerPost?.region!, partnerPost?.country.country!]} setLocation={setLocation} />
-          {/* </St.ExplanationBox> */}
-          {/* <St.ExplanationBox> */}
-          <UpdatePartnerCalendar startDate={partnerPost?.startDate!} endDate={partnerPost?.endDate!} setPartnerDates={setPartnerDates} />
-          {/* </St.ExplanationBox> */}
-          {/* <St.ExplanationBox> */}
-          <UpdatePartnerDropDown partner={partnerPost?.numOfPeople!} setPartner={setPartner} />
-          {/* </St.ExplanationBox> */}
-        </St.SelectListBox>
+        {partnerPost && (
+          <St.SelectListBox>
+            <UpdateLocationDropDown location={[partnerPost?.region!, partnerPost?.country.country!]} setLocation={setLocation} />
+            <UpdatePartnerCalendar startDate={partnerPost?.startDate!} endDate={partnerPost?.endDate!} setPartnerDates={setPartnerDates} />
+            <UpdatePartnerDropDown partner={partnerPost?.numOfPeople!} setPartner={setPartner} />
+          </St.SelectListBox>
+        )}
         <St.WriteInput
           maxLength={100}
           value={title}
@@ -218,7 +214,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
                     }}
                   >
                     <St.TegImgBox>
-                      <St.TegImg src={item.imageUrl!} />
+                      <St.TegImg src={item.imageUrl!} alt={`${item.discription} 아이콘`} />
                     </St.TegImgBox>
                     <span>{item.discription}</span>
                   </St.TegButton>

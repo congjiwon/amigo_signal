@@ -1,5 +1,3 @@
-import { LogoDiv } from './../Intro/style';
-import { currentTime } from './../currentTime/CurrentTime';
 import { styled } from 'styled-components';
 
 export const HeaderLayout = styled.div`
@@ -11,7 +9,7 @@ export const HeaderLayout = styled.div`
   left: 0;
   background-color: #fff;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-  z-index: 9;
+  z-index: 9999;
 `;
 
 export const Header = styled.header`
@@ -98,6 +96,7 @@ export const Utils = styled.div`
 
 export const UtilUser = styled.div`
   display: flex;
+  align-items: center;
   gap: 24px;
 `;
 

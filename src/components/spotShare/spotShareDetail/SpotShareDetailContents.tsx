@@ -104,7 +104,7 @@ function SpotShareDetailContents() {
   }, [spotSharePost]);
 
   if (isError) {
-    return <div>Error loading data</div>;
+    navigate('notfound');
   }
 
   // 글 작성자인지 확인하는 함수

@@ -13,7 +13,7 @@ export default function Profile() {
     <St.ProfileWrapper>
       <St.ProfileBox>
         <St.ProfileImgBox>
-          <img src={currentUser?.profileImageUrl ? `${storagaUrl}/${currentUser?.profileImageUrl}` : defaultImg} />
+          <img src={currentUser?.profileImageUrl ? `${storagaUrl}/${currentUser?.profileImageUrl}` : defaultImg} alt={`${currentUser?.nickName}님 프로필 이미지`} />
         </St.ProfileImgBox>
         <St.ProfileInfo>
           {currentUser?.birthday === undefined && (

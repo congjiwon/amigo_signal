@@ -105,7 +105,6 @@ export const CommentBox = styled.div`
 export const CommentParagraph = styled.p`
   line-height: 130%;
   word-break: break-all;
-  white-space: pre;
   @media (max-width: 500px) {
     font-size: 14px;
     font-style: normal;
