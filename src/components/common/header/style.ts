@@ -122,7 +122,7 @@ export const NickName = styled.p`
   margin-left: 10px;
   font-size: 15px;
   font-weight: 500;
-  cursor: pointer;
+  cursor: default;
 `;
 
 export const PopOverButton = styled.button`
@@ -130,7 +130,6 @@ export const PopOverButton = styled.button`
   padding: 0;
   border: none;
   background: none;
-  cursor: pointer;
 `;
 
 export const MyPagePopover = styled.div`
@@ -153,6 +152,7 @@ export const MobileMenu = styled.div`
     width: 24px;
     height: 24px;
     margin-left: 14px;
+    cursor: pointer;
   }
 
   @media screen and (max-width: 640px) {
@@ -219,6 +219,7 @@ export const ProfileImgM = styled.img`
 export const NickNameM = styled.p`
   font-size: 16px;
   font-weight: 600;
+  cursor: default;
 `;
 
 export const DrawerBody = styled.div`

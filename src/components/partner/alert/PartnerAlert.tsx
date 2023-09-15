@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../../../api/supabase/supabaseClient';
-import { fetchPartnerPostTitle } from '../../../api/supabase/partner';
+import { fetchPartnerPostTitle, getUserNickName } from '../../../api/supabase/partner';
 import { addAlert, deleteAlert, getAlertList } from '../../../api/supabase/alert';
 import useSessionStore from '../../../zustand/store';
 import { useAlertStorageStore, useNewAlertStore } from '../../../zustand/alert';
@@ -65,9 +65,11 @@ export default function PartnerAlert() {
         // 신청자가 있을 때
         if (payload.eventType === 'INSERT' && !payload.new.isConfirmed) {
           const postTitle = await fetchPartnerPostTitle(payload.new.postId);
-          if (postTitle) {
+          const applicantNickName = await getUserNickName(payload.new.applicantId);
+          if (postTitle && applicantNickName) {
             const newPostInfo = {
               id: uuidv4(),
+              applicantNickName,
               logInUserId: userId!,
               applyId: payload.new.id,
               postId: payload.new.postId,
@@ -109,9 +111,11 @@ export default function PartnerAlert() {
         // 작성자가 수락했을 떄
         if (payload.eventType === 'UPDATE' && payload.new.isConfirmed && payload.new.isAccepted) {
           const postTitle = await fetchPartnerPostTitle(payload.new.postId);
-          if (postTitle) {
+          const applicantNickName = await getUserNickName(payload.new.applicantId);
+          if (postTitle && applicantNickName) {
             const newPostInfo = {
               id: uuidv4(),
+              applicantNickName,
               logInUserId: userId!,
               applyId: payload.new.id,
               postId: payload.new.postId,
@@ -127,9 +131,11 @@ export default function PartnerAlert() {
         // 작성자가 거절했을 때
         if (payload.eventType === 'UPDATE' && payload.new.isConfirmed && !payload.new.isAccepted) {
           const postTitle = await fetchPartnerPostTitle(payload.new.postId);
-          if (postTitle) {
+          const applicantNickName = await getUserNickName(payload.new.applicantId);
+          if (postTitle && applicantNickName) {
             const newPostInfo = {
               id: uuidv4(),
+              applicantNickName,
               logInUserId: userId!,
               applyId: payload.new.id,
               postId: payload.new.postId,
@@ -168,7 +174,7 @@ export default function PartnerAlert() {
               </div>
               <St.PostInfo>
                 <St.PostInfoTop>
-                  <p>{item.genre === PENDING ? '새로운 동행 신청' : item.genre === ACCEPTED ? '동행 신청이 수락되었습니다.' : '동행 신청이 거절되었습니다.'}</p>
+                  <p>{item.genre === PENDING ? `동행신청 | ${item.applicantNickName} 님` : item.genre === ACCEPTED ? '동행신청이 수락되었습니다.' : '동행신청이 거절되었습니다.'}</p>
                   <St.TimeAgo>{timeAgo(item.date)}</St.TimeAgo>
                 </St.PostInfoTop>
                 <St.PostTitle>{item.title}</St.PostTitle>
@@ -188,7 +194,7 @@ export default function PartnerAlert() {
           trigger="hover"
           placement="topRight"
           overlayStyle={{
-            width: '282px',
+            width: '300px',
           }}
         >
           <img src={YesAlert} alt="alert" />

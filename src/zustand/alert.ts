@@ -3,6 +3,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 
 type AlertInfo = {
   id: string;
+  applicantNickName: string;
   logInUserId: string;
   applyId: string;
   postId: string;

@@ -110,3 +110,27 @@ a {
 .swal2-modal .alert-btn-cancel {
   background: #6c7486;
 }
+
+@media screen and (max-width: 640px) {
+  .swal2-popup {
+    width: 27em;
+  }
+
+  .swal2-modal .swal2-title {
+    font-size: 18px;
+  }
+
+  .swal2-modal .swal2-html-container {
+    font-size: 14px;
+  }
+
+  .swal2-modal .swal2-actions {
+    padding: 0 30px;
+    gap: 14px;
+  }
+
+  .swal2-modal .alert-btn {
+    padding: 10px 0;
+    font-size: 14px;
+  }
+}

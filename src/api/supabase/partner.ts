@@ -275,6 +275,12 @@ export const fetchPartnerPostTitle = async (postId: string) => {
   return data?.title;
 };
 
+// 헤더 alert에 담길 user Nickname 가져오기
+export const getUserNickName = async (applicantId: string) => {
+  const { data } = await supabase.from('users').select('nickName').eq('id', applicantId).single();
+  return data?.nickName;
+};
+
 //북마크 추가
 export const addBookmark = async (bookMarkInsert: Inserts<'bookmarks'>) => {
   const { error } = await supabase.from('bookmarks').insert(bookMarkInsert).select();
