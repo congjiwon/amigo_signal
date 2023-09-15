@@ -2,9 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { getSpotPost, updateSpotPost } from '../../../api/supabase/spotshare';
-import { BtnStyleType } from '../../../types/styleTypes';
 import useSessionStore from '../../../zustand/store';
-import Button from '../../common/button/Button';
 import { UpdateSpotCalendar } from '../../common/calendar/SpotCalendar';
 import { UpdateLocationDropDown } from '../../common/dropDown/LocationDropDown';
 import LoadingSpinner from '../../common/loadingSpinner/LoadingSpinner';
@@ -130,23 +128,25 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
   return (
     <St.FormContainer>
       <St.WriteForm onSubmit={handleOnSumbit}>
-        <St.SelectListBox>
-          <UpdateLocationDropDown location={[spotSharePost?.region!, spotSharePost?.country.country!]} setLocation={setLocation} />
-          <UpdateSpotCalendar spotDate={spotSharePost?.visitDate!} setSpotDate={setSpotDate} />
-          <UpdateStarRate star={spotSharePost?.starRate!} setStar={setStar} />
-        </St.SelectListBox>
-        <div>
-          <St.SpotShareTitleInput maxLength={100} type="text" placeholder="제목을 입력해주세요" value={title || ''} onChange={(e) => setTitle(e.target.value)} />
-        </div>
-        <SpotShareEditor editorHtml={editorHtml} setEditorHtml={setEditorHtml} postImageUrlArray={postImageUrl} setPostImageUrl={setPostImageUrl} />
+        <St.WriteBox>
+          <St.SelectListBox>
+            <UpdateLocationDropDown location={[spotSharePost?.region!, spotSharePost?.country.country!]} setLocation={setLocation} />
+            <UpdateSpotCalendar spotDate={spotSharePost?.visitDate!} setSpotDate={setSpotDate} />
+            <UpdateStarRate star={spotSharePost?.starRate!} setStar={setStar} />
+          </St.SelectListBox>
+          <div>
+            <St.SpotShareTitleInput maxLength={100} type="text" placeholder="제목을 입력해주세요" value={title || ''} onChange={(e) => setTitle(e.target.value)} />
+          </div>
+          <SpotShareEditor editorHtml={editorHtml} setEditorHtml={setEditorHtml} postImageUrlArray={postImageUrl} setPostImageUrl={setPostImageUrl} />
+        </St.WriteBox>
         <SpotMap setLatitude={setLatitude} setLongitude={setLongitude} address={address} setAddress={setAddress} country={location[1]} />
         <St.ButtonBox>
-          <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={() => navigate('/spotshare')}>
+          <button className="CancelBtn" type="button" onClick={() => navigate('/spotshare')}>
             취소
-          </Button>
-          <Button type="submit" disabled={disable} styleType={BtnStyleType.BTN_DARK}>
+          </button>
+          <button className="SubmitBtn" type="submit" disabled={disable}>
             수정완료
-          </Button>
+          </button>
         </St.ButtonBox>
       </St.WriteForm>
       {disable && <LoadingSpinner />}

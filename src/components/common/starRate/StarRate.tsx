@@ -14,7 +14,7 @@ function StarRate({ setStar }: StarProps) {
 }
 
 export function UpdateStarRate({ star, setStar }: UpdateStarProps) {
-  return <Rate defaultValue={star} onChange={setStar} />;
+  return <Rate className="UpdateStarRate" defaultValue={star} onChange={setStar} />;
 }
 
 export default StarRate;

@@ -49,7 +49,7 @@ export function UpdateSpotCalendar({ spotDate, setSpotDate }: UpdateCalendarProp
   const dateFormat = 'YYYY/MM/DD';
   return (
     <Space direction="vertical">
-      <DatePicker disabledDate={disabledDate} defaultValue={dayjs(spotDate, dateFormat)} onChange={getDateHandle} inputReadOnly />
+      <DatePicker className="UpdateSpotCalendar" disabledDate={disabledDate} defaultValue={dayjs(spotDate, dateFormat)} onChange={getDateHandle} inputReadOnly />
     </Space>
   );
 }

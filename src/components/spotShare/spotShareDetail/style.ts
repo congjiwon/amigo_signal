@@ -204,3 +204,7 @@ export const AddressBox = styled.div`
     letter-spacing: -0.3px;
   }
 `;
+
+export const MapSection = styled.section`
+  margin-bottom: 64px;
+`;

@@ -176,14 +176,14 @@ function SpotShareDetailContents() {
             <St.GraySpan>방문날짜</St.GraySpan>
             <St.BlackSpan> {spotSharePost?.visitDate}</St.BlackSpan>
           </St.DetailInfoBox>
-          <St.DetailInfoBox>{spotSharePost?.starRate && <Rate disabled defaultValue={spotSharePost.starRate} />}</St.DetailInfoBox>
+          <St.DetailInfoBox>{spotSharePost?.starRate && <Rate style={{ color: '#643bdc' }} disabled defaultValue={spotSharePost.starRate} />}</St.DetailInfoBox>
         </St.DetailInfoList>
 
         <St.SpotShareBox>
           <ReactQuill readOnly={true} theme="bubble" value={spotSharePost?.content} />
         </St.SpotShareBox>
       </St.DetailSection>
-      <div>
+      <St.MapSection>
         {spotSharePost?.address ? (
           <St.AddressBox>
             <FiMapPin className="markerIcon" />
@@ -193,7 +193,7 @@ function SpotShareDetailContents() {
           <></>
         )}
         {spotSharePost?.latitude && spotSharePost.longitude ? <div ref={mapRef} style={{ width: '100%', height: '50vh' }} /> : <></>}
-      </div>
+      </St.MapSection>
     </>
   );
 }
