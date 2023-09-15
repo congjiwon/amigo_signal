@@ -195,6 +195,7 @@ export default function PartnerAlert() {
           placement="topRight"
           overlayStyle={{
             width: '300px',
+            zIndex: 9999,
           }}
         >
           <img src={YesAlert} alt="alert" style={{ width: '20px', height: '22px' }} />
@@ -206,6 +207,7 @@ export default function PartnerAlert() {
           placement="topRight"
           overlayStyle={{
             width: '150px',
+            zIndex: 9999,
           }}
         >
           <img src={NoAlert} alt="noAlert" style={{ width: '24px', height: '24px' }} />

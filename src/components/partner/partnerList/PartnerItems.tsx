@@ -24,9 +24,7 @@ export default function PartnerItems({ isOpen, country, startDate, endDate }: Pa
     hasNextPage,
   } = useInfiniteQuery({
     queryKey: ['PartnerPostsList', isOpen, country, startDate, endDate],
-    queryFn: async ({ pageParam = 0 }) => {
-      return getPartnerPosts({ isOpen, country, startDate, endDate, page: pageParam });
-    },
+    queryFn: async ({ pageParam = 0 }) => await getPartnerPosts({ isOpen, country, startDate, endDate, page: pageParam }),
     getNextPageParam: (lastPage) => {
       if (lastPage.data && lastPage.data.length !== 0) {
         return lastPage.page + 1;
