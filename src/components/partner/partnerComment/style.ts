@@ -43,8 +43,6 @@ export const CommentTextarea = styled.textarea`
   padding: 14px 20px 14px 20px;
   border-radius: 15px;
   border: 1px solid var(--light-gray, #e8ebee);
-  /* word-break: break-all;
-  white-space: pre; */
   @media (max-width: 500px) {
     width: 231px;
     height: 20px;
@@ -72,9 +70,7 @@ export const CommentButton = styled.button`
 
 export const PartnerCommentsContainerBox = styled.div``;
 
-export const PartnerCommentsBox = styled.div`
-  /* margin-bottom: 25px; */
-`;
+export const PartnerCommentsBox = styled.div``;
 
 export const CommentTopBox = styled.div`
   display: flex;
@@ -109,8 +105,7 @@ export const CommentBox = styled.div`
 export const CommentParagraph = styled.p`
   line-height: 130%;
   word-break: break-all;
-  /* word-break: break-all;
-  white-space: pre; */
+  white-space: pre;
   @media (max-width: 500px) {
     font-size: 14px;
     font-style: normal;
@@ -167,13 +162,10 @@ export const InputBox = styled.div`
   border-radius: 15px;
   border: 1px solid var(--light-gray, #e8ebee);
   padding: 14px 20px 43px 20px;
-
   @media (max-width: 800px) {
-    /* width: 258px; */
     height: 43px;
     padding: 10px 12px 33px 12px;
     margin-right: 0px;
-    /* margin-bottom: 24px; */
     border-radius: 8px;
   }
 `;
@@ -200,14 +192,6 @@ export const ReCommentInputBox = styled.div`
     border-radius: 8px;
   }
 `;
-
-// export const RecommentTextarea = styled.textarea`
-//   resize: none;
-//   width: 100%;
-//   height: 43px;
-//   border: 0;
-//   outline: 0;
-// `;
 
 export const CancelSubmitButtonBox = styled.div`
   position: absolute;

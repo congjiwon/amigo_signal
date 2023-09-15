@@ -2,13 +2,15 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { FiEdit, FiTrash2 } from 'react-icons/fi';
-import { RiBookmarkFill, RiBookmarkLine, RiKakaoTalkLine } from 'react-icons/ri';
+import { RiBookmarkFill, RiBookmarkLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router';
 import { addBookmark, bookmarkCheck, deletePartnerPost, removeBookMark } from '../../../api/supabase/partner';
 import { Tables } from '../../../api/supabase/supabase';
+import Messages from '../../../assets/imgs/partner/Messages.png';
 import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import useCopyClipBoard from '../../../hooks/useCopyClipBoard';
 import useSessionStore from '../../../zustand/store';
+import classifyingAge from '../../common/classifyingAge/classifyingAge';
 import { Alert, AlertError, ConfirmDelete } from '../../common/modal/alert';
 import * as St from './style';
 
@@ -19,7 +21,7 @@ interface Props {
 const UserFeedback = ({ partnerPostData }: Props) => {
   const { id, createdAt, writerId, openChat } = partnerPostData;
   const { users } = partnerPostData;
-  const { nickName, profileImageUrl } = users;
+  const { nickName, profileImageUrl, birthday, gender } = users;
   const [bookMark, setBookMark] = useState(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -89,14 +91,19 @@ const UserFeedback = ({ partnerPostData }: Props) => {
       <St.UserProfileBox>
         <St.UserProfileImgBox>{profileImageUrl ? <St.UserProfileImg src={`${storagaUrl}/${profileImageUrl!}`} alt="profile" /> : <St.UserProfileImg src={defaultProfileImage} alt="profile" />}</St.UserProfileImgBox>
         <div>
-          <St.BlackParagraph>{nickName}</St.BlackParagraph>
+          <St.UserInfoBox>
+            <St.BlackParagraph>{nickName}</St.BlackParagraph>
+            <St.UserInfoParagraph>
+              {classifyingAge(birthday)} | {gender}
+            </St.UserInfoParagraph>
+          </St.UserInfoBox>
           <St.GrayParagraph>
             <span>{createdAt.substring(0, 10)}</span>
           </St.GrayParagraph>
         </div>
       </St.UserProfileBox>
       <St.ButtonBox>
-        <button>{openChat.length > 1 && <RiKakaoTalkLine className="kakaoIcon" onClick={() => handleCopyClipBoard(openChat)} />}</button>
+        <button>{openChat.length > 1 && <img src={Messages} className="kakaoIcon" onClick={() => handleCopyClipBoard(openChat)} />}</button>
         <button>{bookMark ? <RiBookmarkFill className="fillIcon" onClick={debouncedRemoveBookMarkHandle} /> : <RiBookmarkLine className="lineIcon" onClick={debouncedAddBookMarkHandle} />}</button>
 
         {isPostUser() ? (
