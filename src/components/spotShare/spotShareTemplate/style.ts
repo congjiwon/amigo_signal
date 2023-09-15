@@ -35,7 +35,9 @@ export const SelectListBox = styled.div`
   display: flex;
   align-items: center;
   gap: 24px;
+  .UpdateLocationDropDown,
   .LocationDropDown,
+  .UpdateSpotCalendar,
   .SpotCalendar {
     width: 384px;
     @media (max-width: 1047px) {
@@ -45,6 +47,7 @@ export const SelectListBox = styled.div`
       width: 335px;
     }
   }
+  .UpdateStarRate,
   .StarRate {
     color: #643bdc;
   }
