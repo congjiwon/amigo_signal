@@ -63,6 +63,10 @@ a {
   color: inherit;
 }
 
+:where(.css-dev-only-do-not-override-byeoj0).ant-drawer {
+  z-index: 9999;
+}
+
 .swal2-container .swal2-popup {
   padding-bottom: 3em;
   border-radius: 30px;

@@ -39,7 +39,7 @@ export const countryMapping = {
   Kenya: '케냐',
   Namibia: '나미비아',
   Morocco: '모로코',
-  USA: '미국',
+  'United States': '미국',
   Canada: '캐나다',
   Mexico: '멕시코',
   Peru: '페루',
