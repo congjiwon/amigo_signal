@@ -10,7 +10,7 @@ interface UpdateStarProps {
 }
 
 function StarRate({ setStar }: StarProps) {
-  return <Rate defaultValue={5} onChange={setStar} />;
+  return <Rate className="StarRate" defaultValue={5} onChange={setStar} />;
 }
 
 export function UpdateStarRate({ star, setStar }: UpdateStarProps) {

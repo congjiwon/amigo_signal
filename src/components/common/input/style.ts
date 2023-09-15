@@ -4,15 +4,15 @@ import { InputProps } from './Input';
 type TextareaProps = Omit<InputProps, 'type'>;
 
 interface BaseStylesProps {
-  inputStyleType: 'comment' | 'auth' | 'search' | 'write' | 'apply';
-  border: boolean;
+  $inputStyleType: 'comment' | 'auth' | 'search' | 'write' | 'apply';
+  $border: boolean;
 }
 
 const baseStyles = css<BaseStylesProps>`
   outline: none;
 
   ${(props) => {
-    switch (props.inputStyleType) {
+    switch (props.$inputStyleType) {
       case 'comment':
         return css`
           width: 60vw;
@@ -64,7 +64,7 @@ const baseStyles = css<BaseStylesProps>`
   }}
 
   ${(props) =>
-    props.border
+    props.$border
       ? css`
           border: 1px solid #e8ebee;
           border-radius: 10px;

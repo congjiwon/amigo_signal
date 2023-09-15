@@ -92,7 +92,7 @@ export const AddressSearch = ({ map, setLatitude, setLongitude, setAddress, addr
   return (
     <St.SearchAddressBox>
       <St.SearchAddress>
-        <input type="text" value={inputValue} onChange={handleInputChange} onKeyPress={handleEnterToSearch} placeholder="장소를 검색하세요!" />
+        <input type="text" value={inputValue} onChange={handleInputChange} onKeyPress={handleEnterToSearch} placeholder="방문한 장소를 검색하세요!" />
         <button type="button" onClick={handleSearch}>
           검색
         </button>

@@ -3,9 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { insertSpotPost } from '../../../api/supabase/spotshare';
 import { supabase } from '../../../api/supabase/supabaseClient';
-import { BtnStyleType } from '../../../types/styleTypes';
 import useSessionStore from '../../../zustand/store';
-import Button from '../../common/button/Button';
 import { SpotCalendar } from '../../common/calendar/SpotCalendar';
 import { currentTime } from '../../common/currentTime/CurrentTime';
 import LocationDropDown from '../../common/dropDown/LocationDropDown';
@@ -105,23 +103,25 @@ export default function WriteTemplate() {
   return (
     <St.FormContainer>
       <St.WriteForm onSubmit={handleOnSumbit}>
-        <St.SelectListBox>
-          <LocationDropDown setLocation={setLocation} />
-          <SpotCalendar setSpotDate={setSpotDate} />
-          <StarRate setStar={setStar} />
-        </St.SelectListBox>
-        <div>
-          <St.SpotShareTitleInput maxLength={100} type="text" placeholder="제목을 입력해주세요" value={title} onChange={(e) => setTitle(e.target.value)} />
-        </div>
-        <SpotShareEditor editorHtml={editorHtml} setEditorHtml={setEditorHtml} postImageUrlArray={postImageUrl} setPostImageUrl={setPostImageUrl} />
+        <St.WriteBox>
+          <St.SelectListBox>
+            <LocationDropDown setLocation={setLocation} />
+            <SpotCalendar setSpotDate={setSpotDate} />
+            <StarRate setStar={setStar} />
+          </St.SelectListBox>
+          <div>
+            <St.SpotShareTitleInput maxLength={100} type="text" placeholder="제목을 입력해주세요" value={title} onChange={(e) => setTitle(e.target.value)} />
+          </div>
+          <SpotShareEditor editorHtml={editorHtml} setEditorHtml={setEditorHtml} postImageUrlArray={postImageUrl} setPostImageUrl={setPostImageUrl} />
+        </St.WriteBox>
         <SpotMap setLatitude={setLatitude} setLongitude={setLongitude} address={address} setAddress={setAddress} country={location[1]} />
         <St.ButtonBox>
-          <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={handleonClickCancel}>
+          <button className="CancelBtn" type="button" onClick={handleonClickCancel}>
             취소
-          </Button>
-          <Button type="submit" disabled={disable} styleType={BtnStyleType.BTN_DARK}>
+          </button>
+          <button className="SubmitBtn" type="submit" disabled={disable}>
             작성완료
-          </Button>
+          </button>
         </St.ButtonBox>
       </St.WriteForm>
       {disable && <LoadingSpinner />}

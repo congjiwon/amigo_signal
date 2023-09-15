@@ -45,18 +45,15 @@ export const getPartnerPost = async ({ postId }: { postId: string }) => {
 
 export const deletePartnerPost = async ({ postId }: { postId: string }) => {
   const { error } = await supabase.from('partnerPosts').delete().eq('id', postId);
-  console.log('deletePost', error);
 };
 
 export const updatePartnerPost = async (updatePost: any) => {
   const { data, error } = await supabase.from('partnerPosts').update(updatePost).eq('id', updatePost.id);
-  console.log('updatePost', error);
 };
 
 // 동행 댓글 가져오기(정렬)
 export const getPartnerComments = async () => {
   const { data, error } = await supabase.from('partnerComments').select('*').order('date', { ascending: false });
-  // console.log('getPartnerComments');
   return data;
 };
 
@@ -70,20 +67,17 @@ export const getPostData = async () => {
 // 동행 댓글 작성
 export const postPartnerComment = async (newPartnerComment: TPartnerInsert) => {
   const { error } = await supabase.from('partnerComments').insert(newPartnerComment);
-  console.log('error', error);
 };
 
 // 동행 댓글 삭제
 export const deletePartnerComment = async (commentId: string) => {
   const { error } = await supabase.from('partnerComments').delete().eq('id', commentId);
-  console.log('error', error);
 };
 
 // 동행 댓글 수정
 export const updatePartnerComment = async (updateComment: TPartnerUpdate) => {
   // 수정할 댓글 ID = updateComment.id
   const { data, error } = await supabase.from('partnerComments').update(updateComment).eq('id', updateComment.id);
-  console.log('error', error);
 };
 
 // 동행 답댓글 가져오기(답글 작성한 모든 유저도 같이)
@@ -100,7 +94,6 @@ export const postPartnerRecomment = async (newPartnerRecomment: TPartnerReCommen
 // 동행 답댓글 삭제
 export const deletePartnerReComment = async (reCommentId: string) => {
   const { error } = await supabase.from('reComments').delete().eq('id', reCommentId);
-  console.log('error', error);
 };
 
 // 동행 답댓글 수정
@@ -127,13 +120,10 @@ export const getReCommentWriterIds = async () => {
 };
 
 //동행 글 추가
-// export const insertPost = async (dataToInsert: any) => {
 export const insertPost = async (dataToInsert: Inserts<'partnerPosts'>) => {
   const { data, error } = await supabase.from('partnerPosts').insert(dataToInsert).select();
   if (error) {
-    console.error('Insert error:', error);
   } else {
-    // console.log('Inserted data:', data);
     return data;
   }
 };
@@ -145,7 +135,6 @@ export const insertApplicant = async (applicantData: Inserts<'applicants'>) => {
     if (error) throw error;
     return data;
   } catch (error) {
-    console.error('참여하기 정보 보내는 과정에서 오류 발생', error);
     throw error;
   }
 };
@@ -155,7 +144,6 @@ export const checkApply = async (postId: string, logInUserId: string) => {
   if (!postId || !logInUserId) return;
   const { data, error } = await supabase.from('applicants').select('*').eq('postId', postId).eq('applicantId', logInUserId);
   if (error) {
-    console.error('참가 여부를 확인하는 과정에서 error 발생', error);
     return;
   }
   return data;
@@ -168,7 +156,6 @@ export const deleteApplicant = async (postId: string, logInUserId: string) => {
     if (error) throw error;
     return data;
   } catch (error) {
-    console.error('참여 취소 과정에서 error 발생', error);
     throw error;
   }
 };
@@ -267,7 +254,6 @@ export const getBookmarkedPosts = async ({ userId, page }: BookmarkedPostProps) 
 export const updatePostStatus = async (postId: string, isOpen: boolean) => {
   const { error } = await supabase.from('partnerPosts').update({ isOpen }).eq('id', postId).single();
   if (error) {
-    console.error('모집 상태 업데이트 중 error 발생', error);
   }
 };
 
@@ -293,7 +279,6 @@ export const fetchPartnerPostTitle = async (postId: string) => {
 export const addBookmark = async (bookMarkInsert: Inserts<'bookmarks'>) => {
   const { error } = await supabase.from('bookmarks').insert(bookMarkInsert).select();
   if (error) {
-    console.log('북마크 추가 실패', error);
   }
 };
 

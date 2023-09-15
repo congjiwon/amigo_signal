@@ -52,7 +52,6 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
       if (!postId) return;
       const { data, error } = await getApplicantList(postId);
       if (error || !data) {
-        console.error('신청자 목록을 가져오는 과정에서 error 발생', error);
         setApplicantList([]);
       } else {
         setApplicantList(data);
@@ -65,7 +64,6 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
         if (response.data !== null) {
           setConfirmedApplicantList(response.data);
         }
-        console.log('response', response.data);
       }
     };
     fetchConfirmedPartnerList();
@@ -197,15 +195,15 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
     <St.FormContainer>
       <St.WriteForm>
         <St.SelectListBox>
-          <St.ExplanationBox>
-            <UpdateLocationDropDown location={[partnerPost?.region!, partnerPost?.country.country!]} setLocation={setLocation} />
-          </St.ExplanationBox>
-          <St.ExplanationBox>
-            <UpdatePartnerCalendar startDate={partnerPost?.startDate!} endDate={partnerPost?.endDate!} setPartnerDates={setPartnerDates} />
-          </St.ExplanationBox>
-          <St.ExplanationBox>
-            <UpdatePartnerDropDown partner={partnerPost?.numOfPeople!} setPartner={setPartner} />
-          </St.ExplanationBox>
+          {/* <St.ExplanationBox> */}
+          <UpdateLocationDropDown location={[partnerPost?.region!, partnerPost?.country.country!]} setLocation={setLocation} />
+          {/* </St.ExplanationBox> */}
+          {/* <St.ExplanationBox> */}
+          <UpdatePartnerCalendar startDate={partnerPost?.startDate!} endDate={partnerPost?.endDate!} setPartnerDates={setPartnerDates} />
+          {/* </St.ExplanationBox> */}
+          {/* <St.ExplanationBox> */}
+          <UpdatePartnerDropDown partner={partnerPost?.numOfPeople!} setPartner={setPartner} />
+          {/* </St.ExplanationBox> */}
         </St.SelectListBox>
         <St.WriteInput
           maxLength={100}

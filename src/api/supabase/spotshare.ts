@@ -98,7 +98,6 @@ export const deleteSpotSharePost = async (postId: string | undefined) => {
 export const insertSpotPost = async (spotPostData: Inserts<'spotPosts'>) => {
   const { data, error } = await supabase.from('spotPosts').insert(spotPostData).select();
   if (error) {
-    console.log(error);
   }
   return data;
 };
@@ -135,7 +134,6 @@ export const getLikes = async () => {
 export const getLikesCondition = async (logInUserId: string, postid: string) => {
   let { data, error } = await supabase.from('likes').select('*').eq('userId', logInUserId).eq('postId', postid);
   if (error) {
-    console.log('좋아요 데이터 불러오기 실패', error);
   }
   return data;
 };
