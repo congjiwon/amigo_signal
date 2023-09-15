@@ -144,7 +144,7 @@ const UserFeedback = ({ partnerPostData }: Props) => {
         </div>
       </St.UserProfileBox>
       <St.ButtonBox>
-        <button>{openChat.length > 1 && <img src={Messages} className="kakaoIcon" onClick={() => handleCopyClipBoard(openChat)} />}</button>
+        <button>{openChat.length > 1 && <img src={Messages} className="kakaoIcon" onClick={() => handleCopyClipBoard(openChat)} alt="오픈채팅 링크 아이콘" />}</button>
         <button>{bookMark ? <RiBookmarkFill className="fillIcon" onClick={debouncedRemoveBookMarkHandle} /> : <RiBookmarkLine className="lineIcon" onClick={debouncedAddBookMarkHandle} />}</button>
 
         {isPostUser() ? (

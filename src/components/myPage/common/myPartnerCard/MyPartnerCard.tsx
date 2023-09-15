@@ -108,7 +108,7 @@ export default function MyPartnerCard({ partnerPost, postUserInfo }: PartnerItem
             <StCommon.FlexBetween className="partner-bottom">
               <StCommon.UserInfoMain>
                 <div>
-                  <img src={writerInfo.profileImageUrl} />
+                  <img src={writerInfo.profileImageUrl} alt={`${writerInfo.nickName}님 프로필 이미지`} />
                 </div>
                 <p>{writerInfo.nickName}</p>
               </StCommon.UserInfoMain>

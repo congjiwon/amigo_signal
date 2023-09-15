@@ -120,7 +120,7 @@ export default function ModifyProfile() {
       <form onSubmit={(e) => handleSubmitUpdateProfile(e)}>
         <St.ModifyProfileBox>
           <St.ProfileImgBox>
-            <St.PreviewProfileImg src={profileImgUrl} />
+            <St.PreviewProfileImg src={profileImgUrl} alt="선택 이미지 미리보기" />
 
             <St.ProfileImgLabel className="btn-profile-label" htmlFor="profileImg">
               <img src={iconProfileImgBtn} alt="이미지 선택 아이콘" />

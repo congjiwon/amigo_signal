@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { FiCheck } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { updatePostStatus } from '../../../api/supabase/partner';
 import { Tables } from '../../../api/supabase/supabase';
@@ -6,7 +7,6 @@ import Calender from '../../../assets/imgs/partner/Calendar.svg';
 import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import classifyingAge from '../../common/classifyingAge/classifyingAge';
 import * as St from './style';
-import { FiCheck } from 'react-icons/fi';
 type PartnerItemProps = {
   post: Tables<'partnerPosts'>;
 };
@@ -34,7 +34,7 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
     <Link to={`detail/${post.id}`}>
       <St.PostCard>
         <St.LocationBox>
-          <St.FlagBox>{country.flagUrl && <St.FlagImage src={country.flagUrl} alt="Image" />}</St.FlagBox>
+          <St.FlagBox>{country.flagUrl && <St.FlagImage src={country.flagUrl} alt={`${post?.country.country!} 국기`} />}</St.FlagBox>
           <St.Country>{post?.country.country!}</St.Country>
           {post.isOpen === false ? (
             <St.CheckBox style={{ color: '#643bdc' }}>

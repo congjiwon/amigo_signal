@@ -6,7 +6,7 @@ function CommentTopBox({ user, storageUrl, comment, isPostWriter }: CommentTopBo
   return (
     <St.CommentTopBox>
       <div>
-        <St.Img src={user! && user!.profileImageUrl! ? `${storageUrl}/${user!.profileImageUrl!}` : DefaultProfileImage} />
+        <St.Img src={user! && user!.profileImageUrl! ? `${storageUrl}/${user!.profileImageUrl!}` : DefaultProfileImage} alt={`${user.nickName}님 프로필 이미지`} />
       </div>
       <St.WriterContainerBox>
         <St.WriterBox>

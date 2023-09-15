@@ -25,7 +25,7 @@ function SpotReCommentList({ storageUrl, reCommentId, reComment, isPostWriter, i
     <St.ReCommentBox>
       <St.CommentTopBox>
         <div>
-          <St.Img src={reComment!.users && reComment?.users.profileImageUrl! ? `${storageUrl}/${reComment!.users && reComment?.users.profileImageUrl!}` : DefaultProfileImage} />
+          <St.Img src={reComment!.users && reComment?.users.profileImageUrl! ? `${storageUrl}/${reComment!.users && reComment?.users.profileImageUrl!}` : DefaultProfileImage} alt={`${reComment?.users?.nickName}`} />
         </div>
         <St.WriterContainerBox>
           <St.WriterBox>

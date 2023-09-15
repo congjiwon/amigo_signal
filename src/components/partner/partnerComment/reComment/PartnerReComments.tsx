@@ -25,7 +25,7 @@ function PartnerReComments({ comment, storageUrl, reCommentId, reComment, isPost
     <St.ReCommentBox>
       <St.CommentTopBox>
         <div>
-          <St.Img src={reComment!.users && reComment?.users.profileImageUrl! ? `${storageUrl}/${reComment!.users && reComment?.users.profileImageUrl!}` : DefaultProfileImage} />
+          <St.Img src={reComment!.users && reComment?.users.profileImageUrl! ? `${storageUrl}/${reComment!.users && reComment?.users.profileImageUrl!}` : DefaultProfileImage} alt={`${reComment?.users.nickName}님 프로필 이미지`} />
         </div>
         <St.WriterContainerBox>
           <St.WriterBox>
