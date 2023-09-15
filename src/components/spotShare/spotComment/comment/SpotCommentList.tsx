@@ -148,7 +148,7 @@ function SpotCommentList({ allComments, allReCommentsData, comment, isLoginUser,
         {users?.map((user) => {
           if (user.id === comment?.writerId) {
             const isPostWriter = comment.writerId === postWriterId;
-            return <CommentTopBox user={user} storageUrl={storageUrl} isPostWriter={isPostWriter} comment={comment} />;
+            return <CommentTopBox user={user} storageUrl={storageUrl} isPostWriter={isPostWriter} comment={comment} key={user.id} />;
           }
         })}
         {logInUserId ? (

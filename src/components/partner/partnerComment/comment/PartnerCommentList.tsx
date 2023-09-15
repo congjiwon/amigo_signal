@@ -143,7 +143,7 @@ function PartnerCommentList({ allComments, allReCommentsData, comment, isLoginUs
         {users?.map((user) => {
           if (user.id === comment?.writerId) {
             const isPostWriter = comment.writerId === postWriterId;
-            return <CommentTopBox user={user} storageUrl={storageUrl} isPostWriter={isPostWriter} comment={comment} />;
+            return <CommentTopBox key={user.id} user={user} storageUrl={storageUrl} isPostWriter={isPostWriter} comment={comment} />;
           }
         })}
         {logInUserId ? (

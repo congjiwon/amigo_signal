@@ -2,6 +2,7 @@ import { supabase } from './supabaseClient';
 
 type NewPostInfoProps = {
   id: string;
+  applicantNickName: string;
   logInUserId: string;
   applyId: string;
   postId: string;
