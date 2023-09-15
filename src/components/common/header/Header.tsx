@@ -71,7 +71,7 @@ export default function Header() {
       <St.Header>
         <St.H1>
           <Link to="/">
-            <img src={logoHeader} style={{ width: '144px' }} alt="아미고 시그널 로고" />
+            <img src={logoHeader} style={{ width: '144px', height: '24px' }} alt="아미고 시그널 로고" />
           </Link>
         </St.H1>
         {/* web */}

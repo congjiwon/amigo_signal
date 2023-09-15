@@ -47,7 +47,7 @@ const PartnerItem = ({ post }: PartnerItemProps) => {
         </St.LocationBox>
         <St.Main>
           <St.TravelDate>
-            <img src={Calender} alt="여행기간" />
+            <img src={Calender} alt="여행기간" style={{ width: '16px', height: '16px;' }} />
             <p>
               {post.startDate} ~ {post.endDate}
             </p>

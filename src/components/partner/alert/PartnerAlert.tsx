@@ -1,18 +1,18 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Popover } from 'antd';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '../../../api/supabase/supabaseClient';
-import { fetchPartnerPostTitle, getUserNickName } from '../../../api/supabase/partner';
-import { addAlert, deleteAlert, getAlertList } from '../../../api/supabase/alert';
-import useSessionStore from '../../../zustand/store';
-import { useAlertStorageStore, useNewAlertStore } from '../../../zustand/alert';
-import { timeAgo } from '../../common/transferTime/transferTime';
 import { v4 as uuidv4 } from 'uuid';
-import { Popover } from 'antd';
-import * as St from './style';
-import YesAlert from '../../../assets/imgs/header/YesAlert.svg';
+import { addAlert, deleteAlert, getAlertList } from '../../../api/supabase/alert';
+import { fetchPartnerPostTitle, getUserNickName } from '../../../api/supabase/partner';
+import { supabase } from '../../../api/supabase/supabaseClient';
 import NoAlert from '../../../assets/imgs/header/NoAlert.svg';
+import YesAlert from '../../../assets/imgs/header/YesAlert.svg';
 import iconAlert from '../../../assets/imgs/header/icon_alert.png';
+import { useAlertStorageStore, useNewAlertStore } from '../../../zustand/alert';
+import useSessionStore from '../../../zustand/store';
+import { timeAgo } from '../../common/transferTime/transferTime';
+import * as St from './style';
 
 const PENDING = 'pending';
 const ACCEPTED = 'accepted';
@@ -197,7 +197,7 @@ export default function PartnerAlert() {
             width: '300px',
           }}
         >
-          <img src={YesAlert} alt="alert" />
+          <img src={YesAlert} alt="alert" style={{ width: '20px', height: '22px' }} />
         </Popover>
       ) : (
         <Popover
@@ -208,7 +208,7 @@ export default function PartnerAlert() {
             width: '150px',
           }}
         >
-          <img src={NoAlert} alt="noAlert" />
+          <img src={NoAlert} alt="noAlert" style={{ width: '24px', height: '24px' }} />
         </Popover>
       )}
     </>
