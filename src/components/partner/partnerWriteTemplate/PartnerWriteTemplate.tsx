@@ -108,6 +108,8 @@ function PartnerWriteTemplate() {
   };
   // 글 작성 버튼 클릭 핸들러
   const handleWriteClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+
     const time = currentTime();
     const dataToInsert = {
       title,

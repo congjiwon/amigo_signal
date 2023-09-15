@@ -98,7 +98,7 @@ export const OpenStatus = styled.div`
   justify-content: center;
   align-items: center;
   gap: 4px;
-  width: 89px;
+  width: 78px;
   height: 32px;
   font-size: 12px;
   color: #643bdc;

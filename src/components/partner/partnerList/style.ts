@@ -153,7 +153,7 @@ export const PostCard = styled.div`
 export const LocationBox = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   h1 {
     margin: 30px 0px 0px 5px;
   }
@@ -187,8 +187,9 @@ export const Country = styled.p`
 export const CheckBox = styled.div`
   border-radius: 18px;
   border: 1px solid var(--purple, #643bdc);
-  width: 89px;
-  height: 32px;
+  /* width: 89px; */
+  width: 78px;
+  height: 30px;
 
   display: flex;
   flex-direction: row;
@@ -196,7 +197,7 @@ export const CheckBox = styled.div`
   align-items: center;
 
   position: absolute;
-  top: 22px;
+  top: 24px;
   right: 20px;
   span {
     font-size: 12px;
@@ -204,7 +205,7 @@ export const CheckBox = styled.div`
     font-weight: 600;
     line-height: 160%; /* 19.2px */
     letter-spacing: -0.3px;
-    margin-left: 5px;
+    margin-left: 2px;
   }
 `;
 
