@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { getInterests } from '../../../api/supabase/interest';
-import { getApplicantList, getConfirmedApplicantList, getPartnerPost, updatePartnerPost } from '../../../api/supabase/partner';
+import { getPartnerPost, updatePartnerPost } from '../../../api/supabase/partner';
 import { Tables } from '../../../api/supabase/supabase';
 import { BtnStyleType } from '../../../types/styleTypes';
 import useSessionStore from '../../../zustand/store';
@@ -16,8 +16,6 @@ import * as St from './style';
 
 function PartnerUpdateTemplate({ postId }: { postId: string }) {
   const { data: partnerPost, isLoading, isError } = useQuery(['partnerPost', postId], () => getPartnerPost({ postId }));
-  const [applicantList, setApplicantList] = useState<Tables<'applicants'>[]>([]);
-  const [confirmedApplicantList, setConfirmedApplicantList] = useState<Tables<'applicants'>[]>([]);
   const [location, setLocation] = useState<string[]>([]);
   const [partnerDates, setPartnerDates] = useState<string[]>([]);
   const [partner, setPartner] = useState<number>(1);
@@ -27,7 +25,6 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
   const [interestTagList, setInterestTagList] = useState<Tables<'interest'>[]>([]);
   const [interestUrl, setInterestUrl] = useState<string[]>([]);
   const [interestDiscription, setInterestDiscription] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
   const [writerId, setWriterId] = useState<string>('');
   const [disable, setDisable] = useState(false);
   const navigate = useNavigate();
@@ -49,30 +46,6 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
   }, []);
 
   useEffect(() => {
-    const fetchApplicant = async () => {
-      if (!postId) return;
-      const { data, error } = await getApplicantList(postId);
-      if (error || !data) {
-        console.error('신청자 목록을 가져오는 과정에서 error 발생', error);
-        setApplicantList([]);
-      } else {
-        setApplicantList(data);
-      }
-    };
-    fetchApplicant();
-    const fetchConfirmedPartnerList = async () => {
-      if (postId) {
-        const response = await getConfirmedApplicantList(postId!);
-        if (response.data !== null) {
-          setConfirmedApplicantList(response.data);
-        }
-        console.log('response', response.data);
-      }
-    };
-    fetchConfirmedPartnerList();
-  }, [postId]);
-
-  useEffect(() => {
     const fetchPostData = async () => {
       if (partnerPost) {
         setLocation([partnerPost.region, partnerPost?.country.country!]);
@@ -92,7 +65,12 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
     if (!authId) {
       navigate('/login');
     }
-  }, [navigate, authId]);
+    if (writerId.length > 0) {
+      if (authId !== writerId) {
+        navigate('/partner');
+      }
+    }
+  }, [navigate, authId, writerId]);
 
   const handleInterestClick = (imageUrl: string, discription: string) => {
     if (interestUrl.includes(imageUrl)) {
@@ -135,11 +113,6 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
       navigate(`/partner/detail/${postId}`);
       return false;
     }
-    if (applicantList.length >= 1 || confirmedApplicantList.length >= 1) {
-      AlertError({ title: '수정이 불가능 합니다.', text: '동행 신청이 시작되었습니다.' });
-      navigate(`/partner/detail/${postId}`);
-      return false;
-    }
     if (location.length < 1) {
       AlertWarning({ title: '국가를 선택해주세요.' });
       return false;
@@ -168,7 +141,8 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
   }
 
   // 글 작성 버튼 클릭 핸들러
-  const handleUpdateClick = () => {
+  const handleUpdateClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
     if (validation()) {
       const dataToInsert = {
         id: postId,
@@ -193,15 +167,15 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
     <St.FormContainer>
       <St.WriteForm>
         <St.SelectListBox>
-          <St.ExplanationBox>
-            <UpdateLocationDropDown location={[partnerPost?.region!, partnerPost?.country.country!]} setLocation={setLocation} />
-          </St.ExplanationBox>
-          <St.ExplanationBox>
-            <UpdatePartnerCalendar startDate={partnerPost?.startDate!} endDate={partnerPost?.endDate!} setPartnerDates={setPartnerDates} />
-          </St.ExplanationBox>
-          <St.ExplanationBox>
-            <UpdatePartnerDropDown partner={partnerPost?.numOfPeople!} setPartner={setPartner} />
-          </St.ExplanationBox>
+          {/* <St.ExplanationBox> */}
+          <UpdateLocationDropDown location={[partnerPost?.region!, partnerPost?.country.country!]} setLocation={setLocation} />
+          {/* </St.ExplanationBox> */}
+          {/* <St.ExplanationBox> */}
+          <UpdatePartnerCalendar startDate={partnerPost?.startDate!} endDate={partnerPost?.endDate!} setPartnerDates={setPartnerDates} />
+          {/* </St.ExplanationBox> */}
+          {/* <St.ExplanationBox> */}
+          <UpdatePartnerDropDown partner={partnerPost?.numOfPeople!} setPartner={setPartner} />
+          {/* </St.ExplanationBox> */}
         </St.SelectListBox>
         <St.WriteInput
           maxLength={100}
@@ -256,7 +230,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
           <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={() => navigate(`partner/detail/${postId}`)}>
             취소
           </Button>
-          <Button type="button" disabled={disable} styleType={BtnStyleType.BTN_DARK} onClick={handleUpdateClick}>
+          <Button type="submit" disabled={disable} styleType={BtnStyleType.BTN_DARK} onClick={handleUpdateClick}>
             수정완료
           </Button>
         </St.ButtonBox>

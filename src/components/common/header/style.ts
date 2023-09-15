@@ -1,3 +1,5 @@
+import { LogoDiv } from './../Intro/style';
+import { currentTime } from './../currentTime/CurrentTime';
 import { styled } from 'styled-components';
 
 export const HeaderLayout = styled.div`
@@ -59,31 +61,49 @@ export const Gnb = styled.header`
     gap: 60px;
 
     & a {
+      font-size: 16px;
       color: #81858a;
-      font-weight: 600;
+      font-weight: 500;
 
       &:hover {
-        color: #000;
+        color: #121621;
       }
 
       &.active {
-        color: #000;
+        color: #121621;
       }
     }
+  }
+
+  @media screen and (max-width: 640px) {
+    display: none;
   }
 `;
 
 export const Utils = styled.div`
-  display: flex;
-  gap: 8px;
-
   a {
-    font-size: 14px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #121621;
 
     &:hover {
       text-decoration: underline;
     }
   }
+
+  @media screen and (max-width: 640px) {
+    display: none;
+  }
+`;
+
+export const UtilUser = styled.div`
+  display: flex;
+  gap: 24px;
+`;
+
+export const UtilLogin = styled.div`
+  display: flex;
+  gap: 40px;
 `;
 
 export const UserBox = styled.div`
@@ -95,14 +115,14 @@ export const UserBox = styled.div`
 export const ProfileImg = styled.img`
   width: 28px;
   height: 28px;
-  margin-left: 28px;
   border-radius: 50%;
 `;
 
 export const NickName = styled.p`
   margin-left: 10px;
-  font-size: 14px;
-  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: default;
 `;
 
 export const PopOverButton = styled.button`
@@ -110,7 +130,6 @@ export const PopOverButton = styled.button`
   padding: 0;
   border: none;
   background: none;
-  cursor: pointer;
 `;
 
 export const MyPagePopover = styled.div`
@@ -119,7 +138,131 @@ export const MyPagePopover = styled.div`
   flex-direction: column;
   gap: 10px;
 
-  & a.active {
-    font-weight: 500;
+  & a:hover,
+  a:active {
+    color: #643bdc;
+  }
+`;
+
+// Mobile
+export const MobileMenu = styled.div`
+  display: none;
+
+  & .hambuger-menu {
+    width: 24px;
+    height: 24px;
+    margin-left: 14px;
+    cursor: pointer;
+  }
+
+  @media screen and (max-width: 640px) {
+    display: block;
+  }
+`;
+
+export const DrawerHeader = styled.div`
+  position: relative;
+  padding: 54px 20px 24px 20px;
+  border-bottom: 1px solid #e3e9f3;
+
+  & .icon-close-menu {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    bottom: 30.5px;
+    right: 22.5px;
+    cursor: pointer;
+  }
+`;
+
+export const UserBoxM = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+`;
+
+export const LoginBoxM = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  & a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 95px;
+    height: 41px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+  }
+
+  & .link-login {
+    color: #fff;
+    background-color: #121621;
+    border: 1px solid #121621;
+  }
+
+  & .link-join {
+    color: #121621;
+    background-color: #fff;
+    border: 1px solid #e3e9f3;
+  }
+`;
+
+export const ProfileImgM = styled.img`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+`;
+
+export const NickNameM = styled.p`
+  font-size: 16px;
+  font-weight: 600;
+  cursor: default;
+`;
+
+export const DrawerBody = styled.div`
+  padding: 32px 20px;
+`;
+
+export const GnbM = styled.div`
+  li {
+    margin-bottom: 32px;
+    color: #000;
+    font-size: 20px;
+    font-weight: 600;
+
+    a:hover,
+    a:active,
+    a.active {
+      color: #643bdc;
+    }
+  }
+`;
+
+export const UserMenuM = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  & a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 41px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  & .btn-mypage {
+    color: #fff;
+    background-color: #643bdc;
+  }
+
+  & .btn-logout {
+    border: 1px solid #e3e9f3;
   }
 `;

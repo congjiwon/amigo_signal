@@ -4,7 +4,7 @@ import { CommentTopBoxProps } from '../type/CommentType';
 
 function CommentTopBox({ user, storageUrl, comment, isPostWriter }: CommentTopBoxProps) {
   return (
-    <St.CommentTopBox key={user.id}>
+    <St.CommentTopBox>
       <div>
         <St.Img src={user! && user!.profileImageUrl! ? `${storageUrl}/${user!.profileImageUrl!}` : DefaultProfileImage} />
       </div>

@@ -4,6 +4,14 @@ type StatusProps = {
   $isOpen: boolean;
 };
 
+export const CustomDropBox = styled.div`
+  @media screen and (max-width: 690px) {
+    position: relative;
+    right: 76px;
+    top: 4px;
+  }
+`;
+
 export const NoDataImgBox = styled.div`
   height: 588px;
   display: flex;
@@ -54,25 +62,54 @@ export const FilterWriteBox = styled.div`
     padding: 0 16px;
   }
 
-  @media screen and (max-width: 650px) {
-    flex-direction: column;
+  @media screen and (max-width: 690px) {
+    flex-direction: column-reverse;
     align-items: flex-start;
     padding: 0 20px;
     gap: 12px;
 
     & button:last-of-type {
       align-self: flex-end;
+      z-index: 1;
+      width: 87px;
+      height: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      span {
+        color: var(--white, #fff);
+        text-align: center;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 100%; /* 14px */
+        display: inline-block;
+        width: 45px;
+      }
     }
   }
 `;
 
 export const SelectsBox = styled.div`
   display: flex;
+  /* gap: 24px; */
 
-  @media screen and (max-width: 650px) {
-    align-items: flex-start;
+  & > div {
+    display: flex;
+    gap: 24px;
+  }
+  @media screen and (max-width: 690px) {
+    position: relative;
+    top: -48px;
     flex-direction: column;
-    gap: 12px;
+    align-items: flex-end;
+    gap: 15px;
+    width: 100%;
+    margin-bottom: -60px;
+
+    & > div {
+      display: flex;
+      gap: 12px;
+    }
 
     & :where(.css-dev-only-do-not-override-byeoj0).ant-space-vertical {
       margin-left: 0 !important;
@@ -82,7 +119,7 @@ export const SelectsBox = styled.div`
 
 export const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, minmax(200px, auto));
+  grid-template-columns: repeat(4, minmax(282px, auto));
   grid-gap: 24px;
   place-items: center;
   margin: 50px auto;
@@ -106,12 +143,17 @@ export const PostCard = styled.div`
   position: relative;
   border-radius: 30px;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+
+  @media screen and (max-width: 600px) {
+    width: 335px;
+    height: 216px;
+  }
 `;
 
 export const LocationBox = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   h1 {
     margin: 30px 0px 0px 5px;
   }
@@ -121,7 +163,6 @@ export const FlagBox = styled.div`
   position: relative;
   width: 50px;
   height: 36px;
-  /* border-radius: 50%; */
   border: 1px solid var(--light-gray, #e3e9f3);
   overflow: hidden;
   margin: 24px 0px 0px 20px;
@@ -146,21 +187,25 @@ export const Country = styled.p`
 export const CheckBox = styled.div`
   border-radius: 18px;
   border: 1px solid var(--purple, #643bdc);
-  width: 89px;
-  height: 32px;
+  /* width: 89px; */
+  width: 78px;
+  height: 30px;
+
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin-left: 50px;
-  margin-top: 22px;
+
+  position: absolute;
+  top: 24px;
+  right: 20px;
   span {
     font-size: 12px;
     font-style: normal;
     font-weight: 600;
     line-height: 160%; /* 19.2px */
     letter-spacing: -0.3px;
-    margin-left: 5px;
+    margin-left: 2px;
   }
 `;
 
@@ -204,9 +249,6 @@ export const Body = styled.div`
   display: flex;
   gap: 5px;
   margin: 21px 20px 20px 20px;
-  /* margin-top: 21px; */
-  /* margin-left: 20px; */
-  /* margin-right: 20px; */
   padding-bottom: 19px;
   border-bottom: 1px solid #d9d9d9;
   p {
@@ -239,17 +281,20 @@ export const Footer = styled.div`
   margin-left: 20px;
   border-top: 1px solid #e3e9f3;
   justify-content: space-between;
-  margin-right: 20px;
   align-items: center;
+  margin-right: 20px;
   font-size: 0.8rem;
+
+  @media screen and (max-width: 600px) {
+    width: 295px;
+    height: 49px;
+  }
 `;
 
 export const UserProfile = styled.div`
   display: flex;
   align-items: center;
   gap: 7px;
-  /* marg */
-  /* margin-left: 20px; */
   p {
     margin-left: 2px;
   }

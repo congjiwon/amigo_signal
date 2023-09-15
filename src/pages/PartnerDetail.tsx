@@ -1,14 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { checkApply, getConfirmedApplicantList, getPartnerPost, updatePostStatus } from '../api/supabase/partner';
 import FiCheck from '../assets/imgs/partner/FiCheck.svg';
+import Button from '../components/common/button/Button';
 import LoadingSpinner from '../components/common/loadingSpinner/LoadingSpinner';
 import MetaTags from '../components/common/metaTags/MetaTags';
 import Communication from '../components/partner/communicate/Communication';
 import ConfirmedPartnerList from '../components/partner/communicate/ConfirmedPartnerList';
 import PartnerComments from '../components/partner/partnerComment/PartnerComments';
 import PartnerDetailInfo from '../components/partner/partnerDetailInfo/PartnerDetailInfo';
+import { BtnStyleType } from '../types/styleTypes';
 import { useStateStore } from '../zustand/communicate';
 import useSessionStore from '../zustand/store';
 import * as St from './style';
@@ -17,6 +19,7 @@ function PartnerDetail() {
   const { postid } = useParams<string>();
   const { session } = useSessionStore();
   const logInUserId = session?.user.id;
+  const navigate = useNavigate();
 
   const { partnerStatus, applicantStatus, setPartnerStatus, setApplicantStatus } = useStateStore();
 
@@ -106,6 +109,11 @@ function PartnerDetail() {
         {partnerStatus === '모집중' && isApply && applicantStatus !== null ? <St.ApplyStatus $applicantStatus={applicantStatus}>{applicantStatus}</St.ApplyStatus> : <></>}
       </St.Status>
       <PartnerComments />
+      <St.ButtonBox>
+        <Button styleType={BtnStyleType.BTN_GOTOLIST} onClick={() => navigate('/partner')}>
+          목록보기
+        </Button>
+      </St.ButtonBox>
     </>
   );
 }

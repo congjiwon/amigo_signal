@@ -10,28 +10,54 @@ type ApplyStatusProps = {
 
 export const PartnerDetailMain = styled.div`
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
-`;
+  margin-top: 100px;
 
-export const PartnerDetailInfoSection = styled.section`
-  margin-top: 30px;
-  flex-basis: 791px;
-  flex-shrink: 1;
-  @media (max-width: 1090px) {
-    flex-grow: 1;
+  @media (max-width: 1256px) {
+    display: block;
+    padding: 0 50px 0 50px;
+  }
+
+  @media (max-width: 800px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 100px;
+    padding: 0 20px 0 20px;
+  }
+
+  @media (max-width: 500px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 100px;
+    margin-top: 40px;
+    padding: 0 10px 0 10px;
   }
 `;
 
-export const CommunicateDiv = styled.section`
-  margin-top: 30px;
+export const PartnerDetailInfoSection = styled.section`
+  flex-basis: 791px;
+  flex-shrink: 1;
+  @media (max-width: 1256px) {
+    margin-bottom: 120px;
+  }
 `;
+
+export const CommunicateDiv = styled.section``;
 
 export const Status = styled.div`
   display: flex;
   gap: 10px;
   margin-top: 160px;
   margin-bottom: 24px;
+  @media (max-width: 1256px) {
+    padding: 0 50px 0 50px;
+  }
+  @media (max-width: 800px) {
+    padding: 0 20px 0 20px;
+  }
+  @media (max-width: 500px) {
+    padding: 0 10px 0 10px;
+  }
 `;
 
 export const PostStatus = styled.span<StatusProps>`
@@ -64,4 +90,16 @@ export const ApplyStatus = styled.div<ApplyStatusProps>`
   font-weight: 600;
   line-height: 160%;
   letter-spacing: -0.3px;
+`;
+
+export const ButtonBox = styled.div`
+  margin: 40px 474px 120px 474px;
+  display: flex;
+  justify-content: center;
+  @media (max-width: 1060px) {
+    margin: 40px 145px 75px 145px;
+  }
+  @media (max-width: 500px) {
+    margin: 0px 145px 75px 145px;
+  }
 `;

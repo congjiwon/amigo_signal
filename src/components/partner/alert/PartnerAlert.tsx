@@ -1,22 +1,54 @@
 import { useEffect } from 'react';
-import { supabase } from '../../../api/supabase/supabaseClient';
-import useSessionStore from '../../../zustand/store';
-import { fetchPartnerPostTitle } from '../../../api/supabase/partner';
-import { useAlertStorageStore, useNewAlertStore } from '../../../zustand/alert';
 import { useNavigate } from 'react-router';
-import YesAlert from '../../../assets/imgs/header/YesAlert.svg';
-import NoAlert from '../../../assets/imgs/header/NoAlert.svg';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '../../../api/supabase/supabaseClient';
+import { fetchPartnerPostTitle, getUserNickName } from '../../../api/supabase/partner';
+import { addAlert, deleteAlert, getAlertList } from '../../../api/supabase/alert';
+import useSessionStore from '../../../zustand/store';
+import { useAlertStorageStore, useNewAlertStore } from '../../../zustand/alert';
+import { timeAgo } from '../../common/transferTime/transferTime';
+import { v4 as uuidv4 } from 'uuid';
 import { Popover } from 'antd';
 import * as St from './style';
+import YesAlert from '../../../assets/imgs/header/YesAlert.svg';
+import NoAlert from '../../../assets/imgs/header/NoAlert.svg';
 import iconAlert from '../../../assets/imgs/header/icon_alert.png';
-import { timeAgo } from '../../common/transferTime/transferTime';
+
+const PENDING = 'pending';
+const ACCEPTED = 'accepted';
+const REJECTED = 'rejected';
 
 export default function PartnerAlert() {
   const session = useSessionStore((state) => state.session);
   const userId = session?.user.id;
-  const { alertStorage, addAlertStorage, removeAlertStorage } = useAlertStorageStore();
+  const { alertStorage, removeAlertStorage, setAlertStorage } = useAlertStorageStore();
   const { hasNewAlert, setHasNewAlert } = useNewAlertStore();
   const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
+
+  const { data: alertList } = useQuery(['getAlertStorage', userId], () => getAlertList(userId as string), { enabled: !!userId, retry: false });
+
+  const mutationAlertList = useMutation(getAlertList, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['getAlertStorage', userId]);
+    },
+  });
+
+  // 초기에 alert DB에서 가져온 data로 default setting
+  useEffect(() => {
+    if (userId && alertList !== undefined && alertList.data !== null) {
+      setAlertStorage(alertList?.data);
+    }
+  }, [alertList]);
+
+  useEffect(() => {
+    if (alertStorage.length === 0) {
+      setHasNewAlert(false);
+    } else if (alertStorage.length > 0) {
+      setHasNewAlert(true);
+    }
+  }, [alertStorage]);
 
   // 작성자 기준
   supabase
@@ -33,21 +65,27 @@ export default function PartnerAlert() {
         // 신청자가 있을 때
         if (payload.eventType === 'INSERT' && !payload.new.isConfirmed) {
           const postTitle = await fetchPartnerPostTitle(payload.new.postId);
-          if (postTitle) {
+          const applicantNickName = await getUserNickName(payload.new.applicantId);
+          if (postTitle && applicantNickName) {
             const newPostInfo = {
-              id: payload.new.id,
+              id: uuidv4(),
+              applicantNickName,
+              logInUserId: userId!,
+              applyId: payload.new.id,
               postId: payload.new.postId,
               title: postTitle,
               date: payload.commit_timestamp,
-              genre: '동행 신청 받음',
+              genre: PENDING,
             };
-            addAlertStorage(newPostInfo);
+            addAlert(newPostInfo);
+            mutationAlertList.mutate(userId!);
             setHasNewAlert(true);
           }
         }
         // 신청자가 참여 취소 시
         if (payload.eventType === 'DELETE') {
-          removeAlertStorage(payload.old.id);
+          deleteAlert(payload.old.id, PENDING);
+          mutationAlertList.mutate(userId!);
           if (alertStorage.length === 0) {
             setHasNewAlert(false);
           } else if (alertStorage.length > 0) {
@@ -73,30 +111,40 @@ export default function PartnerAlert() {
         // 작성자가 수락했을 떄
         if (payload.eventType === 'UPDATE' && payload.new.isConfirmed && payload.new.isAccepted) {
           const postTitle = await fetchPartnerPostTitle(payload.new.postId);
-          if (postTitle) {
+          const applicantNickName = await getUserNickName(payload.new.applicantId);
+          if (postTitle && applicantNickName) {
             const newPostInfo = {
-              id: payload.new.id,
+              id: uuidv4(),
+              applicantNickName,
+              logInUserId: userId!,
+              applyId: payload.new.id,
               postId: payload.new.postId,
               title: postTitle,
               date: payload.commit_timestamp,
-              genre: '동행 신청 수락됨',
+              genre: ACCEPTED,
             };
-            addAlertStorage(newPostInfo);
+            addAlert(newPostInfo);
+            mutationAlertList.mutate(userId!);
             setHasNewAlert(true);
           }
         }
         // 작성자가 거절했을 때
         if (payload.eventType === 'UPDATE' && payload.new.isConfirmed && !payload.new.isAccepted) {
           const postTitle = await fetchPartnerPostTitle(payload.new.postId);
-          if (postTitle) {
+          const applicantNickName = await getUserNickName(payload.new.applicantId);
+          if (postTitle && applicantNickName) {
             const newPostInfo = {
-              id: payload.new.id,
+              id: uuidv4(),
+              applicantNickName,
+              logInUserId: userId!,
+              applyId: payload.new.id,
               postId: payload.new.postId,
               title: postTitle,
               date: payload.commit_timestamp,
-              genre: '동행 신청 거절됨',
+              genre: REJECTED,
             };
-            addAlertStorage(newPostInfo);
+            addAlert(newPostInfo);
+            mutationAlertList.mutate(userId!);
             setHasNewAlert(true);
           }
         }
@@ -104,15 +152,9 @@ export default function PartnerAlert() {
     )
     .subscribe();
 
-  useEffect(() => {
-    if (alertStorage.length === 0) {
-      setHasNewAlert(false);
-    } else if (alertStorage.length > 0) {
-      setHasNewAlert(true);
-    }
-  }, [alertStorage]);
-  const handleAlertLink = (id: string, postId: string) => {
+  const handleAlertLink = (id: string, postId: string, genre: string) => {
     navigate(`/partner/detail/${postId}`);
+    deleteAlert(id, genre);
     removeAlertStorage(id);
     if (alertStorage.length === 0) {
       setHasNewAlert(false);
@@ -120,20 +162,19 @@ export default function PartnerAlert() {
       setHasNewAlert(true);
     }
   };
-
   const alarmPopover = (
     <St.AlarmPopoverBox>
       <St.MainTitle>{`새로운 소식 (${alertStorage.length})`}</St.MainTitle>
       <St.ListBox>
         {[...alertStorage].reverse().map((item) => (
-          <St.ListList onClick={() => handleAlertLink(item.id, item.postId)} key={item.id}>
+          <St.ListList onClick={() => handleAlertLink(item.applyId, item.postId, item.genre)} key={item.id}>
             <St.ListItem>
               <div>
                 <img src={iconAlert} alt="동행 아이콘" style={{ width: '40px' }} />
               </div>
               <St.PostInfo>
                 <St.PostInfoTop>
-                  <p>{item.genre === '동행 신청 받음' ? '새로운 동행 신청' : item.genre === '동행 신청 수락됨' ? '동행 신청이 수락되었습니다.' : '동행 신청이 거절되었습니다.'}</p>
+                  <p>{item.genre === PENDING ? `동행신청 | ${item.applicantNickName} 님` : item.genre === ACCEPTED ? '동행신청이 수락되었습니다.' : '동행신청이 거절되었습니다.'}</p>
                   <St.TimeAgo>{timeAgo(item.date)}</St.TimeAgo>
                 </St.PostInfoTop>
                 <St.PostTitle>{item.title}</St.PostTitle>
@@ -153,7 +194,7 @@ export default function PartnerAlert() {
           trigger="hover"
           placement="topRight"
           overlayStyle={{
-            width: '282px',
+            width: '300px',
           }}
         >
           <img src={YesAlert} alt="alert" />

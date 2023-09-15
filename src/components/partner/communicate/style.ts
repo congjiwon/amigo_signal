@@ -20,6 +20,10 @@ export const ApplyDiv = styled.div`
 
 export const CommunicationDiv = styled.div`
   width: 282px;
+
+  @media (max-width: 1256px) {
+    width: 100%;
+  }
 `;
 
 export const NewApplicantAlert = styled.p`
@@ -35,18 +39,38 @@ export const ModalTitle = styled.h1`
   font-weight: bold;
 `;
 
+export const InputBox = styled.div`
+  display: flex;
+  position: relative;
+  /* min-height: 232px; */
+`;
+
 export const TextCount = styled.span`
   position: absolute;
-  top: 281px;
+  top: 180px;
   right: 60px;
   font-size: 14px;
   color: #3f4656;
+  font-weight: 400;
+  line-height: 150%;
+  @media screen and (max-width: 664px) {
+    top: 280px;
+  }
 `;
 
 export const SubmitApply = styled.div`
   display: flex;
   justify-content: flex-end;
-  margin-right: 45px;
+  margin-right: 40px;
+  margin-top: 40px;
+`;
+
+export const EmptyApplicant = styled.p`
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  font-size: 13px;
+  color: gray;
 `;
 
 export const ApplicantList = styled.ul`
@@ -60,20 +84,27 @@ export const ApplicantList = styled.ul`
 `;
 
 export const ApplicantCard = styled.div<ApplicantCardProps>`
+  position: relative;
   margin-top: 15px;
   padding: 20px;
   border: ${(props) => (props.$isClicked ? '1.5px solid black' : '1px solid lightgray')};
   border-radius: 10px;
+  @media (max-width: 612px) {
+    padding-bottom: 70px;
+  }
 `;
 
 export const ApplicantProfile = styled.div`
   display: flex;
   justify-content: space-between;
+  @media (max-width: 612px) {
+    flex-direction: column;
+    gap: 20px;
+  }
 `;
 
 export const ApplicantInfo = styled.div`
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: 16px;
 `;
@@ -85,24 +116,47 @@ export const ApplicantProfileImage = styled.img`
 `;
 
 export const ApplicantNickName = styled.p`
-  font-weight: bold;
-  font-size: 1rem;
+  color: #121621;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 150%;
 `;
 
 export const ApplicantAgeGender = styled.p`
-  color: gray;
+  color: #3f4656;
+  text-align: right;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 150%;
 `;
 
 export const ButtonDiv = styled.div`
+  position: absolute;
+  top: 25px;
+  right: 20px;
   display: flex;
   gap: 10px;
-  flex: 0 0 auto;
+
+  @media (max-width: 612px) {
+    top: auto;
+    bottom: 20px;
+    left: 20px;
+
+    & button {
+      flex: 1;
+    }
+  }
+
+  /* display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto; */
 `;
 
 export const AcceptButton = styled.button<CheckButtonProps>`
   width: 65px;
   height: 32px;
-  padding: 7px 10px;
   background: none;
   border: 1px solid black;
   border-radius: 6px;
@@ -120,9 +174,12 @@ export const AcceptButton = styled.button<CheckButtonProps>`
     return props.$isAccepted ? 'white' : 'black';
   }};
 
-  @media (max-width: 550px) {
-    height: 30px;
-    border-radius: 15px;
+  @media (max-width: 612px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 133px;
+    padding: 12px 24px;
   }
 `;
 
@@ -136,24 +193,37 @@ export const RejectButton = styled.button<CheckButtonProps>`
   cursor: pointer;
   background-color: ${(props) => {
     if (props.$isAccepted === null) return 'white';
-    return props.$isAccepted ? 'white' : 'black';
+    return props.$isAccepted ? 'white' : '#643BDC';
+  }};
+  border-color: ${(props) => {
+    if (props.$isAccepted === null) return 'black';
+    return props.$isAccepted ? 'black' : '#643BDC';
   }};
   color: ${(props) => {
     if (props.$isAccepted === null) return 'black';
     return props.$isAccepted ? 'black' : 'white';
   }};
-  @media (max-width: 550px) {
-    height: 30px;
-    border-radius: 15px;
+
+  @media (max-width: 612px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 133px;
+    padding: 12px 24px;
   }
 `;
 
 export const ApplicantContent = styled.p`
-  margin-top: 20px;
+  margin-top: 15px;
   margin-left: 56px;
   overflow-wrap: anywhere;
+  color: #121621;
   font-size: 14px;
   line-height: 150%;
+  font-weight: 400;
+  @media (max-width: 612px) {
+    margin-left: 0;
+  }
 `;
 
 export const ConfirmedApplicantList = styled.div<ConfirmedApplicantListProps>`
@@ -166,6 +236,10 @@ export const ConfirmedApplicantList = styled.div<ConfirmedApplicantListProps>`
     margin-top: 40px;
     margin-left: 24px;
     font-weight: 600;
+  }
+
+  @media (max-width: 1256px) {
+    width: 100%;
   }
 `;
 
@@ -192,9 +266,15 @@ export const ConfirmedApplicantInfo = styled.div`
   align-items: center;
   gap: 10px;
   font-size: 14px;
+  color: #000;
+  font-weight: 600;
+  line-height: 150%;
 `;
 
 export const ConfirmedApplicantAgeNGender = styled.p`
-  color: #3f4656;
-  font-size: 12px;
+  color: #6c7486;
+  text-align: right;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 150%;
 `;

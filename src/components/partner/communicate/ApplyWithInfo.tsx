@@ -29,7 +29,6 @@ const ApplyWithInfo = ({ postId, writerId, applicantId, setIsApply }: ApplyWithI
 
   const handleSubmit = async () => {
     if (!postId || !applicantId || !writerId) {
-      console.error('postId 또는 applicantId 유효하지 않습니다.');
       return;
     }
 
@@ -56,9 +55,7 @@ const ApplyWithInfo = ({ postId, writerId, applicantId, setIsApply }: ApplyWithI
         await insertApplicant(applicantData);
         setIsApply(true);
         closeModal('applyWithInfo');
-      } catch (error) {
-        console.log('참가 신청 모달 제출 과정에서 오류 발생', error);
-      }
+      } catch (error) {}
     } else {
       try {
         setApplicantStatus('참여 신청중');
@@ -66,20 +63,21 @@ const ApplyWithInfo = ({ postId, writerId, applicantId, setIsApply }: ApplyWithI
         setIsApply(true);
         closeModal('applyWithInfo');
         Alert({ title: '동행 참여 신청이 완료되었습니다!' });
-      } catch (error) {
-        console.log('참가 신청 모달 제출 과정에서 오류 발생', error);
-      }
+      } catch (error) {}
     }
   };
+
+  const buttonStyleType = text.trim() === '' ? BtnStyleType.BTN_NOTEXTAPPLY : BtnStyleType.BTN_APPLY;
 
   return (
     <>
       <St.ModalTitle>동행 참여 신청하기</St.ModalTitle>
-      <Input type="textarea" inputStyleType="apply" border={true} placeholder="간단한 자기소개를 작성해주세요." value={text} onChange={handleText} />
-
-      <St.TextCount>{text.length}/300 자</St.TextCount>
+      <St.InputBox>
+        <Input type="textarea" $inputStyleType="apply" $border={true} placeholder="간단한 자기소개를 작성해주세요." value={text} onChange={handleText} />
+        <St.TextCount>{text.length}/300 자</St.TextCount>
+      </St.InputBox>
       <St.SubmitApply>
-        <Button type="submit" styleType={BtnStyleType.BTN_APPLY} onClick={handleSubmit}>
+        <Button type="submit" styleType={buttonStyleType} onClick={handleSubmit}>
           신청
         </Button>
       </St.SubmitApply>

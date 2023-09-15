@@ -11,17 +11,50 @@ import SignUp from '../pages/SignUp';
 import SpotShare from '../pages/SpotShare';
 import SpotShareDetail from '../pages/SpotShareDetail';
 import SpotShareWrite from '../pages/SpotShareWrite';
+import StyledWrapper from '../components/common/layout/StyleWrapper';
+import ScrollTopTop from '../components/common/scrollToTop/ScrollTopTop';
 
 const Router: React.FC = () => {
   return (
     <BrowserRouter>
+      <ScrollTopTop />
       <Routes>
         <Route path="/" element={<Intro />} />
-        <Route path="/login" element={<LogIn />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/partner" element={<Partner />} />
-        <Route path="/spotshare" element={<SpotShare />} />
         <Route path="*" element={<ErrorPage />} />
+
+        <Route
+          path="/login"
+          element={
+            <StyledWrapper>
+              <LogIn />
+            </StyledWrapper>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <StyledWrapper>
+              <SignUp />
+            </StyledWrapper>
+          }
+        />
+        <Route
+          path="/partner"
+          element={
+            <StyledWrapper>
+              <Partner />
+            </StyledWrapper>
+          }
+        />
+        <Route
+          path="/spotshare"
+          element={
+            <StyledWrapper>
+              <SpotShare />
+            </StyledWrapper>
+          }
+        />
+
         <Route element={<Layout />}>
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/partner/detail/:postid" element={<PartnerDetail />} />

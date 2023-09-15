@@ -1,6 +1,7 @@
 import { RxGithubLogo, RxNotionLogo } from 'react-icons/rx';
 import One from '../../../assets/imgs/Logo/One.png';
 import logo from '../../../assets/imgs/Logo/logo.png';
+import logoHeader from '../../../assets/imgs/Logo/logo_header.png';
 import * as St from './style';
 
 const Footer = () => {
@@ -9,8 +10,9 @@ const Footer = () => {
       <St.FooterContainer>
         <St.FootInfoBox>
           <St.FootLogo>
-            <img src={logo} style={{ width: '40px' }} />
-            <img src={One} style={{ width: '120px' }} />
+            <img src={logoHeader} style={{ width: '144px' }} />
+            {/* <img src={logo} style={{ width: '40px' }} /> */}
+            {/* <img src={One} style={{ width: '120px' }} /> */}
           </St.FootLogo>
           <div>
             <p style={{ fontWeight: 'bold' }}>내일배움캠프 React 6 </p>

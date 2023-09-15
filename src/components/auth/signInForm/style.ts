@@ -70,13 +70,9 @@ export const SignInInputBox = styled.div`
       outline: none;
       cursor: pointer;
 
-      &:focus svg {
-        fill: #000;
-      }
-
       & svg {
         font-size: 24px;
-        fill: #81858a;
+        fill: #3f4656;
         color: #fff;
       }
     }
@@ -113,7 +109,7 @@ export const BtnSignInBox = styled.div`
     font-size: 16px;
     font-weight: 700;
     color: #fff;
-    background-color: #000;
+    background-color: #643bdc;
     border: 0;
     border-radius: 10px;
     cursor: pointer;

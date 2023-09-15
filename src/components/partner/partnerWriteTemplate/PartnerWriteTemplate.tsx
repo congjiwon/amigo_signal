@@ -53,7 +53,7 @@ function PartnerWriteTemplate() {
 
   const mutation = useMutation(insertPost, {
     onSuccess: async () => {
-      queryClient.invalidateQueries(['partnerPost']);
+      await queryClient.invalidateQueries(['partnerPost']);
       navigate('/partner');
     },
     onError: () => {
@@ -108,6 +108,8 @@ function PartnerWriteTemplate() {
   };
   // 글 작성 버튼 클릭 핸들러
   const handleWriteClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+
     const time = currentTime();
     const dataToInsert = {
       title,
@@ -191,7 +193,7 @@ function PartnerWriteTemplate() {
           <Button type="button" styleType={BtnStyleType.BTN_DARK} onClick={() => navigate('/partner')}>
             취소
           </Button>
-          <Button type="button" disabled={disable} styleType={BtnStyleType.BTN_DARK} onClick={handleWriteClick}>
+          <Button type="submit" disabled={disable} styleType={BtnStyleType.BTN_DARK} onClick={handleWriteClick}>
             작성완료
           </Button>
         </St.ButtonBox>

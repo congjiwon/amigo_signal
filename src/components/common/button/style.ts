@@ -39,6 +39,11 @@ export const CommentButton = styled.button<{ $styleType: BtnStyleType; disabled:
           return css`
             ${btnCommentStyles}
           `;
+        case BtnStyleType.BTN_SUBMITCOMMENT:
+          return css`
+            ${btnCommentStyles}
+            color: #643BDC;
+          `;
         case BtnStyleType.BTN_LIKE:
           return css`
             ${btnCommentStyles}
@@ -90,7 +95,42 @@ export const Button = styled.button<{ $styleType: BtnStyleType; disabled: boolea
         case BtnStyleType.BTN_APPLY:
           return css`
             ${btnCommonStyles}
+            background: #643bdc;
+          `;
+        case BtnStyleType.BTN_NOTEXTAPPLY:
+          return css`
+            ${btnCommonStyles}
             background: #99A3BA;
+            &:hover {
+              background: #643bdc;
+            }
+          `;
+        case BtnStyleType.BTN_COMMUNICATE:
+          return css`
+            ${btnCommonStyles}
+            background: #643BDC;
+          `;
+        case BtnStyleType.BTN_GOTOLIST:
+          return css`
+            ${btnCommonStyles}
+            width: 116px;
+            min-width: 85px;
+            height: 48px;
+            background: #e3e9f3;
+            color: black;
+            border-radius: 8px;
+            &:hover {
+              color: #643bdc;
+              transform: scale(1.03);
+              transition: transform 0.3s ease;
+            }
+            &:not(:hover) {
+              transition: 0.3s ease-out;
+            }
+
+            @media (max-width: 500px) {
+              padding: 10px 5px;
+            }
           `;
         default:
           return ``;

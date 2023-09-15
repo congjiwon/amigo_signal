@@ -54,9 +54,7 @@ const ApplicantCard = ({ data, postId, onClick, isSelected, removeConfirmedAppli
       addConfirmedApplicant(data);
       removeConfirmedApplicant(applicantId);
       closeModal('applicantList');
-    } catch (error) {
-      console.error('수락 과정 중 error 발생', error);
-    }
+    } catch (error) {}
   };
 
   const handleReject = async () => {
@@ -77,9 +75,7 @@ const ApplicantCard = ({ data, postId, onClick, isSelected, removeConfirmedAppli
       setApplicantStatus('참여 거절됨');
       removeConfirmedApplicant(applicantId);
       closeModal('applicantList');
-    } catch (error) {
-      console.error('거절 과정 중 error 발생', error);
-    }
+    } catch (error) {}
   };
 
   return (
@@ -92,15 +88,17 @@ const ApplicantCard = ({ data, postId, onClick, isSelected, removeConfirmedAppli
             {classifyingAge(data.users?.birthday!)} | {data.users?.gender}
           </St.ApplicantAgeGender>
         </St.ApplicantInfo>
-        <St.ButtonDiv>
-          <St.AcceptButton onClick={handleAccept} $isAccepted={isAccepted}>
-            수락
-          </St.AcceptButton>
-          <St.RejectButton onClick={handleReject} $isAccepted={isAccepted}>
-            거절
-          </St.RejectButton>
-        </St.ButtonDiv>
       </St.ApplicantProfile>
+
+      <St.ButtonDiv>
+        <St.AcceptButton onClick={handleAccept} $isAccepted={isAccepted}>
+          수락
+        </St.AcceptButton>
+        <St.RejectButton onClick={handleReject} $isAccepted={isAccepted}>
+          거절
+        </St.RejectButton>
+      </St.ButtonDiv>
+
       <St.ApplicantContent>{data.content}</St.ApplicantContent>
     </St.ApplicantCard>
   );

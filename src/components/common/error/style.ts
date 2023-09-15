@@ -9,10 +9,19 @@ export const ErrorLayout = styled.div`
 
 export const ErrorContainer = styled.section`
   display: flex;
-  flex-flow: wrap;
   justify-content: center;
   align-items: center;
-  padding: 3rem;
+  gap: 24px;
+  padding: 10px;
+
+  @media (max-width: 840px) {
+    flex-direction: column;
+  }
+
+  @media (max-width: 500px) {
+    flex-direction: column;
+    gap: 16px;
+  }
 
   & h1 {
     color: var(--black, #121621);
@@ -20,25 +29,62 @@ export const ErrorContainer = styled.section`
     font-style: normal;
     font-weight: 600;
     line-height: 150%;
+
+    @media (max-width: 840px) {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    @media (max-width: 500px) {
+      font-size: 18px;
+    }
   }
+
   & p {
     color: var(--gray2, #6c7486);
     font-size: 16px;
     font-style: normal;
-    font-weight: 600;
+    font-weight: 400;
     line-height: 150%;
+    text-transform: uppercase;
+
+    @media (max-width: 840px) {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    @media (max-width: 500px) {
+      font-size: 14px;
+    }
   }
 `;
 
 export const ErrorImg = styled.img`
   width: 344px;
   height: 344px;
+  @media (max-width: 500px) {
+    width: 120px;
+    height: 120px;
+  }
 `;
 
 export const ErrorDescription = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
+  @media (max-width: 500px) {
+    gap: 16px;
+  }
+`;
+
+export const ErrorBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  @media (max-width: 840px) {
+    /* justify-content: center; */
+    align-items: center;
+  }
 `;
 
 export const HomeBtn = styled.button`
@@ -51,5 +97,12 @@ export const HomeBtn = styled.button`
   background: var(--purple, #643bdc);
   border: 0;
   color: #fff;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
   cursor: pointer;
+  @media (max-width: 500px) {
+    width: 221px;
+  }
 `;

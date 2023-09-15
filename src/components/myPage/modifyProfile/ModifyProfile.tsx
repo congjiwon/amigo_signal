@@ -83,9 +83,7 @@ export default function ModifyProfile() {
           const compressedFile = await imageCompression(selectedFile, options);
           setProfileImgUrl(URL.createObjectURL(selectedFile));
           setProfileImgFile(compressedFile);
-        } catch (error) {
-          console.log(`프로필 이미지 업로드 중 에러 발생: ${error}`);
-        }
+        } catch (error) {}
       }
     }
   };

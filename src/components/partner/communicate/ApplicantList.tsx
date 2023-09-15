@@ -40,6 +40,7 @@ const ApplicantList = ({ postId, applicantList, setApplicantList }: ApplicantLis
   return (
     <>
       <St.ModalTitle>동행 신청자 리스트</St.ModalTitle>
+      {applicantList.length === 0 && <St.EmptyApplicant>동행 신청자가 없습니다.</St.EmptyApplicant>}
       <St.ApplicantList>
         {applicantList.map((data) => {
           return (

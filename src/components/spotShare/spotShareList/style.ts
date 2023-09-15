@@ -17,6 +17,17 @@ export const NoDataImgBox = styled.div`
   }
 `;
 
+export const CustomDropBox = styled.div`
+  @media screen and (max-width: 690px) {
+    position: relative;
+    right: 100px;
+    top: 4px;
+    Select {
+      border: none;
+    }
+  }
+`;
+
 export const MoveButtonArea = styled.div`
   position: fixed;
   right: 40px;
@@ -37,16 +48,34 @@ export const FilterBox = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+
   @media screen and (max-width: 1200px) {
     padding: 0 16px;
   }
-  @media screen and (max-width: 650px) {
-    flex-direction: column;
+
+  @media screen and (max-width: 690px) {
+    flex-direction: column-reverse;
     align-items: flex-start;
     padding: 0 20px;
     gap: 12px;
+
     & button:last-of-type {
       align-self: flex-end;
+      z-index: 1;
+      width: 87px;
+      height: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      span {
+        color: var(--white, #fff);
+        text-align: center;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 100%; /* 14px */
+        display: inline-block;
+        width: 45px;
+      }
     }
   }
 `;
@@ -54,15 +83,34 @@ export const FilterBox = styled.div`
 export const SelectsBox = styled.div`
   display: flex;
   gap: 24px;
-  @media screen and (max-width: 650px) {
-    align-items: flex-start;
+
+  & > div {
+    display: flex;
+    gap: 24px;
+  }
+  @media screen and (max-width: 690px) {
+    position: relative;
+    top: -48px;
     flex-direction: column;
+    align-items: flex-end;
+    gap: 15px;
+    width: 100%;
+    margin-bottom: -60px;
+
+    & > div {
+      display: flex;
+      gap: 12px;
+    }
+
+    & :where(.css-dev-only-do-not-override-byeoj0).ant-space-vertical {
+      margin-left: 0 !important;
+    }
   }
 `;
 
 export const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, minmax(200px, auto));
+  grid-template-columns: repeat(4, minmax(282px, auto));
   grid-gap: 24px;
   place-items: center;
   margin: 50px auto;
@@ -87,6 +135,14 @@ export const PostCard = styled.div`
   position: relative;
   border-radius: 30px;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+  @media (max-width: 600px) {
+    width: 335px;
+    height: 262px;
+    flex-shrink: 0;
+    border-radius: 20px;
+    background: var(--white, #fff);
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+  }
 `;
 
 export const DateLikeBox = styled.div`
@@ -142,13 +198,19 @@ export const DefaultImg = styled.img`
   height: 143px;
   object-fit: cover;
   border-radius: 0px 0px 30px 30px;
+  @media (max-width: 600px) {
+    width: 335px;
+    height: 123px;
+    flex-shrink: 0;
+    border-radius: 0px 0px 20px 20px;
+  }
 `;
 
 export const TravelDateBox = styled.div`
   display: flex;
   align-items: flex-start;
   padding-top: 24px;
-  gap: 5px;
+  gap: 10px;
   p {
     margin: 3px 0 21px 0;
     font-size: 12px;
@@ -201,4 +263,7 @@ export const Span = styled.span`
   position: absolute;
   bottom: 100px;
   left: 20px;
+  @media (max-width: 600px) {
+    bottom: 80px;
+  }
 `;
