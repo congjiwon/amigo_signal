@@ -12,7 +12,7 @@ export const UserFeedbackBox = styled.div`
 export const UserProfileBox = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 `;
 
 export const UserProfileImgBox = styled.div`
@@ -45,15 +45,24 @@ export const GrayParagraph = styled.p`
   }
 `;
 
-export const BlackParagraph = styled.p`
-  color: #000;
+export const UserInfoBox = styled.div`
+  display: flex;
+  gap: 20px;
   font-size: 14px;
   font-style: normal;
+  line-height: 150%;
+`;
+
+export const BlackParagraph = styled.p`
+  color: #000;
   font-weight: 600;
-  line-height: 150%; /* 21px */
   @media (max-width: 500px) {
     font-size: 12px;
   }
+`;
+
+export const UserInfoParagraph = styled.p`
+  color: #6c7486;
 `;
 
 export const ButtonBox = styled.div`
@@ -78,11 +87,11 @@ export const ButtonBox = styled.div`
   }
 
   .kakaoIcon {
-    width: 26px;
-    height: 26px;
+    width: 22px;
+    height: 22px;
     @media (max-width: 500px) {
-      width: 22px;
-      height: 22px;
+      width: 18px;
+      height: 18px;
     }
   }
 
