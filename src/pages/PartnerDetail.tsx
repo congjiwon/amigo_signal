@@ -26,7 +26,7 @@ function PartnerDetail() {
   const [isApply, setIsApply] = useState<boolean | null>(null);
 
   const { data: partnerPost, isLoading: isLoadingPost, isError } = useQuery(['partnerPost', postid], () => getPartnerPost({ postId: postid as string }));
-  console.log('isError', isError);
+
   const { data: confirmedApplicants, isLoading: isLoadingApplicants } = useQuery(['confirmedApplicants', postid], () => getConfirmedApplicantList(postid!));
 
   useEffect(() => {

@@ -14,7 +14,6 @@ type ApplicantListProps = {
 };
 
 const ApplicantList = ({ postId, applicantList, setApplicantList }: ApplicantListProps) => {
-  // const [applicantList, setApplicantList] = useState<Tables<'applicants'>[]>([]);
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
 
   const { setHasApplicant } = useApplicantStore();

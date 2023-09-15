@@ -15,11 +15,6 @@ function MyPage() {
     }
   }, []);
 
-  // TODO: spinner 또는 텍스트
-  if (localSession === null) {
-    return <></>;
-  }
-
   return (
     <>
       <MetaTags
