@@ -39,7 +39,10 @@ export const getPartnerPosts = async ({ isOpen, country, startDate, endDate, pag
 };
 
 export const getPartnerPost = async ({ postId }: { postId: string }) => {
-  const { data } = await supabase.from('partnerPosts').select('*, country(country), users(nickName, profileImageUrl, birthday, gender)').eq('id', postId).single();
+  const { data, error } = await supabase.from('partnerPosts').select('*, country(country), users(nickName, profileImageUrl, birthday, gender)').eq('id', postId).single();
+  if (error) {
+    throw error;
+  }
   return data;
 };
 
