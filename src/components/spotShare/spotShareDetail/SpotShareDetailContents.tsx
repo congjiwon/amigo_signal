@@ -54,8 +54,8 @@ function SpotShareDetailContents() {
   // 게시글 삭제
   const mutation = useMutation(deleteSpotSharePost, {
     onSuccess: async () => {
-      await queryClient.invalidateQueries(['spotSharePost']);
       navigate('/spotshare');
+      await queryClient.invalidateQueries(['spotSharePost']);
       if (spotSharePost) {
         const { data } = await supabase.storage.from('quillImgs').remove(spotSharePost.postImageUrl);
       }
