@@ -1,11 +1,18 @@
+import mainBannerAvif from '../../../assets/imgs/partner/partner_post_banner.avif';
 import mainBanner from '../../../assets/imgs/partner/partner_post_banner.png';
-// import
+import mainBannerWebp from '../../../assets/imgs/partner/partner_post_banner.webp';
 import * as St from './style';
 
 function PartnerBanner() {
   return (
     <St.ImageWrapper $banner={`partner`}>
-      <St.PartnerMainImage src={mainBanner} alt="동행 찾기 매인 배너 이미지" />
+      <St.PartnerMainImageBox>
+        <picture>
+          <source srcSet={mainBannerAvif} type="image/avif" />
+          <source srcSet={mainBannerWebp} type="image/webp" />
+          <img src={mainBanner} alt="동행 찾기 메인 배너 이미지" />
+        </picture>
+      </St.PartnerMainImageBox>
       <St.PartnerBannerTextBox>
         <St.PartnerImageMainText>
           <span>친구와 함께라면 </span>
