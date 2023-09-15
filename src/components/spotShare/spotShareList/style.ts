@@ -22,6 +22,9 @@ export const CustomDropBox = styled.div`
     position: relative;
     right: 100px;
     top: 4px;
+    Select {
+      border: none;
+    }
   }
 `;
 
@@ -132,6 +135,14 @@ export const PostCard = styled.div`
   position: relative;
   border-radius: 30px;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+  @media (max-width: 600px) {
+    width: 335px;
+    height: 262px;
+    flex-shrink: 0;
+    border-radius: 20px;
+    background: var(--white, #fff);
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+  }
 `;
 
 export const DateLikeBox = styled.div`
@@ -187,13 +198,19 @@ export const DefaultImg = styled.img`
   height: 143px;
   object-fit: cover;
   border-radius: 0px 0px 30px 30px;
+  @media (max-width: 600px) {
+    width: 335px;
+    height: 123px;
+    flex-shrink: 0;
+    border-radius: 0px 0px 20px 20px;
+  }
 `;
 
 export const TravelDateBox = styled.div`
   display: flex;
   align-items: flex-start;
   padding-top: 24px;
-  gap: 5px;
+  gap: 10px;
   p {
     margin: 3px 0 21px 0;
     font-size: 12px;
@@ -246,4 +263,7 @@ export const Span = styled.span`
   position: absolute;
   bottom: 100px;
   left: 20px;
+  @media (max-width: 600px) {
+    bottom: 80px;
+  }
 `;

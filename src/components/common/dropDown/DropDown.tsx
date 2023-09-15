@@ -150,6 +150,7 @@ export function SortDropDown({ setSort }: SortProps) {
   return (
     <Space wrap>
       <Select
+        // className="SortDropDown"
         placeholder="최신순"
         defaultValue="최신순"
         allowClear
