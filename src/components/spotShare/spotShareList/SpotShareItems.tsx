@@ -30,7 +30,7 @@ export default function SpotShareItems({ sort, country, startDate, endDate }: Sp
     hasNextPage,
   } = useInfiniteQuery({
     queryKey: ['SpotShareList', sort, country, startDate, endDate],
-    queryFn: async ({ pageParam = 0 }) => getFilteredSpotSharePost({ sort, country, startDate, endDate, page: pageParam }),
+    queryFn: async ({ pageParam = 0 }) => await getFilteredSpotSharePost({ sort, country, startDate, endDate, page: pageParam }),
     getNextPageParam: (lastPage) => {
       if (lastPage.data && lastPage.data.length !== 0) {
         return lastPage.page + 1;
@@ -83,7 +83,7 @@ export default function SpotShareItems({ sort, country, startDate, endDate }: Sp
               return like.userId === logInUserId;
             });
             if (post !== null && post !== undefined) {
-              return <SpotShareItem key={post!.id} post={post!} likedPost={likedPost} />;
+              return <SpotShareItem key={post.id} post={post!} likedPost={likedPost} />;
             } else {
               return null;
             }

@@ -93,7 +93,14 @@ export default function Header() {
           {session ? (
             <St.UtilUser>
               <PartnerAlert />
-              <Popover content={myPagePopover} trigger="hover" placement="topRight">
+              <Popover
+                content={myPagePopover}
+                trigger="hover"
+                placement="topRight"
+                overlayStyle={{
+                  zIndex: 9999,
+                }}
+              >
                 <St.UserBox>
                   <St.ProfileImg src={currentUser?.profileImageUrl ? `${storagaUrl}/${currentUser?.profileImageUrl}` : defaultImg} alt={`${currentUser?.nickName} 프로필 이미지`} />
                   <St.NickName>{currentUser?.nickName} 님</St.NickName>
