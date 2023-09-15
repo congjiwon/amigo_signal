@@ -12,10 +12,12 @@ import SpotShare from '../pages/SpotShare';
 import SpotShareDetail from '../pages/SpotShareDetail';
 import SpotShareWrite from '../pages/SpotShareWrite';
 import StyledWrapper from '../components/common/layout/StyleWrapper';
+import ScrollTopTop from '../components/common/scrollToTop/ScrollTopTop';
 
 const Router: React.FC = () => {
   return (
     <BrowserRouter>
+      <ScrollTopTop />
       <Routes>
         <Route path="/" element={<Intro />} />
         <Route path="*" element={<ErrorPage />} />
