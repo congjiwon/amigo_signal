@@ -9,7 +9,7 @@ export const HeaderLayout = styled.div`
   left: 0;
   background-color: #fff;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-  z-index: 9;
+  z-index: 9999;
 `;
 
 export const Header = styled.header`

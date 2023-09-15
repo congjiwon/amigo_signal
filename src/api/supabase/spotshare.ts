@@ -27,7 +27,10 @@ export const getFilteredSpotSharePost = async ({ sort = 'createdAt', country, st
 
 // 클릭한 게시글 id?
 export const getSpotPost = async ({ postId }: { postId: string }) => {
-  const { data } = await supabase.from('spotPosts').select('*').eq('id', postId).single();
+  const { data, error } = await supabase.from('spotPosts').select('*').eq('id', postId).single();
+  if (error) {
+    throw error;
+  }
   return data;
 };
 
@@ -85,7 +88,10 @@ export const updateSpotReComment = async (updateReComment: Update<'spotReComment
 
 //스팟공유 특정 글 가져오기
 export const getDetailSpotSharePost = async (postId: string | undefined) => {
-  const { data } = await supabase.from('spotPosts').select('*, users(*), country(country)').eq('id', postId).single();
+  const { data, error } = await supabase.from('spotPosts').select('*, users(*), country(country)').eq('id', postId).single();
+  if (error) {
+    throw error;
+  }
   return data;
 };
 

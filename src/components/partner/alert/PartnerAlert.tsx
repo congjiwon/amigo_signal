@@ -77,14 +77,14 @@ export default function PartnerAlert() {
               date: payload.commit_timestamp,
               genre: PENDING,
             };
-            addAlert(newPostInfo);
+            await addAlert(newPostInfo);
             mutationAlertList.mutate(userId!);
             setHasNewAlert(true);
           }
         }
         // 신청자가 참여 취소 시
         if (payload.eventType === 'DELETE') {
-          deleteAlert(payload.old.id, PENDING);
+          await deleteAlert(payload.old.id, PENDING);
           mutationAlertList.mutate(userId!);
           if (alertStorage.length === 0) {
             setHasNewAlert(false);
@@ -123,7 +123,7 @@ export default function PartnerAlert() {
               date: payload.commit_timestamp,
               genre: ACCEPTED,
             };
-            addAlert(newPostInfo);
+            await addAlert(newPostInfo);
             mutationAlertList.mutate(userId!);
             setHasNewAlert(true);
           }
@@ -143,7 +143,7 @@ export default function PartnerAlert() {
               date: payload.commit_timestamp,
               genre: REJECTED,
             };
-            addAlert(newPostInfo);
+            await addAlert(newPostInfo);
             mutationAlertList.mutate(userId!);
             setHasNewAlert(true);
           }

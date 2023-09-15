@@ -98,7 +98,7 @@ export const AddressSearch = ({ map, setLatitude, setLongitude, setAddress, addr
         </button>
       </St.SearchAddress>
       <St.Address>
-        {address ? address : `검색한 주소가 표시됩니다`}
+        <p>{address ? address : `검색한 주소가 표시됩니다`}</p>
         <button onClick={handleClearAddress}>지도 초기화</button>
       </St.Address>
     </St.SearchAddressBox>

@@ -2,7 +2,7 @@ import { styled } from 'styled-components';
 
 export const SearchAddressBox = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
 
   button {
@@ -13,13 +13,14 @@ export const SearchAddressBox = styled.div`
     padding: 3px 10px;
     border-radius: 2px;
   }
-  @media (max-width: 762px) {
+  @media (max-width: 1000px) {
     flex-direction: column;
     gap: 12px;
   }
 `;
 
 export const SearchAddress = styled.div`
+  min-width: 384px;
   & .map-search-input {
     padding: 3px 6px;
     font-size: 16px;
@@ -27,13 +28,14 @@ export const SearchAddress = styled.div`
   @media (max-width: 1256px) {
     padding: 0px 50px 0px 50px;
   }
-  @media (max-width: 500px) {
-    padding: 0px 10px 0px 10px;
+  @media (max-width: 809px) {
+    text-align: end;
   }
-  /* @media (max-width: ) */
+  @media (max-width: 500px) {
+    padding: 0px 20px 0px 20px;
+  }
 
   input {
-    /* flex: 1 0 0; */
     width: 237.94px;
     height: 24px;
     padding: 8px 12px;
@@ -41,10 +43,8 @@ export const SearchAddress = styled.div`
     border-radius: 6px;
     border: 1px solid var(--light-gray, #e3e9f3);
     font-size: 14px;
-    @media (max-width: 809px) {
+    @media (max-width: 500px) {
       width: 196px;
-      height: 24px;
-      padding: 8px 12px;
     }
   }
 
@@ -64,16 +64,27 @@ export const SearchAddress = styled.div`
 `;
 
 export const Address = styled.div`
+  display: flex;
+  text-align: end;
+  align-items: center;
+  flex-shrink: 0;
   font-size: 14px;
   color: #777;
   @media (max-width: 1256px) {
     padding: 0px 50px 0px 50px;
   }
+
   @media (max-width: 500px) {
     padding: 0px 20px 0px 20px;
   }
-
+  p {
+    width: 350px;
+    @media (max-width: 1020px) {
+      width: 230px;
+    }
+  }
   button {
+    height: 30px;
     background-color: #999;
   }
 `;

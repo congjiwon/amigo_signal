@@ -8,7 +8,7 @@ import { UpdateLocationDropDown } from '../../common/dropDown/LocationDropDown';
 import LoadingSpinner from '../../common/loadingSpinner/LoadingSpinner';
 import { AlertError, AlertWarning } from '../../common/modal/alert';
 import { UpdateStarRate } from '../../common/starRate/StarRate';
-import SpotMap from '../map/SpotMap';
+import SpotMapUpdate from '../map/SpotMapUpdate';
 import SpotShareEditor from '../spotShareEditor/SpotShareEditor';
 import * as St from './style';
 
@@ -98,7 +98,7 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
     return <LoadingSpinner />;
   }
   if (isError) {
-    return <div>Error loading data</div>;
+    navigate('notfound');
   }
 
   const handleOnSumbit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -139,7 +139,16 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
           </div>
           <SpotShareEditor editorHtml={editorHtml} setEditorHtml={setEditorHtml} postImageUrlArray={postImageUrl} setPostImageUrl={setPostImageUrl} />
         </St.WriteBox>
-        <SpotMap setLatitude={setLatitude} setLongitude={setLongitude} address={address} setAddress={setAddress} country={location[1]} />
+        <SpotMapUpdate
+          latitude={spotSharePost?.latitude}
+          setLatitude={setLatitude}
+          longitude={spotSharePost?.longitude}
+          setLongitude={setLongitude}
+          address={address}
+          setAddress={setAddress}
+          country={location[1]}
+          defaultCountry={spotSharePost!.country.country}
+        />
         <St.ButtonBox>
           <button className="CancelBtn" type="button" onClick={() => navigate('/spotshare')}>
             취소
