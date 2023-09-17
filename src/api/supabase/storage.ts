@@ -16,3 +16,21 @@ export const modifyProfileImg = async ({ userEmail, fileNewName, newFille }: mod
   });
   return data;
 };
+
+type uploadQuillImgProps = {
+  fileNewName: string;
+  newFille: File;
+};
+export const uploadQuillImg = async ({ fileNewName, newFille }: uploadQuillImgProps) => {
+  const { data: upload } = await supabase.storage.from('quillImgs').upload(`quill_imgs/${fileNewName}`, newFille);
+
+  const { data } = supabase.storage.from('quillImgs').getPublicUrl(`quill_imgs/${fileNewName}`);
+  return data;
+};
+
+type removeQuillImgProps = {
+  removeImgArray: string[];
+};
+export const removeQuillImg = async ({ removeImgArray }: removeQuillImgProps) => {
+  const { data } = await supabase.storage.from('quillImgs').remove(removeImgArray);
+};
