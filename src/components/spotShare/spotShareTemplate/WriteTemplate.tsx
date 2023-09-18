@@ -2,7 +2,7 @@ import { QueryClient, useMutation } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { insertSpotPost } from '../../../api/supabase/spotshare';
-import { supabase } from '../../../api/supabase/supabaseClient';
+import { removeQuillImg } from '../../../api/supabase/storage';
 import useSessionStore from '../../../zustand/store';
 import { SpotCalendar } from '../../common/calendar/SpotCalendar';
 import { currentTime } from '../../common/currentTime/CurrentTime';
@@ -97,7 +97,7 @@ export default function WriteTemplate() {
 
   const handleonClickCancel = async () => {
     navigate('/spotshare');
-    const { data } = await supabase.storage.from('quillImgs').remove(postImageUrl);
+    removeQuillImg({ removeImgArray: postImageUrl });
   };
 
   return (

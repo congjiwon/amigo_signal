@@ -5,8 +5,8 @@ import React, { useCallback, useMemo, useRef } from 'react';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { v4 as uuidv4 } from 'uuid';
-import { supabase } from '../../../api/supabase/supabaseClient';
-import { AlertWarning } from '../../common/modal/alert';
+import { uploadQuillImg } from '../../../api/supabase/storage';
+import { AlertError, AlertWarning } from '../../common/modal/alert';
 import * as St from './style';
 import './textEditor.css';
 
@@ -60,23 +60,20 @@ const SoptShareEditor = ({ editorHtml, setEditorHtml, setPostImageUrl, postImage
         };
         const compressedFile = await imageCompression(file, options);
         const fileNewName = uuidv4();
-        const { data, error } = await supabase.storage.from('quillImgs').upload(`quill_imgs/${fileNewName}`, compressedFile);
-        if (error) {
-        } else {
-        }
-        const response = supabase.storage.from('quillImgs').getPublicUrl(`quill_imgs/${fileNewName}`);
+        const storageData = await uploadQuillImg({ fileNewName, newFille: compressedFile });
 
-        if (response.data) {
-          const postImageUrl = response.data.publicUrl;
+        if (storageData) {
+          const postImageUrl = storageData.publicUrl;
           setPostImageUrl((prev) => [...prev, `quill_imgs/${fileNewName}`]);
           const editor = quillRef.current!.getEditor();
           const range = editor.getSelection();
           editor.insertEmbed(range.index, 'image', postImageUrl);
           editor.setSelection(range.index + 1);
-        } else {
         }
       });
-    } catch (error) {}
+    } catch (error) {
+      AlertError({});
+    }
   };
 
   const modules = useMemo(() => {
