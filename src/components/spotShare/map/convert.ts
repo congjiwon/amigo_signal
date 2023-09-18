@@ -11,8 +11,6 @@ export const getAddress = async (lat: number, lng: number, setAddress: (address:
       } else {
         AlertError({ text: '결과가 없습니다.' });
       }
-    } else {
-      AlertError({ text: `다음의 이유로 주소 변환 과정에서 문제가 발생했습니다. ${status} 다시 한 번 시도해주세요!` });
     }
   });
 };
