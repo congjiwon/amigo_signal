@@ -8,7 +8,7 @@
 
 #### 인트로페이지
 
-![인트로페이지](https://github.com/congjiwon/amigo_signal/assets/133928653/eec481b5-d968-4d89-aeec-a9d25ba1aae2)
+![인트로페이지](https://github.com/congjiwon/amigo_signal/assets/133928653/4a6b31e1-9425-467b-91bb-1a582f138490)
 
 #### 동행 찾기: 목록
 
@@ -99,7 +99,7 @@
 
 ## 프로젝트 노션
 
-[Amigo Signal Notion](https://www.notion.so/7-amigo-signal-8bfd66ca86fd4690944ac66c23403b90)
+[Project Browser: Amigo Signal](https://www.notion.so/Amigo-Signal-91561b50073848d6bdb8ecb06f83ac25)
 
 ## 기술 스택 및 라이브러리
 
