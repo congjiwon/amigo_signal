@@ -96,7 +96,7 @@ const UserFeedback = ({ partnerPostData }: Props) => {
   const mutation = useMutation(deletePartnerPost, {
     onSuccess: async () => {
       navigate('/partner');
-      await queryClient.invalidateQueries(['partnerPost']);
+      await queryClient.invalidateQueries(['PartnerPostsList', null, null, null, null]);
     },
     onError: () => {
       AlertError({ title: '삭제오류' });

@@ -39,7 +39,7 @@ export default function WriteTemplate() {
 
   const mutation = useMutation(insertSpotPost, {
     onSuccess: async () => {
-      await queryClient.invalidateQueries(['spotSharePost']);
+      await queryClient.invalidateQueries(['SpotShareList', null, null, null, null]);
       navigate('/spotshare');
     },
     onError: () => {
