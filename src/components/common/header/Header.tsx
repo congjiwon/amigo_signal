@@ -32,9 +32,8 @@ export default function Header() {
     supabase.auth.onAuthStateChange((_event, session) => {
       if (session === null) {
         localStorage.clear();
-      } else {
-        setSession(session);
       }
+      setSession(session);
     });
   }, [setSession]);
 

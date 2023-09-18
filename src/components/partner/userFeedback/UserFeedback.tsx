@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router';
 import { addBookmark, bookmarkCheck, deletePartnerPost, getApplicantList, getConfirmedApplicantList, removeBookMark } from '../../../api/supabase/partner';
 import { Tables } from '../../../api/supabase/supabase';
 import Messages from '../../../assets/imgs/partner/Messages.png';
+import MessagesOn from '../../../assets/imgs/partner/messages_on.png';
 import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import useCopyClipBoard from '../../../hooks/useCopyClipBoard';
 import useSessionStore from '../../../zustand/store';
@@ -25,6 +26,7 @@ const UserFeedback = ({ partnerPostData }: Props) => {
   const [bookMark, setBookMark] = useState(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [isMsgHover, setIsMsgHover] = useState(false);
 
   const [applicantList, setApplicantList] = useState<Tables<'applicants'>[]>([]);
   const [confirmedApplicantList, setConfirmedApplicantList] = useState<Tables<'applicants'>[]>([]);
@@ -144,7 +146,9 @@ const UserFeedback = ({ partnerPostData }: Props) => {
         </div>
       </St.UserProfileBox>
       <St.ButtonBox>
-        <button>{openChat.length > 1 && <img src={Messages} className="kakaoIcon" onClick={() => handleCopyClipBoard(openChat)} alt="오픈채팅 링크 아이콘" />}</button>
+        <button onMouseOver={() => setIsMsgHover(true)} onMouseOut={() => setIsMsgHover(false)}>
+          {openChat.length > 1 && <img src={isMsgHover ? MessagesOn : Messages} className="kakaoIcon" onClick={() => handleCopyClipBoard(openChat)} alt="오픈채팅 링크 아이콘" />}
+        </button>
         <button>{bookMark ? <RiBookmarkFill className="fillIcon" onClick={debouncedRemoveBookMarkHandle} /> : <RiBookmarkLine className="lineIcon" onClick={debouncedAddBookMarkHandle} />}</button>
 
         {isPostUser() ? (
