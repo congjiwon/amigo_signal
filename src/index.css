@@ -63,7 +63,11 @@ a {
   color: inherit;
 }
 
-:where(.css-dev-only-do-not-override-byeoj0).ant-drawer {
+:where(.css-byeoj0).ant-drawer {
+  z-index: 9999;
+}
+
+.ant-drawer.ant-drawer-right.ant-drawer-open {
   z-index: 9999;
 }
 

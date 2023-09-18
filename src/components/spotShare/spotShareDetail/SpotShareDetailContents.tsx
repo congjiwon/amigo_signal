@@ -55,7 +55,7 @@ function SpotShareDetailContents() {
   const mutation = useMutation(deleteSpotSharePost, {
     onSuccess: async () => {
       navigate('/spotshare');
-      await queryClient.invalidateQueries(['spotSharePost']);
+      await queryClient.invalidateQueries(['SpotShareList', null, null, null, null]);
       if (spotSharePost) {
         removeQuillImg({ removeImgArray: spotSharePost.postImageUrl });
       }

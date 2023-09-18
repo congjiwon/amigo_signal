@@ -21,7 +21,7 @@ const REJECTED = 'rejected';
 export default function PartnerAlert() {
   const session = useSessionStore((state) => state.session);
   const userId = session?.user.id;
-  const { alertStorage, removeAlertStorage, setAlertStorage } = useAlertStorageStore();
+  const { alertStorage, setAlertStorage } = useAlertStorageStore();
   const { hasNewAlert, setHasNewAlert } = useNewAlertStore();
   const navigate = useNavigate();
 
@@ -152,16 +152,17 @@ export default function PartnerAlert() {
     )
     .subscribe();
 
-  const handleAlertLink = (id: string, postId: string, genre: string) => {
+  const handleAlertLink = async (id: string, postId: string, genre: string) => {
     navigate(`/partner/detail/${postId}`);
-    deleteAlert(id, genre);
-    removeAlertStorage(id);
+    await deleteAlert(id, genre);
+    // removeAlertStorage(id);
     if (alertStorage.length === 0) {
       setHasNewAlert(false);
     } else if (alertStorage.length > 0) {
       setHasNewAlert(true);
     }
   };
+
   const alarmPopover = (
     <St.AlarmPopoverBox>
       <St.MainTitle>{`새로운 소식 (${alertStorage.length})`}</St.MainTitle>
