@@ -64,7 +64,7 @@ export default function UpdateTemplate({ postId }: { postId: string }) {
 
   const mutation = useMutation(updateSpotPost, {
     onSuccess: async () => {
-      await queryClient.invalidateQueries(['spotSharePost']);
+      await queryClient.invalidateQueries(['SpotShareList', null, null, null, null]);
       navigate(`/spotshare/detail/${postId}`);
     },
     onError: () => {

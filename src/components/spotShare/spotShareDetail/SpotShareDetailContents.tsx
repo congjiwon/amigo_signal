@@ -55,7 +55,7 @@ function SpotShareDetailContents() {
   const mutation = useMutation(deleteSpotSharePost, {
     onSuccess: async () => {
       navigate('/spotshare');
-      await queryClient.invalidateQueries(['spotSharePost']);
+      await queryClient.invalidateQueries(['SpotShareList', null, null, null, null]);
       if (spotSharePost) {
         const { data } = await supabase.storage.from('quillImgs').remove(spotSharePost.postImageUrl);
       }

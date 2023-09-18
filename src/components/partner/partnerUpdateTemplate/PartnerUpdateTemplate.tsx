@@ -98,7 +98,7 @@ function PartnerUpdateTemplate({ postId }: { postId: string }) {
 
   const mutation = useMutation(updatePartnerPost, {
     onSuccess: async () => {
-      await queryClient.invalidateQueries(['partnerPost']);
+      await queryClient.invalidateQueries(['PartnerPostsList', null, null, null, null]);
       navigate(`/partner/detail/${postId}`);
     },
     onError: () => {

@@ -53,7 +53,7 @@ function PartnerWriteTemplate() {
 
   const mutation = useMutation(insertPost, {
     onSuccess: async () => {
-      await queryClient.invalidateQueries(['partnerPost']);
+      await queryClient.invalidateQueries(['PartnerPostsList', null, null, null, null]);
       navigate('/partner');
     },
     onError: () => {
