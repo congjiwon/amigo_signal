@@ -17,10 +17,10 @@ const Footer = () => {
           </div>
         </St.FootInfoBox>
         <St.LinkBox>
-          <a href="https://github.com/congjiwon/amigo_signal" target="_blank">
+          <a href="https://github.com/congjiwon/amigo_signal" target="_blank" rel="noreferrer">
             <RxGithubLogo className="githubIcon" />
           </a>
-          <a href="https://github.com/congjiwon/amigo_signal" target="_blank">
+          <a href="https://www.notion.so/Amigo-Signal-91561b50073848d6bdb8ecb06f83ac25" target="_blank" rel="noreferrer">
             <RxNotionLogo className="notionIcon" />
           </a>
         </St.LinkBox>
