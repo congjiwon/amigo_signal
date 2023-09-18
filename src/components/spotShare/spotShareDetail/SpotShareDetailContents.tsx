@@ -8,7 +8,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
 import { useNavigate, useParams } from 'react-router';
 import { countLike, countLikes, deleteLike, deleteSpotSharePost, getDetailSpotSharePost, getLikesCondition, postLike } from '../../../api/supabase/spotshare';
-import { supabase } from '../../../api/supabase/supabaseClient';
+import { removeQuillImg } from '../../../api/supabase/storage';
 import defaultProfileImage from '../../../assets/imgs/users/default_profile_img.png';
 import useSessionStore from '../../../zustand/store';
 import LoadingSpinner from '../../common/loadingSpinner/LoadingSpinner';
@@ -55,9 +55,9 @@ function SpotShareDetailContents() {
   const mutation = useMutation(deleteSpotSharePost, {
     onSuccess: async () => {
       navigate('/spotshare');
-      await queryClient.invalidateQueries(['spotSharePost']);
+      await queryClient.invalidateQueries(['SpotShareList', null, null, null, null]);
       if (spotSharePost) {
-        const { data } = await supabase.storage.from('quillImgs').remove(spotSharePost.postImageUrl);
+        removeQuillImg({ removeImgArray: spotSharePost.postImageUrl });
       }
     },
     onError: () => {

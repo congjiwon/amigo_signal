@@ -30,6 +30,9 @@ export default function Header() {
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((_event, session) => {
+      if (session === null) {
+        localStorage.clear();
+      }
       setSession(session);
     });
   }, [setSession]);
@@ -39,7 +42,7 @@ export default function Header() {
   }, [currentUserDB]);
 
   const handleSignout = async () => {
-    localStorage.removeItem('authId');
+    localStorage.clear();
     await supabase.auth.signOut();
     Alert({ title: '로그아웃 되었습니다.' });
     navigate('/login');
