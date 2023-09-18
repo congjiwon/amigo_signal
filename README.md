@@ -97,7 +97,7 @@
 | 송현섭 | `프론트엔드` | 팀원       | [songhsb](https://github.com/songhsb)       |
 | 김수연 | `피그마`     | `디자이너` | []()                                        |
 
-## 프로젝트 노션
+## 프로젝트 브로셔
 
 [Project Browser: Amigo Signal](https://www.notion.so/Amigo-Signal-91561b50073848d6bdb8ecb06f83ac25)
 
